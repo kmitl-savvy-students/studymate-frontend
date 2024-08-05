@@ -1,0 +1,13 @@
+<div
+	class="h-full max-w-52 rounded-md border border-orange-200 bg-orange-100 px-3 py-2 text-start focus-within:border-orange-300 focus-within:bg-orange-200"
+>
+	<div
+		#noteElement
+		contenteditable="true"
+		(focus)="editEnable()"
+		(blur)="editDisable()"
+		class="outline-none"
+	>
+		{{ note.text }}
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<section>
+	<div class="rounded-md bg-orange-100 p-4">
+		<h1 class="mb-1 text-3xl font-bold">ผู้ใช้งานระบบ</h1>
+		<p class="mb-3 text-amber-800">นี่คือระบบดูและเพิ่มผู้ใช้งานระบบ</p>
+
+		<div
+			class="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-center"
+		>
+			<div class="flex flex-wrap items-stretch gap-2">
+				@if (users.length === 0) {
+					<span>คุณไม่มีผู้ใช้ในระบบ</span>
+				} @else {
+					@for (user of users; track user) {}
+				}
+			</div>
+		</div>
+		<div class="mt-2"></div>
+	</div>
+</section>
