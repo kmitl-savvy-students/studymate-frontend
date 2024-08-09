@@ -39,11 +39,6 @@
 	"workbench.cloudChanges.continueOn": "off",
 	"workbench.activityBar.iconClickBehavior": "toggle",
 	"workbench.activityBar.location": "top",
-	"workbench.colorTheme": "Monokai",
-	"workbench.preferredDarkColorTheme": "Default Dark+",
-	"workbench.preferredLightColorTheme": "Default Light+",
-	"workbench.iconTheme": "vs-seti",
-	"workbench.statusBar.visible": false,
 	"workbench.tips.enabled": false,
 	"workbench.tree.enableStickyScroll": false,
 	"workbench.tree.indent": 16,
@@ -68,20 +63,5 @@
 
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 
-	"files.autoSave": "off",
-	"files.exclude": {
-		"**/.vscode": true,
-		"**/LICENSE": true,
-		"**/.gitignore": true,
-
-		"**/.angular": true,
-		"**/.prettierrc": true,
-		"**/angular.json": true,
-		"**/package-lock.json": true,
-		"**/tailwind.config.js": true,
-		"**/tsconfig.app.json": true,
-		"**/tsconfig.json": true,
-		"**/tsconfig.spec.json": true,
-		"**/node_modules": true
-	}
+	"files.autoSave": "off"
 }
