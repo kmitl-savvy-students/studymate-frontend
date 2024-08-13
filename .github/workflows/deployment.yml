@@ -12,7 +12,9 @@ on:
 
 jobs:
   Deploy-Frontend:
-    runs-on: [self-hosted, front-env]
+    runs-on:
+     group: org/Org.Runner
+     labels: [ self-hosted, front-env ]
 
     steps:
       - name: Checkout code
