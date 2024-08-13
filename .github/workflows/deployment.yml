@@ -15,6 +15,7 @@ jobs:
     runs-on:
      group: Org. Runner
      labels: [ self-hosted, front-env ]
+     timeout-minutes: 2
 
     steps:
       - name: Checkout code
