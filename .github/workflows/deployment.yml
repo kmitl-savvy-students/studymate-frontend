@@ -4,13 +4,14 @@
 name: StudyMate-Frontend
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
 
 jobs:
-  build-and-run:
+  Deploy Frontend:
     runs-on: [self-hosted, front-env]
 
     steps:
