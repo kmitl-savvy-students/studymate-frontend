@@ -14,7 +14,7 @@ jobs:
   Deploy-Frontend:
     runs-on:
      group: Org. Runner
-     labels: [ self-hosted, front-env ]
+     labels: [self-hosted, linux, front-env]
 
     steps:
       - name: Checkout code
