@@ -2,7 +2,7 @@
 	"json.format.enable": true,
 	"explorer.autoReveal": true,
 
-	"editor.fontSize": 16,
+	// "editor.fontSize": 16,
 	"editor.fontFamily": "Consolas, monospace",
 	"editor.detectIndentation": false,
 	"editor.dragAndDrop": false,
