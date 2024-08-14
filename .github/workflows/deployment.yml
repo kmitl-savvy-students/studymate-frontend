@@ -24,13 +24,13 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -f Dockerfile.prod -t studyMate-Frontend .
+          docker build -f Dockerfile.prod -t front-img .
 
       - name: Run Docker Container
         run: |
-          docker run -d -p 4200:80 --name sdm-frontend-container studyMate-Frontend
+          docker run -d -p 4200:80 --name sdm-frontend-container front-img
 
-      - name: Echo Finish
+      - name: ✅✅ Finish ✅✅
         run: echo "All Passed => Fisnish !!"
 
       - name: Stop and Remove Container
