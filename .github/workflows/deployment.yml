@@ -34,6 +34,5 @@ jobs:
       - name: ✅✅ Finish ✅✅
         run: echo "All Passed => Fisnish !!"
 
-      - name: Discord Webhook Notify
-        uses: rjstone/discord-webhook-notify@v1.0.4
+      
             
