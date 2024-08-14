@@ -9,6 +9,7 @@
 			<div class="flex flex-wrap items-stretch gap-2">
 				@if (users.length === 0) {
 					<span>คุณไม่มีผู้ใช้ในระบบจ้า</span>
+					<div style="color: brown;">test update from pipeline</div>
 				} @else {
 					@for (user of users; track user) {}
 				}
