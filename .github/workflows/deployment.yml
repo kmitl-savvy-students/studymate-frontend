@@ -13,7 +13,6 @@ on:
 jobs:
   Deploy-Frontend:
     runs-on:
-     group: Org. Runner
      labels: [ 'self-hosted', 'Linux', 'X64' , 'front-runner' ]
 
     steps:
