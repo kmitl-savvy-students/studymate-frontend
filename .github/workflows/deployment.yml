@@ -5,10 +5,6 @@ name: StudyMate-Frontend
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
 
 jobs:
   Deploy-Frontend:
@@ -37,3 +33,6 @@ jobs:
 
       - name: ✅✅ Finish ✅✅
         run: echo "All Passed => Fisnish !!"
+
+      
+            
