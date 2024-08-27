@@ -1,23 +1,50 @@
-<section>
-	<div class="rounded-md bg-orange-100 p-4">
-		<h1 class="mb-1 text-3xl font-bold">ผู้ใช้งานระบบ</h1>
-		<p class="mb-3 text-amber-800">นี่คือระบบดูและเพิ่มผู้ใช้งานระบบ</p>
-
-		<div
-			class="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-center"
-		>
-			<div class="flex flex-wrap items-stretch gap-2">
-				@if (users.length === 0) {
-					<span>คุณไม่มีผู้ใช้ในระบบจ้า</span>
-				} @else {
-					@for (user of users; track user) {}
-				}
-			</div>
-			<div>
-				<img src="https://avatars.githubusercontent.com/u/162490643?s=200&v=4" alt="studymate">
-				<div style="color: brown;">test for pipeline</div>
-			</div>
-		</div>
-		<div class="mt-2"></div>
+<header>
+	<div class="text-dark-100 bg-white py-5 text-center drop-shadow-md">
+		Header จ้า
 	</div>
-</section>
+	<main>
+		<div
+			class="text-dark-100 mx-2 mb-32 mt-9 rounded-lg bg-orange-50 sm:mx-9 md:mx-24 lg:mx-48"
+		>
+			<h1 class="mb-1 text-3xl font-bold">ผู้ใช้งานระบบ</h1>
+			<p class="mb-3 text-amber-800">นี่คือระบบดูและเพิ่มผู้ใช้งานระบบ</p>
+
+			<div
+				class="rounded-md border border-orange-200 bg-orange-50 px-3 py-2 text-center"
+			>
+				<div class="flex flex-wrap items-stretch gap-2">
+					@if (users.length === 0) {
+						<span>คุณไม่มีผู้ใช้ในระบบจ้า</span>
+					} @else {
+						@for (user of users; track user) {}
+					}
+				</div>
+				<div>
+					<img
+						src="https://avatars.githubusercontent.com/u/162490643?s=200&v=4"
+						alt="studymate"
+					/>
+					<div style="color: brown">test for pipeline</div>
+				</div>
+			</div>
+			<div class="mt-2"></div>
+			<i class="fa-solid fa-heart-pulse"></i>
+		</div>
+	</main>
+	<footer>
+		<div
+			class="text-dark-100 bg-orange-50 px-2 py-10 sm:px-9 md:px-24 lg:px-48"
+		>
+			<h1 class="text-center">Footer จ้า</h1>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
+				nobis excepturi odio pariatur repellendus ea maxime perspiciatis
+				quaerat dicta! Minima adipisci dolore, eum dolores maiores
+				laboriosam suscipit doloremque officiis sequi iusto deserunt
+				dicta totam fugiat, magni nam magnam odio eos molestias
+				voluptates aut veniam! Accusamus ex laboriosam voluptatem rem
+				cumque.
+			</p>
+		</div>
+	</footer>
+</header>
