@@ -9,7 +9,9 @@ on:
 jobs:
   Deploy-Frontend:
     runs-on:
-     labels: [ 'self-hosted', 'Linux', 'X64' , 'front-runner' ]
+     # labels: [ 'self-hosted', 'Linux', 'X64' , 'front-runner' ]
+     - self-hosted
+     - org-runner
 
     steps:
       - name: Checkout code
