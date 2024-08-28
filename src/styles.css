@@ -17,65 +17,88 @@ body {
 }
 
 /* background-color */
-.bg-white {
+.sdm-bg-white {
     background-color: #ffffff;
 }
-.bg-main-100 {
-    background-color: rgba(77, 116, 203, 1);
-}
-.bg-main-50 {
+.sdm-bg-main-5 {
     background-color: rgba(77, 116, 203, 0.5);
 }
-.bg-main-25 {
-    background-color: rgba(77, 116, 203, 0.25);
-}
-.bg-main-15 {
-    background-color: rgba(77, 116, 203, 0.15);
-}
-.bg-main-10 {
+.sdm-bg-main-10 {
     background-color: rgba(77, 116, 203, 0.10);
 }
-.bg-main-5 {
+.sdm-bg-main-15 {
+    background-color: rgba(77, 116, 203, 0.15);
+}
+.sdm-bg-main-25 {
+    background-color: rgba(77, 116, 203, 0.25);
+}
+.sdm-bg-main-50 {
     background-color: rgba(77, 116, 203, 0.5);
 }
-.bg-dark-100 {
-    background-color: rgba(38, 40, 69, 1);
+.sdm-bg-main-100 {
+    background-color: rgba(77, 116, 203, 1);
 }
-.bg-dark-75 {
+.sdm-bg-dark-50 {
+    background-color: rgba(38, 40, 69, 0.5);
+}
+.sdm-bg-dark-75 {
     background-color: rgba(38, 40, 69, 0.75);
 }
-.bg-dark-50 {
-    background-color: rgba(38, 40, 69, 0.5);
+.sdm-bg-dark-100 {
+    background-color: rgba(38, 40, 69, 1);
 }
 
 /* text-color */
-.text-white {
+.sdm-text-white {
     color: #ffffff;
 }
-.text-main-100 {
-    color: rgba(77, 116, 203, 1);
-}
-.text-main-50 {
+.sdm-text-main-5 {
     color: rgba(77, 116, 203, 0.5);
 }
-.text-main-25 {
-    color: rgba(77, 116, 203, 0.25);
-}
-.text-main-15 {
-    color: rgba(77, 116, 203, 0.15);
-}
-.text-main-10 {
+.sdm-text-main-10 {
     color: rgba(77, 116, 203, 0.10);
 }
-.text-main-5 {
+.sdm-text-main-15 {
+    color: rgba(77, 116, 203, 0.15);
+}
+.sdm-text-main-25 {
+    color: rgba(77, 116, 203, 0.25);
+}
+.sdm-text-main-50 {
     color: rgba(77, 116, 203, 0.5);
 }
-.text-dark-100 {
-    color: rgba(38, 40, 69, 1);
+.sdm-text-main-100 {
+    color: rgba(77, 116, 203, 1);
 }
-.text-dark-75 {
+.sdm-text-dark-50 {
+    color: rgba(38, 40, 69, 0.5);
+}
+.sdm-text-dark-75 {
     color: rgba(38, 40, 69, 0.75);
 }
-.text-dark-50 {
-    color: rgba(38, 40, 69, 0.5);
+.sdm-text-dark-100 {
+    color: rgba(38, 40, 69, 1);
+}
+
+/* font size */
+.sdm-fs-12 {
+    font-size: 12px;
+}
+.sdm-fs-14 {
+    font-size: 14px;
+}
+.sdm-fs-16 {
+    font-size: 16px;
+}
+.sdm-fs-18 {
+    font-size: 18px;
+}
+.sdm-fs-20 {
+    font-size: 20px;
+}
+.sdm-fs-30 {
+    font-size: 30px;
+}
+.sdm-fs-44 {
+    font-size: 44px;
 }
