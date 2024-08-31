@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-	standalone: true,
-	selector: 'app-button',
 
+	selector: 'app-button',
+	standalone: true,
 	templateUrl: './button.component.html',
 })
 export class ButtonComponent {
