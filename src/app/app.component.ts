@@ -1,12 +1,21 @@
 import { Component } from '@angular/core';
 
 import { User } from './models/User.model';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { AnnounceComponent } from './components/announce/announce.component';
+import { LetPlanComponent } from './components/let-plan/let-plan.component';
 
 @Component({
 	standalone: true,
 	selector: 'app-root',
 
-	imports: [],
+	imports: [
+		NavbarComponent,
+		FooterComponent,
+		AnnounceComponent,
+		LetPlanComponent,
+	],
 
 	templateUrl: './app.component.html',
 })
