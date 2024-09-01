@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { RouterOutlet } from '@angular/router';
 import { User } from './models/User.model';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -15,6 +15,7 @@ import { LetPlanComponent } from './components/let-plan/let-plan.component';
 		FooterComponent,
 		AnnounceComponent,
 		LetPlanComponent,
+		RouterOutlet,
 	],
 
 	templateUrl: './app.component.html',
