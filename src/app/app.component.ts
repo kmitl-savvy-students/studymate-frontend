@@ -3,20 +3,18 @@ import { RouterOutlet } from '@angular/router';
 import { User } from './models/User.model';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { AnnounceComponent } from './components/announce/announce.component';
-import { LetPlanComponent } from './components/let-plan/let-plan.component';
+import { SignUpComponent } from "./components/sign-up/sign-up.component";
 
 @Component({
 	standalone: true,
 	selector: 'app-root',
 
 	imports: [
-		NavbarComponent,
-		FooterComponent,
-		AnnounceComponent,
-		LetPlanComponent,
-		RouterOutlet,
-	],
+    NavbarComponent,
+    FooterComponent,
+    RouterOutlet,
+    SignUpComponent
+],
 
 	templateUrl: './app.component.html',
 })
