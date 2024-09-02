@@ -1,15 +1,22 @@
-<!-- โค้ดเดิม -->
+<div class="flex min-h-screen flex-col">
+	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
+		<header class="flex-none">
+			<app-navbar></app-navbar>
+		</header>
+	}
 
-<!-- <div class="flex min-h-screen flex-col">
-	<header class="flex-none">
-		<app-navbar></app-navbar>
-	</header>
-	<main class="mx-2 mb-32 mt-28 flex-1 sm:mx-9 md:mx-24 lg:mx-48">
+	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
+		<main class="mx-2 mb-32 mt-28 flex-1 sm:mx-9 md:mx-24 lg:mx-48">
+			<router-outlet></router-outlet>
+		</main>
+	}
+	@else {
 		<router-outlet></router-outlet>
-	</main>
-	<footer class="flex-none">
-		<app-footer></app-footer>
-	</footer>
-</div> -->
+	}
 
-<app-sign-up></app-sign-up>
+	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
+		<footer class="flex-none">
+			<app-footer></app-footer>
+		</footer>
+	}
+</div>
