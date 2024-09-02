@@ -1,9 +1,68 @@
-<div
-	class="flex-col rounded-2xl bg-orange-50 px-32 py-20 text-dark-100 space-y-11"
->
-	<p class="font-bold text-5xl flex justify-center">Sign In Page</p>
-	<p class="text-base flex justify-center">
-		ยังทำให้เวลากดปุ่ม Sign In ที่ Navbar แล้ว route ไปหน้าใหม่ที่ไม่มี
-		Navbar กับ Footer ไม่ได้
-	</p>
+<div class="grid min-h-screen grid-cols-2">
+	<div class="flex items-center justify-center bg-orange-50">
+		<img src="signup-signin-boy.png" alt="signup-signin-boy" />
+	</div>
+	<div class="flex items-center justify-center bg-white">
+		<div class="border border-main-25 rounded-[40px] px-20 py-12 2xl:px-28 2xl:py-24">
+			<div class="flex min-h-full flex-col w-80 2xl:w-96">
+				<div class="flex flex-col items-center">
+					<p class="font-semibold text-main-100 text-4xl 2xl:text-6xl">KMITL</p>
+					<p class="font-semibold text-main-100 -mt-3 text-2xl 2xl:text-3xl">
+						Study Mate
+					</p>
+				</div>
+				<h2 class="text-center text-xl font-medium text-dark-100 mt-10">
+					Sign in with KMITL Study Mate
+				</h2>
+				<div class="xl:mt-4 2xl:mt-6">
+					<form class="xl:space-y-2.5 2xl:space-y-4" method="POST">
+						<input
+							type="email"
+							required
+							placeholder="Email"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1  ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
+						/>
+						<input
+							type="password"
+							required
+							placeholder="Password"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100 disabled:pointer-events-none"
+						/>
+						<button
+							type="submit"
+							class="hover:bg-main-120 w-full justify-center rounded-xl bg-main-100 px-4 py-3 text-base font-semibold text-white"
+						>
+							Sign in
+						</button>
+						<div class="flex items-center space-x-4">
+							<hr class="w-full text-main-25" />
+							<p class="text-base font-normal text-dark-100">
+								Or
+							</p>
+							<hr class="w-full text-main-25" />
+						</div>
+						<button
+							type="submit"
+							class="w-full justify-center rounded-xl px-4 py-3 text-base font-medium text-dark-100 ring-1 ring-main-25 hover:bg-main-5"
+						>
+							<div class="flex justify-center space-x-4">
+								<img src="google.png" alt="google" />
+								<p>Continue with Google</p>
+							</div>
+						</button>
+					</form>
+					<div class="mt-4 flex items-center justify-center gap-3.5">
+						<p class="text-center text-sm text-dark-50">
+							Don’t have an account?
+						</p>
+						<a
+							routerLink="/sign-up"
+							class="text-sm font-semibold text-main-75 hover:text-main-100"
+							>Sign up</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

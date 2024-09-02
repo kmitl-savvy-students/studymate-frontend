@@ -21,6 +21,7 @@ module.exports = {
 			'red': colors.red,
 			'white': '#ffffff',
 			'main': {
+				120: '#4263AC',
 				100: '#4D74CB',
 				75: '#4D74CBBF',
 				50: '#4D74CB80',

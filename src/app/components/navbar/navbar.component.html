@@ -3,34 +3,31 @@
 		<div class="flex h-20 content-center justify-between">
 			<a
 				routerLink="/home"
-				routerLinkActive="active"
-				ariaCurrentWhenActive="page"
 				class="flex items-center"
 			>
-				<img src="kmitl-studymate.png" alt="StudyMate" />
+				<div class="flex flex-col items-center">
+					<p class="text-main-100 font-semibold text-3xl">KMITL</p>
+					<p class="text-main-100 font-semibold text-sm -mt-2">Study Mate</p>
+				</div>
 			</a>
 			<div class="m-0 flex content-center">
 				<div class="flex items-center space-x-12 text-base font-medium">
-					<a class="hover:text-main-100">รายวิชาเรียน</a>
-					<a class="hover:text-main-100">รีวิววิชา</a>
-					<a class="hover:text-main-100">จัดตารางเรียน</a>
-					<a class="hover:text-main-100">เกี่ยวกับเรา</a>
+					<a routerLink="" class="hover:text-main-100">รายวิชาเรียน</a>
+					<a routerLink="" class="hover:text-main-100">รีวิววิชา</a>
+					<a routerLink="" class="hover:text-main-100">จัดตารางเรียน</a>
+					<a routerLink="" class="hover:text-main-100">เกี่ยวกับเรา</a>
 					<div
 						class="flex items-center space-x-6 text-base font-medium"
 					>
 						<button
 							routerLink="/sign-in"
-							routerLinkActive="active"
-							ariaCurrentWhenActive="page"
 							class="underline underline-offset-2 hover:text-main-100"
 						>
 							Sign in
 						</button>
 						<button
 							routerLink="/sign-up"
-							routerLinkActive="active"
-							ariaCurrentWhenActive="page"
-							class="rounded-full bg-main-100 px-3.5 py-2 text-white"
+							class="rounded-full bg-main-100 px-3.5 py-2 text-white hover:bg-main-120"
 						>
 							Sign up
 						</button>
