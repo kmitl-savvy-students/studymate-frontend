@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { ButtonComponent } from "../button/button.component";
 
 @Component({
   selector: 'app-announce',
   standalone: true,
-  imports: [ButtonComponent],
+  imports: [],
   templateUrl: './announce.component.html',
   styleUrl: './announce.component.css'
 })
