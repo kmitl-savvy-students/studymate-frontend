@@ -1,34 +1,46 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: StudyMate-Frontend
+name: StudyMate-Frontend CICD
 
 on:
   workflow_dispatch:
 
 jobs:
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: [ 'self-hosted', 'org-runner' ]  # Specify the labels for the SonarQube self-hosted runner here
   
-  build-and-analyze:
-    name: Build, Analyze, and Deploy Frontend
-    runs-on:
-     labels: [ 'self-hosted', 'Linux', 'X64' , 'front-runner' ]
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: sonarsource/sonarqube-scan-action@master
+          fetch-depth: 0  # Ensures a full clone for better analysis relevancy
+          
+      - name: Run SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: -X
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
+  
+      # Uncomment the following lines to fail the job if the Quality Gate fails
+      # - name: Check SonarQube Quality Gate
+      #   uses: sonarsource/sonarqube-quality-gate-action@master
       #   timeout-minutes: 5
       #   env:
       #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build:
+    name: Build and Deploy Frontend
+    needs: sonarqube
+    runs-on:
+     labels: [ 'self-hosted', 'Linux', 'X64' , 'front-runner' ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
