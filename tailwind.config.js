@@ -10,7 +10,11 @@ import {
 	red as _red,
 } from 'tailwindcss/colors';
 
-export const content = ['./src/**/*.{html,ts}'];
+export const content = [
+	'./src/**/*.{html,ts}',
+	'./node_modules/flowbite/**/*.js',
+];
+export const plugins = [require('flowbite/plugin')];
 export const theme = {
 	extend: {
 		fontFamily: {

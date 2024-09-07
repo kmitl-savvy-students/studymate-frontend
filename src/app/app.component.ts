@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	standalone: true,
@@ -12,6 +13,10 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 	templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 	constructor(public router: Router) {}
+
+	ngOnInit(): void {
+		initFlowbite();
+	}
 }
