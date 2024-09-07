@@ -1,2 +1,28 @@
-<h1>Empty Page</h1>
-<p>For copying</p>
+<h5
+	class="text-gray-900 mb-2 text-2xl font-bold tracking-tight dark:text-white"
+>
+	หน้าเปล่า
+</h5>
+
+<p class="text-gray-700 dark:text-gray-400 mb-5 font-normal">
+	นี่คือตัวอย่างเปล่า ที่อยู่ในเว็บไซต์ StudyMate
+</p>
+
+<div class="flex gap-3">
+	<sdm-button-link
+		label="ไปหน้า เข้าสู่ระบบ"
+		link="/sign-in"
+		icon="sign-in"
+	></sdm-button-link>
+	<sdm-button-link
+		label="ไปหน้า สมัครสมาชิก"
+		link="/sign-up"
+		icon="user-plus"
+	></sdm-button-link>
+	<sdm-button-link
+		label="เปิด Google"
+		link="https://google.com"
+		icon="arrow-up-right-from-square"
+		[external]="true"
+	></sdm-button-link>
+</div>

@@ -3,8 +3,4 @@
 @tailwind utilities;
 
 @layer components {
-	/* Custom button that only exists in this page */
-	.custom-btn {
-		@apply rounded-full bg-violet-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-400 focus:ring-opacity-75;
-	}
 }
