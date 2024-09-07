@@ -4,66 +4,63 @@
 name: StudyMate-Frontend CICD
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
-  sonarqube:
-    name: SonarQube Analysis
-    runs-on: [ 'self-hosted', 'org-runner' ]  # Specify the labels for the SonarQube self-hosted runner here
-  
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Ensures a full clone for better analysis relevancy
-          
-      - name: Run SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: -X
-  
-      # Uncomment the following lines to fail the job if the Quality Gate fails
-      # - name: Check SonarQube Quality Gate
-      #   uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    sonarqube:
+        name: SonarQube Analysis
+        runs-on: ['self-hosted', 'org-runner'] # Specify the labels for the SonarQube self-hosted runner here
 
-  build:
-    name: Build and Deploy Frontend
-    needs: sonarqube
-    runs-on:
-     labels: [ 'self-hosted', 'Linux', 'X64' , 'front-runner' ]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0 # Ensures a full clone for better analysis relevancy
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+            - name: Run SonarQube Scan
+              uses: sonarsource/sonarqube-scan-action@master
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+              with:
+                  args: -X
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+            # Uncomment the following lines to fail the job if the Quality Gate fails
+            # - name: Check SonarQube Quality Gate
+            #   uses: sonarsource/sonarqube-quality-gate-action@master
+            #   timeout-minutes: 5
+            #   env:
+            #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Build Docker Image
-        run: |
-          docker build -f Dockerfile.prod -t front-img .
-      
-      - name: Stop and Remove Container
-        run: |
-          docker stop sdm-frontend-container | true
-          docker rm sdm-frontend-container | true
+    build:
+        name: Build and Deploy Frontend
+        needs: sonarqube
+        runs-on:
+            labels: ['self-hosted', 'Linux', 'X64', 'front-runner']
 
-      - name: Run Docker Container
-        run: |
-          docker run -d -p 4200:4200 --name sdm-frontend-container --restart=always front-img
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Assign container network
-        run: |
-          docker network connect frontend-network sdm-frontend-container
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
 
-      - name: ✅✅ Finish ✅✅
-        run: echo "All Passed => Fisnish !!"
+            - name: Build Docker Image
+              run: |
+                  docker build -f Dockerfile.prod -t front-img .
 
-      
-            
+            - name: Stop and Remove Container
+              run: |
+                  docker stop sdm-frontend-container | true
+                  docker rm sdm-frontend-container | true
+
+            - name: Run Docker Container
+              run: |
+                  docker run -d -p 4200:4200 --name sdm-frontend-container --restart=always front-img
+
+            - name: Assign container network
+              run: |
+                  docker network connect frontend-network sdm-frontend-container
+
+            - name: ✅✅ Finish ✅✅
+              run: echo "All Passed => Fisnish !!"
