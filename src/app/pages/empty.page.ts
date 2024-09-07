@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { SDMButtonLink } from '../components/buttons/link/button-link.component';
 
 @Component({
-	selector: 'page-empty',
+	selector: 'sdm-page-empty',
 	standalone: true,
-	imports: [],
+	imports: [SDMButtonLink],
 	templateUrl: './empty.page.html',
 	styleUrl: './empty.page.css',
 })
-export class EmptyPage {}
+export class SDMPageEmpty {}
