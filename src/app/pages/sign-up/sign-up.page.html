@@ -1,2 +1,94 @@
-<h1>Sign Up</h1>
-<p>Please sign up</p>
+<div class="grid min-h-screen grid-cols-2">
+	<div class="flex items-center justify-center bg-orange-50">
+		<img src="signup-signin-boy.png" alt="signup-signin-boy" />
+	</div>
+	<div class="flex items-center justify-center bg-white">
+		<div
+			class="rounded-[40px] border border-main-25 px-20 py-12 2xl:px-28 2xl:py-24"
+		>
+			<div class="flex min-h-full w-80 flex-col 2xl:w-96">
+				<div class="flex flex-col items-center">
+					<p
+						class="text-4xl font-semibold text-main-100 2xl:text-6xl"
+					>
+						KMITL
+					</p>
+					<p
+						class="-mt-3 text-2xl font-semibold text-main-100 2xl:text-3xl"
+					>
+						Study Mate
+					</p>
+				</div>
+				<h2 class="mt-10 text-center text-xl font-medium text-dark-100">
+					Sign up with KMITL Study Mate
+				</h2>
+				<div class="xl:mt-4 2xl:mt-6">
+					<form class="xl:space-y-2.5 2xl:space-y-4" method="POST">
+						<input
+							type="text"
+							required
+							placeholder="Firstname"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1 ring-inset ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
+						/>
+						<input
+							type="text"
+							required
+							placeholder="Lastname"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1 ring-inset ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
+						/>
+						<input
+							type="email"
+							required
+							placeholder="Email"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
+						/>
+						<input
+							type="password"
+							required
+							placeholder="Password"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100 disabled:pointer-events-none"
+						/>
+						<input
+							type="password"
+							required
+							placeholder="Confirm Password"
+							class="w-full rounded-xl px-4 py-3 text-sm ring-1 ring-inset ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
+						/>
+						<button
+							type="submit"
+							class="w-full justify-center rounded-xl bg-main-100 px-4 py-3 text-base font-semibold text-white hover:bg-main-120"
+						>
+							Sign up
+						</button>
+						<div class="flex items-center space-x-4">
+							<hr class="w-full text-main-25" />
+							<p class="text-base font-normal text-dark-100">
+								Or
+							</p>
+							<hr class="w-full text-main-25" />
+						</div>
+						<button
+							type="submit"
+							class="w-full justify-center rounded-xl px-4 py-3 text-base font-medium text-dark-100 ring-1 ring-main-25 hover:bg-main-5"
+						>
+							<div class="flex justify-center space-x-4">
+								<img src="google.png" alt="google" />
+								<p>Continue with Google</p>
+							</div>
+						</button>
+					</form>
+					<div class="mt-4 flex items-center justify-center gap-3.5">
+						<p class="text-center text-sm text-dark-50">
+							already have an account?
+						</p>
+						<a
+							routerLink="/sign-in"
+							class="text-sm font-semibold text-main-75 hover:text-main-100"
+							>Sign in</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
