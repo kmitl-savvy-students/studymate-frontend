@@ -11,5 +11,6 @@
 	target="_blank"
 	rel="noopener noreferrer"
 >
-	<fa-icon *ngIf="icon" class="me-2" [icon]="icon"></fa-icon>{{ label }}
+	<fa-icon *ngIf="icon" class="me-2" [icon]="[iconStyle, icon]"></fa-icon
+	>{{ label }}
 </a>

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-	selector: 'app-text-box-home',
+	selector: 'sdm-text-box-home',
 	standalone: true,
 	imports: [],
 	templateUrl: './text-box-home.component.html',
