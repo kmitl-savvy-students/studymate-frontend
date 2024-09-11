@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-	selector: 'app-card-home',
+	selector: 'sdm-card-home',
 	standalone: true,
 	imports: [],
 	templateUrl: './card-home.component.html',

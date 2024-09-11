@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
-	selector: 'app-footer',
+	selector: 'sdm-footer',
 	standalone: true,
-	imports: [FontAwesomeModule],
+	imports: [FontAwesomeModule, IconComponent],
 	templateUrl: './footer.component.html',
 	styleUrl: './footer.component.css',
 })

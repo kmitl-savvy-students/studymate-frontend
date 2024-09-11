@@ -1,9 +1,79 @@
-<div class="bg-orange-50 rounded-[20px] flex px-10 py-8 justify-between items-center">
-    <button><i class="fa-solid fa-circle-chevron-left text-main-50"></i></button>
-    <div class="text-xl px-16 2xl:px-32">
-        <p class="flex justify-center font-semibold text-center">{{detail}}</p>
-        <p class="flex justify-center">{{date}}</p>
-    </div>
-    <button><i class="fa-solid fa-circle-chevron-right text-main-50"></i></button>
-    
+<div id="default-carousel" class="relative w-full" data-carousel="slide">
+	<!-- Carousel wrapper -->
+	<div class="relative h-[120px] overflow-hidden rounded-lg">
+		@for (item of details; track item) {
+			<!-- Item -->
+			<div class="hidden duration-700 ease-in-out" data-carousel-item>
+				<div
+					class="absolute left-1/2 top-1/2 block w-full -translate-x-1/2 -translate-y-1/2"
+				>
+					<div
+						class="flex items-center justify-center rounded-[20px] bg-orange-50 py-8"
+					>
+						<div class="px-16 text-xl 2xl:px-32">
+							<p
+								class="flex justify-center text-center font-semibold"
+							>
+								{{ item.detail }}
+							</p>
+							<p class="flex justify-center">{{ item.date }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+	<!-- Slider controls -->
+	<button
+		type="button"
+		class="group absolute start-0 top-0 z-30 flex h-full cursor-pointer items-center justify-center px-10 focus:outline-none"
+		data-carousel-prev
+	>
+		<span
+			class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-main-50 group-hover:bg-main-120 group-focus:outline-none"
+		>
+			<svg
+				class="h-3 w-3 text-white rtl:rotate-180"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 6 10"
+			>
+				<path
+					stroke="currentColor"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M5 1 1 5l4 4"
+				/>
+			</svg>
+			<span class="sr-only">Previous</span>
+		</span>
+	</button>
+	<button
+		type="button"
+		class="group absolute end-0 top-0 z-30 flex h-full cursor-pointer items-center justify-center px-10 focus:outline-none"
+		data-carousel-next
+	>
+		<span
+			class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-main-50 group-hover:bg-main-120 group-focus:outline-none"
+		>
+			<svg
+				class="h-3 w-3 text-white rtl:rotate-180"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 6 10"
+			>
+				<path
+					stroke="currentColor"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="m1 9 4-4-4-4"
+				/>
+			</svg>
+			<span class="sr-only">Next</span>
+		</span>
+	</button>
 </div>

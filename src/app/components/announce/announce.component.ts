@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
-  selector: 'app-announce',
-  standalone: true,
-  imports: [],
-  templateUrl: './announce.component.html',
-  styleUrl: './announce.component.css'
+	selector: 'sdm-announce',
+	standalone: true,
+	imports: [FontAwesomeModule, IconComponent],
+	templateUrl: './announce.component.html',
+	styleUrl: './announce.component.css',
 })
 export class AnnounceComponent {
-  @Input() detail: string = '';
-  @Input() date: string = '';
+	@Input() details: { detail: string; date: string }[] = [];
 }

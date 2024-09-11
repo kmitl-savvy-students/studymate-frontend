@@ -15,5 +15,6 @@ export class SDMButtonLink {
 	@Input() label: string = 'กดปุ่มเลย';
 	@Input() link: string = '/';
 	@Input() icon: string = '';
+	@Input() iconStyle: string = 'fas';
 	@Input() external: boolean = false;
 }

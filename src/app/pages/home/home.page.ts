@@ -5,6 +5,7 @@ import { CardHomeComponent } from '../../components/card-home/card-home.componen
 import { SDMButtonLink } from '../../components/buttons/link/button-link.component';
 import { PicBoxHomeComponent } from '../../components/pic-box-home/pic-box-home.component';
 import { TextBoxHomeComponent } from '../../components/text-box-home/text-box-home.component';
+import { IconComponent } from '../../components/icon/icon.component';
 
 @Component({
 	selector: 'sdm-page-home',
@@ -16,6 +17,7 @@ import { TextBoxHomeComponent } from '../../components/text-box-home/text-box-ho
 		SDMButtonLink,
 		PicBoxHomeComponent,
 		TextBoxHomeComponent,
+		IconComponent,
 	],
 	templateUrl: './home.page.html',
 	styleUrl: './home.page.css',
