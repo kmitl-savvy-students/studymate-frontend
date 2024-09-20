@@ -1,0 +1,50 @@
+<div class="relative overflow-x-auto rounded-[20px] border border-main-50">
+	<table
+		class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
+	>
+		<thead class="">
+			<tr>
+				<th
+					*ngFor="let item of listThead; let i = index"
+					scope="col"
+					class="bg-main-50 px-[30px] py-10 text-lg font-medium text-dark-100
+	{{ i > 0 && i < listThead.length ? 'border-l border-white text-center' : '' }} "
+				>
+					{{ item }}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="bg-white dark:border-gray-700 dark:bg-gray-800">
+				<th
+					scope="row"
+					class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+				>
+					Apple MacBook Pro 17"
+				</th>
+				<td class="px-6 py-4">Silver</td>
+				<td class="px-6 py-4">Laptop</td>
+			</tr>
+			<tr class="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+				<th
+					scope="row"
+					class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+				>
+					Microsoft Surface Pro
+				</th>
+				<td class="px-6 py-4">White</td>
+				<td class="px-6 py-4">Laptop PC</td>
+			</tr>
+			<tr class="bg-white dark:bg-gray-800">
+				<th
+					scope="row"
+					class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+				>
+					Magic Mouse 2
+				</th>
+				<td class="px-6 py-4">Black</td>
+				<td class="px-6 py-4">Accessories</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

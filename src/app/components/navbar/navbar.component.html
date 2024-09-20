@@ -18,6 +18,15 @@
 					<a routerLink="" class="hover:text-main-100"
 						>จัดตารางเรียน</a
 					>
+					<a
+						routerLink="/my-subject"
+						class="hover:text-main-100"
+						[ngClass]="{
+							'text-main-100': currentRoute === '/my-subject',
+						}"
+					>
+						รายวิชาของฉัน
+					</a>
 					<a routerLink="" class="hover:text-main-100"
 						>เกี่ยวกับเรา</a
 					>
@@ -30,12 +39,8 @@
 						>
 							Sign in
 						</button>
-						<button
-							routerLink="/sign-up"
-							class="rounded-full bg-main-100 px-3.5 py-2 text-white hover:bg-main-120"
-						>
-							Sign up
-						</button>
+						<sdm-button-link label="Sign up" link="/sign-up">
+						</sdm-button-link>
 					</div>
 				</div>
 			</div>

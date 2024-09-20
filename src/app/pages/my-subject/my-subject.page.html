@@ -1,0 +1,15 @@
+<div class="mt-4 flex justify-between">
+	<p class="text-xl font-medium text-dark-100">
+		หลักสูตร วิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์
+		(หลักสูตรปรับปรุง พ.ศ. 2564)
+	</p>
+	<button>Upload Transcript</button>
+</div>
+
+<div class="mt-11 flex gap-x-6">
+	<sdm-table
+		[listThead]="['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก']"
+		class="w-3/4"
+	></sdm-table>
+	<sdm-credit-dashboard class="w-1/4"></sdm-credit-dashboard>
+</div>
