@@ -7,7 +7,7 @@
 				<th
 					*ngFor="let item of listThead; let i = index"
 					scope="col"
-					class="bg-main-50 px-[30px] py-10 text-lg font-medium text-dark-100
+					class="bg-main-50 px-[30px] py-9 text-lg font-medium text-dark-100
 	{{
 						i > 0 && i < listThead.length
 							? 'border-l border-white text-center'
@@ -23,15 +23,15 @@
 				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
 				(click)="toggleExpand1()"
 			>
-				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-8">
+				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-7">
 					<sdm-icon
 						[icon]="isExpanded1 ? 'chevron-down' : 'chevron-right'"
 						class="text-sm text-main-50"
 					></sdm-icon>
 					<p class="text-base">หมวดวิชาศึกษาทั่วไป</p>
 				</td>
-				<td class="px-6 py-8 text-center text-base">30</td>
-				<td class="px-6 py-8 text-center text-base">0</td>
+				<td class="px-6 py-7 text-center text-base">30</td>
+				<td class="px-6 py-7 text-center text-base">0</td>
 			</tr>
 			@if (isExpanded1) {
 				<tr class="bg-white font-normal text-dark-100">
@@ -102,11 +102,16 @@
 			<tr
 				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
 			>
-				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-8">
+				<td scope="row" class="flex gap-5 whitespace-nowrap px-14 py-8">
 					<p class="text-base">หมวดวิชาเสรี</p>
 				</td>
 				<td class="px-6 py-8 text-center text-base">0</td>
 				<td class="px-6 py-8 text-center text-base">6</td>
+			</tr>
+			<tr class="bg-white font-medium text-dark-100 hover:cursor-pointer">
+				<td class="px-14 py-5 text-base">รวม</td>
+				<td class="px-6 py-5 text-center text-base">118</td>
+				<td class="px-6 py-5 text-center text-base">18</td>
 			</tr>
 		</tbody>
 	</table>
