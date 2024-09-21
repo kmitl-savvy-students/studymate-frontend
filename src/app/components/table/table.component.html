@@ -2,48 +2,111 @@
 	<table
 		class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
 	>
-		<thead class="">
+		<thead>
 			<tr>
 				<th
 					*ngFor="let item of listThead; let i = index"
 					scope="col"
 					class="bg-main-50 px-[30px] py-10 text-lg font-medium text-dark-100
-	{{ i > 0 && i < listThead.length ? 'border-l border-white text-center' : '' }} "
+	{{
+						i > 0 && i < listThead.length
+							? 'border-l border-white text-center'
+							: ''
+					}} {{ i === 0 ? 'w-2/4' : 'w-1/4' }}"
 				>
 					{{ item }}
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="bg-white dark:border-gray-700 dark:bg-gray-800">
-				<th
-					scope="row"
-					class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-				>
-					Apple MacBook Pro 17"
-				</th>
-				<td class="px-6 py-4">Silver</td>
-				<td class="px-6 py-4">Laptop</td>
+			<tr
+				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
+				(click)="toggleExpand1()"
+			>
+				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-8">
+					<sdm-icon
+						[icon]="isExpanded1 ? 'chevron-down' : 'chevron-right'"
+						class="text-sm text-main-50"
+					></sdm-icon>
+					<p class="text-base">หมวดวิชาศึกษาทั่วไป</p>
+				</td>
+				<td class="px-6 py-8 text-center text-base">30</td>
+				<td class="px-6 py-8 text-center text-base">0</td>
 			</tr>
-			<tr class="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-				<th
-					scope="row"
-					class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-				>
-					Microsoft Surface Pro
-				</th>
-				<td class="px-6 py-4">White</td>
-				<td class="px-6 py-4">Laptop PC</td>
+			@if (isExpanded1) {
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">วิชาพื้นฐาน</td>
+					<td class="px-6 py-5 text-center text-base">6</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">
+						วิชาด้านภาษาและการสื่อสาร
+					</td>
+					<td class="px-6 py-5 text-center text-base">9</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">วิชาตามเกณฑ์ของคณะ</td>
+					<td class="px-6 py-5 text-center text-base">3</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">
+						วิชาเลือกหมวดวิชาศึกษาทั่วไป
+					</td>
+					<td class="px-6 py-5 text-center text-base">12</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+			}
+			<tr
+				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
+				(click)="toggleExpand2()"
+			>
+				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-8">
+					<sdm-icon
+						[icon]="isExpanded2 ? 'chevron-down' : 'chevron-right'"
+						class="text-sm text-main-50"
+					></sdm-icon>
+					<p class="text-base">หมวดวิชาเฉพาะ</p>
+				</td>
+				<td class="px-6 py-8 text-center text-base">88</td>
+				<td class="px-6 py-8 text-center text-base">12</td>
 			</tr>
-			<tr class="bg-white dark:bg-gray-800">
-				<th
-					scope="row"
-					class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-				>
-					Magic Mouse 2
-				</th>
-				<td class="px-6 py-4">Black</td>
-				<td class="px-6 py-4">Accessories</td>
+			@if (isExpanded2) {
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">วิชาพื้นฐาน</td>
+					<td class="px-6 py-5 text-center text-base">6</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">
+						วิชาด้านภาษาและการสื่อสาร
+					</td>
+					<td class="px-6 py-5 text-center text-base">9</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">วิชาตามเกณฑ์ของคณะ</td>
+					<td class="px-6 py-5 text-center text-base">3</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+				<tr class="bg-white font-normal text-dark-100">
+					<td class="px-14 py-5 text-base">
+						วิชาเลือกหมวดวิชาศึกษาทั่วไป
+					</td>
+					<td class="px-6 py-5 text-center text-base">12</td>
+					<td class="px-6 py-5 text-center text-base">0</td>
+				</tr>
+			}
+			<tr
+				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
+			>
+				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-8">
+					<p class="text-base">หมวดวิชาเสรี</p>
+				</td>
+				<td class="px-6 py-8 text-center text-base">0</td>
+				<td class="px-6 py-8 text-center text-base">6</td>
 			</tr>
 		</tbody>
 	</table>
