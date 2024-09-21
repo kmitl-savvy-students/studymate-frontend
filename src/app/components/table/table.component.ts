@@ -28,6 +28,7 @@ export class TableComponent {
 
 	toggleExpand(rowIndex: number) {
 		this.expandedRows[rowIndex] = !this.expandedRows[rowIndex];
+		console.log(this.expandedRows[rowIndex]);
 	}
 
 	isExpanded(rowIndex: number): boolean {
