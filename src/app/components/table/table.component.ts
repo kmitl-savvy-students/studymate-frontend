@@ -11,12 +11,37 @@ import { IconComponent } from '../icon/icon.component';
 })
 export class TableComponent {
 	@Input() listThead: string[] = [];
-	isExpanded1: boolean = true;
-	isExpanded2: boolean = true;
-	toggleExpand1() {
-		this.isExpanded1 = !this.isExpanded1;
+	@Input() tableData: any[] = [];
+
+	expandedRows: { [key: number]: boolean } = {};
+
+	ngOnInit() {
+		this.tableData.forEach((_, index) => {
+			this.expandedRows[index] = true;
+		});
 	}
-	toggleExpand2() {
-		this.isExpanded2 = !this.isExpanded2;
+
+	toggleExpand(rowIndex: number) {
+		this.expandedRows[rowIndex] = !this.expandedRows[rowIndex];
+	}
+
+	isExpanded(rowIndex: number): boolean {
+		return !!this.expandedRows[rowIndex];
+	}
+
+	hasSubCategories(row: any): boolean {
+		return row.subCategories && row.subCategories.length > 0;
+	}
+
+	calculateTotals() {
+		let totalCompleted = 0;
+		let totalRemaining = 0;
+
+		for (const row of this.tableData) {
+			totalCompleted += row.completed;
+			totalRemaining += row.remaining;
+		}
+
+		return { totalCompleted, totalRemaining };
 	}
 }

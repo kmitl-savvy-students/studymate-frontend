@@ -12,7 +12,8 @@
 
 <div class="mt-9 flex gap-x-6">
 	<sdm-table
-		[listThead]="['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก']"
+		[listThead]="tableHeaders"
+		[tableData]="tableRows"
 		class="w-[1168px]"
 	></sdm-table>
 	<div class="flex flex-col gap-y-6">

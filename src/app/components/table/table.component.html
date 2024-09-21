@@ -19,99 +19,82 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr
-				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
-				(click)="toggleExpand1()"
-			>
-				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-7">
-					<sdm-icon
-						[icon]="isExpanded1 ? 'chevron-down' : 'chevron-right'"
-						class="text-sm text-main-50"
-					></sdm-icon>
-					<p class="text-base">หมวดวิชาศึกษาทั่วไป</p>
+			<ng-container *ngFor="let row of tableData; let rowIndex = index">
+				<tr
+					class=" bg-main-5 font-medium text-dark-100 hover:cursor-pointer {{
+						!isExpanded(rowIndex) ? 'border-b border-main-5' : ''
+					}}"
+					(click)="
+						hasSubCategories(row) ? toggleExpand(rowIndex) : null
+					"
+				>
+					<td
+						scope="row"
+						class="flex whitespace-nowrap px-6 py-7"
+						[ngClass]="{
+							'gap-[17px]': isExpanded(rowIndex),
+							'gap-[22px]':
+								!isExpanded(rowIndex) && hasSubCategories(row),
+							'ps-14': !hasSubCategories(row),
+						}"
+					>
+						<sdm-icon
+							*ngIf="hasSubCategories(row)"
+							[icon]="
+								isExpanded(rowIndex)
+									? 'chevron-down'
+									: 'chevron-right'
+							"
+							class="text-sm text-main-50"
+						>
+						</sdm-icon>
+						<p class="text-base">{{ row.category }}</p>
+					</td>
+					<td
+						class="border-l border-main-50 px-6 py-7 text-center text-base"
+					>
+						{{ row.completed }}
+					</td>
+					<td
+						class="border-l border-main-50 px-6 py-7 text-center text-base"
+					>
+						{{ row.remaining }}
+					</td>
+				</tr>
+
+				<ng-container *ngIf="isExpanded(rowIndex)">
+					<tr
+						*ngFor="let subRow of row.subCategories"
+						class="bg-white font-normal text-dark-100"
+					>
+						<td class="py-5 pe-6 ps-14 text-base">
+							{{ subRow.name }}
+						</td>
+						<td
+							class="border-l border-main-50 px-6 py-5 text-center text-base"
+						>
+							{{ subRow.completed }}
+						</td>
+						<td
+							class="border-l border-main-50 px-6 py-5 text-center text-base"
+						>
+							{{ subRow.remaining }}
+						</td>
+					</tr>
+				</ng-container>
+			</ng-container>
+			<tr class="bg-white font-medium text-dark-100">
+				<td class="py-5 pe-6 ps-14 text-base">รวม</td>
+				<td
+					class="border-l border-main-50 px-6 py-5 text-center text-base"
+				>
+					{{ calculateTotals().totalCompleted }}
 				</td>
-				<td class="px-6 py-7 text-center text-base">30</td>
-				<td class="px-6 py-7 text-center text-base">0</td>
-			</tr>
-			@if (isExpanded1) {
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">วิชาพื้นฐาน</td>
-					<td class="px-6 py-5 text-center text-base">6</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">
-						วิชาด้านภาษาและการสื่อสาร
-					</td>
-					<td class="px-6 py-5 text-center text-base">9</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">วิชาตามเกณฑ์ของคณะ</td>
-					<td class="px-6 py-5 text-center text-base">3</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">
-						วิชาเลือกหมวดวิชาศึกษาทั่วไป
-					</td>
-					<td class="px-6 py-5 text-center text-base">12</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-			}
-			<tr
-				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
-				(click)="toggleExpand2()"
-			>
-				<td scope="row" class="flex gap-5 whitespace-nowrap px-6 py-8">
-					<sdm-icon
-						[icon]="isExpanded2 ? 'chevron-down' : 'chevron-right'"
-						class="text-sm text-main-50"
-					></sdm-icon>
-					<p class="text-base">หมวดวิชาเฉพาะ</p>
+				<td
+					class="border-l border-main-50 px-6 py-5 text-center text-base"
+				>
+					{{ calculateTotals().totalRemaining }}
 				</td>
-				<td class="px-6 py-8 text-center text-base">88</td>
-				<td class="px-6 py-8 text-center text-base">12</td>
-			</tr>
-			@if (isExpanded2) {
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">วิชาพื้นฐาน</td>
-					<td class="px-6 py-5 text-center text-base">6</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">
-						วิชาด้านภาษาและการสื่อสาร
-					</td>
-					<td class="px-6 py-5 text-center text-base">9</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">วิชาตามเกณฑ์ของคณะ</td>
-					<td class="px-6 py-5 text-center text-base">3</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-				<tr class="bg-white font-normal text-dark-100">
-					<td class="px-14 py-5 text-base">
-						วิชาเลือกหมวดวิชาศึกษาทั่วไป
-					</td>
-					<td class="px-6 py-5 text-center text-base">12</td>
-					<td class="px-6 py-5 text-center text-base">0</td>
-				</tr>
-			}
-			<tr
-				class="bg-main-5 font-medium text-dark-100 hover:cursor-pointer"
-			>
-				<td scope="row" class="flex gap-5 whitespace-nowrap px-14 py-8">
-					<p class="text-base">หมวดวิชาเสรี</p>
-				</td>
-				<td class="px-6 py-8 text-center text-base">0</td>
-				<td class="px-6 py-8 text-center text-base">6</td>
-			</tr>
-			<tr class="bg-white font-medium text-dark-100 hover:cursor-pointer">
-				<td class="px-14 py-5 text-base">รวม</td>
-				<td class="px-6 py-5 text-center text-base">118</td>
-				<td class="px-6 py-5 text-center text-base">18</td>
 			</tr>
 		</tbody>
 	</table>
