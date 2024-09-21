@@ -17,7 +17,12 @@
 		class="w-[1168px]"
 	></sdm-table>
 	<div class="flex flex-col gap-y-6">
-		<sdm-credit-dashboard class="w-[325px]"></sdm-credit-dashboard>
-		<sdm-advice-dashboard class="w-[325px]">03</sdm-advice-dashboard>
+		<sdm-credit-dashboard
+			[totalCompleted]="totalCompleted"
+			[totalRemaining]="totalRemaining"
+			[totalCredit]="totalCredit"
+			class="w-[325px]"
+		></sdm-credit-dashboard>
+		<sdm-advice-dashboard class="w-[325px]"></sdm-advice-dashboard>
 	</div>
 </div>

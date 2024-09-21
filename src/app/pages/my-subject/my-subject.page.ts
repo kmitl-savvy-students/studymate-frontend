@@ -61,9 +61,34 @@ export class SDMMySubject {
 		},
 		{
 			category: 'หมวดวิชาเสรี',
-			completed: 6,
-			remaining: 0,
+			completed: 3,
+			remaining: 3,
 			subCategories: [],
 		},
 	];
+
+	private calculateTotals() {
+		let totalCompleted = 0;
+		let totalRemaining = 0;
+
+		for (const row of this.tableRows) {
+			totalCompleted += row.completed;
+			totalRemaining += row.remaining;
+		}
+
+		return { totalCompleted, totalRemaining };
+	}
+
+	get totalCredit(): number {
+		// ต้องแก้ให้ดึงมาใช้จากข้อมูลที่รับมา แต่ยังไงนะ
+		return 136; // ใส่เลขแมนนวลไปก่อน
+	}
+
+	get totalCompleted(): number {
+		return this.calculateTotals().totalCompleted;
+	}
+
+	get totalRemaining(): number {
+		return this.calculateTotals().totalRemaining;
+	}
 }

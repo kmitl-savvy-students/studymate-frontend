@@ -6,7 +6,7 @@
 		class="flex h-44 w-44 flex-col space-y-2 self-center rounded-full bg-main-15 p-12"
 	>
 		<div class="mt-1 text-center text-5xl font-medium text-[#14b8a6]">
-			118
+			{{ totalCompleted }}
 		</div>
 		<div class="text-center text-base font-normal text-dark-100">
 			หน่วยกิต
@@ -16,11 +16,15 @@
 		<div>หน่วยกิตทั้งหมด</div>
 		<div>ขาดอีก</div>
 		<div>
-			<span class="me-2 font-semibold text-main-100">136</span
+			<span class="me-2 font-semibold text-main-100">{{
+				totalCredit
+			}}</span
 			><span>หน่วยกิต</span>
 		</div>
 		<div>
-			<span class="me-2 font-semibold text-red-400">18</span
+			<span class="me-2 font-semibold text-red-400">{{
+				totalRemaining
+			}}</span
 			><span>หน่วยกิต</span>
 		</div>
 	</div>
