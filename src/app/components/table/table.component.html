@@ -65,7 +65,10 @@
 				<ng-container *ngIf="isExpanded(rowIndex)">
 					<tr
 						*ngFor="let subRow of row.subCategories"
-						class="bg-white font-normal text-dark-100"
+						class="bg-white font-normal text-dark-100 hover:cursor-pointer"
+						data-modal-target="default-modal"
+						data-modal-toggle="default-modal"
+						(click)="selectSubRow(subRow)"
 					>
 						<td class="py-5 pe-6 ps-14 text-base">
 							{{ subRow.name }}
@@ -83,17 +86,22 @@
 					</tr>
 				</ng-container>
 			</ng-container>
+			<sdm-modal
+				modalID="default-modal"
+				[headerModal]="selectedSubRowName"
+				[courseList]="selectedCourses"
+			></sdm-modal>
 			<tr class="bg-white font-medium text-dark-100">
 				<td class="py-5 pe-6 ps-14 text-base">รวม</td>
 				<td
 					class="border-l border-main-50 px-6 py-5 text-center text-base"
 				>
-					{{ calculateTotals().totalCompleted }}
+					{{ totalCompleted }}
 				</td>
 				<td
 					class="border-l border-main-50 px-6 py-5 text-center text-base"
 				>
-					{{ calculateTotals().totalRemaining }}
+					{{ totalRemaining }}
 				</td>
 			</tr>
 		</tbody>

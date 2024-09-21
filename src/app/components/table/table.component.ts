@@ -1,19 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
+import { ModalComponent } from '../modals/modal/modal.component';
 
 @Component({
 	selector: 'sdm-table',
 	standalone: true,
-	imports: [CommonModule, IconComponent],
+	imports: [CommonModule, IconComponent, ModalComponent],
 	templateUrl: './table.component.html',
 	styleUrl: './table.component.css',
 })
 export class TableComponent {
 	@Input() listThead: string[] = [];
 	@Input() tableData: any[] = [];
+	@Input() totalCompleted: number = 0;
+	@Input() totalRemaining: number = 0;
 
 	expandedRows: { [key: number]: boolean } = {};
+	selectedSubRowName: string = '';
+	selectedCourses: Array<{ code: string; title: string }> = [];
 
 	ngOnInit() {
 		this.tableData.forEach((_, index) => {
@@ -33,15 +38,11 @@ export class TableComponent {
 		return row.subCategories && row.subCategories.length > 0;
 	}
 
-	calculateTotals() {
-		let totalCompleted = 0;
-		let totalRemaining = 0;
-
-		for (const row of this.tableData) {
-			totalCompleted += row.completed;
-			totalRemaining += row.remaining;
-		}
-
-		return { totalCompleted, totalRemaining };
+	selectSubRow(subRow: {
+		name: string;
+		courses: { code: string; title: string }[];
+	}) {
+		this.selectedSubRowName = subRow.name;
+		this.selectedCourses = subRow.courses;
 	}
 }
