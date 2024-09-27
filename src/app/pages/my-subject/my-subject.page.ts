@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { TableComponent } from '../../components/table/table.component';
 import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-my-subject',
@@ -14,7 +15,10 @@ import { AdviceDashboardComponent } from '../../components/advice-dashboard/advi
 	templateUrl: './my-subject.page.html',
 	styleUrl: './my-subject.page.css',
 })
-export class SDMMySubject {
+export class SDMMySubject implements AfterViewInit {
+	ngAfterViewInit(): void {
+		initFlowbite();
+	}
 	tableHeaders = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
 	tableRows = [
 		{
@@ -99,7 +103,65 @@ export class SDMMySubject {
 			completed: 88,
 			remaining: 12,
 			subCategories: [
-				{ name: 'วิชาแกน', completed: 30, remaining: 0 },
+				{
+					name: 'วิชาแกน',
+					completed: 30,
+					remaining: 0,
+					courses: [
+						{
+							code: '01076140',
+							title: 'CALCULUS 1',
+						},
+						{
+							code: '01076141',
+							title: 'CALCULUS 2',
+						},
+						{
+							code: '01076032',
+							title: 'ELEMENTARY DIFFERENTIAL EQUATIONS AND LINEAR ALGEBRA',
+						},
+						{
+							code: '01076253',
+							title: 'PROBABILITY AND STATISTICS',
+						},
+						{
+							code: '01076101',
+							title: 'INTRODUCTION TO COMPUTER ENGINEERING',
+						},
+						{
+							code: '01076103',
+							title: 'PROGRAMMING FUNDAMENTAL',
+						},
+						{
+							code: '01076104',
+							title: 'PROGRAMMING PROJECT',
+						},
+						{
+							code: '01076107',
+							title: 'CIRCUITS AND ELECTRONICS',
+						},
+						{
+							code: '01076108',
+							title: 'CIRCUITS AND ELECTRONICS IN PRACTICE',
+						},
+						{
+							code: '01076012',
+							title: 'DISCRETE STRUCTURE',
+						},
+						{
+							code: '01076011',
+							title: 'OPERATING SYSTEMS',
+						},
+						{
+							code: '01076016',
+							title: 'COMPUTER ENGINEERING PROJECT PREPARATION',
+						},
+						{
+							code: '01006004',
+							title: 'INDUSTRIAL TRAINING',
+						},
+					],
+				},
 				{
 					name: 'วิชาเฉพาะด้าน',
 					completed: 46,
@@ -232,14 +294,6 @@ export class SDMMySubject {
 			subCategories: [],
 		},
 	];
-
-	// selectedSubRowName = '';
-	// selectedCourses = [];
-
-	// openModal(subRow: any) {
-	// 	this.selectedCourses = subRow.courses;
-	// 	this.selectedSubRowName = subRow.name;
-	// }
 
 	private calculateTotals() {
 		let totalCompleted = 0;
