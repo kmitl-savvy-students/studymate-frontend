@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { ModalComponent } from '../modals/modal/modal.component';
+import { Modal } from 'flowbite';
 
 @Component({
 	selector: 'sdm-table',
@@ -19,6 +20,7 @@ export class TableComponent {
 	expandedRows: { [key: number]: boolean } = {};
 	selectedSubRowName: string = '';
 	selectedCourses: Array<{ code: string; title: string }> = [];
+	initialized: boolean = false;
 
 	ngOnInit() {
 		this.tableData.forEach((_, index) => {
@@ -28,7 +30,6 @@ export class TableComponent {
 
 	toggleExpand(rowIndex: number) {
 		this.expandedRows[rowIndex] = !this.expandedRows[rowIndex];
-		console.log(this.expandedRows[rowIndex]);
 	}
 
 	isExpanded(rowIndex: number): boolean {
@@ -45,5 +46,9 @@ export class TableComponent {
 	}) {
 		this.selectedSubRowName = subRow.name;
 		this.selectedCourses = subRow.courses;
+
+		const modalElement = document.getElementById('default-modal');
+		const modal = new Modal(modalElement);
+		modal.show();
 	}
 }
