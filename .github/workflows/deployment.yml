@@ -15,7 +15,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0 # Ensures a full clone for better analysis relevancy
+                fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
             - name: Run SonarQube Scan
               uses: sonarsource/sonarqube-scan-action@master
