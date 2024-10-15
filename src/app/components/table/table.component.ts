@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
-import { ModalComponent } from '../modals/modal/modal.component';
+import { ModalComponent } from '../modals/my-subject-modal/my-subject-modal.component';
 import { Modal } from 'flowbite';
 
 @Component({
@@ -47,7 +47,7 @@ export class TableComponent {
 		this.selectedSubRowName = subRow.name;
 		this.selectedCourses = subRow.courses;
 
-		const modalElement = document.getElementById('default-modal');
+		const modalElement = document.getElementById('my-subject-modal');
 		const modal = new Modal(modalElement);
 		modal.show();
 	}

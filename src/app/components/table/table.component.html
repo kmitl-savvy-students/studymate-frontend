@@ -66,8 +66,8 @@
 					<tr
 						*ngFor="let subRow of row.subCategories"
 						class="bg-white font-normal text-dark-100 hover:cursor-pointer"
-						data-modal-target="default-modal"
-						data-modal-toggle="default-modal"
+						data-modal-target="my-subject-modal"
+						data-modal-toggle="my-subject-modal"
 						(click)="selectSubRow(subRow)"
 					>
 						<td class="py-5 pe-6 ps-14 text-base">
@@ -86,11 +86,11 @@
 					</tr>
 				</ng-container>
 			</ng-container>
-			<sdm-modal
-				modalID="default-modal"
+			<sdm-my-subject-modal
+				modalID="my-subject-modal"
 				[headerModal]="selectedSubRowName"
 				[courseList]="selectedCourses"
-			></sdm-modal>
+			></sdm-my-subject-modal>
 			<tr class="bg-white font-medium text-dark-100">
 				<td class="py-5 pe-6 ps-14 text-base">รวม</td>
 				<td

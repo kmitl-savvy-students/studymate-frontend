@@ -3,6 +3,7 @@ import { TableComponent } from '../../components/table/table.component';
 import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
 import { initFlowbite } from 'flowbite';
+import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
 
 @Component({
 	selector: 'sdm-my-subject',
@@ -11,6 +12,7 @@ import { initFlowbite } from 'flowbite';
 		TableComponent,
 		CreditDashboardComponent,
 		AdviceDashboardComponent,
+		ImportTranscriptComponent,
 	],
 	templateUrl: './my-subject.page.html',
 	styleUrl: './my-subject.page.css',
