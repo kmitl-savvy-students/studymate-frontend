@@ -13,4 +13,4 @@ RUN ng build --configuration=production
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "--configuration=production", "0.0.0.0", "--poll", "1"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--poll", "1"]
