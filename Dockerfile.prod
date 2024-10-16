@@ -9,8 +9,8 @@ RUN npm install
 
 COPY . .
 
-RUN ng build --configuration=preprod
+RUN ng build --configuration=prod
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "--configuration=preprod", "0.0.0.0", "--poll", "1"]
+CMD ["ng", "serve", "--host", "--configuration=prod", "0.0.0.0", "--poll", "1"]
