@@ -38,7 +38,7 @@ jobs:
 
             - name: Build Docker Image
               run: |
-                  docker build -f Dockerfile.prod -t front-img .
+                  docker build -f Dockerfile.preprod -t front-img .
 
             - name: Stop and Remove Container
               run: |
