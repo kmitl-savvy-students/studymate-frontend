@@ -14,6 +14,7 @@ export class ImportTranscriptComponent {
 	@Input() headerModal: string = '';
 	selectedFileName: string = '';
 	errorMessage: string = '';
+	isSubmitDisabled: boolean = true;
 
 	@ViewChild('fileInput') fileInput!: ElementRef;
 
@@ -21,11 +22,20 @@ export class ImportTranscriptComponent {
 		const file: File = event.target.files[0];
 		if (file) {
 			if (file.type === 'application/pdf') {
-				this.selectedFileName = file.name;
-				this.errorMessage = '';
+				const fileSizeInMB = file.size / (1024 * 1024);
+				if (fileSizeInMB <= 15) {
+					this.selectedFileName = file.name;
+					this.errorMessage = '';
+					this.isSubmitDisabled = false;
+				} else {
+					this.selectedFileName = '';
+					this.errorMessage = 'ขนาดไฟล์ต้องไม่เกิน 15 MB';
+					this.isSubmitDisabled = true;
+				}
 			} else {
 				this.selectedFileName = '';
 				this.errorMessage = 'อัปโหลดได้เฉพาะไฟล์ PDF เท่านั้น';
+				this.isSubmitDisabled = true;
 			}
 		}
 	}
@@ -34,5 +44,11 @@ export class ImportTranscriptComponent {
 		this.selectedFileName = '';
 		this.errorMessage = '';
 		this.fileInput.nativeElement.value = '';
+		this.isSubmitDisabled = true;
+	}
+
+	onDivClick(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
 	}
 }

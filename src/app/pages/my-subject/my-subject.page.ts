@@ -4,6 +4,7 @@ import { CreditDashboardComponent } from '../../components/credit-dashboard/cred
 import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
 import { initFlowbite } from 'flowbite';
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
+import { IconComponent } from '../../components/icon/icon.component';
 
 @Component({
 	selector: 'sdm-my-subject',
@@ -13,6 +14,7 @@ import { ImportTranscriptComponent } from '../../components/modals/import-transc
 		CreditDashboardComponent,
 		AdviceDashboardComponent,
 		ImportTranscriptComponent,
+		IconComponent,
 	],
 	templateUrl: './my-subject.page.html',
 	styleUrl: './my-subject.page.css',
