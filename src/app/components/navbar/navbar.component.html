@@ -11,7 +11,13 @@
 			</a>
 			<div class="m-0 flex content-center">
 				<div class="flex items-center space-x-12 text-base font-medium">
-					<a routerLink="/subject" class="hover:text-main-100"
+					<a
+						routerLink="/subject"
+						class="hover:text-main-100"
+						[ngClass]="{
+							'font-semibold text-main-100':
+								currentRoute === '/subject',
+						}"
 						>รายวิชาเรียน</a
 					>
 					<a routerLink="" class="hover:text-main-100">รีวิววิชา</a>
