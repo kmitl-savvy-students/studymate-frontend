@@ -1,0 +1,85 @@
+<!-- <div>
+	<select
+		class="appearance-none rounded-[10px] border-none bg-main-100 text-white hover:bg-main-120 focus:ring-0"
+	>
+		<option
+			selected
+			value
+			class="bg-white px-3 py-2 text-base font-normal text-dark-100"
+		>
+			ปีการศึกษา
+		</option>
+
+		@for (option of listOptions; track option) {
+			<option
+				[value]="option"
+				class="bg-white text-base font-normal text-dark-100"
+			>
+				{{ option }}
+			</option>
+		}
+	</select>
+</div> -->
+
+<!-- <form [formGroup]="form">
+	<div>
+		<select
+			formControlName="selectedOption"
+			(change)="onOptionChange()"
+			class="appearance-none rounded-[10px] border-none bg-main-100 text-white hover:bg-main-120 focus:ring-0"
+		>
+			<option
+				value=""
+				class="bg-white px-3 py-2 text-base font-normal text-dark-100"
+			>
+				ปีการศึกษา
+			</option>
+			@for (option of listOptions; track option) {
+				<option
+					[value]="option"
+					class="bg-white text-base font-normal text-dark-100"
+				>
+					{{ option }}
+				</option>
+			}
+		</select>
+	</div>
+</form> -->
+
+<div class="test relative cursor-pointer">
+	<div
+		class="selected flex items-center justify-between gap-x-3 rounded-[10px] border-none bg-main-100 px-4 py-2 font-medium text-white hover:bg-main-120 focus:ring-0"
+		(click)="toggleDropdown()"
+	>
+		{{ form.get('selectedOption')?.value || selectName }}
+		<sdm-icon
+			icon="chevron-down"
+			class="text-sm text-white"
+			[ngClass]="{ 'rotate-180': isDropdownOpen }"
+		></sdm-icon>
+	</div>
+	<ul
+		[class.show]="isDropdownOpen"
+		class="mt-1 rounded-[10px] bg-white py-1.5 shadow-md"
+	>
+		<li
+			(click)="selectOption('')"
+			[class.hover]="hoveredOption === ''"
+			(mouseenter)="hoveredOption = ''"
+			(mouseleave)="hoveredOption = null"
+			class="py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
+		>
+			{{ selectName }}
+		</li>
+		<li
+			*ngFor="let option of listOptions"
+			(click)="selectOption(option)"
+			(mouseenter)="hoveredOption = option"
+			(mouseleave)="hoveredOption = null"
+			[class.hover]="hoveredOption === option"
+			class="py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
+		>
+			{{ option }}
+		</li>
+	</ul>
+</div>
