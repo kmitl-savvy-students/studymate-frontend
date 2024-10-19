@@ -11,4 +11,5 @@ RUN npm install
 
 RUN ng build --configuration=prod
 
-CMD ["ng", "serve", "--host", "--configuration=prod", "0.0.0.0", "--poll", "1"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--configuration", "prod", "--poll", "1"]
+

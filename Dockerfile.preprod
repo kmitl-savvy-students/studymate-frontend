@@ -11,4 +11,5 @@ RUN npm install
 
 RUN ng build --configuration=preprod
 
-CMD ["ng", "serve", "--host", "--configuration=preprod", "0.0.0.0", "--poll", "1"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--configuration", "preprod", "--poll", "1"]
+
