@@ -1,0 +1,148 @@
+<div
+	class="flex w-64 flex-col rounded-[20px] border border-main-25 px-5 text-dark-100"
+>
+	<!-- Filter  คะแนน -->
+	<div class="flex flex-col gap-y-2 border-b border-b-main-25 py-4">
+		<div
+			class="flex justify-between hover:cursor-pointer"
+			(click)="togglePointFilter()"
+		>
+			<div class="text-lg font-medium">คะแนน</div>
+			<sdm-icon
+				icon="chevron-up"
+				class="icon-filter"
+				[ngClass]="{ 'rotate-180': isPointFilterOpen }"
+			></sdm-icon>
+		</div>
+
+		<div class="flex flex-col gap-y-2.5" *ngIf="isPointFilterOpen">
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">5</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">4</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">3</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">2</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">1</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Filter หมวดวิชา -->
+	<div class="flex flex-col gap-y-2 border-b border-b-main-25 pb-4 pt-3">
+		<div
+			class="flex justify-between hover:cursor-pointer"
+			(click)="toggleSubCateFilter()"
+		>
+			<div class="text-lg font-medium">หมวดวิชา</div>
+			<sdm-icon
+				icon="chevron-up"
+				class="icon-filter"
+				[ngClass]="{ 'rotate-180': isSubCateFilterOpen }"
+			></sdm-icon>
+		</div>
+		<div *ngIf="isSubCateFilterOpen">
+			<div
+				class="flex flex-col gap-y-2.5 pb-2"
+				*ngFor="let category of subjects; let categoryIndex = index"
+			>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">
+						{{ category.category }}
+					</div>
+				</div>
+				<div
+					class="ms-4 flex gap-x-3.5"
+					*ngFor="let subCate of category.subCategories"
+				>
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">
+						{{ subCate.name }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Filter วัน -->
+	<div class="flex flex-col gap-y-2 border-b border-b-main-25 pb-4 pt-3">
+		<div
+			class="flex justify-between hover:cursor-pointer"
+			(click)="toggleDayFilter()"
+		>
+			<div class="text-lg font-medium">วัน</div>
+			<sdm-icon
+				icon="chevron-up"
+				class="icon-filter"
+				[ngClass]="{ 'rotate-180': isDayFilterOpen }"
+			></sdm-icon>
+		</div>
+
+		<div class="flex flex-col gap-y-2.5" *ngIf="isDayFilterOpen">
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">จันทร์</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">อังคาร</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">พุธ</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">พฤหัสบดี</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">ศุกร์</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">เสาร์</div>
+			</div>
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">อาทิตย์</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Filter เวลา-->
+	<div class="flex flex-col gap-y-2 pb-4 pt-3">
+		<div
+			class="flex justify-between hover:cursor-pointer"
+			(click)="toggleTimeFilter()"
+		>
+			<div class="text-lg font-medium">เวลา</div>
+			<sdm-icon
+				icon="chevron-up"
+				class="icon-filter"
+				[ngClass]="{ 'rotate-180': isTimeFilterOpen }"
+			></sdm-icon>
+		</div>
+
+		<div class="flex flex-col gap-y-2" *ngIf="isTimeFilterOpen">
+			<div class="flex gap-x-3.5">
+				<input id="checkbox" type="checkbox" class="check-box" />
+				<div class="col-span-2 -mb-1 text-sm">
+					ยังไม่ได้ทำ จะใช้ของ Flowbite
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -4,6 +4,7 @@ import { SDMSelectComponent } from '../../components/select/select.component';
 import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-added-modal/subject-added-modal.component';
+import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 
 @Component({
 	selector: 'sdm-subject',
@@ -13,6 +14,7 @@ import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-a
 		SDMSearchBarComponent,
 		IconComponent,
 		SDMSubjectAddedModalComponent,
+		SDMilterBarComponent,
 	],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
