@@ -3,11 +3,12 @@ import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'sdm-navbar',
 	standalone: true,
-	imports: [RouterLink, SDMButtonLink, CommonModule],
+	imports: [RouterLink, SDMButtonLink, CommonModule, IconComponent],
 	templateUrl: './navbar.component.html',
 	styleUrl: './navbar.component.css',
 })
@@ -20,5 +21,12 @@ export class NavbarComponent {
 			.subscribe((event: any) => {
 				this.currentRoute = event.url;
 			});
+	}
+
+	isSignIn = false;
+
+	toggleSignIn() {
+		this.isSignIn = !this.isSignIn;
+		console.log('SignIn : ', this.isSignIn);
 	}
 }

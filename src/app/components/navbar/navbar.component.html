@@ -11,6 +11,12 @@
 			</a>
 			<div class="m-0 flex content-center">
 				<div class="flex items-center space-x-12 text-base font-medium">
+					<button
+						(click)="toggleSignIn()"
+						class="hover:text-main-100"
+					>
+						toggleSignIn
+					</button>
 					<a
 						routerLink="/subject"
 						class="hover:text-main-100"
@@ -39,6 +45,7 @@
 					>
 					<div
 						class="flex items-center space-x-6 text-base font-medium"
+						[ngClass]="{ hidden: isSignIn }"
 					>
 						<button
 							routerLink="/sign-in"
@@ -49,6 +56,51 @@
 						<sdm-button-link label="Sign up" link="/sign-up">
 						</sdm-button-link>
 					</div>
+
+					<button
+						[ngClass]="{ hidden: !isSignIn }"
+						id="dropdownUserAvatarButton"
+						data-dropdown-toggle="dropdownAvatar"
+						class="flex items-center space-x-6 text-base font-medium"
+						type="button"
+					>
+						<sdm-icon
+							icon="circle-user"
+							class="text-3xl text-main-25 hover:text-main-50"
+						></sdm-icon>
+					</button>
+				</div>
+				<!-- Dropdown menu -->
+				<div
+					id="dropdownAvatar"
+					class="test-margin-left z-10 hidden w-60 divide-y divide-main-25 rounded-[20px] bg-white px-4 shadow-md"
+				>
+					<div class="flex w-full gap-x-3 py-3">
+						<sdm-icon
+							icon="circle-user"
+							class="flex items-center text-3xl text-main-25 hover:text-main-50"
+						></sdm-icon>
+						<div>
+							<div
+								class="max-w-40 text-ellipsis text-base font-medium"
+							>
+								Tanchanok Charungpattananon
+							</div>
+							<div class="text-xs font-medium">64010359</div>
+						</div>
+					</div>
+
+					<ul
+						class="py-2 text-sm font-medium text-dark-100"
+						aria-labelledby="dropdownUserAvatarButton"
+					>
+						<li>
+							<a href="#" class="block py-2">โปรไฟล์</a>
+						</li>
+						<li>
+							<a href="#" class="block py-2">ออกจากระบบ</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
