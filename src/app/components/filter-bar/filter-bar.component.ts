@@ -1,30 +1,37 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { TableComponent } from '../../components/table/table.component';
-import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
-import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
-import { initFlowbite } from 'flowbite';
-import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
-import { IconComponent } from '../../components/icon/icon.component';
+import { Component } from '@angular/core';
+import { IconComponent } from '../icon/icon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-	selector: 'sdm-my-subject',
+	selector: 'sdm-filter-bar',
 	standalone: true,
-	imports: [
-		TableComponent,
-		CreditDashboardComponent,
-		AdviceDashboardComponent,
-		ImportTranscriptComponent,
-		IconComponent,
-	],
-	templateUrl: './my-subject.page.html',
-	styleUrl: './my-subject.page.css',
+	imports: [IconComponent, CommonModule],
+	templateUrl: './filter-bar.component.html',
+	styleUrl: './filter-bar.component.css',
 })
-export class SDMMySubject implements AfterViewInit {
-	ngAfterViewInit(): void {
-		initFlowbite();
+export class SDMilterBarComponent {
+	isPointFilterOpen = true;
+	isSubCateFilterOpen = true;
+	isDayFilterOpen = true;
+	isTimeFilterOpen = true;
+
+	togglePointFilter() {
+		this.isPointFilterOpen = !this.isPointFilterOpen;
 	}
-	tableHeaders = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
-	tableRows = [
+
+	toggleSubCateFilter() {
+		this.isSubCateFilterOpen = !this.isSubCateFilterOpen;
+	}
+
+	toggleDayFilter() {
+		this.isDayFilterOpen = !this.isDayFilterOpen;
+	}
+
+	toggleTimeFilter() {
+		this.isTimeFilterOpen = !this.isTimeFilterOpen;
+	}
+
+	subjects = [
 		{
 			category: 'หมวดวิชาศึกษาทั่วไป',
 			completed: 30,
@@ -334,29 +341,4 @@ export class SDMMySubject implements AfterViewInit {
 			subCategories: [],
 		},
 	];
-
-	private calculateTotals() {
-		let totalCompleted = 0;
-		let totalRemaining = 0;
-
-		for (const row of this.tableRows) {
-			totalCompleted += row.completed;
-			totalRemaining += row.remaining;
-		}
-
-		return { totalCompleted, totalRemaining };
-	}
-
-	get totalCredit(): number {
-		// ต้องแก้ให้ดึงมาใช้จากข้อมูลที่รับมา แต่ยังไงนะ
-		return 136; // ใส่เลขแมนนวลไปก่อน
-	}
-
-	get totalCompleted(): number {
-		return this.calculateTotals().totalCompleted;
-	}
-
-	get totalRemaining(): number {
-		return this.calculateTotals().totalRemaining;
-	}
 }

@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
-	selector: 'sdm-modal',
+	selector: 'sdm-my-subject-modal',
 	standalone: true,
 	imports: [CommonModule],
-	templateUrl: './modal.component.html',
-	styleUrl: './modal.component.css',
+	templateUrl: './my-subject-modal.component.html',
+	styleUrl: './my-subject-modal.component.css',
 })
 export class ModalComponent {
 	@Input() modalID: string = '';

@@ -9,6 +9,6 @@ COPY . .
 RUN npm install -g @angular/cli
 RUN npm install
 
-RUN ng build --configuration=preprod
+RUN ng build --configuration=prod
 
-CMD ["ng", "serve", "--host", "--configuration=preprod", "0.0.0.0", "--poll", "1"]
+CMD ["ng", "serve", "--host", "--configuration=prod", "0.0.0.0", "--poll", "1"]
