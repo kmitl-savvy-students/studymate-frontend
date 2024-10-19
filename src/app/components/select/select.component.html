@@ -1,0 +1,37 @@
+<div class="test relative cursor-pointer">
+	<div
+		class="selected flex items-center justify-between gap-x-3 rounded-[10px] border-none bg-main-100 px-4 py-1 font-medium text-white hover:bg-main-120 focus:ring-0"
+		(click)="toggleDropdown()"
+	>
+		{{ form.get('selectedOption')?.value || selectName }}
+		<sdm-icon
+			icon="chevron-down"
+			class="text-sm text-white"
+			[ngClass]="{ 'rotate-180': isDropdownOpen }"
+		></sdm-icon>
+	</div>
+	<ul
+		[class.show]="isDropdownOpen"
+		class="absolute z-10 mt-1 hidden w-full rounded-[10px] bg-white py-1.5 shadow-md"
+	>
+		<li
+			(click)="selectOption('')"
+			[class.hover]="hoveredOption === ''"
+			(mouseenter)="hoveredOption = ''"
+			(mouseleave)="hoveredOption = null"
+			class="cursor-pointer py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
+		>
+			{{ selectName }}
+		</li>
+		<li
+			*ngFor="let option of listOptions"
+			(click)="selectOption(option)"
+			(mouseenter)="hoveredOption = option"
+			(mouseleave)="hoveredOption = null"
+			[class.hover]="hoveredOption === option"
+			class="py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
+		>
+			{{ option }}
+		</li>
+	</ul>
+</div>
