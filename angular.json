@@ -32,7 +32,13 @@
 						"scripts": []
 					},
 					"configurations": {
-						"production": {
+						"prod": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.ts"
+								}
+							],
 							"budgets": [
 								{
 									"type": "initial",
@@ -47,33 +53,54 @@
 							],
 							"outputHashing": "all"
 						},
-						"development": {
+						"preprod": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.preprod.ts"
+								}
+							],
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "5MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"dev": {
 							"optimization": false,
 							"extractLicenses": false,
 							"sourceMap": true
 						}
 					},
-					"defaultConfiguration": "production"
+					"defaultConfiguration": "prod"
 				},
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
-						"production": {
-							"buildTarget": "studymate-frontend:build:production"
+						"prod": {
+							"buildTarget": "studymate-frontend:build:prod"
 						},
-						"development": {
-							"buildTarget": "studymate-frontend:build:development"
+						"preprod": {
+							"buildTarget": "studymate-frontend:build:preprod"
+						},
+						"dev": {
+							"buildTarget": "studymate-frontend:build:dev"
 						}
 					},
-					"defaultConfiguration": "development"
+					"defaultConfiguration": "dev"
 				},
 				"extract-i18n": {
 					"builder": "@angular-devkit/build-angular:extract-i18n"
 				}
 			}
 		}
-	},
-	"cli": {
-		"analytics": "44a5494d-38d0-4bd2-81d4-bc342bcfa790"
 	}
 }
