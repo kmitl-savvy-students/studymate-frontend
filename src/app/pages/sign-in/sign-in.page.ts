@@ -37,6 +37,7 @@ export class SDMPageSignIn implements OnInit {
 			.subscribe((response) => {
 				this.authService.setToken(response.data.id);
 				console.log(response.data.id);
+				window.location.href = '/';
 			});
 	}
 
