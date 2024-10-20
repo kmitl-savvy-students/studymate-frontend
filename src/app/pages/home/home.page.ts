@@ -7,7 +7,6 @@ import { PicBoxHomeComponent } from '../../components/pic-box-home/pic-box-home.
 import { TextBoxHomeComponent } from '../../components/text-box-home/text-box-home.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { initFlowbite } from 'flowbite';
-import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 
 @Component({
 	selector: 'sdm-page-home',
@@ -20,7 +19,6 @@ import { SDMChooseCurriculumModalComponent } from '../../components/modals/choos
 		PicBoxHomeComponent,
 		TextBoxHomeComponent,
 		IconComponent,
-		SDMChooseCurriculumModalComponent,
 	],
 	templateUrl: './home.page.html',
 	styleUrl: './home.page.css',
