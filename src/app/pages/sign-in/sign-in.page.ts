@@ -49,12 +49,8 @@ export class SDMPageSignIn implements OnInit {
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];
 			if (authCode) {
+				this.isSigningIn = true;
 				this.googleSignInCallback(authCode);
-				this.router.navigate([], {
-					relativeTo: this.route,
-					queryParams: {},
-					replaceUrl: true,
-				});
 			}
 		});
 	}
