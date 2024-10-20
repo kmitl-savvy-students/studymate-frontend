@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
 	selector: 'sdm-navbar',
@@ -12,10 +13,14 @@ import { IconComponent } from '../icon/icon.component';
 	templateUrl: './navbar.component.html',
 	styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
 	currentRoute: string = '';
+	isSetToken = false;
 
-	constructor(private router: Router) {
+	constructor(
+		private router: Router,
+		private authService: AuthService,
+	) {
 		this.router.events
 			.pipe(filter((event) => event instanceof NavigationEnd))
 			.subscribe((event: any) => {
@@ -23,10 +28,15 @@ export class NavbarComponent {
 			});
 	}
 
-	isSignIn = false;
+	ngOnInit(): void {
+		// สมัครรับข้อมูลการเปลี่ยนแปลงของ Token
+		this.authService.tokenSubject.subscribe((token) => {
+			this.isSetToken = token !== null;
+			console.log('Token:', token);
+			console.log('isSetToken:', this.isSetToken);
+		});
 
-	toggleSignIn() {
-		this.isSignIn = !this.isSignIn;
-		console.log('SignIn : ', this.isSignIn);
+		// ตรวจสอบค่าเริ่มต้นของ Token
+		this.isSetToken = this.authService.getToken() !== null;
 	}
 }

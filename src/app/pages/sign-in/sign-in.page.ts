@@ -26,7 +26,7 @@ export class SDMPageSignIn implements OnInit {
 
 		this.http.get<{ data: string }>(apiUrl).subscribe((response) => {
 			this.googleSignInUrl = response.data;
-			window.location.href = this.googleSignInUrl;
+			window.location.replace(this.googleSignInUrl); // เปลี่ยนเป็น replace
 		});
 	}
 	googleSignInCallback(authCode: string) {
@@ -37,14 +37,33 @@ export class SDMPageSignIn implements OnInit {
 			.subscribe((response) => {
 				this.authService.setToken(response.data.id);
 				console.log(response.data.id);
-				window.location.href = '/';
+				console.log('Token Set: ', this.authService.getToken());
+
+				// ใช้ router.navigate แทน window.location.href
+				this.router.navigate(['/']);
 			});
 	}
+
+	// ngOnInit() {
+	// 	this.route.queryParams.subscribe((params) => {
+	// 		const authCode = params['code'];
+	// 		if (authCode) this.googleSignInCallback(authCode);
+	// 	});
+	// }
 
 	ngOnInit() {
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];
-			if (authCode) this.googleSignInCallback(authCode);
+			if (authCode) {
+				this.googleSignInCallback(authCode);
+
+				// ล้าง query parameters เพื่อไม่ให้ authCode ค้างอยู่ใน URL
+				this.router.navigate([], {
+					relativeTo: this.route,
+					queryParams: {},
+					replaceUrl: true, // แทนที่ URL โดยไม่โหลดหน้าใหม่
+				});
+			}
 		});
 	}
 

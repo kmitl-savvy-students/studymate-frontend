@@ -11,12 +11,6 @@
 			</a>
 			<div class="m-0 flex content-center">
 				<div class="flex items-center space-x-12 text-base font-medium">
-					<button
-						(click)="toggleSignIn()"
-						class="hover:text-main-100"
-					>
-						toggleSignIn
-					</button>
 					<a
 						routerLink="/subject"
 						class="hover:text-main-100"
@@ -45,7 +39,7 @@
 					>
 					<div
 						class="flex items-center space-x-6 text-base font-medium"
-						[ngClass]="{ hidden: isSignIn }"
+						[ngClass]="{ hidden: isSetToken }"
 					>
 						<button
 							routerLink="/sign-in"
@@ -58,7 +52,7 @@
 					</div>
 
 					<button
-						[ngClass]="{ hidden: !isSignIn }"
+						[ngClass]="{ hidden: !isSetToken }"
 						id="dropdownUserAvatarButton"
 						data-dropdown-toggle="dropdownAvatar"
 						class="flex items-center space-x-6 text-base font-medium"
