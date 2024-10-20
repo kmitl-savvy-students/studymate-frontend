@@ -1,9 +1,25 @@
 <sdm-announce
 	[details]="[{ detail: 'ใกล้จะถึงวันลงทะเบียนเรียนล่วงหน้าแล้ว อย่าลืมมาลงทะเบียนเรียนกันนะ', date: 'จ. 10 มิ.ย. - ศ. 14 มิ.ย. 67' }, { detail: 'ใกล้จะถึงวันประกาศผลลงทะเบียนเรียนล่วงหน้าแล้ว อย่าลืมมาตรวจสอบผลกันนะ', date: 'ศ. 21 มิ.ย. 67' }, { detail: 'ใกล้จะถึงวันลงทะเบียนเรียนปกติแล้ว อย่าลืมมาลงทะเบียนเรียนกันนะ', date: 'จ. 24 มิ.ย. - ศ. 28 มิ.ย. 67' }]"
 ></sdm-announce>
+<!-- test -->
+<div class="mt-8 flex justify-center">
+	<button
+		data-modal-target="choose-curriculum-modal"
+		data-modal-toggle="choose-curriculum-modal"
+		class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120"
+	>
+		Choose Curriculum
+	</button>
+</div>
+<sdm-choose-curriculum-modal
+	modalID="choose-curriculum-modal"
+	headerModal="เลือกหลักสูตรที่คุณกำลังศึกษา"
+></sdm-choose-curriculum-modal>
+<!-- test -->
 <div class="mt-8">
 	<sdm-let-plan></sdm-let-plan>
 </div>
+
 <div
 	class="mt-16 grid grid-cols-2 items-center justify-items-center gap-y-16 px-16 2xl:px-32"
 >
