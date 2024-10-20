@@ -30,7 +30,7 @@ export class SDMPageSignIn implements OnInit {
 
 		this.http.get<{ data: string }>(apiUrl).subscribe((response) => {
 			this.googleSignInUrl = response.data;
-			window.location.href = this.googleSignInUrl;
+			window.location.replace(this.googleSignInUrl);
 		});
 	}
 
@@ -49,8 +49,12 @@ export class SDMPageSignIn implements OnInit {
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];
 			if (authCode) {
-				this.isSigningIn = true;
 				this.googleSignInCallback(authCode);
+				this.router.navigate([], {
+					relativeTo: this.route,
+					queryParams: {},
+					replaceUrl: true,
+				});
 			}
 		});
 	}

@@ -1,0 +1,9 @@
+.test-margin-left {
+	margin-left: -75px !important;
+}
+
+.text-ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
