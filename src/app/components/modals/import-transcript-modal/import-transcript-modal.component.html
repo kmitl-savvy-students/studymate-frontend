@@ -99,13 +99,11 @@
 							ยกเลิก
 						</button>
 						<button
-							[attr.data-modal-hide]="modalID"
-							type="submit"
-							[disabled]="isSubmitDisabled"
+							type="button"
 							class="w-full rounded-[10px] bg-main-100 px-4 py-2 text-center text-white hover:bg-main-120"
-							(click)="clearFile()"
+							(click)="uploadFile()"
 						>
-							บันทึก
+							อัปโหลด
 						</button>
 					</div>
 				</div>
