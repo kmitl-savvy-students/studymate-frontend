@@ -4,11 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/auth.service';
+import { NgIf } from '@angular/common';
 
 @Component({
 	selector: 'sdm-page-sign-in',
 	standalone: true,
-	imports: [RouterLink, ReactiveFormsModule],
+	imports: [RouterLink, ReactiveFormsModule, NgIf],
 	templateUrl: './sign-in.page.html',
 	styleUrl: './sign-in.page.css',
 })
@@ -20,7 +21,10 @@ export class SDMPageSignIn implements OnInit {
 		private authService: AuthService,
 	) {}
 
+	isSigningIn: boolean = false;
+
 	googleSignInUrl: string | null = null;
+
 	googleSignIn() {
 		const apiUrl = `${environment.backendUrl}/api/google/link/sign-in`;
 
@@ -29,6 +33,7 @@ export class SDMPageSignIn implements OnInit {
 			window.location.href = this.googleSignInUrl;
 		});
 	}
+
 	googleSignInCallback(authCode: string) {
 		const apiUrl = `${environment.backendUrl}/api/google/callback`;
 
@@ -36,15 +41,17 @@ export class SDMPageSignIn implements OnInit {
 			.post<{ data: { id: string } }>(apiUrl, { code: authCode })
 			.subscribe((response) => {
 				this.authService.setToken(response.data.id);
-				console.log(response.data.id);
-				window.location.href = '/';
+				this.router.navigate(['/']);
 			});
 	}
 
 	ngOnInit() {
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];
-			if (authCode) this.googleSignInCallback(authCode);
+			if (authCode) {
+				this.isSigningIn = true;
+				this.googleSignInCallback(authCode);
+			}
 		});
 	}
 
