@@ -29,14 +29,11 @@ export class NavbarComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		// สมัครรับข้อมูลการเปลี่ยนแปลงของ Token
 		this.authService.tokenSubject.subscribe((token) => {
 			this.isSetToken = token !== null;
 			console.log('Token:', token);
 			console.log('isSetToken:', this.isSetToken);
 		});
-
-		// ตรวจสอบค่าเริ่มต้นของ Token
 		this.isSetToken = this.authService.getToken() !== null;
 	}
 }
