@@ -9,7 +9,7 @@ services:
       - frontend-network
     labels:
       traefik.enable: "true"
-      traefik.http.services.sdm-frontend.loadbalancer.server.port: "8080"
+      traefik.http.services.sdm-frontend.loadbalancer.server.port: "4200"
       traefik.http.services.sdm-frontend.loadbalancer.server.scheme: "http"
       traefik.http.routers.sdm-frontend-https.entrypoints: "websecure"
       traefik.http.routers.sdm-frontend-https.rule: "Host(`preprod.savvystudymate.com`)"
