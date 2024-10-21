@@ -60,19 +60,21 @@
 					>
 						<sdm-icon
 							icon="circle-user"
-							class="text-3xl text-main-25 hover:text-main-50"
+							class="icon-32px text-main-25 hover:text-main-50"
 						></sdm-icon>
 					</button>
 				</div>
 				<!-- Dropdown menu -->
 				<div
 					id="dropdownAvatar"
-					class="test-margin-left z-10 hidden w-60 divide-y divide-main-25 rounded-[20px] bg-white px-4 shadow-md"
+					class="test-margin-left dropdown-shadow z-10 hidden w-60 divide-y divide-main-25 rounded-[20px] bg-white px-4"
 				>
-					<div class="flex w-full gap-x-3 py-3">
+					<div
+						class="flex w-full items-center justify-between gap-x-3 py-4"
+					>
 						<sdm-icon
 							icon="circle-user"
-							class="flex items-center text-3xl text-main-25 hover:text-main-50"
+							class="icon-40px -mb-1 flex cursor-pointer text-main-25 hover:text-main-50"
 						></sdm-icon>
 						<div>
 							<div
@@ -80,21 +82,26 @@
 							>
 								Tanchanok Charungpattananon
 							</div>
-							<div class="text-xs font-medium">64010359</div>
+							<div class="text-sm font-medium">64010359</div>
 						</div>
 					</div>
 
-					<ul
-						class="py-2 text-sm font-medium text-dark-100"
+					<div
+						class="flex flex-col py-3 text-sm font-medium text-dark-100"
 						aria-labelledby="dropdownUserAvatarButton"
 					>
-						<li>
-							<a href="#" class="block py-2">โปรไฟล์</a>
-						</li>
-						<li>
-							<a href="#" class="block py-2">ออกจากระบบ</a>
-						</li>
-					</ul>
+						<div class="rounded-[10px] py-2 hover:bg-main-10">
+							<a routerLink="" class="ps-2">โปรไฟล์</a>
+						</div>
+						<div class="rounded-[10px] py-2 hover:bg-main-10">
+							<a
+								routerLink="/sign-in"
+								class="ps-2"
+								(click)="userSignOut()"
+								>ออกจากระบบ</a
+							>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
