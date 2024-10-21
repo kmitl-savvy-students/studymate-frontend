@@ -14,7 +14,7 @@ run-name: "${{ contains(github.head_ref, 'feature/') && 'Feature' || contains(gi
 jobs:
   sonarqube:
       name: SonarQube Analysis
-      runs-on: ['self-hosted', 'org-runner'] # Specify the labels for the SonarQube self-hosted runner here
+      runs-on: ['self-hosted', 'org-runner']
       steps:
           - name: Checkout code
             uses: actions/checkout@v4
