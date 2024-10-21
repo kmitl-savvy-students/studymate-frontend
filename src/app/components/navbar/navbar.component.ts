@@ -5,6 +5,7 @@ import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { AuthService } from '../../shared/auth.service';
+import { User } from '../../classes/User';
 
 @Component({
 	selector: 'sdm-navbar',
@@ -15,7 +16,9 @@ import { AuthService } from '../../shared/auth.service';
 })
 export class NavbarComponent implements OnInit {
 	currentRoute: string = '';
-	isSetToken = false;
+
+	user: User | null = null;
+	isSignIn = false;
 
 	constructor(
 		private router: Router,
@@ -29,15 +32,38 @@ export class NavbarComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.authService.tokenSubject.subscribe((token) => {
-			this.isSetToken = token !== null;
-			console.log('Token:', token);
-			console.log('isSetToken:', this.isSetToken);
+		this.authService.userTokenSubject.subscribe((userToken) => {
+			if (!userToken) {
+				this.isSignIn = false;
+				return;
+			}
+			this.authService.getUser(userToken).subscribe((user) => {
+				if (user) {
+					this.isSignIn = true;
+					this.user = user;
+				} else {
+					this.isSignIn = false;
+				}
+			});
 		});
-		this.isSetToken = this.authService.getToken() !== null;
+
+		this.authService.getToken().subscribe((userToken) => {
+			if (!userToken) {
+				this.isSignIn = false;
+				return;
+			}
+			this.authService.getUser(userToken).subscribe((user) => {
+				if (user) {
+					this.isSignIn = true;
+					this.user = user;
+				} else {
+					this.isSignIn = false;
+				}
+			});
+		});
 	}
 
 	userSignOut(): void {
-		this.authService.clearToken();
+		this.authService.signOut();
 	}
 }

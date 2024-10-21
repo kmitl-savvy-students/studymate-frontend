@@ -5,6 +5,8 @@ import { environment } from '../../../environments/environment';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/auth.service';
 import { NgIf } from '@angular/common';
+import { BaseResponse } from '../../classes/BaseResponse';
+import { UserToken } from '../../classes/UserToken';
 
 @Component({
 	selector: 'sdm-page-sign-in',
@@ -28,7 +30,12 @@ export class SDMPageSignIn implements OnInit {
 	googleSignIn() {
 		const apiUrl = `${environment.backendUrl}/api/google/link/sign-in`;
 
-		this.http.get<{ data: string }>(apiUrl).subscribe((response) => {
+		this.http.get<BaseResponse<string>>(apiUrl).subscribe((response) => {
+			if (response.code !== '200') {
+				console.log(response.message);
+				return;
+			}
+
 			this.googleSignInUrl = response.data;
 			window.location.replace(this.googleSignInUrl);
 		});
@@ -38,9 +45,14 @@ export class SDMPageSignIn implements OnInit {
 		const apiUrl = `${environment.backendUrl}/api/google/callback`;
 
 		this.http
-			.post<{ data: { id: string } }>(apiUrl, { code: authCode })
+			.post<BaseResponse<UserToken>>(apiUrl, { code: authCode })
 			.subscribe((response) => {
-				this.authService.setToken(response.data.id);
+				if (response.code !== '200') {
+					console.log(response.message);
+					return;
+				}
+
+				this.authService.signIn(response.data);
 				this.router.navigate(['/']);
 			});
 	}

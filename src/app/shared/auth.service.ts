@@ -1,28 +1,100 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { User } from '../classes/User';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { BaseResponse } from '../classes/BaseResponse';
+import { UserToken } from '../classes/UserToken';
+import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	private userToken: string | null = null;
-	public tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<
-		string | null
-	>(null);
+	constructor(private http: HttpClient) {}
 
-	setToken(token: string): void {
-		this.userToken = token;
-		sessionStorage.setItem('userToken', token);
-		this.tokenSubject.next(token);
-	}
-	getToken(): string | null {
-		if (!this.userToken) {
-			this.userToken = sessionStorage.getItem('userToken');
-			this.tokenSubject.next(this.userToken);
+	public userTokenSubject: BehaviorSubject<UserToken | null> =
+		new BehaviorSubject<UserToken | null>(null);
+
+	private userToken: UserToken | null = null;
+	private user: User | null = null;
+
+	getUser(userToken: UserToken): Observable<User | null> {
+		if (!userToken) {
+			return of(null);
 		}
-		return this.userToken;
+
+		const apiUrl = `${environment.backendUrl}/api/user`;
+		const id = userToken.id;
+
+		return this.http
+			.post<BaseResponse<User>>(apiUrl, { userTokenId: id })
+			.pipe(
+				map((response) => {
+					if (response.code !== '200') {
+						console.log(response.message);
+						return null;
+					}
+
+					this.user = response.data;
+					return this.user;
+				}),
+			);
+	}
+
+	signIn(userToken: UserToken): void {
+		this.setToken(userToken);
+	}
+	signOut(): void {
+		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;
+		const id = sessionStorage.getItem('userTokenId');
+
+		this.clearToken();
+		this.http
+			.post<BaseResponse<UserToken>>(apiUrl, { userTokenId: id })
+			.subscribe((response) => {
+				if (response.code !== '200') {
+					console.log(response.message);
+					return;
+				}
+			});
+	}
+
+	setToken(userToken: UserToken): void {
+		this.userToken = userToken;
+		this.userTokenSubject.next(userToken);
+		sessionStorage.setItem('userTokenId', userToken.id);
+	}
+	getToken(): Observable<UserToken | null> {
+		const id = sessionStorage.getItem('userTokenId');
+		if (!id) {
+			this.userToken = null;
+			this.userTokenSubject.next(null);
+			return of(null);
+		}
+
+		if (this.userToken) {
+			this.userTokenSubject.next(this.userToken);
+			return of(this.userToken);
+		}
+
+		const apiUrl = `${environment.backendUrl}/api/auth/token`;
+
+		return this.http
+			.post<BaseResponse<UserToken>>(apiUrl, { userTokenId: id })
+			.pipe(
+				map((response) => {
+					if (response.code !== '200') {
+						console.log(response.message);
+						return null;
+					}
+
+					this.userToken = response.data;
+					this.userTokenSubject.next(this.userToken);
+					return this.userToken;
+				}),
+			);
 	}
 	clearToken(): void {
 		this.userToken = null;
-		sessionStorage.removeItem('userToken');
-		this.tokenSubject.next(null);
+		this.userTokenSubject.next(null);
+		sessionStorage.removeItem('userTokenId');
 	}
 }

@@ -39,7 +39,7 @@
 					>
 					<div
 						class="flex items-center space-x-6 text-base font-medium"
-						[ngClass]="{ hidden: isSetToken }"
+						[ngClass]="{ hidden: isSignIn }"
 					>
 						<button
 							routerLink="/sign-in"
@@ -52,13 +52,14 @@
 					</div>
 
 					<button
-						[ngClass]="{ hidden: !isSetToken }"
+						[ngClass]="{ hidden: !isSignIn }"
 						id="dropdownUserAvatarButton"
 						data-dropdown-toggle="dropdownAvatar"
 						class="flex items-center space-x-6 text-base font-medium"
 						type="button"
 					>
 						<sdm-icon
+							[src]="user?.profile || null"
 							icon="circle-user"
 							class="icon-32px text-main-25 hover:text-main-50"
 						></sdm-icon>
@@ -73,6 +74,7 @@
 						class="flex w-full items-center justify-between gap-x-3 py-4"
 					>
 						<sdm-icon
+							[src]="user?.profile || null"
 							icon="circle-user"
 							class="icon-40px -mb-1 flex cursor-pointer text-main-25 hover:text-main-50"
 						></sdm-icon>
@@ -80,9 +82,15 @@
 							<div
 								class="max-w-40 text-ellipsis text-base font-medium"
 							>
-								Tanchanok Charungpattananon
+								{{
+									(user?.nameFirst || '') +
+										' ' +
+										(user?.nameLast || '')
+								}}
 							</div>
-							<div class="text-sm font-medium">64010359</div>
+							<div class="text-sm font-medium">
+								{{ user?.id || 'Undefined' }}
+							</div>
 						</div>
 					</div>
 
