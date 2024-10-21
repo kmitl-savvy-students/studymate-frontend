@@ -36,4 +36,8 @@ export class NavbarComponent implements OnInit {
 		});
 		this.isSetToken = this.authService.getToken() !== null;
 	}
+
+	userSignOut(): void {
+		this.authService.clearToken();
+	}
 }

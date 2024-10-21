@@ -25,3 +25,7 @@ ul.show {
 ::-webkit-scrollbar-thumb:hover {
 	background: #4d74cb80;
 }
+
+.dropdown-shadow {
+	box-shadow: 0 0 6px 0 rgb(0 0 0 / 0.1);
+}
