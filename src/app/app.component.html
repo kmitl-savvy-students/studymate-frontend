@@ -6,7 +6,10 @@
 	}
 
 	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
-		<main class="mx-32 mb-32 mt-28 flex-1 2xl:mx-48">
+		<!-- <main class="mx-32 mb-32 mt-28 flex-1 2xl:mx-48">
+			<router-outlet></router-outlet>
+		</main> -->
+		<main class="container mx-auto mb-32 mt-28 flex-1">
 			<router-outlet></router-outlet>
 		</main>
 	} @else {
