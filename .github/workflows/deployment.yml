@@ -4,7 +4,12 @@
 name: StudyMate-Frontend CICD
 
 on:
-    workflow_dispatch:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+run-name: "${{ contains(github.head_ref, 'feature/') && 'Feature' || contains(github.head_ref, 'bugfix/') && 'Bugfix' || 'Update' }}: ${{ github.head_ref }} by @${{ github.actor }}"
 
 jobs:
     sonarqube:
