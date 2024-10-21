@@ -1,4 +1,4 @@
 export const environment = {
 	production: true,
-	backendUrl: 'http://192.168.50.52:8000',
+	backendUrl: 'https://preprod.backend.savvystudymate.com',
 };
