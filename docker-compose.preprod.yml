@@ -9,12 +9,12 @@ services:
       - frontend-network
     labels:
       traefik.enable: "true"
-      traefik.http.services.sdm-backend.loadbalancer.server.port: "8080"
-      traefik.http.services.sdm-backend.loadbalancer.server.scheme: "http"
-      traefik.http.routers.sdm-backend-https.entrypoints: "websecure"
-      traefik.http.routers.sdm-backend-https.rule: "Host(`preprod.savvystudymate.com`)"
-      traefik.http.routers.sdm-backend-https.tls: "true"
-      traefik.http.routers.sdm-backend-https.tls.certresolver: "cloudflare"
+      traefik.http.services.sdm-frontend.loadbalancer.server.port: "8080"
+      traefik.http.services.sdm-frontend.loadbalancer.server.scheme: "http"
+      traefik.http.routers.sdm-frontend-https.entrypoints: "websecure"
+      traefik.http.routers.sdm-frontend-https.rule: "Host(`preprod.savvystudymate.com`)"
+      traefik.http.routers.sdm-frontend-https.tls: "true"
+      traefik.http.routers.sdm-frontend-https.tls.certresolver: "cloudflare"
 
 networks:
   backend-network:
