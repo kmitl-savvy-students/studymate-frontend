@@ -98,17 +98,19 @@
 						class="flex flex-col py-3 text-sm font-medium text-dark-100"
 						aria-labelledby="dropdownUserAvatarButton"
 					>
-						<div class="rounded-[10px] py-2 hover:bg-main-10">
-							<a routerLink="" class="ps-2">โปรไฟล์</a>
-						</div>
-						<div class="rounded-[10px] py-2 hover:bg-main-10">
-							<a
-								routerLink="/sign-in"
-								class="ps-2"
-								(click)="userSignOut()"
-								>ออกจากระบบ</a
-							>
-						</div>
+						<a
+							class="rounded-[10px] py-2 hover:bg-main-10"
+							routerLink=""
+						>
+							<div class="ps-2">โปรไฟล์</div>
+						</a>
+						<a
+							class="rounded-[10px] py-2 hover:bg-main-10"
+							(click)="userSignOut()"
+							routerLink="/sign-in"
+						>
+							<div class="ps-2">ออกจากระบบ</div>
+						</a>
 					</div>
 				</div>
 			</div>
