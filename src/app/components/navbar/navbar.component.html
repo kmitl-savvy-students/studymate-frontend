@@ -61,7 +61,7 @@
 						<sdm-icon
 							[src]="user?.profile || null"
 							icon="circle-user"
-							class="icon-32px text-main-25 hover:text-main-50"
+							class="icon-32px max-h-[32px] max-w-[32px] text-main-25 hover:text-main-50"
 						></sdm-icon>
 					</button>
 				</div>
@@ -76,7 +76,7 @@
 						<sdm-icon
 							[src]="user?.profile || null"
 							icon="circle-user"
-							class="icon-40px -mb-1 flex cursor-pointer text-main-25 hover:text-main-50"
+							class="icon-40px flex max-h-[40px] max-w-[40px] cursor-pointer text-main-25 hover:text-main-50"
 						></sdm-icon>
 						<div>
 							<div
@@ -98,17 +98,19 @@
 						class="flex flex-col py-3 text-sm font-medium text-dark-100"
 						aria-labelledby="dropdownUserAvatarButton"
 					>
-						<div class="rounded-[10px] py-2 hover:bg-main-10">
-							<a routerLink="" class="ps-2">โปรไฟล์</a>
-						</div>
-						<div class="rounded-[10px] py-2 hover:bg-main-10">
-							<a
-								routerLink="/sign-in"
-								class="ps-2"
-								(click)="userSignOut()"
-								>ออกจากระบบ</a
-							>
-						</div>
+						<a
+							class="rounded-[10px] py-2 hover:bg-main-10"
+							routerLink=""
+						>
+							<div class="ps-2">โปรไฟล์</div>
+						</a>
+						<a
+							class="rounded-[10px] py-2 hover:bg-main-10"
+							(click)="userSignOut()"
+							routerLink="/sign-in"
+						>
+							<div class="ps-2">ออกจากระบบ</div>
+						</a>
 					</div>
 				</div>
 			</div>
