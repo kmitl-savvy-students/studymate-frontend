@@ -49,6 +49,8 @@ export class SDMPageSignIn implements OnInit {
 			.subscribe((response) => {
 				if (response.code !== '200') {
 					console.log(response.message);
+					alert(response.data);
+					this.router.navigate(['/sign-in']);
 					return;
 				}
 
