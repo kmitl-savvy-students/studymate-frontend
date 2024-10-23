@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import {
+	catchError,
+	distinctUntilChanged,
+	filter,
+	switchMap,
+	takeUntil,
+} from 'rxjs/operators';
 import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { AuthService } from '../../shared/auth.service';
 import { User } from '../../classes/User';
+import { of, Subject } from 'rxjs';
+import { UserToken } from '../../classes/UserToken';
 
 @Component({
 	selector: 'sdm-navbar',
@@ -31,28 +39,17 @@ export class NavbarComponent implements OnInit {
 			});
 	}
 
-	ngOnInit(): void {
-		this.authService.userTokenSubject.subscribe((userToken) => {
-			if (!userToken) {
-				this.isSignIn = false;
-				return;
-			}
-			this.authService.getUser(userToken).subscribe((user) => {
-				if (user) {
-					this.isSignIn = true;
-					this.user = user;
-				} else {
-					this.isSignIn = false;
-				}
-			});
-		});
+	public userTokenSubject: Subject<UserToken | null> =
+		new Subject<UserToken | null>();
 
-		this.authService.getToken().subscribe((userToken) => {
-			if (!userToken) {
-				this.isSignIn = false;
-				return;
-			}
-			this.authService.getUser(userToken).subscribe((user) => {
+	ngOnInit(): void {
+		this.authService.userTokenSubject
+			.pipe(
+				filter((token) => token !== null),
+				distinctUntilChanged(),
+				switchMap((userToken) => this.authService.getUser(userToken!)),
+			)
+			.subscribe((user) => {
 				if (user) {
 					this.isSignIn = true;
 					this.user = user;
@@ -60,7 +57,6 @@ export class NavbarComponent implements OnInit {
 					this.isSignIn = false;
 				}
 			});
-		});
 	}
 
 	userSignOut(): void {

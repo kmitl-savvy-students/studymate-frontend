@@ -3,6 +3,7 @@ import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
 import { TranscriptUploadService } from '../../../shared/transcript-upload.service';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { AuthService } from '../../../shared/auth.service';
 
 @Component({
 	selector: 'sdm-import-transcript-modal',
@@ -20,10 +21,11 @@ export class ImportTranscriptComponent {
 
 	@ViewChild('fileInput') fileInput!: ElementRef;
 
-	constructor(private uploadService: TranscriptUploadService) {}
+	constructor(
+		private uploadService: TranscriptUploadService,
+		private authService: AuthService,
+	) {}
 
-	// New properties for upload state
-	uploadProgress: number = 0;
 	isUploading: boolean = false;
 	uploadComplete: boolean = false;
 	statusMessage: string = '';
@@ -37,7 +39,7 @@ export class ImportTranscriptComponent {
 					this.selectedFileName = file.name;
 					this.errorMessage = '';
 					this.isSubmitDisabled = false;
-					this.uploadComplete = false; // Reset uploadComplete
+					this.uploadComplete = false;
 				} else {
 					this.selectedFileName = '';
 					this.errorMessage = 'ขนาดไฟล์ต้องไม่เกิน 15 MB';
@@ -60,43 +62,42 @@ export class ImportTranscriptComponent {
 		if (file) {
 			console.log('Uploading file:', file.name);
 			this.isUploading = true;
-			this.uploadProgress = 0;
-			this.uploadService.uploadTranscript(file).subscribe(
-				(event: HttpEvent<any>) => {
-					switch (event.type) {
-						case HttpEventType.Sent:
-							console.log('Upload started');
-							break;
-						case HttpEventType.UploadProgress:
-							if (event.total) {
-								this.uploadProgress = Math.round(
-									(100 * event.loaded) / event.total,
-								);
-								console.log(
-									`Upload progress: ${this.uploadProgress}%`,
-								);
+
+			this.authService.getToken().subscribe((userToken) => {
+				this.uploadService
+					.uploadTranscript(file, userToken?.id ?? '')
+					.subscribe({
+						next: (event: HttpEvent<any>) => {
+							switch (event.type) {
+								case HttpEventType.Sent:
+									console.log('Upload started');
+									break;
+								case HttpEventType.Response:
+									console.log(
+										'Upload completed successfully',
+										event.body,
+									);
+									this.isUploading = false;
+									this.uploadComplete = true;
+									this.statusMessage =
+										'การอัปโหลดเสร็จสมบูรณ์';
+									this.clearFile();
+									setTimeout(() => {
+										this.uploadComplete = false;
+										this.statusMessage = '';
+									}, 5000);
+									break;
 							}
-							break;
-						case HttpEventType.Response:
-							console.log(
-								'Upload completed successfully',
-								event.body,
-							);
+						},
+						error: (error) => {
+							console.error('Upload failed', error);
+							this.errorMessage =
+								'การอัปโหลดล้มเหลว กรุณาลองใหม่อีกครั้ง';
 							this.isUploading = false;
-							this.uploadComplete = true;
-							this.statusMessage = 'การอัปโหลดเสร็จสมบูรณ์';
-							this.clearFile();
-							break;
-					}
-				},
-				(error) => {
-					console.error('Upload failed', error);
-					this.errorMessage =
-						'การอัปโหลดล้มเหลว กรุณาลองใหม่อีกครั้ง';
-					this.isUploading = false;
-					this.isSubmitDisabled = false;
-				},
-			);
+							this.isSubmitDisabled = false;
+						},
+					});
+			});
 		}
 	}
 
@@ -105,9 +106,6 @@ export class ImportTranscriptComponent {
 		this.errorMessage = '';
 		this.fileInput.nativeElement.value = '';
 		this.isSubmitDisabled = true;
-		this.uploadProgress = 0;
-		this.uploadComplete = false;
-		this.statusMessage = '';
 	}
 
 	onDivClick(event: MouseEvent) {
