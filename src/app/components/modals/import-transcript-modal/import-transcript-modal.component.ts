@@ -67,26 +67,27 @@ export class ImportTranscriptComponent {
 				this.uploadService
 					.uploadTranscript(file, userToken?.id ?? '')
 					.subscribe({
-						next: (event: HttpEvent<any>) => {
-							switch (event.type) {
-								case HttpEventType.Sent:
-									console.log('Upload started');
-									break;
-								case HttpEventType.Response:
-									console.log(
-										'Upload completed successfully',
-										event.body,
-									);
-									this.isUploading = false;
-									this.uploadComplete = true;
+						next: (event) => {
+							if (event.type === HttpEventType.Response) {
+								const responseBody = event.body;
+								console.log('Response body:', responseBody);
+
+								if (responseBody.code === '200') {
 									this.statusMessage =
 										'การอัปโหลดเสร็จสมบูรณ์';
+									this.uploadComplete = true;
 									this.clearFile();
-									setTimeout(() => {
-										this.uploadComplete = false;
-										this.statusMessage = '';
-									}, 5000);
-									break;
+								} else {
+									this.errorMessage =
+										responseBody.data || 'เกิดข้อผิดพลาด';
+								}
+
+								this.isUploading = false;
+
+								setTimeout(() => {
+									this.uploadComplete = false;
+									this.statusMessage = '';
+								}, 5000);
 							}
 						},
 						error: (error) => {
