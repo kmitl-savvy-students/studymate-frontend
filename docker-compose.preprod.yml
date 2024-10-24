@@ -1,23 +1,23 @@
 services:
-  backend:
-    container_name: sdm-frontend-container
-    image: front-img
-    restart: always
-    ports:
-      - "4200:4200"
-    networks:
-      - frontend-network
-    labels:
-      traefik.enable: "true"
-      traefik.http.services.sdm-frontend.loadbalancer.server.port: "4200"
-      traefik.http.services.sdm-frontend.loadbalancer.server.scheme: "http"
-      traefik.http.routers.sdm-frontend-https.entrypoints: "websecure"
-      traefik.http.routers.sdm-frontend-https.rule: "Host(`preprod.savvystudymate.com`)"
-      traefik.http.routers.sdm-frontend-https.tls: "true"
-      traefik.http.routers.sdm-frontend-https.tls.certresolver: "cloudflare"
+    backend:
+        container_name: sdm-frontend-container
+        image: front-img
+        restart: always
+        ports:
+            - '4200:4200'
+        networks:
+            - frontend-network
+        labels:
+            traefik.enable: 'true'
+            traefik.http.services.sdm-frontend.loadbalancer.server.port: '4200'
+            traefik.http.services.sdm-frontend.loadbalancer.server.scheme: 'http'
+            traefik.http.routers.sdm-frontend-https.entrypoints: 'websecure'
+            traefik.http.routers.sdm-frontend-https.rule: 'Host(`preprod.savvystudymate.com`) || Host(`test.savvystudymate.com`)'
+            traefik.http.routers.sdm-frontend-https.tls: 'true'
+            traefik.http.routers.sdm-frontend-https.tls.certresolver: 'cloudflare'
 
 networks:
-  backend-network:
-    external: true
-  frontend-network:
-    external: true
+    backend-network:
+        external: true
+    frontend-network:
+        external: true
