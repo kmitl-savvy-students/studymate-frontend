@@ -45,7 +45,9 @@ export class SDMPageSignIn implements OnInit {
 		const apiUrl = `${environment.backendUrl}/api/google/callback`;
 
 		this.http
-			.post<BaseResponse<UserToken>>(apiUrl, { code: authCode })
+			.post<
+				BaseResponse<UserToken>
+			>(apiUrl, { code: authCode, redirect_uri: 'sign-in' })
 			.subscribe((response) => {
 				if (response.code !== '200') {
 					console.log(response.message);
