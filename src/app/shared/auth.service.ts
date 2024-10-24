@@ -8,7 +8,10 @@ import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) {
+		// Automatically attempt to load the token when the service is instantiated
+		this.getToken().subscribe();
+	}
 
 	public userTokenSubject: BehaviorSubject<UserToken | null> =
 		new BehaviorSubject<UserToken | null>(null);
@@ -42,6 +45,7 @@ export class AuthService {
 	signIn(userToken: UserToken): void {
 		this.setToken(userToken);
 	}
+
 	signOut(): void {
 		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;
 		const id = sessionStorage.getItem('userTokenId');
@@ -62,6 +66,7 @@ export class AuthService {
 		this.userTokenSubject.next(userToken);
 		sessionStorage.setItem('userTokenId', userToken.id);
 	}
+
 	getToken(): Observable<UserToken | null> {
 		const id = sessionStorage.getItem('userTokenId');
 		if (!id) {
@@ -92,6 +97,7 @@ export class AuthService {
 				}),
 			);
 	}
+
 	clearToken(): void {
 		this.userToken = null;
 		this.userTokenSubject.next(null);
