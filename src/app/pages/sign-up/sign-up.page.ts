@@ -52,11 +52,6 @@ export class SDMPageSignUp implements OnInit {
 				if (response.code !== '200') {
 					console.log(response.message);
 					alert(response.data);
-					// if(response.message === "UNAUTHORIZED"){
-					// 	this.router.navigate(['/sign-in']);
-					// }else{
-					// 	this.router.navigate(['/sign-up']);
-					// }
 					response.message === "UNAUTHORIZED"? this.router.navigate(['/sign-in']) : this.router.navigate(['/sign-up'])
 					return;
 				}
