@@ -47,7 +47,7 @@ export class SDMPageSignUp implements OnInit {
 		this.http
 			.post<
 				BaseResponse<UserToken>
-			>(apiUrl, { code: authCode, redirect_uri: 'sign-up' })
+			>(apiUrl, { Code: authCode, RedirectUri: 'sign-up' })
 			.subscribe((response) => {
 				if (response.code !== '200') {
 					console.log(response.message);
