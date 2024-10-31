@@ -1,6 +1,6 @@
 export const environment = {
 	production: true,
+	backendUrl: 'https://preprod.backend.savvystudymate.com',
 	//ชั่วคราวจ้า
-	// backendUrl: 'https://preprod.backend.savvystudymate.com',
-	backendUrl: 'https://backend.savvystudymate.com',
+	// backendUrl: 'https://backend.savvystudymate.com',
 };
