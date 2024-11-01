@@ -3,14 +3,27 @@
 		หลักสูตร วิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์
 		(หลักสูตรปรับปรุง พ.ศ. 2564)
 	</p>
-	<button
-		data-modal-target="import-transcript-modal"
-		data-modal-toggle="import-transcript-modal"
-		class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120"
-	>
-		Import Transcript
-	</button>
+	<div class="flex gap-x-2">
+		<button
+			data-modal-target="confirm-delete-modal"
+			data-modal-toggle="confirm-delete-modal"
+			class="rounded-lg border border-red-400 bg-white px-3 py-1.5 text-base font-medium text-dark-100 hover:bg-red-400 hover:text-white focus:bg-red-400 focus:text-white"
+		>
+			ลบข้อมูล Transcript
+		</button>
+		<button
+			data-modal-target="import-transcript-modal"
+			data-modal-toggle="import-transcript-modal"
+			class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120"
+		>
+			อัปโหลด Transcript
+		</button>
+	</div>
 </div>
+<sdm-confirm-delete-modal
+	modalID="confirm-delete-modal"
+	text="คุณต้องการลบข้อมูล Transcript ใช่หรือไม่?"
+></sdm-confirm-delete-modal>
 <sdm-import-transcript-modal
 	modalID="import-transcript-modal"
 	headerModal="อัปโหลดไฟล์ Transcript ของคุณ"
