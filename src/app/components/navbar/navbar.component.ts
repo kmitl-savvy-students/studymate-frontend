@@ -1,3 +1,4 @@
+import { Curriculum } from './../../shared/api-manage/models/Curriculum';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import {
@@ -47,9 +48,9 @@ export class NavbarComponent implements OnInit {
 			.pipe(
 				filter((token) => token !== null),
 				distinctUntilChanged(),
-				switchMap((userToken) => this.authService.getUser(userToken!)),
 			)
-			.subscribe((user) => {
+			.subscribe((userToken) => {
+				let user = userToken.user;
 				if (user) {
 					this.isSignIn = true;
 					this.user = user;

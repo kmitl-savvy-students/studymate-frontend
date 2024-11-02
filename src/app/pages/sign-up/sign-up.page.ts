@@ -62,13 +62,15 @@ export class SDMPageSignUp implements OnInit {
 					this.router.navigate(['/']);
 				},
 				error: (error) => {
-					console.error(error);
 					if (error.status === 409) {
-						// alert(error.);
-						error.message === 'UNAUTHORIZED'
-							? this.router.navigate(['/sign-in'])
-							: this.router.navigate(['/sign-up']);
+						alert(error.error.message);
+						this.router.navigate(['/sign-in']);
 						return;
+					} else {
+						console.error(
+							'An unexpected error occurred:',
+							error.status,
+						);
 					}
 				},
 			});

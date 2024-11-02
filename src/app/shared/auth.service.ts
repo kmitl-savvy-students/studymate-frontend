@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { User } from './api-manage/models/User';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseResponse } from './api-manage/models/BaseResponse';
 import { UserToken } from './api-manage/models/UserToken';
-import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { APIManagementService } from './api-manage/api-management.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-	constructor(private http: HttpClient) {
+	constructor(private apiManagementService: APIManagementService) {
 		// Automatically attempt to load the token when the service is instantiated
 		this.getToken().subscribe();
 	}
@@ -17,48 +15,28 @@ export class AuthService {
 		new BehaviorSubject<UserToken | null>(null);
 
 	private userToken: UserToken | null = null;
-	private user: User | null = null;
-
-	getUser(userToken: UserToken): Observable<User | null> {
-		if (!userToken) {
-			return of(null);
-		}
-
-		const apiUrl = `${environment.backendUrl}/api/user`;
-		const id = userToken.id;
-
-		return this.http
-			.post<BaseResponse<User>>(apiUrl, { userTokenId: id })
-			.pipe(
-				map((response) => {
-					if (response.code !== '200') {
-						console.log(response.message);
-						return null;
-					}
-
-					this.user = response.data;
-					return this.user;
-				}),
-			);
-	}
 
 	signIn(userToken: UserToken): void {
 		this.setToken(userToken);
 	}
 
 	signOut(): void {
-		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;
 		const id = sessionStorage.getItem('userTokenId');
-
 		this.clearToken();
-		this.http
-			.post<BaseResponse<UserToken>>(apiUrl, { userTokenId: id })
-			.subscribe((response) => {
-				if (response.code !== '200') {
-					console.log(response.message);
-					return;
+		this.apiManagementService.SignoutUserfromSystem(id!).subscribe({
+			error: (error) => {
+				if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error(
+						'An unexpected error occurred:',
+						error.status,
+					);
 				}
-			});
+			},
+		});
 	}
 
 	setToken(userToken: UserToken): void {
@@ -69,33 +47,37 @@ export class AuthService {
 
 	getToken(): Observable<UserToken | null> {
 		const id = sessionStorage.getItem('userTokenId');
-		if (!id) {
-			this.userToken = null;
-			this.userTokenSubject.next(null);
-			return of(null);
-		}
+		return new Observable<UserToken | null>((observer) => {
+			if (!id) {
+				this.userToken = null;
+				this.userTokenSubject.next(null);
+				observer.next(null);
+				observer.complete();
+				return;
+			}
 
-		if (this.userToken) {
-			this.userTokenSubject.next(this.userToken);
-			return of(this.userToken);
-		}
+			if (this.userToken) {
+				this.userTokenSubject.next(this.userToken);
+				observer.next(this.userToken);
+				observer.complete();
+				return;
+			}
 
-		const apiUrl = `${environment.backendUrl}/api/auth/token`;
-
-		return this.http
-			.post<BaseResponse<UserToken>>(apiUrl, { userTokenId: id })
-			.pipe(
-				map((response) => {
-					if (response.code !== '200') {
-						console.log(response.message);
-						return null;
-					}
-
-					this.userToken = response.data;
+			this.apiManagementService.GetUserToken(id).subscribe({
+				next: (response) => {
+					this.userToken = response;
 					this.userTokenSubject.next(this.userToken);
-					return this.userToken;
-				}),
-			);
+					observer.next(this.userToken);
+					observer.complete();
+				},
+				error: (error) => {
+					console.error(error);
+					this.userTokenSubject.next(null);
+					observer.next(null);
+					observer.complete();
+				},
+			});
+		});
 	}
 
 	clearToken(): void {

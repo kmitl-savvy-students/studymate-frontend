@@ -1,17 +1,13 @@
-export enum EnumGender {
-	MALE = 'Male',
-	FEMALE = 'Female',
-	OTHER = 'Other',
-}
+import { Curriculum } from './Curriculum';
 
 export class User {
 	constructor(
 		public id: string,
 		public password: string,
-		public gender: EnumGender,
-		public nameNick: string,
-		public nameFirst: string,
-		public nameLast: string,
+		public name_nick: string,
+		public name_first: string,
+		public name_last: string,
 		public profile: string,
+		public curriculum: Curriculum,
 	) {}
 }
