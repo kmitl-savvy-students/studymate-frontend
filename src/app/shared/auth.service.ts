@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { User } from '../classes/User';
+import { User } from './api-manage/models/User';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { BaseResponse } from '../classes/BaseResponse';
-import { UserToken } from '../classes/UserToken';
+import { BaseResponse } from './api-manage/models/BaseResponse';
+import { UserToken } from './api-manage/models/UserToken';
 import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

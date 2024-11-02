@@ -4,12 +4,18 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FontAwesomeIconsService } from './shared/font-awesome-icons.service';
 import { initFlowbite } from 'flowbite';
+import { SDMChooseCurriculumModalComponent } from './components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 
 @Component({
 	standalone: true,
 	selector: 'app-root',
 
-	imports: [RouterOutlet, NavbarComponent, FooterComponent],
+	imports: [
+		RouterOutlet,
+		NavbarComponent,
+		FooterComponent,
+		SDMChooseCurriculumModalComponent,
+	],
 
 	templateUrl: './app.component.html',
 })

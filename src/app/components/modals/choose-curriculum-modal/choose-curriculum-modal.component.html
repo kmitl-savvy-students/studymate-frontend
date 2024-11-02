@@ -24,8 +24,9 @@
 						</div>
 						<sdm-select
 							selectName="หลักสูตรที่คุณกำลังศึกษา"
+							class="w-[28rem] h-[56px]"
 							[listOptions]="curriculumOptions"
-							class="w-[30rem]"
+							(selectedValue)="handleSelectedValueChange($event)"
 						></sdm-select>
 					</div>
 				</div>
@@ -35,6 +36,7 @@
 						<button
 							[attr.data-modal-hide]="modalID"
 							type="submit"
+							(click)="onSubmitUserCurriculum()"
 							class="w-full rounded-[10px] bg-main-100 px-4 py-2 text-center text-white hover:bg-main-120"
 						>
 							บันทึก

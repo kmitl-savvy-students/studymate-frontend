@@ -11,9 +11,9 @@ import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { AuthService } from '../../shared/auth.service';
-import { User } from '../../classes/User';
+import { User } from '../../shared/api-manage/models/User';
 import { of, Subject } from 'rxjs';
-import { UserToken } from '../../classes/UserToken';
+import { UserToken } from '../../shared/api-manage/models/UserToken';
 
 @Component({
 	selector: 'sdm-navbar',

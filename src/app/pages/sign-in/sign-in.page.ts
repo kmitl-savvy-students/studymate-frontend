@@ -5,8 +5,8 @@ import { environment } from '../../../environments/environment';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/auth.service';
 import { NgIf } from '@angular/common';
-import { BaseResponse } from '../../classes/BaseResponse';
-import { UserToken } from '../../classes/UserToken';
+import { BaseResponse } from '../../shared/api-manage/models/BaseResponse';
+import { UserToken } from '../../shared/api-manage/models/UserToken';
 
 @Component({
 	selector: 'sdm-page-sign-in',

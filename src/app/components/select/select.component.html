@@ -1,31 +1,38 @@
-<div class="test relative cursor-pointer">
+<div class="test relative cursor-pointer h-full">
 	<div
-		class="selected flex items-center justify-between gap-x-3 rounded-[10px] border-none bg-main-100 px-4 py-1 font-medium text-white hover:bg-main-120 focus:ring-0"
+		class="selected flex items-center justify-between h-full gap-x-3 rounded-[10px] border-none bg-main-100 px-4 py-1 font-medium text-white hover:bg-main-120 focus:ring-0"
 		(click)="toggleDropdown()"
 	>
-		{{ form.get('selectedOption')?.value || selectName }}
+		{{ showSelectedOption || selectName }}
 		<sdm-icon
+			*ngIf="!isSelect"
 			icon="chevron-down"
 			class="text-sm text-white"
 			[ngClass]="{ 'rotate-180': isDropdownOpen }"
 		></sdm-icon>
+		<sdm-icon
+                    icon="xmark"
+					*ngIf="isSelect"
+                    class="-mb-1 text-lg text-white"
+                	(click)="onSelectedOption('')"
+        ></sdm-icon>
 	</div>
 	<ul
 		[class.show]="isDropdownOpen"
 		class="dropdown-shadow absolute z-10 mt-1 hidden max-h-36 w-full overflow-y-auto rounded-[10px] bg-white py-1.5"
 	>
-		<li
-			(click)="selectOption('')"
+		<!-- <li
+			(click)="onSelectedOption('')"
 			[class.hover]="hoveredOption === ''"
 			(mouseenter)="hoveredOption = ''"
 			(mouseleave)="hoveredOption = null"
 			class="cursor-pointer py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
 		>
 			{{ selectName }}
-		</li>
+		</li> -->
 		<li
-			*ngFor="let option of listOptions"
-			(click)="selectOption(option)"
+			*ngFor="let option of listOptions; let i = index"
+			(click)="onSelectedOption(option,i)"
 			(mouseenter)="hoveredOption = option"
 			(mouseleave)="hoveredOption = null"
 			[class.hover]="hoveredOption === option"
