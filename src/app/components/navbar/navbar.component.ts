@@ -1,3 +1,4 @@
+import { Curriculum } from './../../shared/api-manage/models/Curriculum';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import {
@@ -11,9 +12,9 @@ import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { AuthService } from '../../shared/auth.service';
-import { User } from '../../classes/User';
+import { User } from '../../shared/api-manage/models/User';
 import { of, Subject } from 'rxjs';
-import { UserToken } from '../../classes/UserToken';
+import { UserToken } from '../../shared/api-manage/models/UserToken';
 
 @Component({
 	selector: 'sdm-navbar',
@@ -47,9 +48,9 @@ export class NavbarComponent implements OnInit {
 			.pipe(
 				filter((token) => token !== null),
 				distinctUntilChanged(),
-				switchMap((userToken) => this.authService.getUser(userToken!)),
 			)
-			.subscribe((user) => {
+			.subscribe((userToken) => {
+				let user = userToken.user;
 				if (user) {
 					this.isSignIn = true;
 					this.user = user;

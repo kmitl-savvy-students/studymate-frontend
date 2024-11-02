@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/auth.service';
 import { NgIf } from '@angular/common';
-import { BaseResponse } from '../../classes/BaseResponse';
-import { UserToken } from '../../classes/UserToken';
+import { APIManagementService } from '../../shared/api-manage/api-management.service';
 
 @Component({
 	selector: 'sdm-page-sign-in',
@@ -21,6 +19,7 @@ export class SDMPageSignIn implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private authService: AuthService,
+		private apiManagementService: APIManagementService,
 	) {}
 
 	isSigningIn: boolean = false;
@@ -28,37 +27,50 @@ export class SDMPageSignIn implements OnInit {
 	googleSignInUrl: string | null = null;
 
 	googleSignIn() {
-		const apiUrl = `${environment.backendUrl}/api/google/link/sign-in`;
-
-		this.http.get<BaseResponse<string>>(apiUrl).subscribe((response) => {
-			if (response.code !== '200') {
-				console.log(response.message);
-				return;
-			}
-
-			this.googleSignInUrl = response.data;
-			window.location.replace(this.googleSignInUrl);
+		this.apiManagementService.GetUserOauthSignin().subscribe({
+			next: (res) => {
+				console.log(res);
+				if (res.href !== undefined) {
+					this.googleSignInUrl = res.href;
+					window.location.replace(this.googleSignInUrl);
+				}
+			},
+			error: (error) => {
+				console.log(error);
+				if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error(
+						'An unexpected error occurred:',
+						error.status,
+					);
+				}
+			},
 		});
 	}
 
 	googleSignInCallback(authCode: string) {
-		const apiUrl = `${environment.backendUrl}/api/google/callback`;
-
-		this.http
-			.post<
-				BaseResponse<UserToken>
-			>(apiUrl, { Code: authCode, RedirectUri: 'sign-in' })
-			.subscribe((response) => {
-				if (response.code !== '200') {
-					console.log(response.message);
-					alert(response.data);
-					response.message === 'UNAUTHORIZED'
-						? this.router.navigate(['/sign-up'])
-						: this.router.navigate(['/sign-in']);
-					return;
-				}
-				this.authService.signIn(response.data);
-				this.router.navigate(['/']);
+		this.apiManagementService
+			.UpdateUserOauthSigninCallback(authCode)
+			.subscribe({
+				next: (res) => {
+					this.authService.signIn(res);
+					this.router.navigate(['/']);
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						alert(error.error.message);
+						this.router.navigate(['/sign-up']);
+						return;
+					} else {
+						console.error(
+							'An unexpected error occurred:',
+							error.status,
+						);
+					}
+				},
 			});
 	}
 

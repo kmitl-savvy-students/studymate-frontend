@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/auth.service';
-import { BaseResponse } from '../../classes/BaseResponse';
-import { UserToken } from '../../classes/UserToken';
+import { BaseResponse } from '../../shared/api-manage/models/BaseResponse';
+import { UserToken } from '../../shared/api-manage/models/UserToken';
 import { NgIf } from '@angular/common';
+import { APIManagementService } from '../../shared/api-manage/api-management.service';
 
 @Component({
 	selector: 'sdm-page-sign-up',
@@ -17,10 +18,10 @@ import { NgIf } from '@angular/common';
 })
 export class SDMPageSignUp implements OnInit {
 	constructor(
-		private http: HttpClient,
 		private router: Router,
 		private route: ActivatedRoute,
 		private authService: AuthService,
+		private apiManagementService: APIManagementService,
 	) {}
 
 	isSigningUp: boolean = false;
@@ -28,35 +29,50 @@ export class SDMPageSignUp implements OnInit {
 	googleSignUpUrl: string | null = null;
 
 	googleSignUp() {
-		const apiUrl = `${environment.backendUrl}/api/google/link/sign-up`;
-
-		this.http.get<BaseResponse<string>>(apiUrl).subscribe((response) => {
-			if (response.code !== '200') {
-				console.log(response.message);
-				return;
-			}
-
-			this.googleSignUpUrl = response.data;
-			window.location.replace(this.googleSignUpUrl);
+		this.apiManagementService.GetUserOauthSignup().subscribe({
+			next: (res) => {
+				console.log(res);
+				if (res.href !== undefined) {
+					this.googleSignUpUrl = res.href;
+					window.location.replace(this.googleSignUpUrl);
+				}
+			},
+			error: (error) => {
+				console.log(error);
+				if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error(
+						'An unexpected error occurred:',
+						error.status,
+					);
+				}
+			},
 		});
 	}
 
 	googleSignUpCallback(authCode: string) {
-		const apiUrl = `${environment.backendUrl}/api/google/callback`;
-
-		this.http
-			.post<
-				BaseResponse<UserToken>
-			>(apiUrl, { Code: authCode, RedirectUri: 'sign-up' })
-			.subscribe((response) => {
-				if (response.code !== '200') {
-					console.log(response.message);
-					alert(response.data);
-					response.message === "UNAUTHORIZED"? this.router.navigate(['/sign-in']) : this.router.navigate(['/sign-up'])
-					return;
-				}
-					this.authService.signIn(response.data);
-					this.router.navigate(['/']);			
+		this.apiManagementService
+			.UpdateUserOauthSignupCallback(authCode)
+			.subscribe({
+				next: (res) => {
+					this.authService.signIn(res);
+					this.router.navigate(['/']);
+				},
+				error: (error) => {
+					if (error.status === 409) {
+						alert(error.error.message);
+						this.router.navigate(['/sign-in']);
+						return;
+					} else {
+						console.error(
+							'An unexpected error occurred:',
+							error.status,
+						);
+					}
+				},
 			});
 	}
 

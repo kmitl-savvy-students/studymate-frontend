@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,15 @@ import { CommonModule } from '@angular/common';
 export class SDMSelectComponent implements OnInit {
 	@Input() selectName: string = '';
 	@Input() listOptions: string[] = [];
+	@Output() selectedValue = new EventEmitter<{
+		value: string;
+		index?: number;
+	}>();
 	form: FormGroup;
+
+	public isDropdownOpen: boolean = false;
+	public hoveredOption: string | null = null;
+	public isSelect: boolean = false;
 
 	constructor(private fb: FormBuilder) {
 		this.form = this.fb.group({
@@ -22,27 +30,24 @@ export class SDMSelectComponent implements OnInit {
 		});
 	}
 
-	ngOnInit() {
-		this.form.get('selectedOption')?.valueChanges.subscribe((value) => {
-			console.log('Selected option:', value);
-		});
-	}
-
-	onOptionChange() {
-		const selectedValue = this.form.get('selectedOption')?.value;
-		console.log('Selected option:', selectedValue);
-	}
-
-	isDropdownOpen = false;
-	hoveredOption: string | null = null;
+	ngOnInit() {}
 
 	toggleDropdown() {
 		this.isDropdownOpen = !this.isDropdownOpen;
 	}
 
-	selectOption(option: string) {
+	get showSelectedOption(): string {
+		return this.form.get('selectedOption')?.value || '';
+	}
+
+	onSelectedOption(option: string, i?: number) {
 		this.form.get('selectedOption')?.setValue(option);
+		this.isSelect = option === '' ? false : true;
 		this.isDropdownOpen = false;
-		console.log('Selected option:', option);
+		const data = {
+			value: option,
+			index: i ?? -1,
+		};
+		this.selectedValue.emit(data);
 	}
 }
