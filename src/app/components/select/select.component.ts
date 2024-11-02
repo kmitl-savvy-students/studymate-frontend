@@ -49,7 +49,5 @@ export class SDMSelectComponent implements OnInit {
 			index: i ?? -1,
 		};
 		this.selectedValue.emit(data);
-		// console.log('Selected option:', option);
-		// console.log('Option Number:', i);
 	}
 }
