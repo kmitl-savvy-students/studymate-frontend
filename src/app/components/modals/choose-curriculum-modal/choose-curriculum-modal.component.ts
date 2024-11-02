@@ -3,10 +3,10 @@ import { APIManagementService } from '../../../shared/api-manage/api-management.
 import { Component, Input } from '@angular/core';
 import { SDMSelectComponent } from '../../select/select.component';
 import { CommonModule } from '@angular/common';
-import { Curriculum } from '../../../shared/api-manage/models/Curriculum';
-import { SelectedData } from '../../../shared/api-manage/models/app.model';
+import { Curriculum } from '../../../shared/api-manage/models/Curriculum.model';
+import { SelectedData } from '../../../shared/api-manage/models/AppService.model';
 import { distinctUntilChanged, filter } from 'rxjs';
-import { User } from '../../../shared/api-manage/models/User';
+import { User } from '../../../shared/api-manage/models/User.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -104,7 +104,12 @@ export class SDMChooseCurriculumModalComponent {
 			)
 			.subscribe({
 				next: (res) => {
-					this.router.navigate(['/']);
+					this.authService.setCurriculumSelected(true);
+					const modal = document.getElementById(this.modalID);
+					if (modal) {
+						modal.classList.remove('show');
+						modal.classList.add('hidden');
+					}
 				},
 				error: (error) => {
 					console.log(error);

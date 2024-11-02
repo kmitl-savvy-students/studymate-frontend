@@ -1,4 +1,4 @@
-import { Curriculum } from './../../shared/api-manage/models/Curriculum';
+import { Curriculum } from '../../shared/api-manage/models/Curriculum.model';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
 import {
@@ -12,9 +12,9 @@ import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { AuthService } from '../../shared/auth.service';
-import { User } from '../../shared/api-manage/models/User';
+import { User } from '../../shared/api-manage/models/User.model';
 import { of, Subject } from 'rxjs';
-import { UserToken } from '../../shared/api-manage/models/UserToken';
+import { UserToken } from '../../shared/api-manage/models/UserToken.model';
 
 @Component({
 	selector: 'sdm-navbar',

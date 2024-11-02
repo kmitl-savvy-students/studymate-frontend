@@ -4,12 +4,22 @@ import { SDMPageSignUp } from './pages/sign-up/sign-up.page';
 import { SDMPageSignIn } from './pages/sign-in/sign-in.page';
 import { SDMMySubject } from './pages/my-subject/my-subject.page';
 import { SDMSubject } from './pages/subject/subject.page';
+import { AuthGuard } from './curriculum.guard';
+import { SDMPageProfile } from './pages/profile/profile.page';
 
 export const routes: Routes = [
-	{ path: '', redirectTo: '/home', pathMatch: 'full' },
+	{
+		path: '',
+		redirectTo: '/home',
+		pathMatch: 'full',
+	},
 	{ path: 'home', component: SDMPageHome },
 	{ path: 'sign-up', component: SDMPageSignUp },
 	{ path: 'sign-in', component: SDMPageSignIn },
-	{ path: 'my-subject', component: SDMMySubject },
+	{
+		path: 'my-subject',
+		component: SDMMySubject,
+	},
 	{ path: 'subject', component: SDMSubject },
+	{ path: 'profile', component: SDMPageProfile },
 ];

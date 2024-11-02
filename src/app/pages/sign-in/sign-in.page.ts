@@ -57,7 +57,7 @@ export class SDMPageSignIn implements OnInit {
 			.subscribe({
 				next: (res) => {
 					this.authService.signIn(res);
-					this.router.navigate(['/']);
+					window.location.href = '/';
 				},
 				error: (error) => {
 					if (error.status === 404) {

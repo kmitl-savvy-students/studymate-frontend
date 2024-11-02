@@ -1,9 +1,9 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
-import { TranscriptUploadService } from '../../../shared/transcript-upload.service';
-import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
 import { AuthService } from '../../../shared/auth.service';
+import { APIManagementService } from '../../../shared/api-manage/api-management.service';
 
 @Component({
 	selector: 'sdm-import-transcript-modal',
@@ -22,8 +22,8 @@ export class ImportTranscriptComponent {
 	@ViewChild('fileInput') fileInput!: ElementRef;
 
 	constructor(
-		private uploadService: TranscriptUploadService,
 		private authService: AuthService,
+		private apiManagementService: APIManagementService,
 	) {}
 
 	isUploading: boolean = false;
@@ -64,30 +64,23 @@ export class ImportTranscriptComponent {
 			this.isUploading = true;
 
 			this.authService.getToken().subscribe((userToken) => {
-				this.uploadService
-					.uploadTranscript(file, userToken?.id ?? '')
+				this.apiManagementService
+					.UpdateUserTranscriptByUpload(
+						userToken?.user?.id ?? '',
+						userToken?.id ?? '',
+						file,
+					)
 					.subscribe({
 						next: (event) => {
 							if (event.type === HttpEventType.Response) {
-								const responseBody = event.body;
-								console.log('Response body:', responseBody);
-
-								if (responseBody.code === '200') {
-									this.statusMessage =
-										'การอัปโหลดเสร็จสมบูรณ์';
-									this.uploadComplete = true;
-									this.clearFile();
-								} else {
-									this.errorMessage =
-										responseBody.data || 'เกิดข้อผิดพลาด';
-								}
-
+								this.statusMessage = 'การอัปโหลดเสร็จสมบูรณ์';
+								this.uploadComplete = true;
+								this.clearFile();
 								this.isUploading = false;
-
 								setTimeout(() => {
 									this.uploadComplete = false;
-									this.statusMessage = '';
-								}, 5000);
+									window.location.reload();
+								}, 500);
 							}
 						},
 						error: (error) => {

@@ -1,13 +1,20 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { APIManagementService } from './../../shared/api-manage/api-management.service';
+import {
+	Component,
+	OnInit,
+	AfterViewInit,
+	EventEmitter,
+	Output,
+} from '@angular/core';
 import { TableComponent } from '../../components/table/table.component';
 import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
 import { initFlowbite } from 'flowbite';
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
 import { IconComponent } from '../../components/icon/icon.component';
-import { TranscriptService } from '../../shared/transcript.service';
 import { AuthService } from '../../shared/auth.service';
 import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
+import { TranscriptData } from '../../shared/api-manage/models/TranscriptData.model';
 
 type CategoryName = 'หมวดวิชาศึกษาทั่วไป' | 'หมวดวิชาเฉพาะ' | 'หมวดวิชาเสรี';
 
@@ -26,19 +33,16 @@ type CategoryName = 'หมวดวิชาศึกษาทั่วไป' 
 	styleUrls: ['./my-subject.page.css'],
 })
 export class SDMMySubject implements OnInit, AfterViewInit {
-	tableHeaders = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
-	tableRows: any[] = [];
-
 	private _totalCompleted: number = 0;
+	public tableHeaders: string[] = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
+	public tableRows: any[] = [];
+	public transcriptData: TranscriptData[] = [];
+	public haveTranscriptData: boolean = false;
 
 	constructor(
-		private transcriptService: TranscriptService,
+		private apiManagementService: APIManagementService,
 		private authService: AuthService,
 	) {}
-
-	ngAfterViewInit(): void {
-		initFlowbite();
-	}
 
 	ngOnInit(): void {
 		this.authService.getToken().subscribe({
@@ -48,30 +52,40 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 				}
 
 				const userTokenId = userToken.id;
-				this.transcriptService
-					.getTranscriptData(userTokenId)
-					.subscribe({
-						next: (response) => {
-							if (response.code !== '200') {
-								console.error(
-									'Failed to fetch transcript data:',
-									response.message,
-								);
-								return;
-							}
+				const userId = userToken.user.id;
 
-							const transcriptData = response.data;
-							this.processTranscriptData(transcriptData);
+				this.apiManagementService
+					.GetTranscriptData(userTokenId, userId)
+					.subscribe({
+						next: (res: TranscriptData[]) => {
+							console.log('this is res from api=>', res);
+							this.transcriptData = res;
+							// this.transcriptData !== null
+							// 	? (this.haveTranscriptData = true)
+							// 	: (this.haveTranscriptData = false);
+							this.haveTranscriptData =
+								!!this.transcriptData.length; // Check if data exists
+							this.processTranscriptData(this.transcriptData);
 						},
 						error: (error) => {
-							console.error(
-								'Error fetching transcript data:',
-								error,
-							);
+							if (error.status === 404) {
+								console.error('Not found');
+							} else if (error.status === 500) {
+								console.error('Internal Server Error');
+							} else {
+								console.error(
+									'An unexpected error occurred:',
+									error.status,
+								);
+							}
 						},
 					});
 			},
 		});
+	}
+
+	ngAfterViewInit(): void {
+		initFlowbite();
 	}
 
 	private subjectTitleMap: { [key: string]: string } = {

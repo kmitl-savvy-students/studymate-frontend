@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { User } from './api-manage/models/User';
-import { UserToken } from './api-manage/models/UserToken';
+import { User } from './api-manage/models/User.model';
+import { UserToken } from './api-manage/models/UserToken.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { APIManagementService } from './api-manage/api-management.service';
 
@@ -84,5 +84,16 @@ export class AuthService {
 		this.userToken = null;
 		this.userTokenSubject.next(null);
 		sessionStorage.removeItem('userTokenId');
+	}
+
+	private curriculumSelected = new BehaviorSubject<boolean>(false);
+	curriculumSelected$ = this.curriculumSelected.asObservable();
+
+	setCurriculumSelected(selected: boolean): void {
+		this.curriculumSelected.next(selected);
+	}
+
+	isCurriculumSelected(): boolean {
+		return this.curriculumSelected.getValue();
 	}
 }
