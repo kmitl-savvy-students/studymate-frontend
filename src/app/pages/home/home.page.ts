@@ -20,11 +20,11 @@ import {
 } from 'flowbite';
 import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 import { AuthService } from '../../shared/auth.service';
-import { User } from '../../shared/api-manage/models/User';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Modal } from 'flowbite';
 
 import type { InstanceOptions } from 'flowbite';
+import { User } from '../../shared/api-manage/models/User.model';
 
 @Component({
 	selector: 'sdm-page-home',
@@ -47,8 +47,8 @@ export class SDMPageHome implements AfterViewInit {
 	@ViewChild('chooseCurriculumModal')
 	chooseCurriculumModal!: ElementRef;
 
-	user: User | null = null;
-	isSignIn = false;
+	public user: User | null = null;
+	public isSignIn: boolean = false;
 
 	ngOnInit(): void {
 		this.authService.userTokenSubject
