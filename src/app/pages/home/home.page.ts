@@ -12,12 +12,19 @@ import { SDMButtonLink } from '../../components/buttons/link/button-link.compone
 import { PicBoxHomeComponent } from '../../components/pic-box-home/pic-box-home.component';
 import { TextBoxHomeComponent } from '../../components/text-box-home/text-box-home.component';
 import { IconComponent } from '../../components/icon/icon.component';
-import { initFlowbite, initModals, ModalOptions } from 'flowbite';
+import {
+	initFlowbite,
+	initModals,
+	ModalOptions,
+	ModalInterface,
+} from 'flowbite';
 import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 import { AuthService } from '../../shared/auth.service';
 import { User } from '../../shared/api-manage/models/User';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Modal } from 'flowbite';
+
+import type { InstanceOptions } from 'flowbite';
 
 @Component({
 	selector: 'sdm-page-home',
@@ -60,6 +67,9 @@ export class SDMPageHome implements AfterViewInit {
 					);
 					const options: ModalOptions = {
 						backdrop: 'static',
+						backdropClasses:
+							'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+						closable: false,
 					};
 					const modal = new Modal($targetEl, options);
 
@@ -104,5 +114,36 @@ export class SDMPageHome implements AfterViewInit {
 		// 			);
 		// 		}
 		// 	});
+
+		// const modalOptions: ModalOptions = {
+		// 	placement: 'bottom-right',
+		// 	backdrop: 'dynamic',
+		// 	backdropClasses:
+		// 		'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+		// 	closable: true,
+		// 	onHide: () => {
+		// 		console.log('modal is hidden');
+		// 	},
+		// 	onShow: () => {
+		// 		console.log('modal is shown');
+		// 	},
+		// 	onToggle: () => {
+		// 		console.log('modal has been toggled');
+		// 	},
+		// };
+
+		// // instance options object
+		// const instanceOptions: InstanceOptions = {
+		// 	id: 'modalEl',
+		// 	override: true,
+		// };
+
+		// const modal: ModalInterface = new Modal(
+		// 	$modalElement,
+		// 	modalOptions,
+		// 	instanceOptions,
+		// );
+
+		// modal.show();
 	}
 }

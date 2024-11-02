@@ -5,6 +5,7 @@ import { SDMPageSignIn } from './pages/sign-in/sign-in.page';
 import { SDMMySubject } from './pages/my-subject/my-subject.page';
 import { SDMSubject } from './pages/subject/subject.page';
 import { AuthGuard } from './curriculum.guard';
+import { SDMPageProfile } from './pages/profile/profile.page';
 
 export const routes: Routes = [
 	{
@@ -18,7 +19,7 @@ export const routes: Routes = [
 	{
 		path: 'my-subject',
 		component: SDMMySubject,
-		canActivate: [AuthGuard],
 	},
-	{ path: 'subject', component: SDMSubject, canActivate: [AuthGuard] },
+	{ path: 'subject', component: SDMSubject },
+	{ path: 'profile', component: SDMPageProfile },
 ];
