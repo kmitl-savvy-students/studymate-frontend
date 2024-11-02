@@ -7,6 +7,7 @@ import { ImportTranscriptComponent } from '../../components/modals/import-transc
 import { IconComponent } from '../../components/icon/icon.component';
 import { TranscriptService } from '../../shared/transcript.service';
 import { AuthService } from '../../shared/auth.service';
+import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
 
 type CategoryName = 'หมวดวิชาศึกษาทั่วไป' | 'หมวดวิชาเฉพาะ' | 'หมวดวิชาเสรี';
 
@@ -19,6 +20,7 @@ type CategoryName = 'หมวดวิชาศึกษาทั่วไป' 
 		AdviceDashboardComponent,
 		ImportTranscriptComponent,
 		IconComponent,
+		SDMConfirmDeleteModalComponent,
 	],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
