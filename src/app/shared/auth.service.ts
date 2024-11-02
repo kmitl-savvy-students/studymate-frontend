@@ -85,4 +85,15 @@ export class AuthService {
 		this.userTokenSubject.next(null);
 		sessionStorage.removeItem('userTokenId');
 	}
+
+	private curriculumSelected = new BehaviorSubject<boolean>(false);
+	curriculumSelected$ = this.curriculumSelected.asObservable();
+
+	setCurriculumSelected(selected: boolean): void {
+		this.curriculumSelected.next(selected);
+	}
+
+	isCurriculumSelected(): boolean {
+		return this.curriculumSelected.getValue();
+	}
 }

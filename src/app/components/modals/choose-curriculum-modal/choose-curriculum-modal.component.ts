@@ -104,7 +104,12 @@ export class SDMChooseCurriculumModalComponent {
 			)
 			.subscribe({
 				next: (res) => {
-					this.router.navigate(['/']);
+					this.authService.setCurriculumSelected(true);
+					const modal = document.getElementById(this.modalID);
+					if (modal) {
+						modal.classList.remove('show');
+						modal.classList.add('hidden');
+					}
 				},
 				error: (error) => {
 					console.log(error);
