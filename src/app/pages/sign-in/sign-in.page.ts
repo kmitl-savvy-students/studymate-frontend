@@ -74,41 +74,6 @@ export class SDMPageSignIn implements OnInit {
 			});
 	}
 
-	// googleSignIn() {
-	// 	const apiUrl = `${environment.backendUrl}/api/google/link/sign-in`;
-
-	// 	this.http.get<BaseResponse<string>>(apiUrl).subscribe((response) => {
-	// 		if (response.code !== '200') {
-	// 			console.log(response.message);
-	// 			return;
-	// 		}
-
-	// 		this.googleSignInUrl = response.data;
-	// 		window.location.replace(this.googleSignInUrl);
-	// 	});
-	// }
-
-	// googleSignInCallback(authCode: string) {
-	// 	const apiUrl = `${environment.backendUrl}/api/google/callback`;
-
-	// 	this.http
-	// 		.post<
-	// 			BaseResponse<UserToken>
-	// 		>(apiUrl, { Code: authCode, RedirectUri: 'sign-in' })
-	// 		.subscribe((response) => {
-	// 			if (response.code !== '200') {
-	// 				console.log(response.message);
-	// 				alert(response.data);
-	// 				response.message === 'UNAUTHORIZED'
-	// 					? this.router.navigate(['/sign-up'])
-	// 					: this.router.navigate(['/sign-in']);
-	// 				return;
-	// 			}
-	// 			this.authService.signIn(response.data);
-	// 			this.router.navigate(['/']);
-	// 		});
-	// }
-
 	ngOnInit() {
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];

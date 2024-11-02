@@ -21,15 +21,6 @@
 		[class.show]="isDropdownOpen"
 		class="dropdown-shadow absolute z-10 mt-1 hidden max-h-36 w-full overflow-y-auto rounded-[10px] bg-white py-1.5"
 	>
-		<!-- <li
-			(click)="onSelectedOption('')"
-			[class.hover]="hoveredOption === ''"
-			(mouseenter)="hoveredOption = ''"
-			(mouseleave)="hoveredOption = null"
-			class="cursor-pointer py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
-		>
-			{{ selectName }}
-		</li> -->
 		<li
 			*ngFor="let option of listOptions; let i = index"
 			(click)="onSelectedOption(option,i)"
