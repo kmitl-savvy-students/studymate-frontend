@@ -1,5 +1,11 @@
 import { APIManagementService } from './../../shared/api-manage/api-management.service';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	AfterViewInit,
+	EventEmitter,
+	Output,
+} from '@angular/core';
 import { TableComponent } from '../../components/table/table.component';
 import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
@@ -27,11 +33,11 @@ type CategoryName = 'หมวดวิชาศึกษาทั่วไป' 
 	styleUrls: ['./my-subject.page.css'],
 })
 export class SDMMySubject implements OnInit, AfterViewInit {
-	tableHeaders = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
-	tableRows: any[] = [];
-
 	private _totalCompleted: number = 0;
+	public tableHeaders: string[] = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
+	public tableRows: any[] = [];
 	public transcriptData: TranscriptData[] = [];
+	public haveTranscriptData: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -52,8 +58,13 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 					.GetTranscriptData(userTokenId, userId)
 					.subscribe({
 						next: (res: TranscriptData[]) => {
-							console.log(res);
+							console.log('this is res from api=>', res);
 							this.transcriptData = res;
+							// this.transcriptData !== null
+							// 	? (this.haveTranscriptData = true)
+							// 	: (this.haveTranscriptData = false);
+							this.haveTranscriptData =
+								!!this.transcriptData.length; // Check if data exists
 							this.processTranscriptData(this.transcriptData);
 						},
 						error: (error) => {

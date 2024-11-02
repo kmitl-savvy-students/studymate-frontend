@@ -23,6 +23,8 @@
 <sdm-confirm-delete-modal
 	modalID="confirm-delete-modal"
 	text="คุณต้องการลบข้อมูล Transcript ใช่หรือไม่?"
+	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องอัปโหลดใหม่เท่านั้น"
+	[haveTranscriptData]="haveTranscriptData"
 ></sdm-confirm-delete-modal>
 <sdm-import-transcript-modal
 	modalID="import-transcript-modal"

@@ -92,6 +92,12 @@ export class APIManagementService {
 		});
 	}
 
+	DeleteTranscriptData(userTokenId: string, userId?: string) {
+		const apiUrl = `${environment.backendUrl}/api/transcript/delete/${userId}`;
+		const headers = this.GetAuthHeader(userTokenId);
+		return this.http.delete(apiUrl, { headers });
+	}
+
 	SignoutUserfromSystem(userTokenId: string) {
 		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;
 		const headers = this.GetAuthHeader(userTokenId);

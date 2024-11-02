@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
-import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
 import { AuthService } from '../../../shared/auth.service';
 import { APIManagementService } from '../../../shared/api-manage/api-management.service';
 
@@ -76,13 +76,11 @@ export class ImportTranscriptComponent {
 								this.statusMessage = 'การอัปโหลดเสร็จสมบูรณ์';
 								this.uploadComplete = true;
 								this.clearFile();
-
 								this.isUploading = false;
-
 								setTimeout(() => {
 									this.uploadComplete = false;
-									this.statusMessage = '';
-								}, 5000);
+									window.location.reload();
+								}, 500);
 							}
 						},
 						error: (error) => {
