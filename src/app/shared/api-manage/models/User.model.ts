@@ -1,4 +1,4 @@
-import { Curriculum } from './Curriculum';
+import { Curriculum } from './Curriculum.model';
 
 export class User {
 	constructor(

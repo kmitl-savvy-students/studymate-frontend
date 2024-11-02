@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { User } from './api-manage/models/User';
-import { UserToken } from './api-manage/models/UserToken';
+import { User } from './api-manage/models/User.model';
+import { UserToken } from './api-manage/models/UserToken.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { APIManagementService } from './api-manage/api-management.service';
 

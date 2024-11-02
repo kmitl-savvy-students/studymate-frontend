@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Curriculum } from './models/Curriculum';
-import { GoogleLink } from './models/GoogleLink';
-import { UserToken } from './models/UserToken';
+import { Curriculum } from './models/Curriculum.model';
+import { GoogleLink } from './models/GoogleLink.model';
+import { UserToken } from './models/UserToken.model';
 
 @Injectable({
 	providedIn: 'root',

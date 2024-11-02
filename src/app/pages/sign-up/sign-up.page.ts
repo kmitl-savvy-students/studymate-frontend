@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/auth.service';
-import { BaseResponse } from '../../shared/api-manage/models/BaseResponse';
-import { UserToken } from '../../shared/api-manage/models/UserToken';
 import { NgIf } from '@angular/common';
 import { APIManagementService } from '../../shared/api-manage/api-management.service';
 
