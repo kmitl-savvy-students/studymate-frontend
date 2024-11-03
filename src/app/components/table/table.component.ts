@@ -42,7 +42,7 @@ export class TableComponent {
 
 	selectSubRow(subRow: {
 		name: string;
-		courses: { code: string; title: string }[];
+		courses: { code: string; title: string; completed: number }[];
 	}) {
 		this.selectedSubRowName = subRow.name;
 		this.selectedCourses = subRow.courses;

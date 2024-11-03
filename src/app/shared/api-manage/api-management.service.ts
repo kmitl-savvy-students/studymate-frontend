@@ -6,6 +6,11 @@ import { GoogleLink } from './models/GoogleLink.model';
 import { UserToken } from './models/UserToken.model';
 import { TranscriptData } from './models/TranscriptData.model';
 import { Observable } from 'rxjs/internal/Observable';
+import { CurriculumGroup } from './models/CurriculumGroup.model';
+import { CurriculumSubgroup } from './models/CurriculumSubgroup.model';
+import { CurriculumSubject } from './models/CurriculumSubject.model';
+import { GenedGroup } from './models/GenedGroup.model';
+import { GenedSubject } from './models/GenedSubject.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -53,25 +58,76 @@ export class APIManagementService {
 		return this.http.get<Curriculum[]>(apiUrl);
 	}
 
-	GetCurriculumnGroup(
-		categoryId: number,
-		groupId: number,
+	GetCurriculumGroups(
 		uniqueId: string,
 		year: string,
-	) {
-		const apiUrl = `${environment.backendUrl}/api/curriculum-group/get/${categoryId}/${groupId}/${uniqueId}/${year}`;
-		return this.http.get<Curriculum[]>(apiUrl);
+	): Observable<CurriculumGroup[]> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-group/get/${uniqueId}/${year}`;
+		return this.http.get<CurriculumGroup[]>(apiUrl);
 	}
 
-	GetCurriculumnSubGroup(
+	GetCurriculumGroup(
 		categoryId: number,
 		groupId: number,
-		subGroupId: number,
+		uniqueId: string,
+		year: string,
+	): Observable<CurriculumGroup> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-group/get/${categoryId}/${groupId}/${uniqueId}/${year}`;
+		return this.http.get<CurriculumGroup>(apiUrl);
+	}
+
+	GetCurriculumSubgroups(
+		uniqueId: string,
+		year: string,
+	): Observable<CurriculumSubgroup[]> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-subgroup/get/${uniqueId}/${year}`;
+		return this.http.get<CurriculumSubgroup[]>(apiUrl);
+	}
+
+	GetCurriculumSubgroup(
+		categoryId: number,
+		groupId: number,
+		subgroupId: number,
+		uniqueId: string,
+		year: string,
+	): Observable<CurriculumSubgroup> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-subgroup/get/${categoryId}/${groupId}/${subgroupId}/${uniqueId}/${year}`;
+		return this.http.get<CurriculumSubgroup>(apiUrl);
+	}
+
+	GetCurriculumSubjects(
+		categoryId: number,
+		groupId: number,
+		subgroupId: number,
+		uniqueId: string,
+		year: string,
+	): Observable<CurriculumSubject[]> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-subject/get/${categoryId}/${groupId}/${subgroupId}/${uniqueId}/${year}`;
+		return this.http.get<CurriculumSubject[]>(apiUrl);
+	}
+
+	GetCurriculumSubject(subjectId: string): Observable<CurriculumSubject> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-subject/get/${subjectId}`;
+		return this.http.get<CurriculumSubject>(apiUrl);
+	}
+
+	GetCurriculumSubjectByUniqueIdYear(
+		subjectId: string,
 		uniqueId: string,
 		year: string,
 	) {
-		const apiUrl = `${environment.backendUrl}/api/curriculum-subgroup/get/${categoryId}/${groupId}${subGroupId}/${uniqueId}/${year}`;
-		return this.http.get<Curriculum[]>(apiUrl);
+		const apiUrl = `${environment.backendUrl}/api/curriculum-subject/get/${subjectId}/${uniqueId}/${year}`;
+		return this.http.get<CurriculumSubject>(apiUrl);
+	}
+
+	GetGenedSubject(subjectId: string) {
+		const apiUrl = `${environment.backendUrl}/api/gened-subject/get/${subjectId}`;
+		return this.http.get<GenedSubject>(apiUrl);
+	}
+
+	GetGenedGroup(groupId: string) {
+		const apiUrl = `${environment.backendUrl}/api/gened-group/get/${groupId}`;
+		return this.http.get<GenedGroup>(apiUrl);
 	}
 
 	GetTranscriptData(userTokenId: string, userId?: string) {

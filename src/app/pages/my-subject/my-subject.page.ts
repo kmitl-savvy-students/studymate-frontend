@@ -1,43 +1,47 @@
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { APIManagementService } from './../../shared/api-manage/api-management.service';
-import {
-	Component,
-	OnInit,
-	AfterViewInit,
-	EventEmitter,
-	Output,
-} from '@angular/core';
-import { TableComponent } from '../../components/table/table.component';
-import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
-import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
-import { initFlowbite } from 'flowbite';
-import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
-import { IconComponent } from '../../components/icon/icon.component';
 import { AuthService } from '../../shared/auth.service';
-import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
 import { TranscriptData } from '../../shared/api-manage/models/TranscriptData.model';
-
-type CategoryName = 'หมวดวิชาศึกษาทั่วไป' | 'หมวดวิชาเฉพาะ' | 'หมวดวิชาเสรี';
+import { CurriculumSubject } from '../../shared/api-manage/models/CurriculumSubject.model';
+import { CurriculumSubgroup } from '../../shared/api-manage/models/CurriculumSubgroup.model';
+import { GenedSubject } from '../../shared/api-manage/models/GenedSubject.model';
+import { initFlowbite } from 'flowbite';
+import { Curriculum } from '../../shared/api-manage/models/Curriculum.model';
+import { CurriculumGroup } from '../../shared/api-manage/models/CurriculumGroup.model';
+import { firstValueFrom } from 'rxjs';
+import { GenedGroup } from '../../shared/api-manage/models/GenedGroup.model';
 
 @Component({
 	selector: 'sdm-my-subject',
 	standalone: true,
-	imports: [
-		TableComponent,
-		CreditDashboardComponent,
-		AdviceDashboardComponent,
-		ImportTranscriptComponent,
-		IconComponent,
-		SDMConfirmDeleteModalComponent,
-	],
+	imports: [CommonModule],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
 export class SDMMySubject implements OnInit, AfterViewInit {
-	private _totalCompleted: number = 0;
-	public tableHeaders: string[] = ['หมวดวิชา', 'ลงไปแล้ว', 'ขาดอีก'];
-	public tableRows: any[] = [];
-	public transcriptData: TranscriptData[] = [];
+	public organizedData: {
+		หมวดวิชาศึกษาทั่วไป: Array<{
+			group: GenedGroup;
+			subjects: TranscriptData[];
+		}>;
+		หมวดวิชาเฉพาะ: Array<{
+			group: CurriculumGroup;
+			subgroups: Array<{
+				subgroup: CurriculumSubgroup;
+				subjects: TranscriptData[];
+			}>;
+		}>;
+	} = {
+		หมวดวิชาศึกษาทั่วไป: [],
+		หมวดวิชาเฉพาะ: [],
+	};
+	public curriculumName: string = '';
 	public haveTranscriptData: boolean = false;
+
+	// Credit requirements
+	public generalStudiesCreditRequirement: number = 30;
+	public specializedStudiesCreditRequirement: number = 0;
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -47,157 +51,263 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 	ngOnInit(): void {
 		this.authService.getToken().subscribe({
 			next: (userToken) => {
-				if (!userToken) {
-					return;
-				}
+				if (!userToken) return;
 
 				const userTokenId = userToken.id;
 				const userId = userToken.user.id;
+				const curriculum = userToken.user.curriculum;
+
+				this.curriculumName =
+					curriculum?.name_th || 'ไม่พบข้อมูลหลักสูตร';
 
 				this.apiManagementService
 					.GetTranscriptData(userTokenId, userId)
 					.subscribe({
 						next: (res: TranscriptData[]) => {
-							console.log('this is res from api=>', res);
-							this.transcriptData = res;
-							// this.transcriptData !== null
-							// 	? (this.haveTranscriptData = true)
-							// 	: (this.haveTranscriptData = false);
-							this.haveTranscriptData =
-								!!this.transcriptData.length; // Check if data exists
-							this.processTranscriptData(this.transcriptData);
+							const transcriptPromises = res.map((transcript) =>
+								this.fetchGenedOrCurriculumData(
+									transcript,
+									curriculum,
+								),
+							);
+
+							Promise.all(transcriptPromises).then(
+								(transcriptDataWithGroups) => {
+									this.organizeData(transcriptDataWithGroups);
+									this.calculateSpecializedStudiesCreditRequirement();
+									this.haveTranscriptData = Object.values(
+										this.organizedData,
+									).some((group) => group.length > 0);
+								},
+							);
 						},
 						error: (error) => {
-							if (error.status === 404) {
-								console.error('Not found');
-							} else if (error.status === 500) {
-								console.error('Internal Server Error');
-							} else {
-								console.error(
-									'An unexpected error occurred:',
-									error.status,
-								);
-							}
+							console.error(
+								'Error fetching transcript data:',
+								error,
+							);
 						},
 					});
+			},
+			error: (error) => {
+				console.error('Error fetching user token:', error);
 			},
 		});
 	}
 
-	ngAfterViewInit(): void {
-		initFlowbite();
+	private async fetchGenedOrCurriculumData(
+		transcript: TranscriptData,
+		curriculum: Curriculum,
+	) {
+		const subjectId = transcript.subject?.id;
+		if (!subjectId) return null;
+
+		try {
+			const genedSubject = await firstValueFrom(
+				this.apiManagementService.GetGenedSubject(subjectId),
+			);
+
+			if (genedSubject) {
+				return {
+					transcript,
+					genedGroup: genedSubject.group,
+					masterGroup: 'หมวดวิชาศึกษาทั่วไป' as const,
+				};
+			}
+		} catch (error) {
+			console.error(
+				`Error fetching GenedSubject for subject ${subjectId}:`,
+				error,
+			);
+		}
+
+		const uniqueId = curriculum?.unique_id;
+		const year = curriculum?.year;
+
+		if (!uniqueId || !year) {
+			return null;
+		}
+
+		try {
+			const curriculumSubject = await firstValueFrom(
+				this.apiManagementService.GetCurriculumSubjectByUniqueIdYear(
+					subjectId,
+					uniqueId,
+					year,
+				),
+			);
+
+			if (curriculumSubject) {
+				const { category_id, group_id, subgroup_id } =
+					curriculumSubject;
+
+				const curriculumSubgroup = await firstValueFrom(
+					this.apiManagementService.GetCurriculumSubgroup(
+						category_id,
+						group_id,
+						subgroup_id,
+						uniqueId,
+						year,
+					),
+				);
+				const curriculumGroup = await firstValueFrom(
+					this.apiManagementService.GetCurriculumGroup(
+						category_id,
+						group_id,
+						uniqueId,
+						year,
+					),
+				);
+
+				return {
+					transcript,
+					curriculumSubgroup,
+					curriculumGroup,
+					masterGroup: 'หมวดวิชาเฉพาะ' as const,
+				};
+			}
+		} catch (error) {
+			console.error(
+				`Error fetching CurriculumSubject for subject ${subjectId}:`,
+				error,
+			);
+		}
+
+		return null;
 	}
 
-	private subjectTitleMap: { [key: string]: string } = {
-		'90641001': 'CHARM SCHOOL',
-		'90641002': 'DIGITAL INTELLIGENCE QUOTIENT',
-		'90641003': 'SPORTS AND RECREATIONAL ACTIVITIES',
-		'90644007': 'FOUNDATION ENGLISH 1',
-		'90644008': 'FOUNDATION ENGLISH 2',
-		// ... add other mappings
-	};
-
-	private categoryCreditRequirements: { [key in CategoryName]: number } = {
-		หมวดวิชาศึกษาทั่วไป: 30,
-		หมวดวิชาเฉพาะ: 100,
-		หมวดวิชาเสรี: 6,
-	};
-
-	private processTranscriptData(transcriptData: any[]) {
-		this.tableRows = [];
-
-		const categories: { [key in CategoryName]: any[] } = {
+	private organizeData(data: Array<any>) {
+		this.organizedData = {
 			หมวดวิชาศึกษาทั่วไป: [],
 			หมวดวิชาเฉพาะ: [],
-			หมวดวิชาเสรี: [],
 		};
 
-		for (const entry of transcriptData) {
-			const subjectId = entry.subjectId;
-			const grade = entry.grade;
-			const credit = entry.credit;
-			const semester = entry.semester;
-			const year = entry.year;
-			const title = this.subjectTitleMap[subjectId] || '';
+		for (const item of data) {
+			if (item) {
+				if (item.masterGroup === 'หมวดวิชาศึกษาทั่วไป') {
+					let genedGroupEntry = this.organizedData[
+						'หมวดวิชาศึกษาทั่วไป'
+					].find((group) => group.group.id === item.genedGroup.id);
 
-			let category: CategoryName = 'หมวดวิชาเสรี';
+					if (!genedGroupEntry) {
+						genedGroupEntry = {
+							group: item.genedGroup,
+							subjects: [],
+						};
+						this.organizedData['หมวดวิชาศึกษาทั่วไป'].push(
+							genedGroupEntry,
+						);
+					}
+					genedGroupEntry.subjects.push(item.transcript);
+				} else if (item.masterGroup === 'หมวดวิชาเฉพาะ') {
+					let curriculumGroupEntry = this.organizedData[
+						'หมวดวิชาเฉพาะ'
+					].find(
+						(group) =>
+							group.group.group_id ===
+							item.curriculumGroup.group_id,
+					);
 
-			if (subjectId.startsWith('9064')) {
-				category = 'หมวดวิชาศึกษาทั่วไป';
-			} else if (subjectId.startsWith('0107')) {
-				category = 'หมวดวิชาเฉพาะ';
-			}
+					if (!curriculumGroupEntry) {
+						curriculumGroupEntry = {
+							group: item.curriculumGroup,
+							subgroups: [],
+						};
+						this.organizedData['หมวดวิชาเฉพาะ'].push(
+							curriculumGroupEntry,
+						);
+					}
 
-			categories[category].push({
-				code: subjectId,
-				title: title,
-				grade: grade,
-				credit: credit,
-				semester: semester,
-				year: year,
-			});
-		}
+					let subgroupEntry = curriculumGroupEntry.subgroups.find(
+						(subgroup) =>
+							subgroup.subgroup.subgroup_id ===
+							item.curriculumSubgroup.subgroup_id,
+					);
 
-		for (const [categoryName, subjects] of Object.entries(categories)) {
-			const catName = categoryName as CategoryName;
-			const completedCredits = subjects.reduce((sum, subj) => {
-				if (subj.grade !== '0') {
-					return sum + (subj.credit || 0);
+					if (!subgroupEntry) {
+						subgroupEntry = {
+							subgroup: item.curriculumSubgroup,
+							subjects: [],
+						};
+						curriculumGroupEntry.subgroups.push(subgroupEntry);
+					}
+
+					subgroupEntry.subjects.push(item.transcript);
 				}
-				return sum;
-			}, 0);
-
-			const totalCategoryCredits =
-				this.categoryCreditRequirements[catName] || 0;
-			const remainingCredits = totalCategoryCredits - completedCredits;
-
-			const tableRow = {
-				category: categoryName,
-				completed: completedCredits,
-				remaining: remainingCredits,
-				subCategories: [
-					{
-						name: '',
-						completed: completedCredits,
-						remaining: remainingCredits,
-						courses: subjects.map((subj) => ({
-							code: subj.code,
-							title: subj.title || '',
-						})),
-					},
-				],
-			};
-
-			this.tableRows.push(tableRow);
+			}
 		}
-
-		this.updateTotals();
 	}
 
-	private updateTotals() {
-		const totals = this.calculateTotals();
-		this._totalCompleted = totals.totalCompleted;
+	// Calculate credit requirements for หมวดวิชาเฉพาะ
+	private calculateSpecializedStudiesCreditRequirement() {
+		this.specializedStudiesCreditRequirement = this.organizedData[
+			'หมวดวิชาเฉพาะ'
+		].reduce(
+			(total, groupEntry) => total + (groupEntry.group.credit1 || 0),
+			0,
+		);
 	}
 
-	private calculateTotals() {
-		let totalCompleted = 0;
-
-		for (const row of this.tableRows) {
-			totalCompleted += row.completed || 0;
-		}
-
-		return { totalCompleted };
+	// Calculate earned credits for each GenedGroup
+	public calculateGenedGroupCredits(group: GenedGroup): number {
+		return (
+			this.organizedData['หมวดวิชาศึกษาทั่วไป']
+				.find(
+					(genedGroupEntry) => genedGroupEntry.group.id === group.id,
+				)
+				?.subjects.filter(
+					(subject) => subject.grade !== '0' && subject.grade !== 'F',
+				) // Exclude subjects with grade "0" or "F"
+				.reduce((sum, subject) => sum + (subject.credit || 0), 0) || 0
+		);
 	}
 
-	get totalCredit(): number {
-		return 136;
+	// Calculate earned credits for each CurriculumGroup
+	public calculateCurriculumGroupCredits(group: CurriculumGroup): number {
+		return (
+			this.organizedData['หมวดวิชาเฉพาะ']
+				.find(
+					(curriculumGroupEntry) =>
+						curriculumGroupEntry.group.group_id === group.group_id,
+				)
+				?.subgroups.reduce(
+					(subgroupSum, subgroupEntry) =>
+						subgroupSum +
+						subgroupEntry.subjects
+							.filter(
+								(subject) =>
+									subject.grade !== '0' &&
+									subject.grade !== 'F',
+							) // Exclude subjects with grade "0" or "F"
+							.reduce(
+								(subjectSum, subject) =>
+									subjectSum + (subject.credit || 0),
+								0,
+							),
+					0,
+				) || 0
+		);
 	}
 
-	get totalCompleted(): number {
-		return this._totalCompleted;
+	// Calculate total credits earned for each master group
+	public calculateTotalCredits(
+		masterGroup: 'หมวดวิชาศึกษาทั่วไป' | 'หมวดวิชาเฉพาะ',
+	): number {
+		return masterGroup === 'หมวดวิชาศึกษาทั่วไป'
+			? this.organizedData[masterGroup].reduce(
+					(sum, groupEntry) =>
+						sum + this.calculateGenedGroupCredits(groupEntry.group),
+					0,
+				)
+			: this.organizedData[masterGroup].reduce(
+					(sum, groupEntry) =>
+						sum +
+						this.calculateCurriculumGroupCredits(groupEntry.group),
+					0,
+				);
 	}
 
-	get totalRemaining(): number {
-		return this.totalCredit - this.totalCompleted;
+	ngAfterViewInit(): void {
+		initFlowbite();
 	}
 }

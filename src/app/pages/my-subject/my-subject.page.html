@@ -1,50 +1,188 @@
-<div class="mt-4 flex justify-between">
-	<p class="text-xl font-medium text-dark-100">
-		หลักสูตร วิศวกรรมศาสตรบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์
-		(หลักสูตรปรับปรุง พ.ศ. 2564)
-	</p>
-	<div class="flex gap-x-2">
-		<button
-			data-modal-target="confirm-delete-modal"
-			data-modal-toggle="confirm-delete-modal"
-			class="rounded-lg border border-red-400 bg-white px-3 py-1.5 text-base font-medium text-dark-100 hover:bg-red-400 hover:text-white focus:bg-red-400 focus:text-white"
-		>
-			ลบข้อมูล Transcript
-		</button>
-		<button
-			data-modal-target="import-transcript-modal"
-			data-modal-toggle="import-transcript-modal"
-			class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120"
-		>
-			อัปโหลด Transcript
-		</button>
-	</div>
+<div class="mt-4">
+	<p class="text-xl font-medium text-dark-100">{{ curriculumName }}</p>
 </div>
-<sdm-confirm-delete-modal
-	modalID="confirm-delete-modal"
-	text="คุณต้องการลบข้อมูล Transcript ใช่หรือไม่?"
-	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องอัปโหลดใหม่เท่านั้น"
-	[haveTranscriptData]="haveTranscriptData"
-></sdm-confirm-delete-modal>
-<sdm-import-transcript-modal
-	modalID="import-transcript-modal"
-	headerModal="อัปโหลดไฟล์ Transcript ของคุณ"
-></sdm-import-transcript-modal>
-<div class="mt-9 flex gap-x-6">
-	<sdm-table
-		[listThead]="tableHeaders"
-		[tableData]="tableRows"
-		[totalCompleted]="totalCompleted"
-		[totalRemaining]="totalRemaining"
-		class="w-[1168px]"
-	></sdm-table>
-	<div class="flex flex-col gap-y-6">
-		<sdm-credit-dashboard
-			[totalCompleted]="totalCompleted"
-			[totalRemaining]="totalRemaining"
-			[totalCredit]="totalCredit"
-			class="w-[325px]"
-		></sdm-credit-dashboard>
-		<sdm-advice-dashboard class="w-[325px]"></sdm-advice-dashboard>
-	</div>
+
+<div *ngIf="haveTranscriptData" class="mt-9">
+	<table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
+		<thead>
+			<tr>
+				<th
+					class="bg-main-50 px-6 py-4 text-lg font-medium text-dark-100"
+				>
+					รหัสวิชา
+				</th>
+				<th
+					class="bg-main-50 px-6 py-4 text-lg font-medium text-dark-100"
+				>
+					ชื่อวิชา
+				</th>
+				<th
+					class="bg-main-50 px-6 py-4 text-lg font-medium text-dark-100"
+				>
+					เกรด
+				</th>
+				<th
+					class="bg-main-50 px-6 py-4 text-lg font-medium text-dark-100"
+				>
+					หน่วยกิต
+				</th>
+				<th
+					class="bg-main-50 px-6 py-4 text-lg font-medium text-dark-100"
+				>
+					ภาคการศึกษา
+				</th>
+				<th
+					class="bg-main-50 px-6 py-4 text-lg font-medium text-dark-100"
+				>
+					ปีการศึกษา
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- หมวดวิชาศึกษาทั่วไป -->
+			<tr>
+				<td
+					colspan="3"
+					class="bg-gray-100 px-4 py-2 font-semibold text-dark-100"
+				>
+					หมวดวิชาศึกษาทั่วไป - ต้องการ {{
+					generalStudiesCreditRequirement }} หน่วยกิต
+				</td>
+				<td
+					colspan="3"
+					class="bg-gray-100 px-4 py-2 text-right font-semibold text-dark-100"
+				>
+					ได้รับ {{ calculateTotalCredits('หมวดวิชาศึกษาทั่วไป') }}
+					หน่วยกิต, เหลืออีก {{ generalStudiesCreditRequirement -
+					calculateTotalCredits('หมวดวิชาศึกษาทั่วไป') }} หน่วยกิต
+				</td>
+			</tr>
+			<ng-container
+				*ngFor="let genedGroupEntry of organizedData['หมวดวิชาศึกษาทั่วไป']"
+			>
+				<tr>
+					<td
+						colspan="3"
+						class="bg-gray-200 px-4 py-2 font-semibold text-dark-100"
+					>
+						{{ genedGroupEntry.group.group_name }}
+					</td>
+					<td
+						colspan="3"
+						class="bg-gray-200 px-4 py-2 text-right font-semibold text-dark-100"
+					>
+						ได้รับ {{
+						calculateGenedGroupCredits(genedGroupEntry.group) }}
+						หน่วยกิต
+					</td>
+				</tr>
+				<ng-container *ngFor="let subject of genedGroupEntry.subjects">
+					<tr>
+						<td class="px-6 py-4">
+							{{ subject.subject?.id || '-' }}
+						</td>
+						<td class="px-6 py-4">
+							{{ subject.subject?.subject_ename || '-' }}
+						</td>
+						<td class="px-6 py-4">
+							{{ subject.grade === "0" ? "-" : subject.grade ||
+							'-' }}
+						</td>
+						<td class="px-6 py-4">{{ subject.credit || '-' }}</td>
+						<td class="px-6 py-4">
+							{{ subject.semester === -1 ? "เทียบโอน" :
+							subject.semester || '-' }}
+						</td>
+						<td class="px-6 py-4">
+							{{ subject.year === -1 ? "เทียบโอน" : subject.year
+							|| '-' }}
+						</td>
+					</tr>
+				</ng-container>
+			</ng-container>
+
+			<!-- หมวดวิชาเฉพาะ -->
+			<tr>
+				<td
+					colspan="3"
+					class="bg-gray-100 px-4 py-2 font-semibold text-dark-100"
+				>
+					หมวดวิชาเฉพาะ - ต้องการ {{
+					specializedStudiesCreditRequirement }} หน่วยกิต
+				</td>
+				<td
+					colspan="3"
+					class="bg-gray-100 px-4 py-2 text-right font-semibold text-dark-100"
+				>
+					ได้รับ {{ calculateTotalCredits('หมวดวิชาเฉพาะ') }}
+					หน่วยกิต, เหลืออีก {{ specializedStudiesCreditRequirement -
+					calculateTotalCredits('หมวดวิชาเฉพาะ') }} หน่วยกิต
+				</td>
+			</tr>
+			<ng-container
+				*ngFor="let curriculumGroupEntry of organizedData['หมวดวิชาเฉพาะ']"
+			>
+				<tr>
+					<td
+						colspan="3"
+						class="bg-gray-200 px-4 py-2 font-semibold text-dark-100"
+					>
+						{{ curriculumGroupEntry.group.group_name }} - ต้องการ {{
+						curriculumGroupEntry.group.credit1 }} หน่วยกิต
+					</td>
+					<td
+						colspan="3"
+						class="bg-gray-200 px-4 py-2 text-right font-semibold text-dark-100"
+					>
+						ได้รับ {{
+						calculateCurriculumGroupCredits(curriculumGroupEntry.group)
+						}} หน่วยกิต
+					</td>
+				</tr>
+				<ng-container
+					*ngFor="let subgroupEntry of curriculumGroupEntry.subgroups"
+				>
+					<tr>
+						<td
+							colspan="6"
+							class="bg-gray-300 px-4 py-2 font-semibold text-dark-100"
+						>
+							{{ subgroupEntry.subgroup.subgroup_name }}
+						</td>
+					</tr>
+					<ng-container
+						*ngFor="let subject of subgroupEntry.subjects"
+					>
+						<tr>
+							<td class="px-6 py-4">
+								{{ subject.subject?.id || '-' }}
+							</td>
+							<td class="px-6 py-4">
+								{{ subject.subject?.subject_ename || '-' }}
+							</td>
+							<td class="px-6 py-4">
+								{{ subject.grade === "0" ? "-" : subject.grade
+								|| '-' }}
+							</td>
+							<td class="px-6 py-4">
+								{{ subject.credit || '-' }}
+							</td>
+							<td class="px-6 py-4">
+								{{ subject.semester === -1 ? "เทียบโอน" :
+								subject.semester || '-' }}
+							</td>
+							<td class="px-6 py-4">
+								{{ subject.year === -1 ? "เทียบโอน" :
+								subject.year || '-' }}
+							</td>
+						</tr>
+					</ng-container>
+				</ng-container>
+			</ng-container>
+		</tbody>
+	</table>
+</div>
+
+<div *ngIf="!haveTranscriptData" class="mt-9 text-center text-dark-100">
+	<p>ไม่มีข้อมูล Transcript</p>
 </div>
