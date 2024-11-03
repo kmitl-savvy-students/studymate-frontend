@@ -11,11 +11,21 @@ import { Curriculum } from '../../shared/api-manage/models/Curriculum.model';
 import { CurriculumGroup } from '../../shared/api-manage/models/CurriculumGroup.model';
 import { firstValueFrom } from 'rxjs';
 import { GenedGroup } from '../../shared/api-manage/models/GenedGroup.model';
+import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
+import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
+import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
+import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
 
 @Component({
 	selector: 'sdm-my-subject',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [
+		CommonModule,
+		SDMConfirmDeleteModalComponent,
+		ImportTranscriptComponent,
+		CreditDashboardComponent,
+		AdviceDashboardComponent,
+	],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
@@ -305,6 +315,20 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 						this.calculateCurriculumGroupCredits(groupEntry.group),
 					0,
 				);
+	}
+
+	public calculateUserTotalCredit() {
+		return (
+			this.generalStudiesCreditRequirement +
+			this.specializedStudiesCreditRequirement
+		);
+	}
+
+	public calculateUserTotalCompleted() {
+		return (
+			this.calculateTotalCredits('หมวดวิชาศึกษาทั่วไป') +
+			this.calculateTotalCredits('หมวดวิชาเฉพาะ')
+		);
 	}
 
 	ngAfterViewInit(): void {

@@ -1,8 +1,34 @@
-<div class="mt-4">
+<div class="mt-4 flex justify-between">
 	<p class="text-xl font-medium text-dark-100">{{ curriculumName }}</p>
+	<div class="flex gap-x-2">
+		<button
+			data-modal-target="confirm-delete-modal"
+			data-modal-toggle="confirm-delete-modal"
+			class="rounded-lg border border-red-400 bg-white px-3 py-1.5 text-base font-medium text-dark-100 hover:bg-red-400 hover:text-white focus:bg-red-400 focus:text-white"
+		>
+			ลบข้อมูล Transcript
+		</button>
+		<button
+			data-modal-target="import-transcript-modal"
+			data-modal-toggle="import-transcript-modal"
+			class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120"
+		>
+			อัปโหลด Transcript
+		</button>
+	</div>
 </div>
+<sdm-confirm-delete-modal
+	modalID="confirm-delete-modal"
+	text="คุณต้องการลบข้อมูล Transcript ใช่หรือไม่?"
+	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องอัปโหลดใหม่เท่านั้น"
+	[haveTranscriptData]="haveTranscriptData"
+></sdm-confirm-delete-modal>
+<sdm-import-transcript-modal
+	modalID="import-transcript-modal"
+	headerModal="อัปโหลดไฟล์ Transcript ของคุณ"
+></sdm-import-transcript-modal>
 
-<div *ngIf="haveTranscriptData" class="mt-9">
+<div *ngIf="haveTranscriptData" class="mt-9 flex gap-x-6">
 	<table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
 		<thead>
 			<tr>
@@ -181,8 +207,16 @@
 			</ng-container>
 		</tbody>
 	</table>
+	<div class="flex flex-col gap-y-6">
+		<sdm-credit-dashboard
+			[totalCompleted]="calculateUserTotalCompleted()"
+			[totalRemaining]="calculateUserTotalCredit()+6-calculateUserTotalCompleted()"
+			[totalCredit]="calculateUserTotalCredit()+6"
+			class="w-[325px]"
+		></sdm-credit-dashboard>
+		<sdm-advice-dashboard class="w-[325px]"></sdm-advice-dashboard>
+	</div>
 </div>
-
 <div *ngIf="!haveTranscriptData" class="mt-9 text-center text-dark-100">
 	<p>ไม่มีข้อมูล Transcript</p>
 </div>
