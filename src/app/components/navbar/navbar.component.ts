@@ -24,10 +24,10 @@ import { UserToken } from '../../shared/api-manage/models/UserToken.model';
 	styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit {
-	currentRoute: string = '';
-
-	user: User | null = null;
-	isSignIn = false;
+	public currentRoute: string = '';
+	public user: User | null = null;
+	public isSignIn: boolean = false;
+	public fromNavbar: string = 'navbar';
 
 	constructor(
 		private router: Router,
