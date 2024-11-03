@@ -96,34 +96,39 @@ export class SDMChooseCurriculumModalComponent {
 	}
 
 	onSubmitUserCurriculum() {
-		this.apiManagementService
-			.UpdateUserCurriculum(
-				this.userTokenId!,
-				this.user?.id,
-				this.curriculumId,
-			)
-			.subscribe({
-				next: (res) => {
-					this.authService.setCurriculumSelected(true);
-					const modal = document.getElementById(this.modalID);
-					if (modal) {
-						modal.classList.remove('show');
-						modal.classList.add('hidden');
-					}
-				},
-				error: (error) => {
-					console.log(error);
-					if (error.status === 404) {
-						console.error('Not found');
-					} else if (error.status === 500) {
-						console.error('Internal Server Error');
-					} else {
-						console.error(
-							'An unexpected error occurred:',
-							error.status,
-						);
-					}
-				},
-			});
+		if (this.curriculumId === -1) {
+			alert('Please Select Curriculum First');
+			window.location.reload();
+		} else {
+			this.apiManagementService
+				.UpdateUserCurriculum(
+					this.userTokenId!,
+					this.user?.id,
+					this.curriculumId,
+				)
+				.subscribe({
+					next: (res) => {
+						this.authService.setCurriculumSelected(true);
+						const modal = document.getElementById(this.modalID);
+						if (modal) {
+							modal.classList.remove('show');
+							modal.classList.add('hidden');
+						}
+					},
+					error: (error) => {
+						console.log(error);
+						if (error.status === 404) {
+							console.error('Not found');
+						} else if (error.status === 500) {
+							console.error('Internal Server Error');
+						} else {
+							console.error(
+								'An unexpected error occurred:',
+								error.status,
+							);
+						}
+					},
+				});
+		}
 	}
 }
