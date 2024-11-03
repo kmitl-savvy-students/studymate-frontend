@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-page-profile',
@@ -8,4 +9,8 @@ import { SDMChooseCurriculumModalComponent } from '../../components/modals/choos
 	templateUrl: './profile.page.html',
 	styleUrl: './profile.page.css',
 })
-export class SDMPageProfile {}
+export class SDMPageProfile implements AfterViewInit {
+	ngAfterViewInit(): void {
+		initFlowbite();
+	}
+}
