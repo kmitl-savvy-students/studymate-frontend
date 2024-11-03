@@ -43,6 +43,37 @@ export class APIManagementService {
 		return this.http.get<Curriculum[]>(apiUrl);
 	}
 
+	GetCurriculumById(id: number) {
+		const apiUrl = `${environment.backendUrl}/api/curriculum/get/${id}`;
+		return this.http.get<Curriculum[]>(apiUrl);
+	}
+
+	GetCurriculumByUniqueIdYear(uniqueId: string, year: string) {
+		const apiUrl = `${environment.backendUrl}/api/curriculum/get/${uniqueId}/${year}`;
+		return this.http.get<Curriculum[]>(apiUrl);
+	}
+
+	GetCurriculumnGroup(
+		categoryId: number,
+		groupId: number,
+		uniqueId: string,
+		year: string,
+	) {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-group/get/${categoryId}/${groupId}/${uniqueId}/${year}`;
+		return this.http.get<Curriculum[]>(apiUrl);
+	}
+
+	GetCurriculumnSubGroup(
+		categoryId: number,
+		groupId: number,
+		subGroupId: number,
+		uniqueId: string,
+		year: string,
+	) {
+		const apiUrl = `${environment.backendUrl}/api/curriculum-subgroup/get/${categoryId}/${groupId}${subGroupId}/${uniqueId}/${year}`;
+		return this.http.get<Curriculum[]>(apiUrl);
+	}
+
 	GetTranscriptData(userTokenId: string, userId?: string) {
 		const apiUrl = `${environment.backendUrl}/api/transcript/get/${userId}`;
 		const headers = this.GetAuthHeader(userTokenId);
