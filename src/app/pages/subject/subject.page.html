@@ -20,12 +20,12 @@
 			></sdm-select>
 		</div>
 		<div><sdm-search-bar></sdm-search-bar></div>
-		<sdm-subject-added-modal
-			modalID="subject-added-modal"
-			headerModal="รายวิชาที่เพิ่ม"
-			[subjects_added]="subjects_added"
-		>
-			></sdm-subject-added-modal
-		>
+		<sdm-subject-cpn></sdm-subject-cpn>
 	</div>
 </div>
+<sdm-subject-added-modal
+	modalID="subject-added-modal"
+	headerModal="รายวิชาที่เพิ่ม"
+	[subjects_added]="subjects_added"
+>
+</sdm-subject-added-modal>
