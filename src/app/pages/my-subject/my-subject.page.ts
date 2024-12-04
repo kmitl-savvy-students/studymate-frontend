@@ -15,6 +15,7 @@ import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-m
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
 import { CreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { AdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
+import { IconComponent } from '../../components/icon/icon.component';
 
 @Component({
 	selector: 'sdm-my-subject',
@@ -25,6 +26,7 @@ import { AdviceDashboardComponent } from '../../components/advice-dashboard/advi
 		ImportTranscriptComponent,
 		CreditDashboardComponent,
 		AdviceDashboardComponent,
+		IconComponent,
 	],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
