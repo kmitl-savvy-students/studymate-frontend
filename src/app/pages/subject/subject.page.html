@@ -20,13 +20,8 @@
 			></sdm-select>
 		</div>
 		<div><sdm-search-bar></sdm-search-bar></div>
-		<div class="grid grid-cols-1 gap-4">
-			<sdm-subject-cpn></sdm-subject-cpn>
-			<sdm-subject-cpn></sdm-subject-cpn>
-			<sdm-subject-cpn></sdm-subject-cpn>
-			<sdm-subject-cpn></sdm-subject-cpn>
-			<sdm-subject-cpn></sdm-subject-cpn>
-			<sdm-subject-cpn></sdm-subject-cpn>
+		<div *ngFor="let data of subjectCardData" class="grid grid-cols-1 gap-4">
+			<sdm-subject-cpn [subjectCardData]="data" ></sdm-subject-cpn>
 		</div>
 	</div>
 </div>
