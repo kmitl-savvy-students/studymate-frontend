@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
 
@@ -11,16 +11,18 @@ import { CommonModule } from '@angular/common';
 })
 export class SDMPaginationComponent {
 	@Input() totalItems: number = 0;
-	@Input() itemsPerPage: number = 10;
-	@Input() currentPage: number = 1;
+	@Input() itemsPerPage: number = 0;
+	@Input() currentPage: number = 0;
 	@Output() pageChange = new EventEmitter<number>();
-	visiblePages: number = 5;
 
-	get totalPages(): number {
-		return Math.ceil(this.totalItems / this.itemsPerPage);
+	public visiblePages: number = 5;
+
+	public get totalPages(): number {
+		const showTotal =  Math.ceil(this.totalItems / this.itemsPerPage);
+		return showTotal
 	}
 
-	get pagesToShow(): number[] {
+	public get pagesToShow(): number[] {
 		const halfVisible = Math.floor(this.visiblePages / 2);
 
 		let start = this.currentPage - halfVisible;
@@ -42,7 +44,7 @@ export class SDMPaginationComponent {
 		return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 	}
 
-	changePage(page: number) {
+	public changePage(page: number) {
 		// if (page >= 1 && page <= this.totalPages) {
 		// 	this.pageChange.emit(page);
 		// }
