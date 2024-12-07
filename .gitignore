@@ -7,3 +7,6 @@
 # System files
 .DS_Store
 Thumbs.db
+
+#environment settings
+/src/environments/environment.ts

@@ -14,15 +14,15 @@
 			</div> -->
 			<!-- Testtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt -->
 			<div class="text-lg font-semibold hover:cursor-pointer">
-				01076016 COMPUTER ENGINEERING PROJECT PREPARATION [2 หน่วยกิต]
+				{{subjectCardData.subject_id}} {{subjectCardData.subject_name_en}} [{{subjectCardData.credit}} หน่วยกิต]
 			</div>
 			<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
-				วิชาเลือกหมวดวิชาศึกษาทั่วไป
+				{{subjectCardData.subject_type_name}}
 			</div>
 			<div
 				class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs"
 			>
-				Sec 101
+				Sec {{subjectCardData.section}}
 			</div>
 		</div>
 		<div class="grid grid-cols-8 gap-y-5">
@@ -32,10 +32,13 @@
 					<div
 						class="w-[77px] rounded-[15px] bg-orange-50 px-3 py-1.5 text-center"
 					>
-						เสาร์
+						{{subjectCardData.classdatetime[0]}}
 					</div>
 					<div class="rounded-[15px] bg-orange-50 px-3 py-1.5">
-						13:00 - 14:00
+						{{subjectCardData.classdatetime[1]}}
+					</div>
+					<div *ngIf="subjectCardData.classdatetime[2].trim() !== ''"  class="rounded-[15px] bg-orange-50 px-3 py-1.5">
+						{{subjectCardData.classdatetime[2]}}
 					</div>
 				</div>
 			</div>
@@ -43,20 +46,17 @@
 				<div class="font-normal">อาจารย์ผู้สอน</div>
 				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2 text-sm">
 					<div
-						class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5"
+					  *ngFor="let data of subjectCardData.teacher_list_th.slice(0, 2)"
+					  class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
-						ผศ. ธนา หงษ์สุวรรณ
-					</div>
-					<div
-						class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5"
-					>
-						อ. จิระศักดิ์ สิทธิกร
+					  {{ data }}
 					</div>
 					<sdm-icon
-						icon="ellipsis"
-						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-dark-100"
+					  *ngIf="subjectCardData.teacher_list_th.length > 2"
+					  icon="ellipsis"
+					  class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-dark-100"
 					></sdm-icon>
-				</div>
+				  </div>
 			</div>
 			<div class="col-span-3 flex flex-col gap-y-2">
 				<div class="font-normal">ห้องเรียน</div>
@@ -64,7 +64,7 @@
 					<div
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm"
 					>
-						ECC 807
+						{{subjectCardData.room_no}}
 					</div>
 				</div>
 			</div>
@@ -78,7 +78,7 @@
 						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
 						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
 					</div>
-					<div>4.0/5 (3 รีวิว)</div>
+					<div>{{subjectCardData.review_score}}/5 ({{subjectCardData.review_total}} รีวิว)</div>
 				</div>
 			</div>
 			<div class="col-span-5 flex flex-col gap-y-2">
@@ -88,7 +88,7 @@
 						icon="hand-holding-heart"
 						class="text-lg text-main-100"
 					></sdm-icon>
-					<div>30 คน</div>
+					<div>{{subjectCardData.student_total}} คน</div>
 				</div>
 			</div>
 

@@ -11,6 +11,7 @@ import { CurriculumSubgroup } from './models/CurriculumSubgroup.model';
 import { CurriculumSubject } from './models/CurriculumSubject.model';
 import { GenedGroup } from './models/GenedGroup.model';
 import { GenedSubject } from './models/GenedSubject.model';
+import { SubjectCardData } from './models/SubjectCardData.model.js';
 
 @Injectable({
 	providedIn: 'root',
@@ -118,6 +119,18 @@ export class APIManagementService {
 	) {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-subject/get/${subjectId}/${uniqueId}/${year}`;
 		return this.http.get<CurriculumSubject>(apiUrl);
+	}
+
+	GetCurriculumTeachtable(
+		year : number,
+		semester : number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number
+	){
+		const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+		return this.http.get<SubjectCardData>(apiUrl)
 	}
 
 	GetGenedSubject(subjectId: string) {

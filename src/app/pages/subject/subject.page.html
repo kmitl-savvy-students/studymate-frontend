@@ -23,10 +23,13 @@
 		<!-- ส่วนการแสดงข้อมูล -->
 		<div class="grid grid-cols-1 gap-4">
 			<ng-container *ngFor="let item of paginatedItems; let i = index">
-				<sdm-subject-cpn
-					[subjectName]="item"
-					[index]="i + 1 + (currentPage - 1) * itemsPerPage"
-				></sdm-subject-cpn>
+        <div *ngFor="let data of subjectCardData" class="grid grid-cols-1 gap-4">
+          <sdm-subject-cpn
+            [subjectName]="item"
+            [index]="i + 1 + (currentPage - 1) * itemsPerPage"
+            [subjectCardData]="data"
+          ></sdm-subject-cpn>
+        </div>
 			</ng-container>
 		</div>
 		<!-- Pagination -->
