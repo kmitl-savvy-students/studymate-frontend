@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 
 @Component({
@@ -8,4 +8,7 @@ import { IconComponent } from '../icon/icon.component';
 	templateUrl: './subject.component.html',
 	styleUrl: './subject.component.css',
 })
-export class SDMSubjectComponent {}
+export class SDMSubjectComponent {
+	@Input() subjectName: string = ''; // ชื่อรายวิชา
+	@Input() index: number = 0; // ลำดับของ component
+}
