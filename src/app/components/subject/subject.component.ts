@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { APIManagementService } from '../../shared/api-manage/api-management.service.js';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,8 @@ import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.
 })
 export class SDMSubjectComponent{
 	@Input() subjectCardData!: SubjectCardData;
+  @Input() subjectName: string = ''; // ชื่อรายวิชา
+	@Input() index: number = 0; // ลำดับของ component
 	// public subjectData = [
 	// 	{
 	// 		subject_id : "01006003",

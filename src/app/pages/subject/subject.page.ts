@@ -6,6 +6,7 @@ import { IconComponent } from '../../components/icon/icon.component';
 import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-added-modal/subject-added-modal.component';
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
+import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
 
@@ -18,13 +19,42 @@ import { CommonModule } from '@angular/common';
 		SDMSubjectAddedModalComponent,
 		SDMilterBarComponent,
 		SDMSubjectComponent,
+		SDMPaginationComponent,
 		CommonModule
 	],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
 export class SDMSubject implements AfterViewInit {
+	items: string[] = []; // รายวิชา
+	currentPage: number = 1; // หน้าปัจจุบัน
+	itemsPerPage: number = 10; // จำนวนรายการต่อหน้า
+	paginatedItems: string[] = []; // รายวิชาที่จะแสดงในหน้าปัจจุบัน
 
+	ngAfterViewInit(): void {
+		initFlowbite();
+		this.generateItems(); // สร้างข้อมูลจำลอง
+		this.updatePaginatedItems(); // อัปเดตข้อมูลในหน้าปัจจุบัน
+	}
+
+	generateItems() {
+		// สร้างข้อมูลจำลอง
+		for (let i = 1; i <= 100; i++) {
+			this.items.push(`Component ที่ ${i}`);
+		}
+	}
+
+	updatePaginatedItems() {
+		// อัปเดตข้อมูลในหน้าปัจจุบัน
+		const start = (this.currentPage - 1) * this.itemsPerPage;
+		const end = start + this.itemsPerPage;
+		this.paginatedItems = this.items.slice(start, end);
+	}
+
+	changePage(page: number) {
+		this.currentPage = page;
+		this.updatePaginatedItems();
+	}
 
 	subjectCardData: SubjectCardData[] = [
 		{
@@ -283,10 +313,6 @@ export class SDMSubject implements AfterViewInit {
 			isSelected: false,
 		},
 	];
-
-	ngAfterViewInit(): void {
-		initFlowbite();
-	}
 }
 
 	

@@ -19,10 +19,26 @@
 				class="w-24"
 			></sdm-select>
 		</div>
-		<div><sdm-search-bar></sdm-search-bar></div>
-		<div *ngFor="let data of subjectCardData" class="grid grid-cols-1 gap-4">
-			<sdm-subject-cpn [subjectCardData]="data" ></sdm-subject-cpn>
+		<sdm-search-bar></sdm-search-bar>
+		<!-- ส่วนการแสดงข้อมูล -->
+		<div class="grid grid-cols-1 gap-4">
+			<ng-container *ngFor="let item of paginatedItems; let i = index">
+        <div *ngFor="let data of subjectCardData" class="grid grid-cols-1 gap-4">
+          <sdm-subject-cpn
+            [subjectName]="item"
+            [index]="i + 1 + (currentPage - 1) * itemsPerPage"
+            [subjectCardData]="data"
+          ></sdm-subject-cpn>
+        </div>
+			</ng-container>
 		</div>
+		<!-- Pagination -->
+		<sdm-pagination
+			(pageChange)="changePage($event)"
+			[totalItems]="items.length"
+			[itemsPerPage]="itemsPerPage"
+			[currentPage]="currentPage"
+		></sdm-pagination>
 	</div>
 </div>
 <sdm-subject-added-modal
