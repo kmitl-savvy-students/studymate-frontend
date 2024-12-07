@@ -20,15 +20,6 @@ export class SDMPaginationComponent {
 		return Math.ceil(this.totalItems / this.itemsPerPage);
 	}
 
-	// get pagesToShow(): number[] {
-	// 	const start = Math.max(
-	// 		1,
-	// 		this.currentPage - Math.floor(this.visiblePages / 2),
-	// 	);
-	// 	const end = Math.min(start + this.visiblePages - 1, this.totalPages);
-	// 	return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-	// }
-
 	get pagesToShow(): number[] {
 		const halfVisible = Math.floor(this.visiblePages / 2);
 
@@ -52,8 +43,24 @@ export class SDMPaginationComponent {
 	}
 
 	changePage(page: number) {
-		if (page >= 1 && page <= this.totalPages) {
-			this.pageChange.emit(page);
-		}
+		// if (page >= 1 && page <= this.totalPages) {
+		// 	this.pageChange.emit(page);
+		// }
+		// ถ้าเลือกหน้าเดิมจะไม่ทำอะไร
+		if (page === this.currentPage) return;
+
+		// อัปเดต currentPage
+		this.pageChange.emit(page);
+
+		// เลื่อนหน้าเว็บไปด้านบนสุด
+		this.scrollToTop();
+	}
+
+	// ฟังก์ชันเลื่อนหน้าเว็บไปด้านบนสุด
+	private scrollToTop() {
+		window.scrollTo({
+			top: 0, // เลื่อนขึ้นไปที่ด้านบนสุด
+			behavior: 'smooth', // การเลื่อนแบบนุ่มนวล
+		});
 	}
 }
