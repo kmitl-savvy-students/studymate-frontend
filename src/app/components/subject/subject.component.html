@@ -4,7 +4,7 @@
 	<div class="flex flex-col gap-y-4">
 		<div class="flex flex-row items-center gap-x-3">
 			<div class="text-lg font-semibold hover:cursor-pointer">
-				01076016 COMPUTER ENGINEERING PROJECT PREPARATION [2 หน่วยกิต]
+				{{subjectData[0].subject_id}} {{subjectData[0].subject_name_en}} [{{subjectData[0].credit}} หน่วยกิต]
 			</div>
 			<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
 				วิชาเลือกหมวดวิชาศึกษาทั่วไป
@@ -12,7 +12,7 @@
 			<div
 				class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs"
 			>
-				Sec 101
+				Sec {{subjectData[0].section}}
 			</div>
 		</div>
 		<div class="grid grid-cols-8 gap-y-5">
@@ -22,10 +22,13 @@
 					<div
 						class="w-[77px] rounded-[15px] bg-orange-50 px-3 py-1.5 text-center"
 					>
-						เสาร์
+						{{subjectData[0].classdatetime[0]}}
 					</div>
 					<div class="rounded-[15px] bg-orange-50 px-3 py-1.5">
-						13:00 - 14:00
+						{{subjectData[0].classdatetime[1]}}
+					</div>
+					<div *ngIf="subjectData[0].classdatetime[2].trim() !== ''"  class="rounded-[15px] bg-orange-50 px-3 py-1.5">
+						{{subjectData[0].classdatetime[2]}}
 					</div>
 				</div>
 			</div>
@@ -35,13 +38,17 @@
 					<div
 						class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
-						ผศ. ธนา หงษ์สุวรรณ
+						ผศ. ธนา หงษ์สุวรรณ หงษ์สุวรรณ 
 					</div>
 					<div
 						class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
 						อ. จิระศักดิ์ สิทธิกร
 					</div>
+					<!-- <div class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5">
+						<div>ผศ. ธนา หงษ์สุวรรณ หงษ์สุวรรณ</div>
+						<div>อ. จิระศักดิ์ สิทธิกร</div>
+					</div> -->
 					<sdm-icon
 						icon="ellipsis"
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-dark-100"
@@ -78,7 +85,7 @@
 						icon="hand-holding-heart"
 						class="text-lg text-main-100"
 					></sdm-icon>
-					<div>30 คน</div>
+					<div>{{subjectData[0].student_total}} คน</div>
 				</div>
 			</div>
 
