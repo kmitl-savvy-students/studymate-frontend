@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnInit,
+	Output,
+} from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -30,10 +37,24 @@ export class SDMSelectComponent implements OnInit {
 		});
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		window.addEventListener('close-dropdowns', (event: any) => {
+			if (event.detail !== this) {
+				this.isDropdownOpen = false;
+			}
+		});
+	}
 
 	toggleDropdown() {
 		this.isDropdownOpen = !this.isDropdownOpen;
+		if (this.isDropdownOpen) {
+			this.closeOtherDropdowns();
+		}
+	}
+
+	closeOtherDropdowns() {
+		const event = new CustomEvent('close-dropdowns', { detail: this });
+		window.dispatchEvent(event);
 	}
 
 	get showSelectedOption(): string {
@@ -49,5 +70,18 @@ export class SDMSelectComponent implements OnInit {
 			index: i ?? -1,
 		};
 		this.selectedValue.emit(data);
+	}
+
+	@HostListener('document:click', ['$event'])
+	handleClickOutside(event: MouseEvent) {
+		const target = event.target as HTMLElement;
+		const dropdownElement = document.querySelector('.test');
+		if (dropdownElement && !dropdownElement.contains(target)) {
+			this.isDropdownOpen = false;
+		}
+	}
+
+	preventPropagation(event: Event) {
+		event.stopPropagation();
 	}
 }
