@@ -1,8 +1,8 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
-	<div class="flex flex-1 flex-col gap-y-5">
+	<div class="grid grid-cols-1 gap-5">
 		<div class="text-xl font-semibold">รายวิชาเรียน</div>
-		<div class="flex w-9/12 gap-x-4">
+		<div class="flex flex-wrap gap-x-4 gap-y-3">
 			<sdm-select
 				selectName="ปีการศึกษา"
 				[listOptions]="['2564', '2565', '2566', '2567']"
@@ -18,18 +18,34 @@
 				[listOptions]="['1', '2', '3', '4']"
 				class="w-24"
 			></sdm-select>
+			<sdm-select
+				selectName="คณะ"
+				[listOptions]="['วิศวกรรมศาสตร์', 'ศึกษาทั่วไป']"
+				class="w-40"
+			></sdm-select>
+			<sdm-select
+				selectName="ภาควิชา"
+				[listOptions]="['วิศวกรรมคอมพิวเตอร์', 'ศึกษาทั่วไป']"
+				class="w-40"
+			></sdm-select>
+			<sdm-select
+				selectName="หลักสูตร"
+				[listOptions]="['วิศวกรรมคอมพิวเตอร์ พ.ศ. 2567', 'วิศวกรรมคอมพิวเตอร์ (ต่อเนื่อง) พ.ศ. 2567']"
+				class="w-44"
+			></sdm-select>
 		</div>
 		<sdm-search-bar></sdm-search-bar>
-		<!-- ส่วนการแสดงข้อมูล -->
 		<div class="grid grid-cols-1 gap-4">
-			<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
+			<ng-container
+				*ngFor="let data of paginatedItems; let i = index"
+				class="grid grid-cols-1 gap-4"
+			>
 				<sdm-subject-cpn
 					[subjectCardData]="data"
 					[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
 				></sdm-subject-cpn>
 			</ng-container>
 		</div>
-		<!-- Pagination -->
 		<sdm-pagination
 			(pageChange)="changePage($event)"
 			[totalItems]="subjectCardTotal"
