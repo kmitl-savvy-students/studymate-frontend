@@ -1,8 +1,8 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
-	<div class="flex flex-1 flex-col gap-y-5">
+	<div class="grid grid-cols-1 gap-5">
 		<div class="text-xl font-semibold">รายวิชาเรียน</div>
-		<div class="flex w-9/12 gap-x-4">
+		<div class="flex flex-wrap gap-y-3 gap-x-4">
 			<sdm-select
 				selectName="ปีการศึกษา"
 				[listOptions]="['2564', '2565', '2566', '2567']"
