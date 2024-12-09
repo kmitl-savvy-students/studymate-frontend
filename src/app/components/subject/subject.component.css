@@ -1,0 +1,16 @@
+.tooltip {
+	display: inline-block;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	z-index: 10;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+}
+
+.tooltip-shadow {
+	box-shadow: 0 0 6px 0 rgb(0 0 0 / 0.1);
+}
