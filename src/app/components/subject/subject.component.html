@@ -38,7 +38,7 @@
 						*ngIf="subjectCardData.classdatetime[2].trim() !== ''"
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
-						{{ subjectCardData.classdatetime[2] }}
+						+ {{ subjectCardData.classdatetime[2] }}
 					</div>
 				</div>
 			</div>
@@ -63,7 +63,7 @@
 					></sdm-icon>
 				</div>
 			</div>
-			<div class="col-span-3 flex flex-col gap-y-2">
+			<div class="col-span-1 flex flex-col gap-y-2">
 				<div class="font-normal">ห้องเรียน</div>
 				<div class="flex flex-row">
 					<div
@@ -74,6 +74,16 @@
 				</div>
 			</div>
 			<div class="col-span-2 flex flex-col gap-y-2">
+				<div class="font-normal">ตึกเรียน</div>
+				<div class="flex flex-row">
+					<div
+						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm"
+					>
+						{{ subjectCardData.classbuilding }}
+					</div>
+				</div>
+			</div>
+			<div class="col-span-1 flex flex-col gap-y-2">	
 				<div class="font-normal">เงื่อนไข</div>
 				<div
 					class="tooltip relative"
@@ -92,14 +102,15 @@
 				</div>
 				<div class="flex flex-row" *ngIf="subjectCardData.rule === ''">
 					<div
-						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm text-red-400"
+						class="rounded-[15px] bg-gray-100 px-3 py-0.3 text-sm text-gray-400"
 						*ngIf="subjectCardData.rule === ''"
 					>
 						-
 					</div>
 				</div>
 			</div>
-			<div class="col-span-3 flex flex-col gap-y-2">
+			
+			<div class="col-span-2 flex flex-col gap-y-2">
 				<div class="font-normal">คะแนนรีวิว</div>
 				<div class="flex flex-row flex-wrap gap-x-2 text-sm">
 					<div class="flex flex-row gap-x-1">
@@ -117,7 +128,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-span-2 flex flex-col gap-y-2">
+			<div class="col-span-3 flex flex-col gap-y-1">
 				<div class="font-normal">นักศึกษาที่ขอเปิดรายวิชา</div>
 				<div class="flex flex-row items-center gap-x-2 text-sm">
 					<sdm-icon
@@ -138,3 +149,7 @@
 		</div>
 	</div>
 </div>
+
+
+
+

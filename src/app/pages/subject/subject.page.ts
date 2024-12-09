@@ -15,6 +15,7 @@ import { SDMSubjectComponent } from '../../components/subject/subject.component'
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
+import { APIManagementService } from '../../shared/api-manage/api-management.service.js';
 
 @Component({
 	selector: 'sdm-subject',
@@ -32,20 +33,11 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './subject.page.css',
 })
 export class SDMSubject implements AfterViewInit, OnInit {
+	@ViewChildren(SDMSelectComponent) dropdowns!: QueryList<SDMSelectComponent>;
 	public currentPage: number = 1; // หน้าปัจจุบัน
 	public itemsPerPage: number = 10; // จำนวนรายการต่อหน้า
 	public paginatedItems: SubjectCardData[] = []; // รายวิชาที่จะแสดงในหน้าปัจจุบัน
 	public subjectCardTotal: number = 0;
-
-	@ViewChildren(SDMSelectComponent) dropdowns!: QueryList<SDMSelectComponent>;
-
-	closeAllDropdowns(except?: SDMSelectComponent) {
-		this.dropdowns.forEach((dropdown) => {
-			if (dropdown !== except) {
-				dropdown.isDropdownOpen = false;
-			}
-		});
-	}
 	public subjectCardData: SubjectCardData[] = [
 		{
 			subject_id: '01006003',
@@ -65,7 +57,8 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				'Mr. ravipat lapcharoensuk',
 			],
 			room_no: 'ECC 802',
-			rule: '<div>เฉพาะ นศ. รหัส63010377<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div><div>เฉพาะ นศ. รหัส62010345<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
+			classbuilding: 'ปฏิบัติการ-2',
+			rule: '<div>เฉพาะ นศ. รหัส64010310<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div><div>เฉพาะ นศ. รหัส64010310<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.5,
 			review_total: 3,
 			student_total: 30,
@@ -84,7 +77,8 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				'Mr. ravipat lapcharoensuk',
 			],
 			room_no: 'ECC 807',
-			rule: '<div>เฉพาะ นศ. รหัส63010377<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div><div>เฉพาะ นศ. รหัส62010345<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
+			classbuilding: 'ปฏิบัติการ-2',
+			rule: '',
 			review_score: 4.0,
 			review_total: 3,
 			student_total: 50000,
@@ -100,7 +94,8 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. สมชาย'],
 			teacher_list_en: ['(Lecturers) Somchai'],
 			room_no: 'ECC 101',
-			rule: '<div>เฉพาะ นศ. รหัส64010301<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
+			classbuilding: 'ปฏิบัติการ-2',
+			rule: '',
 			review_score: 4.0,
 			review_total: 5,
 			student_total: 45,
@@ -116,6 +111,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. มนตรี', 'อ. กิตติ'],
 			teacher_list_en: ['(Lecturers) Montri', 'Mr. Kitti'],
 			room_no: 'ECC 202',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010302<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.2,
 			review_total: 6,
@@ -132,6 +128,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. พรเทพ', 'อ. ปริญญา'],
 			teacher_list_en: ['(Lecturers) Porntep'],
 			room_no: 'ECC 303',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010303<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.8,
 			review_total: 10,
@@ -148,6 +145,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. วิทยา', 'อ. ปริญญา', 'อ. เจนจิรา'],
 			teacher_list_en: ['(Lecturers) Witaya'],
 			room_no: 'ECC 404',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010304<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 3.9,
 			review_total: 3,
@@ -164,6 +162,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. เจนจิรา'],
 			teacher_list_en: ['(Lecturers) Janejira'],
 			room_no: 'ECC 505',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010305<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.7,
 			review_total: 8,
@@ -180,6 +179,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. สมพงษ์'],
 			teacher_list_en: ['(Lecturers) Sompong'],
 			room_no: 'ECC 606',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010306<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.3,
 			review_total: 15,
@@ -196,6 +196,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. กัลยา'],
 			teacher_list_en: ['(Lecturers) Kanlaya'],
 			room_no: 'ECC 707',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010307<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.5,
 			review_total: 12,
@@ -212,6 +213,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. วรนุช'],
 			teacher_list_en: ['(Lecturers) Woranuch'],
 			room_no: 'ECC 808',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010308<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.0,
 			review_total: 9,
@@ -228,6 +230,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. สุรีพร'],
 			teacher_list_en: ['(Lecturers) Sureeporn'],
 			room_no: 'ECC 909',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010309<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 3.8,
 			review_total: 7,
@@ -244,6 +247,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. ปริญญา'],
 			teacher_list_en: ['(Lecturers) Parinya'],
 			room_no: 'ECC 505',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010310<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.6,
 			review_total: 20,
@@ -267,6 +271,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				'Mr. ravipat lapcharoensuk',
 			],
 			room_no: 'ECC 802',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส63010377<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div><div>เฉพาะ นศ. รหัส62010345<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.5,
 			review_total: 3,
@@ -286,6 +291,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				'Mr. ravipat lapcharoensuk',
 			],
 			room_no: 'ECC 807',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส63010377<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div><div>เฉพาะ นศ. รหัส62010345<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.0,
 			review_total: 3,
@@ -302,6 +308,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. สมชาย'],
 			teacher_list_en: ['(Lecturers) Somchai'],
 			room_no: 'ECC 101',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010301<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.0,
 			review_total: 5,
@@ -318,6 +325,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. มนตรี', 'อ. กิตติ'],
 			teacher_list_en: ['(Lecturers) Montri', 'Mr. Kitti'],
 			room_no: 'ECC 202',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010302<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.2,
 			review_total: 6,
@@ -334,6 +342,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. พรเทพ', 'อ. ปริญญา'],
 			teacher_list_en: ['(Lecturers) Porntep'],
 			room_no: 'ECC 303',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010303<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.8,
 			review_total: 10,
@@ -350,6 +359,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. วิทยา', 'อ. ปริญญา', 'อ. เจนจิรา'],
 			teacher_list_en: ['(Lecturers) Witaya'],
 			room_no: 'ECC 404',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010304<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 3.9,
 			review_total: 3,
@@ -366,6 +376,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. เจนจิรา'],
 			teacher_list_en: ['(Lecturers) Janejira'],
 			room_no: 'ECC 505',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010305<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.7,
 			review_total: 8,
@@ -382,6 +393,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. สมพงษ์'],
 			teacher_list_en: ['(Lecturers) Sompong'],
 			room_no: 'ECC 606',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010306<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.3,
 			review_total: 15,
@@ -398,6 +410,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. กัลยา'],
 			teacher_list_en: ['(Lecturers) Kanlaya'],
 			room_no: 'ECC 707',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010307<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.5,
 			review_total: 12,
@@ -414,6 +427,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. วรนุช'],
 			teacher_list_en: ['(Lecturers) Woranuch'],
 			room_no: 'ECC 808',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010308<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.0,
 			review_total: 9,
@@ -430,6 +444,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. สุรีพร'],
 			teacher_list_en: ['(Lecturers) Sureeporn'],
 			room_no: 'ECC 909',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010309<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 3.8,
 			review_total: 7,
@@ -446,6 +461,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			teacher_list_th: ['อ. ปริญญา'],
 			teacher_list_en: ['(Lecturers) Parinya'],
 			room_no: 'ECC 505',
+			classbuilding: 'ปฏิบัติการ-2',
 			rule: '<div>เฉพาะ นศ. รหัส64010310<div><font color="red">(ไม่รับนศ.อื่น)</font></div></div>',
 			review_score: 4.6,
 			review_total: 20,
@@ -515,9 +531,12 @@ export class SDMSubject implements AfterViewInit, OnInit {
 		},
 	];
 
-	constructor() {
+	constructor(
+		private apiManagementService: APIManagementService,
+	) {
 		this.subjectCardTotal = this.subjectCardData.length;
 	}
+
 
 	ngOnInit(): void {
 		this.updatePaginatedItems();
@@ -527,13 +546,21 @@ export class SDMSubject implements AfterViewInit, OnInit {
 		initFlowbite();
 	}
 
-	updatePaginatedItems() {
+	public closeAllDropdowns(except?: SDMSelectComponent) {
+		this.dropdowns.forEach((dropdown) => {
+			if (dropdown !== except) {
+				dropdown.isDropdownOpen = false;
+			}
+		});
+	}
+
+	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
 		this.paginatedItems = this.subjectCardData.slice(start, end);
 	}
 
-	changePage(page: number) {
+	public changePage(page: number) {
 		this.currentPage = page;
 		this.updatePaginatedItems();
 	}

@@ -49,13 +49,14 @@ export const theme = {
 		},
 	},
 	container: {
-		padding: {
-			'DEFAULT': '1rem',
-			'sm': '2rem',
-			'md': '3rem',
-			'lg': '4rem',
-			'xl': '5rem',
-			'2xl': '6rem',
+		center: true,
+		padding: '1rem',
+		screens: {
+		  sm: '100%',     // มือถือ กว้างเต็มหน้าจอ
+		  md: '600px',    // แท็บเล็ต
+		  lg: '1024px',   // แล็ปท็อปขนาดเล็ก
+		  xl: '1400px',   // เดสก์ท็อป Full HD
+		  '2xl': '2400px' // จอ Ultrawide
 		},
 	},
 };

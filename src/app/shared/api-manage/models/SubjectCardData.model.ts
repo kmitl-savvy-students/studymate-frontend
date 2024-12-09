@@ -10,6 +10,7 @@ export class SubjectCardData {
 		public teacher_list_th: string[], // Array of teacher names in Thai
 		public teacher_list_en: string[], // Array of teacher names in English
 		public room_no: string,
+		public classbuilding : string,
 		public rule: string, // Rule in HTML format
 		public review_score: number,
 		public review_total: number,
