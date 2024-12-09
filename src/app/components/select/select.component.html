@@ -6,7 +6,7 @@
 		class="selected flex h-full items-center justify-between gap-x-3 rounded-[10px] border-none bg-main-100 px-4 py-1 font-medium text-white hover:bg-main-120 focus:ring-0"
 		(click)="toggleDropdown()"
 	>
-		{{ showSelectedOption || selectName }}
+		<div class="truncate">{{ showSelectedOption || selectName }}</div>
 		<sdm-icon
 			*ngIf="!isSelect"
 			icon="chevron-down"
@@ -29,8 +29,12 @@
 			(click)="onSelectedOption(option, i)"
 			(mouseenter)="hoveredOption = option"
 			(mouseleave)="hoveredOption = null"
-			[class.hover]="hoveredOption === option"
-			class="py-1.5 text-center text-base font-normal text-dark-100 hover:mx-1.5 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
+			[ngClass]="{
+				'hover': hoveredOption === option,
+				'rounded-[10px] bg-main-100 text-white':
+					form.get('selectedOption')?.value === option,
+			}"
+			class="mx-1.5 px-3 py-1.5 text-center text-base font-normal text-dark-100 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
 		>
 			{{ option }}
 		</li>
