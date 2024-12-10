@@ -5,6 +5,7 @@ import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.co
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-added-modal/subject-added-modal.component';
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'sdm-subject',
@@ -12,9 +13,9 @@ import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.com
 	imports: [
 		SDMSelectComponent,
 		SDMSearchBarComponent,
-		IconComponent,
 		SDMSubjectAddedModalComponent,
 		SDMilterBarComponent,
+		RouterLink,
 	],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',

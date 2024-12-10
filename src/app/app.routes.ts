@@ -6,6 +6,7 @@ import { SDMMySubject } from './pages/my-subject/my-subject.page';
 import { SDMSubject } from './pages/subject/subject.page';
 import { AuthGuard } from './curriculum.guard';
 import { SDMPageProfile } from './pages/profile/profile.page';
+import { SDMSubjectDetail } from './pages/subject-detail/subject-detail.page';
 
 export const routes: Routes = [
 	{
@@ -21,5 +22,6 @@ export const routes: Routes = [
 		component: SDMMySubject,
 	},
 	{ path: 'subject', component: SDMSubject },
+	{ path: 'subject-detail', component: SDMSubjectDetail },
 	{ path: 'profile', component: SDMPageProfile },
 ];

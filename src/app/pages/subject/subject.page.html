@@ -1,31 +1,36 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
-	<div class="flex flex-1 flex-col gap-y-5">
-		<div class="text-xl font-semibold">รายวิชาเรียน</div>
-		<div class="flex w-9/12 gap-x-4">
-			<sdm-select
-				selectName="ปีการศึกษา"
-				[listOptions]="['2564', '2565', '2566', '2567']"
-				class="w-36"
-			></sdm-select>
-			<sdm-select
-				selectName="ภาคการศึกษา"
-				[listOptions]="['1', '2', '3']"
-				class="w-40"
-			></sdm-select>
-			<sdm-select
-				selectName="ชั้นปี"
-				[listOptions]="['1', '2', '3', '4']"
-				class="w-24"
-			></sdm-select>
+	<div class="flex w-full flex-col">
+		<div class="flex flex-col gap-y-5">
+			<div class="text-xl font-semibold">รายวิชาเรียน</div>
+			<div class="flex w-9/12 gap-x-4">
+				<sdm-select
+					selectName="ปีการศึกษา"
+					[listOptions]="['2564', '2565', '2566', '2567']"
+					class="w-36"
+				></sdm-select>
+				<sdm-select
+					selectName="ภาคการศึกษา"
+					[listOptions]="['1', '2', '3']"
+					class="w-40"
+				></sdm-select>
+				<sdm-select
+					selectName="ชั้นปี"
+					[listOptions]="['1', '2', '3', '4']"
+					class="w-24"
+				></sdm-select>
+			</div>
+			<div><sdm-search-bar></sdm-search-bar></div>
+			<sdm-subject-added-modal
+				modalID="subject-added-modal"
+				headerModal="รายวิชาที่เพิ่ม"
+				[subjects_added]="subjects_added"
+			>
+				></sdm-subject-added-modal
+			>
 		</div>
-		<div><sdm-search-bar></sdm-search-bar></div>
-		<sdm-subject-added-modal
-			modalID="subject-added-modal"
-			headerModal="รายวิชาที่เพิ่ม"
-			[subjects_added]="subjects_added"
-		>
-			></sdm-subject-added-modal
+		<a routerLink="/subject-detail" class="hover:text-main-100"
+			>Go to Subject Detail Page</a
 		>
 	</div>
 </div>
