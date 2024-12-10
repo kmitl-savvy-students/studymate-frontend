@@ -104,12 +104,13 @@
 						<a
 							class="rounded-[10px] py-2 hover:bg-main-10"
 							routerLink="/profile"
+							(click)="closeDropdown()"
 						>
 							<div class="ps-2">โปรไฟล์</div>
 						</a>
 						<a
 							class="rounded-[10px] py-2 hover:bg-main-10"
-							(click)="userSignOut()"
+							(click)="closeDropdown(); userSignOut()"
 							routerLink="/sign-in"
 						>
 							<div class="ps-2">ออกจากระบบ</div>

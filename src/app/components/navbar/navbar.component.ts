@@ -28,6 +28,7 @@ export class NavbarComponent implements OnInit {
 	public user: User | null = null;
 	public isSignIn: boolean = false;
 	public fromNavbar: string = 'navbar';
+	public isDropdownOpen = false;
 
 	constructor(
 		private router: Router,
@@ -58,6 +59,13 @@ export class NavbarComponent implements OnInit {
 					this.isSignIn = false;
 				}
 			});
+	}
+
+	public closeDropdown() {
+		const dropdown = document.getElementById('dropdownAvatar');
+		if (dropdown) {
+			dropdown.classList.add('hidden');
+		}
 	}
 
 	userSignOut(): void {

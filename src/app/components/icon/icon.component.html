@@ -3,8 +3,8 @@
 
 <fa-icon [ngClass]="{ hidden: src }" [icon]="[iconStyle, icon]"></fa-icon>
 <img
-  [ngClass]="{ hidden: !src }"
-  [src]="src || navbarPlaceholderUrl"
-  class="rounded-full"
-  (error)="onError()"
+	[ngClass]="{ hidden: !src }"
+	[src]="src || navbarPlaceholderUrl"
+	class="h-full w-full rounded-full"
+	(error)="onError()"
 />
