@@ -1,66 +1,105 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
-	<div class="grid w-full grid-cols-1 gap-3">
-		<div class="text-xl font-semibold">รายวิชาเรียน</div>
-		<div class="flex flex-wrap justify-between gap-y-3">
-			<sdm-select
-				selectName="ปีการศึกษา"
-				[listOptions]="yearList"
-				class="w-40"
-			></sdm-select>
-			<sdm-select
-				selectName="ภาคการศึกษา"
-				[listOptions]="semesterList"
-				class="w-40"
-			></sdm-select>
-			<sdm-select
-				selectName="ชั้นปี"
-				[listOptions]="classList"
-				class="w-24"
-			></sdm-select>
-			<sdm-select
-				selectName="คณะ"
-				[listOptions]="facultyList"
-				class="w-48"
-			></sdm-select>
-			<sdm-select
-				selectName="ภาควิชา"
-				[listOptions]="departmentList"
-				class="w-48"
-			></sdm-select>
-			<sdm-select
-				selectName="หลักสูตร"
-				[listOptions]="cirriculumList"
-				class="w-52"
-			></sdm-select>
+	<div class="flex w-full flex-col">
+		<div class="grid w-full flex-none grid-cols-1 gap-3">
+			<div class="text-xl font-semibold">รายวิชาเรียน</div>
+			<div class="flex flex-wrap justify-between gap-y-3">
+				<sdm-select
+					selectName="ปีการศึกษา"
+					[listOptions]="yearList"
+					class="w-40"
+					(selectedValue)="handleSelectedYearChange($event)"
+				></sdm-select>
+				<sdm-select
+					selectName="ภาคการศึกษา"
+					[listOptions]="semesterList"
+					class="w-40"
+					(selectedValue)="handleSelectedSemesterChange($event)"
+				></sdm-select>
+				<sdm-select
+					selectName="ชั้นปี"
+					[listOptions]="classList"
+					class="w-24"
+					(selectedValue)="handleSelectedClassChange($event)"
+				></sdm-select>
+				<sdm-select
+					selectName="คณะ"
+					[listOptions]="facultyList"
+					class="w-48"
+					(selectedValue)="handleSelectedFacultyChange($event)"
+				></sdm-select>
+				<sdm-select
+					selectName="ภาควิชา"
+					[listOptions]="departmentList"
+					class="w-48"
+					(selectedValue)="handleSelectedDepartmentChange($event)"
+				></sdm-select>
+				<sdm-select
+					selectName="หลักสูตร"
+					[listOptions]="cirriculumList"
+					class="w-52"
+					(selectedValue)="handleSelectedCurriculumChange($event)"
+				></sdm-select>
+			</div>
+			<sdm-search-bar></sdm-search-bar>
 		</div>
-		<sdm-search-bar></sdm-search-bar>
-		<!-- Pagination -->
-		<sdm-pagination
-			(pageChange)="changePage($event)"
-			[totalItems]="subjectCardTotal"
-			[itemsPerPage]="itemsPerPage"
-			[currentPage]="currentPage"
-		></sdm-pagination>
-		<!-- ส่วนการแสดงข้อมูล -->
-		<div class="grid grid-cols-1 gap-4">
-			<ng-container
-				*ngFor="let data of paginatedItems; let i = index"
-				class="grid grid-cols-1 gap-4"
-			>
-				<sdm-subject-cpn
-					[subjectCardData]="data"
-					[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
-				></sdm-subject-cpn>
-			</ng-container>
+		<div
+			class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
+		>
+			<!-- Pagination -->
+			<sdm-pagination
+				*ngIf="isSelectAllDropdown"
+				(pageChange)="changePage($event)"
+				[totalItems]="subjectCardTotal"
+				[itemsPerPage]="itemsPerPage"
+				[currentPage]="currentPage"
+				class="mt-4"
+			></sdm-pagination>
+			<!-- Subject Component -->
+			<div class="grid grid-cols-1 gap-4" *ngIf="isSelectAllDropdown">
+				<ng-container
+					*ngFor="let data of paginatedItems; let i = index"
+					class="grid grid-cols-1 gap-4"
+				>
+					<sdm-subject-cpn
+						[subjectCardData]="data"
+						[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
+					></sdm-subject-cpn>
+				</ng-container>
+			</div>
+			<!-- คำแนะนำการดูรายวิชา -->
+			<div>
+				<div class="flex flex-col gap-y-4">
+					<div *ngIf="!selectedYear">
+						โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedSemester">
+						โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedClass">
+						โปรดเลือกชั้นปี เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedFaculty">
+						โปรดเลือกคณะ เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedDepartment">
+						โปรดเลือกภาควิชา เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedCurriculum">
+						โปรดเลือกหลักสูตร เพื่อดูรายวิชา
+					</div>
+				</div>
+			</div>
+
+			<!-- Pagination -->
+			<sdm-pagination
+				*ngIf="isSelectAllDropdown"
+				(pageChange)="changePage($event)"
+				[totalItems]="subjectCardTotal"
+				[itemsPerPage]="itemsPerPage"
+				[currentPage]="currentPage"
+			></sdm-pagination>
 		</div>
-		<!-- Pagination -->
-		<sdm-pagination
-			(pageChange)="changePage($event)"
-			[totalItems]="subjectCardTotal"
-			[itemsPerPage]="itemsPerPage"
-			[currentPage]="currentPage"
-		></sdm-pagination>
 	</div>
 </div>
 <sdm-subject-added-modal

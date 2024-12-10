@@ -3,14 +3,18 @@
 	(click)="preventPropagation($event)"
 >
 	<div
-		class="selected flex h-full items-center justify-between gap-x-3 rounded-[10px] border-none bg-main-100 px-4 py-1 font-medium text-white hover:bg-main-120 focus:ring-0"
+		class="selected flex h-full items-center justify-between gap-x-3 rounded-[10px] border-none px-4 py-1 font-medium focus:ring-0"
 		(click)="toggleDropdown()"
+		[ngClass]="{
+			'text-dark bg-main-10 hover:bg-main-25': !isSelect,
+			'bg-main-100 text-white hover:bg-main-120': isSelect,
+		}"
 	>
 		<div class="truncate">{{ showSelectedOption || selectName }}</div>
 		<sdm-icon
 			*ngIf="!isSelect"
 			icon="chevron-down"
-			class="text-sm text-white"
+			class="text-sm text-dark-100"
 			[ngClass]="{ 'rotate-180': isDropdownOpen }"
 		></sdm-icon>
 		<sdm-icon

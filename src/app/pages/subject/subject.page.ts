@@ -16,6 +16,7 @@ import { SDMPaginationComponent } from '../../components/pagination/pagination.c
 import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
 import { APIManagementService } from '../../shared/api-manage/api-management.service.js';
+import { AuthService } from '../../shared/auth.service';
 
 @Component({
 	selector: 'sdm-subject',
@@ -25,19 +26,27 @@ import { APIManagementService } from '../../shared/api-manage/api-management.ser
 		SDMSearchBarComponent,
 		SDMSubjectAddedModalComponent,
 		SDMilterBarComponent,
-		SDMSubjectComponent,
 		SDMPaginationComponent,
 		CommonModule,
+		SDMSubjectComponent,
 	],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
 export class SDMSubject implements AfterViewInit, OnInit {
 	@ViewChildren(SDMSelectComponent) dropdowns!: QueryList<SDMSelectComponent>;
-	public currentPage: number = 1; // หน้าปัจจุบัน
-	public itemsPerPage: number = 10; // จำนวนรายการต่อหน้า
-	public paginatedItems: SubjectCardData[] = []; // รายวิชาที่จะแสดงในหน้าปัจจุบัน
+	public currentPage: number = 1;
+	public itemsPerPage: number = 10;
+	public paginatedItems: SubjectCardData[] = [];
 	public subjectCardTotal: number = 0;
+
+	public selectedYear: string = '';
+	public selectedSemester: string = '';
+	public selectedClass: string = '';
+	public selectedFaculty: string = '';
+	public selectedDepartment: string = '';
+	public selectedCurriculum: string = '';
+	public isSelectAllDropdown: boolean = false;
 	public subjectCardData: SubjectCardData[] = [
 		{
 			subject_id: '01006003',
@@ -558,6 +567,13 @@ export class SDMSubject implements AfterViewInit, OnInit {
 
 	ngAfterViewInit(): void {
 		initFlowbite();
+		console.log('Selected Year:', this.selectedYear);
+		console.log('Selected Semester:', this.selectedSemester);
+		console.log('Selected Class:', this.selectedClass);
+		console.log('Selected Faculty:', this.selectedFaculty);
+		console.log('Selected Department:', this.selectedDepartment);
+		console.log('Selected Curriculum:', this.selectedCurriculum);
+		this.checkSelectAllDropdown();
 	}
 
 	public closeAllDropdowns(except?: SDMSelectComponent) {
@@ -577,5 +593,75 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public changePage(page: number) {
 		this.currentPage = page;
 		this.updatePaginatedItems();
+	}
+
+	public handleSelectedYearChange(selectedYear: {
+		value: string;
+		index?: number;
+	}) {
+		this.selectedYear = selectedYear.value;
+		console.log('Selected Year:', this.selectedYear);
+		this.checkSelectAllDropdown();
+	}
+
+	public handleSelectedSemesterChange(selectedSemester: {
+		value: string;
+		index?: number;
+	}) {
+		this.selectedSemester = selectedSemester.value;
+		console.log('Selected Semester:', this.selectedSemester);
+		this.checkSelectAllDropdown();
+	}
+
+	public handleSelectedClassChange(selectedClass: {
+		value: string;
+		index?: number;
+	}) {
+		this.selectedClass = selectedClass.value;
+		console.log('Selected Class:', this.selectedClass);
+		this.checkSelectAllDropdown();
+	}
+
+	public handleSelectedFacultyChange(selectedFaculty: {
+		value: string;
+		index?: number;
+	}) {
+		this.selectedFaculty = selectedFaculty.value;
+		console.log('Selected Faculty:', this.selectedFaculty);
+		this.checkSelectAllDropdown();
+	}
+
+	public handleSelectedDepartmentChange(selectedDepartment: {
+		value: string;
+		index?: number;
+	}) {
+		this.selectedDepartment = selectedDepartment.value;
+		console.log('Selected Department:', this.selectedDepartment);
+		this.checkSelectAllDropdown();
+	}
+
+	public handleSelectedCurriculumChange(selectedCurriculum: {
+		value: string;
+		index?: number;
+	}) {
+		this.selectedCurriculum = selectedCurriculum.value;
+		console.log('Selected Curriculum:', this.selectedCurriculum);
+		this.checkSelectAllDropdown();
+	}
+
+	public checkSelectAllDropdown() {
+		if (
+			this.selectedYear &&
+			this.selectedSemester &&
+			this.selectedClass &&
+			this.selectedFaculty &&
+			this.selectedDepartment &&
+			this.selectedCurriculum
+		) {
+			this.isSelectAllDropdown = true;
+		} else {
+			this.isSelectAllDropdown = false;
+		}
+		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 	}
 }
