@@ -17,6 +17,10 @@ import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.
 import { CommonModule } from '@angular/common';
 import { APIManagementService } from '../../shared/api-manage/api-management.service.js';
 import { AuthService } from '../../shared/auth.service';
+import { User } from '../../shared/api-manage/models/User.model';
+import { distinctUntilChanged, filter, of, Subject } from 'rxjs';
+import { UserToken } from '../../shared/api-manage/models/UserToken.model';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
 	selector: 'sdm-subject',
@@ -47,6 +51,9 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public selectedDepartment: string = '';
 	public selectedCurriculum: string = '';
 	public isSelectAllDropdown: boolean = false;
+	public currentRoute: string = '';
+	public user: User | null = null;
+	public isSignIn: boolean = false;
 	public subjectCardData: SubjectCardData[] = [
 		{
 			subject_id: '01006003',
@@ -557,11 +564,37 @@ export class SDMSubject implements AfterViewInit, OnInit {
 		'วิศวกรรมคอมพิวเตอร์ (ต่อเนื่อง) พ.ศ. 2567',
 	];
 
-	constructor(private apiManagementService: APIManagementService) {
+	constructor(
+		private apiManagementService: APIManagementService,
+		private router: Router,
+		private authService: AuthService,
+	) {
+		this.router.events
+			.pipe(filter((event) => event instanceof NavigationEnd))
+			.subscribe((event: any) => {
+				this.currentRoute = event.url;
+			});
 		this.subjectCardTotal = this.subjectCardData.length;
 	}
 
+	public userTokenSubject: Subject<UserToken | null> =
+		new Subject<UserToken | null>();
+
 	ngOnInit(): void {
+		this.authService.userTokenSubject
+			.pipe(
+				filter((token) => token !== null),
+				distinctUntilChanged(),
+			)
+			.subscribe((userToken) => {
+				let user = userToken.user;
+				if (user) {
+					this.isSignIn = true;
+					this.user = user;
+				} else {
+					this.isSignIn = false;
+				}
+			});
 		this.updatePaginatedItems();
 	}
 
