@@ -1,37 +1,37 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
-	<div class="grid grid-cols-1 gap-5">
+	<div class="w-full grid grid-cols-1 gap-3">
 		<div class="text-xl font-semibold">รายวิชาเรียน</div>
-		<div class="flex flex-wrap gap-y-3 gap-x-4">
+		<div class="flex flex-wrap justify-between gap-y-3">
 			<sdm-select
 				selectName="ปีการศึกษา"
-				[listOptions]="['2564', '2565', '2566', '2567']"
-				class="w-36"
+				[listOptions]=yearList
+				class="w-40"
 			></sdm-select>
 			<sdm-select
 				selectName="ภาคการศึกษา"
-				[listOptions]="['1', '2', '3']"
+				[listOptions]=divisionList
 				class="w-40"
 			></sdm-select>
 			<sdm-select
 				selectName="ชั้นปี"
-				[listOptions]="['1', '2', '3', '4']"
+				[listOptions]=classList
 				class="w-24"
 			></sdm-select>
 			<sdm-select
 				selectName="คณะ"
-				[listOptions]="['วิศวกรรมศาสตร์', 'ศึกษาทั่วไป']"
-				class="w-40"
+				[listOptions]=facultyList
+				class="w-48"
 			></sdm-select>
 			<sdm-select
 				selectName="ภาควิชา"
-				[listOptions]="['วิศวกรรมคอมพิวเตอร์', 'ศึกษาทั่วไป']"
+				[listOptions]=departmentList
 				class="w-48"
 			></sdm-select>
 			<sdm-select
 				selectName="หลักสูตร"
-				[listOptions]="['วิศวกรรมคอมพิวเตอร์ พ.ศ. 2567', 'วิศวกรรมคอมพิวเตอร์ (ต่อเนื่อง) พ.ศ. 2567']"
-				class="w-48"
+				[listOptions]=cirriculumList
+				class="w-52"
 			></sdm-select>
 		</div>
 		<sdm-search-bar></sdm-search-bar>

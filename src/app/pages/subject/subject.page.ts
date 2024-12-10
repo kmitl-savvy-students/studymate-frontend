@@ -468,7 +468,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			student_total: 30,
 		},
 	];
-	subjects_added = [
+	public subjects_added = [
 		{
 			code: '01076149',
 			name: 'CHARM SCHOOL',
@@ -530,13 +530,18 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			isSelected: false,
 		},
 	];
+	public yearList:string[] = ['ปีการศึกษา 2564', 'ปีการศึกษา 2565', 'ปีการศึกษา 2566', 'ปีการศึกษา 2567'];
+	public divisionList:string[] = ['เทอม 1', 'เทอม 2', 'เทอม 3'];
+	public classList:string[] = ['ปี 1', 'ปี 2', 'ปี 3', 'ปี 4'];
+	public facultyList:string[] = ['คณะวิศวกรรมศาสตร์', 'สำนักวิชาศึกษาทั่วไป'];
+	public departmentList:string[] = ['วิศวกรรมคอมพิวเตอร์', 'ศึกษาทั่วไป'];
+	public cirriculumList:string[] = ['วิศวกรรมคอมพิวเตอร์ พ.ศ. 2567', 'วิศวกรรมคอมพิวเตอร์ (ต่อเนื่อง) พ.ศ. 2567'];
 
 	constructor(
 		private apiManagementService: APIManagementService,
 	) {
 		this.subjectCardTotal = this.subjectCardData.length;
 	}
-
 
 	ngOnInit(): void {
 		this.updatePaginatedItems();
