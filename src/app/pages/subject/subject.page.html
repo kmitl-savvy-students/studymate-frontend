@@ -1,36 +1,36 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
-	<div class="w-full grid grid-cols-1 gap-3">
+	<div class="grid w-full grid-cols-1 gap-3">
 		<div class="text-xl font-semibold">รายวิชาเรียน</div>
 		<div class="flex flex-wrap justify-between gap-y-3">
 			<sdm-select
 				selectName="ปีการศึกษา"
-				[listOptions]=yearList
+				[listOptions]="yearList"
 				class="w-40"
 			></sdm-select>
 			<sdm-select
 				selectName="ภาคการศึกษา"
-				[listOptions]=divisionList
+				[listOptions]="semesterList"
 				class="w-40"
 			></sdm-select>
 			<sdm-select
 				selectName="ชั้นปี"
-				[listOptions]=classList
+				[listOptions]="classList"
 				class="w-24"
 			></sdm-select>
 			<sdm-select
 				selectName="คณะ"
-				[listOptions]=facultyList
+				[listOptions]="facultyList"
 				class="w-48"
 			></sdm-select>
 			<sdm-select
 				selectName="ภาควิชา"
-				[listOptions]=departmentList
+				[listOptions]="departmentList"
 				class="w-48"
 			></sdm-select>
 			<sdm-select
 				selectName="หลักสูตร"
-				[listOptions]=cirriculumList
+				[listOptions]="cirriculumList"
 				class="w-52"
 			></sdm-select>
 		</div>
@@ -44,7 +44,10 @@
 		></sdm-pagination>
 		<!-- ส่วนการแสดงข้อมูล -->
 		<div class="grid grid-cols-1 gap-4">
-			<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
+			<ng-container
+				*ngFor="let data of paginatedItems; let i = index"
+				class="grid grid-cols-1 gap-4"
+			>
 				<sdm-subject-cpn
 					[subjectCardData]="data"
 					[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
