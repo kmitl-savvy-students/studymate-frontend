@@ -16,7 +16,7 @@ export class SDMSubjectDetailCpnComponent {
 	public subjectDetailData: SubjectDetailData[] = [
 		{
 			subject_id: '01006003',
-			subject_type_name: 'วิชาแกน',
+			subject_type_name: 'วิชาเลือกหมวดศึกษาทั่วไป',
 			subject_name_th: 'คณิตศาสตร์วิศวกรรม 3',
 			subject_name_en: 'ENGINEERING MATHEMATICS 3',
 			detail: 'ฟังก์ชันหลายตัวแปรและการประยุกต์ใช้ พีชคณิตของเวกเตอร์ในสามมิติ พิกัดเชิงขั้ว แคลคูลัสของฟังก์ชันจำนวนจริงสองตัวแปร การหาอนุพันธ์และปริพันธ์ของฟังก์ชันจำนวนจริงและฟังก์ชันเวกเตอร์จำนวนจริงหลายตัวแปร แนะนำปริพันธ์เส้น เส้น ระนาบ และพื้นผิว ในปริภูมิสามมิติ แคลคูลัสของฟังก์ชันจำนวนจริงในปริภูมิสามมิติ\r\nFunctions of several variables and theirs applications, Vector algebra in three dimensions, Polar coordinates, Calculus of real - valued functions of two variables, Differentiation and integration of            real - valued and vector - valued functions of multiple real variables, Introduction to line integrals, Lines, planes and surfaces in three-dimensional space, Calculus of real-valued functions in  three-dimensional space.\r\n',

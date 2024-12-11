@@ -10,12 +10,7 @@ import { APIManagementService } from '../../shared/api-manage/api-management.ser
 @Component({
 	selector: 'sdm-subject-detail',
 	standalone: true,
-	imports: [
-		IconComponent,
-		RouterLink,
-		SDMSubjectDetailCpnComponent,
-		CommonModule,
-	],
+	imports: [IconComponent, SDMSubjectDetailCpnComponent, CommonModule],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
 })
