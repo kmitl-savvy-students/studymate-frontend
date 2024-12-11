@@ -6,11 +6,11 @@
 			<div class="flex flex-wrap justify-between gap-y-3">
 				<sdm-select
 					selectName="ปีการศึกษา"
-					[listOptions]="yearList"
+					[listOptions]="yearsList"
 					class="w-40"
 					(selectedValue)="handleSelectedYearChange($event)"
 				></sdm-select>
-				<sdm-select
+				<!-- <sdm-select
 					selectName="ภาคการศึกษา"
 					[listOptions]="semesterList"
 					class="w-40"
@@ -39,7 +39,7 @@
 					[listOptions]="cirriculumList"
 					class="w-52"
 					(selectedValue)="handleSelectedCurriculumChange($event)"
-				></sdm-select>
+				></sdm-select> -->
 			</div>
 			<sdm-search-bar></sdm-search-bar>
 		</div>

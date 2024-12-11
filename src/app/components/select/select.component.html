@@ -30,7 +30,7 @@
 	>
 		<li
 			*ngFor="let option of listOptions; let i = index"
-			(click)="onSelectedOption(option, i)"
+			(click)="onSelectedOption(option.label, i, option.value)"
 			(mouseenter)="hoveredOption = option"
 			(mouseleave)="hoveredOption = null"
 			[ngClass]="{
@@ -40,7 +40,7 @@
 			}"
 			class="mx-1.5 px-3 py-1.5 text-center text-base font-normal text-dark-100 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
 		>
-			{{ option }}
+			{{ option.label }}
 		</li>
 	</ul>
 </div>

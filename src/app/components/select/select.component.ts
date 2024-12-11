@@ -20,10 +20,11 @@ import { CommonModule } from '@angular/common';
 })
 export class SDMSelectComponent implements OnInit {
 	@Input() selectName: string = '';
-	@Input() listOptions: string[] = [];
+	@Input() listOptions: any[] = [];
 	@Output() selectedValue = new EventEmitter<{
-		value: string;
+		label: string;
 		index?: number;
+		value?: any;
 	}>();
 	form: FormGroup;
 
@@ -61,13 +62,14 @@ export class SDMSelectComponent implements OnInit {
 		return this.form.get('selectedOption')?.value || '';
 	}
 
-	onSelectedOption(option: string, i?: number) {
+	onSelectedOption(option: string, i?: number, value?:any) {
 		this.form.get('selectedOption')?.setValue(option);
 		this.isSelect = option === '' ? false : true;
 		this.isDropdownOpen = false;
 		const data = {
-			value: option,
+			label: option,
 			index: i ?? -1,
+			value: value,
 		};
 		this.selectedValue.emit(data);
 	}
