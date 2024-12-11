@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { User } from './api-manage/models/User.model';
-import { UserToken } from './api-manage/models/UserToken.model';
+import { User } from '../models/User.model';
+import { UserToken } from '../models/UserToken.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { APIManagementService } from './api-manage/api-management.service';
+import { APIManagementService } from './api-management.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

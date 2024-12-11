@@ -13,13 +13,13 @@ import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-a
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
-import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.model.js';
+import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
-import { APIManagementService } from '../../shared/api-manage/api-management.service.js';
-import { AuthService } from '../../shared/auth.service';
-import { User } from '../../shared/api-manage/models/User.model';
+import { APIManagementService } from '../../shared/services/api-management.service.js';
+import { AuthService } from '../../shared/services/auth.service';
+import { User } from '../../shared/models/User.model';
 import { distinctUntilChanged, filter, of, Subject } from 'rxjs';
-import { UserToken } from '../../shared/api-manage/models/UserToken.model';
+import { UserToken } from '../../shared/models/UserToken.model';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
@@ -51,9 +51,11 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public selectedDepartment: string = '';
 	public selectedCurriculum: string = '';
 	public isSelectAllDropdown: boolean = false;
+
 	public currentRoute: string = '';
 	public user: User | null = null;
 	public isSignIn: boolean = false;
+
 	public subjectCardData: SubjectCardData[] = [
 		{
 			subject_id: '01006003',
@@ -546,6 +548,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			isSelected: false,
 		},
 	];
+
 	public yearList: string[] = [
 		'ปีการศึกษา 2564',
 		'ปีการศึกษา 2565',

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
-import { APIManagementService } from '../../shared/api-manage/api-management.service.js';
+import { APIManagementService } from '../../shared/services/api-management.service.js';
 import { CommonModule } from '@angular/common';
-import { SubjectCardData } from '../../shared/api-manage/models/SubjectCardData.model.js';
+import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 @Component({
 	selector: 'sdm-subject-cpn',
 	standalone: true,

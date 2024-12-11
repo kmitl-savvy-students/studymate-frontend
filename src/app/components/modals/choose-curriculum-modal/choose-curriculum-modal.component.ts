@@ -1,12 +1,12 @@
-import { AuthService } from './../../../shared/auth.service';
-import { APIManagementService } from '../../../shared/api-manage/api-management.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { APIManagementService } from '../../../shared/services/api-management.service';
 import { Component, Input } from '@angular/core';
 import { SDMSelectComponent } from '../../select/select.component';
 import { CommonModule } from '@angular/common';
-import { Curriculum } from '../../../shared/api-manage/models/Curriculum.model';
-import { SelectedData } from '../../../shared/api-manage/models/AppService.model';
+import { Curriculum } from '../../../shared/models/Curriculum.model';
+import { SelectedData } from '../../../shared/models/AppService.model';
 import { distinctUntilChanged, filter } from 'rxjs';
-import { User } from '../../../shared/api-manage/models/User.model';
+import { User } from '../../../shared/models/User.model';
 import { Router } from '@angular/router';
 
 @Component({

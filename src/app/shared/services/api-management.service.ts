@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { Curriculum } from './models/Curriculum.model';
-import { GoogleLink } from './models/GoogleLink.model';
-import { UserToken } from './models/UserToken.model';
-import { TranscriptData } from './models/TranscriptData.model';
+import { Curriculum } from '../models/Curriculum.model';
+import { GoogleLink } from '../models/GoogleLink.model';
+import { UserToken } from '../models/UserToken.model';
+import { TranscriptData } from '../models/TranscriptData.model';
 import { Observable } from 'rxjs/internal/Observable';
-import { CurriculumGroup } from './models/CurriculumGroup.model';
-import { CurriculumSubgroup } from './models/CurriculumSubgroup.model';
-import { CurriculumSubject } from './models/CurriculumSubject.model';
-import { GenedGroup } from './models/GenedGroup.model';
-import { GenedSubject } from './models/GenedSubject.model';
-import { SubjectCardData } from './models/SubjectCardData.model.js';
+import { CurriculumGroup } from '../models/CurriculumGroup.model';
+import { CurriculumSubgroup } from '../models/CurriculumSubgroup.model';
+import { CurriculumSubject } from '../models/CurriculumSubject.model';
+import { GenedGroup } from '../models/GenedGroup.model';
+import { GenedSubject } from '../models/GenedSubject.model';
+import { SubjectCardData } from '../models/SubjectCardData.model.js';
 
 @Injectable({
 	providedIn: 'root',
