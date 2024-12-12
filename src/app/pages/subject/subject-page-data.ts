@@ -1,41 +1,42 @@
-import { DropdownList } from "../../shared/models/SdmAppService.model.js";
+import { CirriculumnList, DropdownList } from "../../shared/models/SdmAppService.model.js";
 import { SubjectCardData } from "../../shared/models/SubjectCardData.model.js";
 
   
 export const yearsList: DropdownList[] = [
-{
-    label: 'ปีการศึกษา 2564',
-    value: 2564,
-},
-{
-    label: 'ปีการศึกษา 2565',
-    value: 2565,
-},
-{
-    label: 'ปีการศึกษา 2566',
-    value: 2566,
-},
-{
-    label: 'ปีการศึกษา 2567',
-    value: 2567,
-},
+    {label: 'ปีการศึกษา 2564', value: 2564},
+    {label: 'ปีการศึกษา 2565', value: 2565},
+    {label: 'ปีการศึกษา 2566', value: 2566},
+    {label: 'ปีการศึกษา 2567', value: 2567},
 ];
 
-export const semesterList: string[] = ['เทอม 1', 'เทอม 2', 'เทอม 3'];
-
-export const classList: string[] = ['ทุกชั้นปี', 'ปี 1', 'ปี 2', 'ปี 3', 'ปี 4'];
-
-export const facultyList: string[] = [
-  'คณะวิศวกรรมศาสตร์',
-  'สำนักวิชาศึกษาทั่วไป',
+export const semesterList: DropdownList[] = [
+    {label: 'เทอม 1', value: 1},
+    {label: 'เทอม 2',value: 2},
+    {label: 'เทอม 3',value: 3},
 ];
 
-export const departmentList: string[] = ['วิศวกรรมคอมพิวเตอร์', 'ศึกษาทั่วไป'];
-
-export const cirriculumList: string[] = [
-  'วิศวกรรมคอมพิวเตอร์ พ.ศ. 2567',
-  'วิศวกรรมคอมพิวเตอร์ (ต่อเนื่อง) พ.ศ. 2567',
+export const classYearList: DropdownList[] = [
+    {label: 'ทุกชั้นปี', value: 0},
+    {label: 'ปี 1', value: 1},
+    {label: 'ปี 2',value: 2},
+    {label: 'ปี 3',value: 3},
+    {label: 'ปี 4',value: 4},
 ];
+
+export const facultyList: DropdownList[] = [
+    {label: 'คณะวิศวกรรมศาสตร์', value: '01'},
+    {label: 'สำนักวิชาศึกษาทั่วไป',value: '90'},
+];
+
+export const departmentList: DropdownList[] = [
+    {label: 'วิศวกรรมคอมพิวเตอร์', value: '05'},
+    {label: 'ศึกษาทั่วไป',value: '90'},
+];
+
+// export const cirriculumList: CirliculumnDropdownList[] = [
+//     {label: 'วิศวกรรมคอมพิวเตอร์ พ.ศ. 2564', value: '06', uniqueId: 0o132, cirriculumYear: 2564},
+//     {label: 'วิศวกรรมคอมพิวเตอร์ (ต่อเนื่อง) พ.ศ. 2564',value: '101'},
+// ];
 
 export const subjects_added = [
     {

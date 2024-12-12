@@ -19,13 +19,15 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './select.component.css',
 })
 export class SDMSelectComponent implements OnInit {
-	@Input() selectName: string = '';
+	@Input() defaultLabel: string = '';
+	@Input() SelectName: string = '';
 	@Input() listOptions: any[] = [];
 	@Output() selectedValue = new EventEmitter<{
 		label: string;
 		index?: number;
 		value?: any;
 	}>();
+	@Output() selectNameChange = new EventEmitter<string>();
 	form: FormGroup;
 
 	public isDropdownOpen: boolean = false;
@@ -72,6 +74,7 @@ export class SDMSelectComponent implements OnInit {
 			value: value,
 		};
 		this.selectedValue.emit(data);
+		this.selectNameChange.emit(this.SelectName);
 	}
 
 	@HostListener('document:click', ['$event'])

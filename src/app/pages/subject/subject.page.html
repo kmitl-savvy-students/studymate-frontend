@@ -5,41 +5,47 @@
 			<div class="text-xl font-semibold">รายวิชาเรียน</div>
 			<div class="flex flex-wrap justify-between gap-y-3">
 				<sdm-select
-					selectName="ปีการศึกษา"
+					defaultLabel="ปีการศึกษา"
+					SelectName="selectedYear"
 					[listOptions]="yearsList"
 					class="w-40"
-					(selectedValue)="handleSelectedYearChange($event)"
+					(selectedValue)="handleSelectChange('selectedYear',$event)"
 				></sdm-select>
-				<!-- <sdm-select
-					selectName="ภาคการศึกษา"
+				<sdm-select
+					defaultLabel="ภาคการศึกษา"
+					SelectName="selectedSemester"
 					[listOptions]="semesterList"
 					class="w-40"
-					(selectedValue)="handleSelectedSemesterChange($event)"
+					(selectedValue)="handleSelectChange('selectedSemester',$event)"
 				></sdm-select>
 				<sdm-select
-					selectName="ชั้นปี"
-					[listOptions]="classList"
+					defaultLabel="ชั้นปี"
+					SelectName="selectedClassYear"
+					[listOptions]="classYearList"
 					class="w-24"
-					(selectedValue)="handleSelectedClassChange($event)"
+					(selectedValue)="handleSelectChange('selectedClassYear',$event)"
 				></sdm-select>
 				<sdm-select
-					selectName="คณะ"
+					defaultLabel="คณะ"
+					SelectName="selectedFaculty"
 					[listOptions]="facultyList"
 					class="w-48"
-					(selectedValue)="handleSelectedFacultyChange($event)"
+					(selectedValue)="handleSelectChange('selectedFaculty',$event)"
 				></sdm-select>
 				<sdm-select
-					selectName="ภาควิชา"
+					defaultLabel="ภาควิชา"
+					SelectName="selectedDepartment"
 					[listOptions]="departmentList"
 					class="w-48"
-					(selectedValue)="handleSelectedDepartmentChange($event)"
+					(selectedValue)="handleSelectChange('selectedDepartment',$event)"
 				></sdm-select>
 				<sdm-select
-					selectName="หลักสูตร"
-					[listOptions]="cirriculumList"
-					class="w-52"
-					(selectedValue)="handleSelectedCurriculumChange($event)"
-				></sdm-select> -->
+					defaultLabel="หลักสูตร"
+					SelectName="selectedCurriculum"
+					[listOptions]="curriculumList"
+					class="w-64"
+					(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
+				></sdm-select>
 			</div>
 			<sdm-search-bar></sdm-search-bar>
 		</div>
@@ -76,7 +82,7 @@
 					<div *ngIf="!selectedSemester">
 						โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
 					</div>
-					<div *ngIf="!selectedClass">
+					<div *ngIf="selectedClassYear === undefined">
 						โปรดเลือกชั้นปี เพื่อดูรายวิชา
 					</div>
 					<div *ngIf="!selectedFaculty">
