@@ -17,3 +17,4 @@ export class SubjectCardData {
 		public student_total: number
 	) {}
 }
+  

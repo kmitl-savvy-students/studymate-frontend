@@ -57,10 +57,10 @@ export class SDMChooseCurriculumModalComponent {
 	getCurriculumsData() {
 		this.apiManagementService.GetCurriculum().subscribe({
 			next: (res) => {
-				this.curriculumsData = res;
-				// .filter(
-				// 	(s) => s.id === 1 || s.id === 3 || s.id === 5,
-				// );
+				this.curriculumsData = res
+				.filter(
+					(s) => s.id === 3 || s.id === 5,
+				);
 				this.curriculumOptions = this.curriculumsData.map(
 					(curriculum) => {
 						const dropdown = new DropdownList();

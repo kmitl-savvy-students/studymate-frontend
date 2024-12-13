@@ -9,3 +9,10 @@ export class DropdownList{
     public value? : string|number
 }
 
+export class CirriculumnList{
+    public value? : string|number;
+    public uniqueId? : string;
+    public curriculumYear? : string;
+}
+
+
