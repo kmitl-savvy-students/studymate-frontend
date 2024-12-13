@@ -1,6 +1,10 @@
-<div class="flex gap-x-3">
-	<form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="w-full">
-		<div class="relative">
+<div class="flex gap-x-2">
+	<form
+		[formGroup]="searchForm"
+		class="flex w-full gap-x-2"
+		(ngSubmit)="onSearch()"
+	>
+		<div class="relative flex w-full gap-x-3">
 			<div
 				class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3"
 			>
@@ -10,17 +14,26 @@
 				></sdm-icon>
 			</div>
 			<input
-				type="search"
+				type="text"
 				formControlName="search"
 				class="block w-full rounded-[20px] border-none bg-main-10 py-2 pe-2 ps-10 text-sm font-normal text-dark-100 hover:bg-main-25 focus:border-none focus:outline-none focus:ring-2 focus:ring-main-100"
 				placeholder="ชื่อวิชา, รหัสวิชา, หมวดหมู่รายวิชา"
 				required
 			/>
+			<sdm-icon
+				icon="xmark"
+				class="absolute inset-y-0 end-0 m-auto cursor-pointer rounded-full px-3 py-2 text-dark-100 hover:bg-main-25"
+				(click)="clearSearch()"
+			></sdm-icon>
 		</div>
+		<button
+			class="flex min-w-max gap-x-2 rounded-[20px] border-none bg-main-10 px-4 py-2 text-sm font-normal text-dark-100 hover:bg-main-25 focus:border-none focus:outline-none focus:ring-0"
+		>
+			ค้นหา
+		</button>
 	</form>
 	<button
 		class="flex min-w-max gap-x-2 rounded-[20px] border-none bg-main-10 px-4 py-2 text-sm font-normal text-dark-50 hover:bg-main-25 focus:border-none focus:outline-none focus:ring-0"
-		(click)="onSubmit()"
 		data-modal-target="subject-added-modal"
 		data-modal-toggle="subject-added-modal"
 	>

@@ -47,7 +47,9 @@
 					(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
 				></sdm-select>
 			</div>
-			<sdm-search-bar></sdm-search-bar>
+			<sdm-search-bar
+				(searchedSubjectCardDataList)="getFilterSubjectCardDataList($event)"
+			></sdm-search-bar>
 		</div>
 		<div
 			class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
@@ -62,7 +64,10 @@
 				class="mt-4"
 			></sdm-pagination>
 			<!-- Subject Component -->
-			<div class="grid grid-cols-1 gap-4" *ngIf="isSelectAllDropdown">
+			<div
+				class="grid w-full grid-cols-1 gap-4"
+				*ngIf="isSelectAllDropdown"
+			>
 				<ng-container
 					*ngFor="let data of paginatedItems; let i = index"
 					class="grid grid-cols-1 gap-4"

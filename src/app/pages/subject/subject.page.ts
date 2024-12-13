@@ -1,5 +1,17 @@
-import { classYearList, departmentList, facultyList, semesterList, subjectCardData, subjects_added, yearsList } from './subject-page-data';
-import { SelectedData, DropdownList, CirriculumnList } from './../../shared/models/SdmAppService.model.js';
+import {
+	classYearList,
+	departmentList,
+	facultyList,
+	semesterList,
+	subjectCardData,
+	subjects_added,
+	yearsList,
+} from './subject-page-data';
+import {
+	SelectedData,
+	DropdownList,
+	CirriculumnList,
+} from './../../shared/models/SdmAppService.model.js';
 import {
 	Component,
 	AfterViewInit,
@@ -62,20 +74,21 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public user: User | null = null;
 	public isSignIn: boolean = false;
 
-	public yearsList= yearsList
+	public yearsList = yearsList;
 	public semesterList = semesterList;
-  	public classYearList = classYearList;
-  	public facultyList = facultyList;
-  	public departmentList = departmentList;
+	public classYearList = classYearList;
+	public facultyList = facultyList;
+	public departmentList = departmentList;
 	public curriculumList: DropdownList[] = [];
-	  
+
 	public curriculumsData: Curriculum[] = [];
-  	public curriculumOptions :any[] = [];
+	public curriculumOptions: any[] = [];
 
 	public SubjectsTeachtableData?: CurriculumTeachtableSubject;
-	public subjectCardData: SubjectCardData[] = [];
+	public subjectCardData = subjectCardData;
 	public subjects_added = subjects_added;
-	
+
+	public filteredSubjectCardDataList: SubjectCardData[] = [];
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -94,7 +107,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 		new Subject<UserToken | null>();
 
 	ngOnInit(): void {
-		this.getCurriculumsData()
+		this.getCurriculumsData();
 		this.authService.userTokenSubject
 			.pipe(
 				filter((token) => token !== null),
@@ -109,7 +122,6 @@ export class SDMSubject implements AfterViewInit, OnInit {
 					this.isSignIn = false;
 				}
 			});
-		this.updatePaginatedItems();
 	}
 
 	ngAfterViewInit(): void {
@@ -124,13 +136,16 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			}
 		});
 	}
-	
+
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
-		this.paginatedItems = this.subjectCardData.slice(start, end);
+		this.paginatedItems = this.filteredSubjectCardDataList.slice(
+			start,
+			end,
+		);
 	}
-	
+
 	public changePage(page: number) {
 		this.currentPage = page;
 		this.updatePaginatedItems();
@@ -145,54 +160,51 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	// 	return matchedItem ? matchedItem.value : undefined;
 	// }
 
-	getSubjectData(){
-		this.apiManagementService.GetCurriculumSubjectsTeachtable(this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId).subscribe({
-			next: (res) => {
-				this.SubjectsTeachtableData = res
-				console.log(this.SubjectsTeachtableData)
-				// this.subjectCardData = this.SubjectsTeachtableData.map()
+	// getSubjectData(){
+	// 	this.apiManagementService.GetCurriculumSubjectsTeachtable(this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId).subscribe({
+	// 		next: (res) => {
+	// 			this.SubjectsTeachtableData = res
+	// 			console.log(this.SubjectsTeachtableData)
+	// 			// this.subjectCardData = this.SubjectsTeachtableData.map()
 
-			},
-			error: (error) => {
-				if (error.status === 404) {
-					console.error('Not found');
-				} else if (error.status === 500) {
-					console.error('Internal Server Error');
-				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
-					);
-				}
-			},
-		})
-	}
+	// 		},
+	// 		error: (error) => {
+	// 			if (error.status === 404) {
+	// 				console.error('Not found');
+	// 			} else if (error.status === 500) {
+	// 				console.error('Internal Server Error');
+	// 			} else {
+	// 				console.error(
+	// 					'An unexpected error occurred:',
+	// 					error.status,
+	// 				);
+	// 			}
+	// 		},
+	// 	})
+	// }
 
 	public getCurriculumsData() {
 		this.apiManagementService.GetCurriculum().subscribe({
 			next: (res) => {
-				this.curriculumsData = res
-				.filter(
-					(s) =>  s.id === 3 || s.id === 5,
+				this.curriculumsData = res.filter(
+					(s) => s.id === 3 || s.id === 5,
 				);
-				this.curriculumList = this.curriculumsData.map(
-					(curriculum) => {
-						const dropdown = new DropdownList();
-						dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
-						dropdown.value = curriculum.id;
-						return dropdown;
-					}
-				);
+				this.curriculumList = this.curriculumsData.map((curriculum) => {
+					const dropdown = new DropdownList();
+					dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
+					dropdown.value = curriculum.id;
+					return dropdown;
+				});
 				this.curriculumOptions = this.curriculumsData.map(
 					(curriculum) => {
 						const curriculumOptions = new CirriculumnList();
 						curriculumOptions.value = curriculum.id;
-						curriculumOptions.uniqueId = curriculum.unique_id
-						curriculumOptions.curriculumYear = curriculum.year
+						curriculumOptions.uniqueId = curriculum.unique_id;
+						curriculumOptions.curriculumYear = curriculum.year;
 						return curriculumOptions;
-					}
+					},
 				);
-				console.log(this.curriculumOptions)
+				console.log(this.curriculumOptions);
 			},
 			error: (error) => {
 				if (error.status === 404) {
@@ -208,12 +220,12 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			},
 		});
 	}
-	
+
 	public handleSelectedYearChange(selectedData: SelectedData) {
 		// this.selectedYear = !Number.isNaN(Number(this.getValue(yearsList, selectedData))) ? Number(this.getValue(yearsList, selectedData)) : undefined
 		// console.log('Selected Label:', selectedData, 'Year:', this.selectedYear);
-		this.selectedYear = selectedData.value
-		console.log('Selected Year:', this.selectedYear)
+		this.selectedYear = selectedData.value;
+		console.log('Selected Year:', this.selectedYear);
 		this.checkSelectAllDropdown();
 	}
 
@@ -244,12 +256,14 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public handleSelectedCurriculumChange(selectedData: SelectedData) {
 		this.selectedCurriculum = selectedData.value;
 
-		const matchedCurriculum = this.curriculumOptions.find(item => item.value === selectedData.value);
-		this.selectedUniqueId = matchedCurriculum.uniqueId
-		this.selectedCurriculumYear = matchedCurriculum.curriculumYear
+		const matchedCurriculum = this.curriculumOptions.find(
+			(item) => item.value === selectedData.value,
+		);
+		this.selectedUniqueId = matchedCurriculum.uniqueId;
+		this.selectedCurriculumYear = matchedCurriculum.curriculumYear;
 
-		console.log('call get subject')
-		this.getSubjectData()
+		console.log('call get subject');
+		// this.getSubjectData()
 
 		this.checkSelectAllDropdown();
 	}
@@ -279,27 +293,30 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
-	
-				const matchedCurriculum = this.curriculumOptions.find(item => item.value === selectedData.value);
+
+				const matchedCurriculum = this.curriculumOptions.find(
+					(item) => item.value === selectedData.value,
+				);
 				this.selectedUniqueId = matchedCurriculum?.uniqueId;
 				this.selectedCurriculumYear = matchedCurriculum?.curriculumYear;
-	
+
 				console.log('Selected Curriculum:', this.selectedCurriculum);
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
 		}
-	
+
 		// เรียกฟังก์ชันเพื่อตรวจสอบสถานะการเลือกทั้งหมด
 		this.checkSelectAllDropdown();
 
 		// ตรวจสอบว่าทุก dropdown ถูกเลือกแล้วหรือยัง
 		if (this.isSelectAllDropdown) {
 			console.log('All dropdowns selected, calling getSubjectData()');
-			this.getSubjectData();
+
+			// this.getSubjectData();
 		}
 	}
-	
+
 	// ฟังก์ชันตรวจสอบว่ามีการเลือกค่าทุก dropdown แล้วหรือไม่
 	// private allDropdownsSelected(): boolean {
 	// 	return (
@@ -311,7 +328,6 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	// 		this.selectedCurriculum !== undefined
 	// 	);
 	// }
-	
 
 	public checkSelectAllDropdown() {
 		if (
@@ -323,9 +339,33 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			this.selectedCurriculum
 		) {
 			this.isSelectAllDropdown = true;
+			this.updatePaginatedItems();
 		} else {
 			this.isSelectAllDropdown = false;
 		}
 		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
+	}
+
+	// filterResults(text: string) {
+	// 	if (!text) {
+	// 		this.filteredSubjectCardDataList = this.subjectCardData;
+	// 		this.paginatedItems = this.filteredSubjectCardDataList;
+	// 		return;
+	// 	}
+	// 	this.filteredSubjectCardDataList = this.subjectCardData.filter(
+	// 		(subject) =>
+	// 			subject.subject_id.toLowerCase().includes(text.toLowerCase()) ||
+	// 			subject.subject_name_en
+	// 				.toLowerCase()
+	// 				.includes(text.toLowerCase()),
+	// 	);
+	// 	this.paginatedItems = this.filteredSubjectCardDataList;
+	// }
+
+	public getFilterSubjectCardDataList(
+		filteredSubjectCardDataList: SubjectCardData[],
+	) {
+		this.filteredSubjectCardDataList = filteredSubjectCardDataList;
+		this.updatePaginatedItems();
 	}
 }
