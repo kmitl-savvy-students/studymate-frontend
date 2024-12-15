@@ -18,11 +18,20 @@ export class SDMSearchBarComponent {
 	searchForm: FormGroup;
 	public subjectCardData = subjectCardData;
 	public filteredSubjectCardDataList: SubjectCardData[] = [];
+	public isSearchFocused = false;
 
 	constructor(private fb: FormBuilder) {
 		this.searchForm = this.fb.group({
 			search: [''],
 		});
+	}
+
+	onFocusSearch() {
+		this.isSearchFocused = true; // เมื่อช่องค้นหาถูกโฟกัส
+	}
+
+	onBlurSearch() {
+		this.isSearchFocused = false; // เมื่อช่องค้นหาหมดโฟกัส
 	}
 
 	onSearch() {

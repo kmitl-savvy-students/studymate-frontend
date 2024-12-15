@@ -88,7 +88,10 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public subjectCardData = subjectCardData;
 	public subjects_added = subjects_added;
 
+	// May เพิ่มมา
 	public filteredSubjectCardDataList: SubjectCardData[] = [];
+	public isSearched: boolean = false;
+	// May เพิ่มมา
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -100,7 +103,9 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			.subscribe((event: any) => {
 				this.currentRoute = event.url;
 			});
-		this.subjectCardTotal = this.subjectCardData.length;
+		// May ลบออก
+		// this.subjectCardTotal = this.subjectCardData.length;
+		// May ลบออก
 	}
 
 	public userTokenSubject: Subject<UserToken | null> =
@@ -140,10 +145,14 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
-		this.paginatedItems = this.filteredSubjectCardDataList.slice(
-			start,
-			end,
-		);
+		// May เพิ่มมา
+		const dataToPaginate = this.isSearched
+			? this.filteredSubjectCardDataList
+			: this.subjectCardData;
+
+		this.paginatedItems = dataToPaginate.slice(start, end);
+		this.subjectCardTotal = dataToPaginate.length;
+		// May เพิ่มมา
 	}
 
 	public changePage(page: number) {
@@ -339,33 +348,23 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			this.selectedCurriculum
 		) {
 			this.isSelectAllDropdown = true;
+			// May เพิ่มมา
 			this.updatePaginatedItems();
+			// May เพิ่มมา
 		} else {
 			this.isSelectAllDropdown = false;
 		}
 		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 	}
 
-	// filterResults(text: string) {
-	// 	if (!text) {
-	// 		this.filteredSubjectCardDataList = this.subjectCardData;
-	// 		this.paginatedItems = this.filteredSubjectCardDataList;
-	// 		return;
-	// 	}
-	// 	this.filteredSubjectCardDataList = this.subjectCardData.filter(
-	// 		(subject) =>
-	// 			subject.subject_id.toLowerCase().includes(text.toLowerCase()) ||
-	// 			subject.subject_name_en
-	// 				.toLowerCase()
-	// 				.includes(text.toLowerCase()),
-	// 	);
-	// 	this.paginatedItems = this.filteredSubjectCardDataList;
-	// }
-
+	// May เพิ่มมา
 	public getFilterSubjectCardDataList(
 		filteredSubjectCardDataList: SubjectCardData[],
 	) {
 		this.filteredSubjectCardDataList = filteredSubjectCardDataList;
+		this.isSearched = true;
+		this.currentPage = 1;
 		this.updatePaginatedItems();
 	}
+	// May เพิ่มมา
 }

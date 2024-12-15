@@ -47,16 +47,18 @@
 					(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
 				></sdm-select>
 			</div>
+			<!-- May เพิ่มมา -->
 			<sdm-search-bar
 				(searchedSubjectCardDataList)="getFilterSubjectCardDataList($event)"
 			></sdm-search-bar>
+			<!-- May เพิ่มมา -->
 		</div>
 		<div
-			class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
+			class="flex w-full flex-1 flex-col items-center justify-start gap-3 text-dark-75"
+			*ngIf="isSelectAllDropdown && (paginatedItems.length > 0)"
 		>
 			<!-- Pagination -->
 			<sdm-pagination
-				*ngIf="isSelectAllDropdown"
 				(pageChange)="changePage($event)"
 				[totalItems]="subjectCardTotal"
 				[itemsPerPage]="itemsPerPage"
@@ -64,10 +66,7 @@
 				class="mt-4"
 			></sdm-pagination>
 			<!-- Subject Component -->
-			<div
-				class="grid w-full grid-cols-1 gap-4"
-				*ngIf="isSelectAllDropdown"
-			>
+			<div class="grid w-full grid-cols-1 gap-4">
 				<ng-container
 					*ngFor="let data of paginatedItems; let i = index"
 					class="grid grid-cols-1 gap-4"
@@ -78,38 +77,43 @@
 					></sdm-subject-cpn>
 				</ng-container>
 			</div>
-			<!-- คำแนะนำการดูรายวิชา -->
-			<div>
-				<div class="flex flex-col gap-y-4">
-					<div *ngIf="!selectedYear">
-						โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedSemester">
-						โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="selectedClassYear === undefined">
-						โปรดเลือกชั้นปี เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedFaculty">
-						โปรดเลือกคณะ เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedDepartment">
-						โปรดเลือกภาควิชา เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedCurriculum">
-						โปรดเลือกหลักสูตร เพื่อดูรายวิชา
-					</div>
-				</div>
-			</div>
 
 			<!-- Pagination -->
 			<sdm-pagination
-				*ngIf="isSelectAllDropdown"
 				(pageChange)="changePage($event)"
 				[totalItems]="subjectCardTotal"
 				[itemsPerPage]="itemsPerPage"
 				[currentPage]="currentPage"
 			></sdm-pagination>
+		</div>
+
+		<!-- คำแนะนำการดูรายวิชา -->
+		<div
+			class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
+		>
+			<div class="flex flex-col gap-y-4">
+				<div *ngIf="!selectedYear">
+					โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedSemester">
+					โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="selectedClassYear === undefined">
+					โปรดเลือกชั้นปี เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedFaculty">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
+				<div *ngIf="!selectedDepartment">
+					โปรดเลือกภาควิชา เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedCurriculum">
+					โปรดเลือกหลักสูตร เพื่อดูรายวิชา
+				</div>
+				<div
+					*ngIf="isSelectAllDropdown && (paginatedItems.length === 0)"
+				>
+					ขออภัย เราไม่พบรายวิชาสำหรับการค้นหานี้เลย
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
