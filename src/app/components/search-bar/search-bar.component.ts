@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
@@ -11,14 +11,13 @@ import { subjectCardData } from '../../pages/subject/subject-page-data';
 	templateUrl: './search-bar.component.html',
 	styleUrl: './search-bar.component.css',
 })
-export class SDMSearchBarComponent {
-	@Output() searchedSubjectCardDataList = new EventEmitter<
-		SubjectCardData[]
-	>();
+export class SDMSearchBarComponent implements OnInit {
+	@Input() subjectData: SubjectCardData[] = [];
+	@Output()
+	searchedSubjectCardDataList = new EventEmitter<SubjectCardData[]>();
 	searchForm: FormGroup;
-	public subjectCardData = subjectCardData;
+	public subjectCardData!: SubjectCardData[];
 	public filteredSubjectCardDataList: SubjectCardData[] = [];
-	public isSearchFocused = false;
 
 	constructor(private fb: FormBuilder) {
 		this.searchForm = this.fb.group({
@@ -26,16 +25,13 @@ export class SDMSearchBarComponent {
 		});
 	}
 
-	onFocusSearch() {
-		this.isSearchFocused = true; // เมื่อช่องค้นหาถูกโฟกัส
-	}
-
-	onBlurSearch() {
-		this.isSearchFocused = false; // เมื่อช่องค้นหาหมดโฟกัส
+	ngOnInit(): void {
+		this.subjectCardData = this.subjectData;
+		console.log('initDataBeforeSearch', this.subjectCardData);
 	}
 
 	onSearch() {
-		const searchValue = this.searchForm.get('search')?.value || ''; // ดึงค่าที่เป็น string
+		const searchValue = this.searchForm.get('search')?.value || '';
 		this.filteredSubjectCardDataList = this.subjectCardData.filter(
 			(subject) =>
 				subject.subject_id
@@ -45,7 +41,7 @@ export class SDMSearchBarComponent {
 					.toLowerCase()
 					.includes(searchValue.toLowerCase()),
 		);
-
+		console.log('dataFromSearch', this.filteredSubjectCardDataList);
 		this.searchedSubjectCardDataList.emit(this.filteredSubjectCardDataList);
 	}
 
