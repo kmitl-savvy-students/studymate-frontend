@@ -35,7 +35,7 @@
 						{{ subjectCardData.classdatetime[1] }}
 					</div>
 					<div
-						*ngIf="subjectCardData.classdatetime[2].trim() !== ''"
+						*ngIf="checkString(subjectCardData.classdatetime[2]) != ''"
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
 						+ {{ subjectCardData.classdatetime[2] }}
@@ -121,12 +121,13 @@
 						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
 						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
 					</div>
-					<div>
+					<!-- <div>
 						{{ subjectCardData.review_score }}/5 ({{
 							subjectCardData.review_total
 						}}
 						รีวิว)
-					</div>
+					</div> -->
+					<div>1/5 review</div>
 				</div>
 			</div>
 			<div class="col-span-4 flex flex-col gap-y-1">
@@ -136,7 +137,8 @@
 						icon="hand-holding-heart"
 						class="text-lg text-main-100"
 					></sdm-icon>
-					<div>{{ subjectCardData.student_total }} คน</div>
+					<!-- <div>{{ subjectCardData.student_total }} คน</div> -->
+					 <div>50</div>
 				</div>
 			</div>
 			<div class="flex flex-row items-end justify-end">

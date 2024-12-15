@@ -120,11 +120,19 @@ export class APIManagementService {
 		department: string,	
 		curriculum : string,
 		classYear: number,
-		curriculumYear: string,
-		uniqueId: string,
-	): Observable<CurriculumTeachtableSubject> {
-		const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${curriculumYear}/${uniqueId}`;
-		return this.http.get<CurriculumTeachtableSubject>(apiUrl);
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<CurriculumTeachtableSubject[]> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+
+		if (curriculumYear) {
+			apiUrl += `/${curriculumYear}`;
+		}
+		if (uniqueId) {
+			apiUrl += `/${uniqueId}`;
+		}
+
+		return this.http.get<CurriculumTeachtableSubject[]>(apiUrl);
 	}
 
 	// GetCurriculumSubjectsTeachtable(

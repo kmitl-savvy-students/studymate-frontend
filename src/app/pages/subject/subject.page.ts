@@ -1,5 +1,6 @@
-import { classYearList, departmentList, facultyList, semesterList, subjectCardData, subjects_added, yearsList } from './subject-page-data';
-import { SelectedData, DropdownList, CirriculumnList } from './../../shared/models/SdmAppService.model.js';
+import { TeachTable } from './../../shared/models/CurriculumTeachtableSubject.model';
+import { classYearList, departmentList, engineerDeList, engineerFacList, facultyList, genedDeList, genedFacList, semesterList, subjects_added, yearsList } from './subject-page-data';
+import { SelectedData, DropdownList, CirriculumnList, SubjectData } from './../../shared/models/SdmAppService.model.js';
 import {
 	Component,
 	AfterViewInit,
@@ -49,14 +50,15 @@ export class SDMSubject implements AfterViewInit, OnInit {
 
 	public selectedYear: number = 0;
 	public selectedSemester: number = 0;
-	public selectedClassYear: number = 0;
+	public selectedClassYear: number = -1;
 	public selectedFaculty: string = '';
 	public selectedDepartment: string = '';
-	public selectedCurriculum: string = '';
-	public selectedUniqueId: string = '';
-	public selectedCurriculumYear: string = '';
+	public selectedCurriculum?: string = '';
+	public selectedUniqueId?: string = '';
+	public selectedCurriculumYear?: string = '';
 	public selectedData?: SelectedData;
 	public isSelectAllDropdown: boolean = false;
+	public isGened : boolean = false;
 
 	public currentRoute: string = '';
 	public user: User | null = null;
@@ -72,10 +74,12 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public curriculumsData: Curriculum[] = [];
   	public curriculumOptions :any[] = [];
 
-	public SubjectsTeachtableData?: CurriculumTeachtableSubject;
 	public subjectCardData: SubjectCardData[] = [];
 	public subjects_added = subjects_added;
-	
+
+	public filteredSubjectCardDataList: SubjectCardData[] = [];
+
+	public SubjectDataIsNull: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -87,7 +91,6 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			.subscribe((event: any) => {
 				this.currentRoute = event.url;
 			});
-		this.subjectCardTotal = this.subjectCardData.length;
 	}
 
 	public userTokenSubject: Subject<UserToken | null> =
@@ -109,7 +112,6 @@ export class SDMSubject implements AfterViewInit, OnInit {
 					this.isSignIn = false;
 				}
 			});
-		this.updatePaginatedItems();
 	}
 
 	ngAfterViewInit(): void {
@@ -136,22 +138,33 @@ export class SDMSubject implements AfterViewInit, OnInit {
 		this.updatePaginatedItems();
 	}
 
-	// public createLabelsDDL(ddl : DropdownList[]){
-	// 	return ddl.map(data => data.label)
-	// }
-
-	// public getValue(ddlData: DropdownList[], selectedData: SelectedData){
-	// 	const matchedItem = ddlData.find(item => item.label === selectedData.label);
-	// 	return matchedItem ? matchedItem.value : undefined;
-	// }
-
-	getSubjectData(){
-		this.apiManagementService.GetCurriculumSubjectsTeachtable(this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId).subscribe({
+	getSubjectData() {
+		this.apiManagementService.GetCurriculumSubjectsTeachtable(
+			this.selectedYear,
+			this.selectedSemester,
+			this.selectedFaculty,
+			this.selectedDepartment,
+			this.selectedCurriculum!,
+			this.selectedClassYear,
+			this.selectedCurriculumYear,
+			this.selectedUniqueId
+		).subscribe({
 			next: (res) => {
-				this.SubjectsTeachtableData = res
-				console.log(this.SubjectsTeachtableData)
-				// this.subjectCardData = this.SubjectsTeachtableData.map()
-
+				console.log('API Response:', res);
+				if (res && res[0] && res[0].teachtable && res[0].teachtable[0]) {
+					this.subjectCardData = res[0].teachtable[0].data;
+					if (this.subjectCardData !== undefined) {
+						console.log('Subject Card Data:', this.subjectCardData);
+						this.subjectCardTotal = this.subjectCardData.length;
+						this.updatePaginatedItems();
+					} else {
+						console.log('No Subject Data Available.');
+					}
+				} else {
+					console.log('teachtable or required nested data is undefined');
+					this.SubjectDataIsNull = true
+					console.log(this.SubjectDataIsNull)
+				}
 			},
 			error: (error) => {
 				if (error.status === 404) {
@@ -159,34 +172,32 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				} else if (error.status === 500) {
 					console.error('Internal Server Error');
 				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
-					);
+					console.error('An unexpected error occurred:', error.status);
 				}
 			},
-		})
+		});
 	}
+	
 
 	public getCurriculumsData() {
 		this.apiManagementService.GetCurriculum().subscribe({
 			next: (res) => {
 				this.curriculumsData = res
 				.filter(
-					(s) =>  s.id === 3 || s.id === 5,
+					(s) =>  s.pid === '06' || s.pid === '101',
 				);
 				this.curriculumList = this.curriculumsData.map(
 					(curriculum) => {
 						const dropdown = new DropdownList();
 						dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
-						dropdown.value = curriculum.id;
+						dropdown.value = curriculum.pid;
 						return dropdown;
 					}
 				);
 				this.curriculumOptions = this.curriculumsData.map(
 					(curriculum) => {
 						const curriculumOptions = new CirriculumnList();
-						curriculumOptions.value = curriculum.id;
+						curriculumOptions.value = curriculum.pid;
 						curriculumOptions.uniqueId = curriculum.unique_id
 						curriculumOptions.curriculumYear = curriculum.year
 						return curriculumOptions;
@@ -208,54 +219,31 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			},
 		});
 	}
-	
-	public handleSelectedYearChange(selectedData: SelectedData) {
-		// this.selectedYear = !Number.isNaN(Number(this.getValue(yearsList, selectedData))) ? Number(this.getValue(yearsList, selectedData)) : undefined
-		// console.log('Selected Label:', selectedData, 'Year:', this.selectedYear);
-		this.selectedYear = selectedData.value
-		console.log('Selected Year:', this.selectedYear)
-		this.checkSelectAllDropdown();
+
+	public handleChooseFaculty(list: DropdownList[]){
+		if(this.selectedFaculty === '90'){
+			this.isGened = true;
+			return genedDeList
+		}else if(this.selectedFaculty === '01'){
+			return engineerDeList
+		}
+		return list
 	}
 
-	public handleSelectedSemesterChange(selectedData: SelectedData) {
-		this.selectedSemester = selectedData.value;
-		console.log('Selected Semester:', this.selectedSemester);
-		this.checkSelectAllDropdown();
-	}
-
-	public handleSelectedClassYearChange(selectedData: SelectedData) {
-		this.selectedClassYear = selectedData.value;
-		console.log('Selected Class:', this.selectedClassYear);
-		this.checkSelectAllDropdown();
-	}
-
-	public handleSelectedFacultyChange(selectedData: SelectedData) {
-		this.selectedFaculty = selectedData.value;
-		console.log('Selected Faculty:', this.selectedFaculty);
-		this.checkSelectAllDropdown();
-	}
-
-	public handleSelectedDepartmentChange(selectedData: SelectedData) {
-		this.selectedDepartment = selectedData.value;
-		console.log('Selected Department:', this.selectedDepartment);
-		this.checkSelectAllDropdown();
-	}
-
-	public handleSelectedCurriculumChange(selectedData: SelectedData) {
-		this.selectedCurriculum = selectedData.value;
-
-		const matchedCurriculum = this.curriculumOptions.find(item => item.value === selectedData.value);
-		this.selectedUniqueId = matchedCurriculum.uniqueId
-		this.selectedCurriculumYear = matchedCurriculum.curriculumYear
-
-		console.log('call get subject')
-		this.getSubjectData()
-
-		this.checkSelectAllDropdown();
+	public handleChooseDepartment(list: DropdownList[]){
+		if(this.selectedDepartment === '90'){
+			this.isGened = true;
+			return genedFacList
+		}else if(this.selectedDepartment === '05'){
+			return engineerFacList
+		}
+		return list
 	}
 
 	public handleSelectChange(selectName: string, selectedData: SelectedData) {
 		// อัปเดตสถานะที่เกี่ยวข้องตาม selectName
+		this.subjectCardData = []
+		this.SubjectDataIsNull = false
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
@@ -290,42 +278,46 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				console.warn(`Unhandled select: ${selectName}`);
 		}
 	
-		// เรียกฟังก์ชันเพื่อตรวจสอบสถานะการเลือกทั้งหมด
 		this.checkSelectAllDropdown();
 
-		// ตรวจสอบว่าทุก dropdown ถูกเลือกแล้วหรือยัง
 		if (this.isSelectAllDropdown) {
 			console.log('All dropdowns selected, calling getSubjectData()');
 			this.getSubjectData();
 		}
 	}
 	
-	// ฟังก์ชันตรวจสอบว่ามีการเลือกค่าทุก dropdown แล้วหรือไม่
-	// private allDropdownsSelected(): boolean {
-	// 	return (
-	// 		this.selectedYear !== undefined &&
-	// 		this.selectedSemester !== undefined &&
-	// 		this.selectedClassYear !== undefined &&
-	// 		this.selectedFaculty !== undefined &&
-	// 		this.selectedDepartment !== undefined &&
-	// 		this.selectedCurriculum !== undefined
-	// 	);
-	// }
-	
-
 	public checkSelectAllDropdown() {
-		if (
-			this.selectedYear &&
-			this.selectedSemester &&
-			this.selectedClassYear !== undefined &&
-			this.selectedFaculty &&
-			this.selectedDepartment &&
-			this.selectedCurriculum
-		) {
-			this.isSelectAllDropdown = true;
-		} else {
-			this.isSelectAllDropdown = false;
+		if(this.selectedFaculty === '90' && this.selectedDepartment === '90'){
+			if (
+				this.selectedYear &&
+				this.selectedSemester &&
+				this.selectedClassYear !== undefined &&
+				this.selectedFaculty &&
+				this.selectedDepartment
+			) {
+				this.selectedCurriculum = 'x'
+				this.selectedCurriculumYear = ''
+				this.selectedUniqueId = ''
+				this.isSelectAllDropdown = true;
+			} else {
+				this.isSelectAllDropdown = false;
+			}
+			console.log('isSelectAllDropdown', this.isSelectAllDropdown);
+		}else{
+			this.isGened = false;
+			if (
+				this.selectedYear &&
+				this.selectedSemester &&
+				this.selectedClassYear !== undefined &&
+				this.selectedFaculty &&
+				this.selectedDepartment &&
+				this.selectedCurriculum
+			) {
+				this.isSelectAllDropdown = true;
+			} else {
+				this.isSelectAllDropdown = false;
+			}
+			console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 		}
-		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 	}
 }

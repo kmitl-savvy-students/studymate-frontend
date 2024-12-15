@@ -28,14 +28,14 @@
 				<sdm-select
 					defaultLabel="คณะ"
 					SelectName="selectedFaculty"
-					[listOptions]="facultyList"
+					[listOptions]="handleChooseDepartment(facultyList)"
 					class="w-48"
 					(selectedValue)="handleSelectChange('selectedFaculty',$event)"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ภาควิชา"
 					SelectName="selectedDepartment"
-					[listOptions]="departmentList"
+					[listOptions]="handleChooseFaculty(departmentList)"
 					class="w-48"
 					(selectedValue)="handleSelectChange('selectedDepartment',$event)"
 				></sdm-select>
@@ -49,62 +49,65 @@
 			</div>
 			<sdm-search-bar></sdm-search-bar>
 		</div>
-		<div
-			class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
-		>
-			<!-- Pagination -->
-			<sdm-pagination
-				*ngIf="isSelectAllDropdown"
-				(pageChange)="changePage($event)"
-				[totalItems]="subjectCardTotal"
-				[itemsPerPage]="itemsPerPage"
-				[currentPage]="currentPage"
-				class="mt-4"
-			></sdm-pagination>
-			<!-- Subject Component -->
-			<div class="grid grid-cols-1 gap-4" *ngIf="isSelectAllDropdown">
-				<ng-container
-					*ngFor="let data of paginatedItems; let i = index"
-					class="grid grid-cols-1 gap-4"
-				>
-					<sdm-subject-cpn
-						[subjectCardData]="data"
-						[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
-					></sdm-subject-cpn>
-				</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && SubjectDataIsNull === false">
+			<div class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-dark-75">
+
+				<!-- Pagination -->
+				<sdm-pagination
+					(pageChange)="changePage($event)"
+					[totalItems]="subjectCardTotal"
+					[itemsPerPage]="itemsPerPage"
+					[currentPage]="currentPage"
+					class="mt-4"
+				></sdm-pagination>
+				<!-- Subject Component -->
+				<div class="w-full grid grid-cols-1 gap-4">
+					<ng-container
+						*ngFor="let data of paginatedItems; let i = index"
+						class="grid grid-cols-1 gap-4"
+					>
+						<sdm-subject-cpn
+							[subjectCardData]="data"
+							[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
+						></sdm-subject-cpn>
+					</ng-container>
+				</div>
+				<!-- Pagination -->
+				<sdm-pagination
+					(pageChange)="changePage($event)"
+					[totalItems]="subjectCardTotal"
+					[itemsPerPage]="itemsPerPage"
+					[currentPage]="currentPage"
+				></sdm-pagination>
 			</div>
-			<!-- คำแนะนำการดูรายวิชา -->
-			<div>
-				<div class="flex flex-col gap-y-4">
-					<div *ngIf="!selectedYear">
-						โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedSemester">
-						โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="selectedClassYear === undefined">
-						โปรดเลือกชั้นปี เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedFaculty">
-						โปรดเลือกคณะ เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedDepartment">
-						โปรดเลือกภาควิชา เพื่อดูรายวิชา
-					</div>
-					<div *ngIf="!selectedCurriculum">
-						โปรดเลือกหลักสูตร เพื่อดูรายวิชา
-					</div>
+		</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && SubjectDataIsNull">
+			<div class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75">
+				ไม่พบข้อมูลรายวิชา
+			</div>
+		</ng-container>
+		<!-- คำแนะนำการดูรายวิชา -->
+		<div class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75">
+			<div class="flex flex-col gap-y-4">
+				<div *ngIf="!selectedYear">
+					โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedSemester">
+					โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="selectedClassYear == undefined || selectedClassYear === -1">
+					โปรดเลือกชั้นปี เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedFaculty">
+					โปรดเลือกคณะ เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedDepartment">
+					โปรดเลือกภาควิชา เพื่อดูรายวิชา
+				</div>
+				<div *ngIf="!selectedCurriculum && !isGened">
+					โปรดเลือกหลักสูตร เพื่อดูรายวิชา
 				</div>
 			</div>
-
-			<!-- Pagination -->
-			<sdm-pagination
-				*ngIf="isSelectAllDropdown"
-				(pageChange)="changePage($event)"
-				[totalItems]="subjectCardTotal"
-				[itemsPerPage]="itemsPerPage"
-				[currentPage]="currentPage"
-			></sdm-pagination>
 		</div>
 	</div>
 </div>

@@ -3,6 +3,7 @@ import { IconComponent } from '../icon/icon.component';
 import { APIManagementService } from '../../shared/services/api-management.service.js';
 import { CommonModule } from '@angular/common';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+// import { TeachData } from '../../shared/models/CurriculumTeachtableSubject.model.js';
 @Component({
 	selector: 'sdm-subject-cpn',
 	standalone: true,
@@ -16,4 +17,10 @@ export class SDMSubjectComponent{
 	constructor(
 		private apiManagementService: APIManagementService,
 	) {}
+
+	public checkString(dateTime:string){
+		let safeString : string = ''
+		safeString = dateTime ? dateTime.trim() : '';
+		return safeString
+	}
 }
