@@ -1,4 +1,3 @@
-import { TeachTable } from './../../shared/models/CurriculumTeachtableSubject.model';
 import { classYearList, departmentList, engineerDeList, engineerFacList, facultyList, genedDeList, genedFacList, semesterList, subjects_added, yearsList } from './subject-page-data';
 import { SelectedData, DropdownList, CirriculumnList, SubjectData } from './../../shared/models/SdmAppService.model.js';
 import {
@@ -7,6 +6,8 @@ import {
 	OnInit,
 	ViewChildren,
 	QueryList,
+	OnChanges,
+	SimpleChanges,
 } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMSelectComponent } from '../../components/select/select.component';
@@ -41,7 +42,7 @@ import { CurriculumTeachtableSubject } from '../../shared/models/CurriculumTeach
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
-export class SDMSubject implements AfterViewInit, OnInit {
+export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	@ViewChildren(SDMSelectComponent) dropdowns!: QueryList<SDMSelectComponent>;
 	public currentPage: number = 1;
 	public itemsPerPage: number = 10;
@@ -80,38 +81,47 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	public filteredSubjectCardDataList: SubjectCardData[] = [];
 
 	public SubjectDataIsNull: boolean = false;
+	public isSearched: boolean = false;
+	public isLoading: boolean = false;
+	public isError: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
 		private router: Router,
 		private authService: AuthService,
 	) {
-		this.router.events
-			.pipe(filter((event) => event instanceof NavigationEnd))
-			.subscribe((event: any) => {
-				this.currentRoute = event.url;
-			});
+		// this.router.events
+		// 	.pipe(filter((event) => event instanceof NavigationEnd))
+		// 	.subscribe((event: any) => {
+		// 		this.currentRoute = event.url;
+		// 	});
 	}
 
-	public userTokenSubject: Subject<UserToken | null> =
-		new Subject<UserToken | null>();
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['isLoading']) { // ตรวจสอบว่ามีการเปลี่ยนแปลงใน isLoading
+			console.log('Loading:', changes['isLoading'].currentValue); // แสดงค่าปัจจุบัน
+		  }
+	}
+
+	// public userTokenSubject: Subject<UserToken | null> =
+	// 	new Subject<UserToken | null>();
 
 	ngOnInit(): void {
 		this.getCurriculumsData()
-		this.authService.userTokenSubject
-			.pipe(
-				filter((token) => token !== null),
-				distinctUntilChanged(),
-			)
-			.subscribe((userToken) => {
-				let user = userToken.user;
-				if (user) {
-					this.isSignIn = true;
-					this.user = user;
-				} else {
-					this.isSignIn = false;
-				}
-			});
+		// this.authService.userTokenSubject
+		// 	.pipe(
+		// 		filter((token) => token !== null),
+		// 		distinctUntilChanged(),
+		// 	)
+		// 	.subscribe((userToken) => {
+		// 		let user = userToken.user;
+		// 		if (user) {
+		// 			this.isSignIn = true;
+		// 			this.user = user;
+		// 		} else {
+		// 			this.isSignIn = false;
+		// 		}
+		// 	});
 	}
 
 	ngAfterViewInit(): void {
@@ -126,12 +136,16 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			}
 		});
 	}
-	
+
 	public updatePaginatedItems() {
-		const start = (this.currentPage - 1) * this.itemsPerPage;
-		const end = start + this.itemsPerPage;
-		this.paginatedItems = this.subjectCardData.slice(start, end);
-	}
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        const dataToPaginate = this.isSearched
+            ? this.filteredSubjectCardDataList
+            : this.subjectCardData;
+        this.paginatedItems = dataToPaginate.slice(start, end);
+        this.subjectCardTotal = dataToPaginate.length;
+    }
 	
 	public changePage(page: number) {
 		this.currentPage = page;
@@ -139,6 +153,8 @@ export class SDMSubject implements AfterViewInit, OnInit {
 	}
 
 	getSubjectData() {
+		this.isLoading = true
+		this.isError = false
 		this.apiManagementService.GetCurriculumSubjectsTeachtable(
 			this.selectedYear,
 			this.selectedSemester,
@@ -162,9 +178,11 @@ export class SDMSubject implements AfterViewInit, OnInit {
 					}
 				} else {
 					console.log('teachtable or required nested data is undefined');
+					this.subjectCardData = []
 					this.SubjectDataIsNull = true
 					console.log(this.SubjectDataIsNull)
 				}
+				this.isLoading = false
 			},
 			error: (error) => {
 				if (error.status === 404) {
@@ -174,6 +192,8 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				} else {
 					console.error('An unexpected error occurred:', error.status);
 				}
+				this.isError = true
+				this.isLoading = false
 			},
 		});
 	}
@@ -299,6 +319,7 @@ export class SDMSubject implements AfterViewInit, OnInit {
 				this.selectedCurriculumYear = ''
 				this.selectedUniqueId = ''
 				this.isSelectAllDropdown = true;
+				this.updatePaginatedItems()
 			} else {
 				this.isSelectAllDropdown = false;
 			}
@@ -320,4 +341,13 @@ export class SDMSubject implements AfterViewInit, OnInit {
 			console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 		}
 	}
+
+	public getFilterSubjectCardDataList(
+        filteredSubjectCardDataList: SubjectCardData[],
+    ) {
+        this.filteredSubjectCardDataList = filteredSubjectCardDataList;
+        this.isSearched = true;
+        this.currentPage = 1;
+        this.updatePaginatedItems();
+    }
 }
