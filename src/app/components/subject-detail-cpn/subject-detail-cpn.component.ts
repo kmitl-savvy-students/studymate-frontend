@@ -55,10 +55,4 @@ export class SDMSubjectDetailCpnComponent {
 			(subject) => subject.subject_id === subjectId,
 		);
 	}
-
-	// public isInterested: boolean = false;
-
-	// toggleInterested(): void {
-	// 	this.isInterested = !this.isInterested;
-	// }
 }
