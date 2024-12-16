@@ -1,136 +1,183 @@
-<div
-	*ngIf="selectedSubject"
-	class="flex w-full flex-col gap-y-5 rounded-[20px] border border-main-25 pb-5"
->
+<div class="flex flex-col gap-y-5">
 	<div
-		class="flex w-full gap-x-2 rounded-t-[20px] bg-main-25 p-5 text-lg font-bold"
+		*ngIf="selectedSubject"
+		class="flex w-full flex-col gap-y-5 rounded-[20px] border border-main-25 pb-5"
 	>
-		<div>{{ selectedSubject.subject_id }}</div>
-		<div>{{ selectedSubject.subject_name_en }}</div>
-	</div>
-	<div class="flex w-full flex-col gap-y-2 px-5">
-		<div class="font-bold">คำอธิบายรายวิชา</div>
-		<div class="indent-8">{{ selectedSubject.detail }}</div>
-	</div>
-	<div class="grid w-full grid-cols-11 gap-y-5 px-5">
-		<div class="col-span-3 flex flex-col gap-y-2 pe-4">
-			<div class="font-bold">วัน-เวลาเรียน</div>
-			<div class="flex flex-row flex-wrap gap-x-2 gap-y-2 text-sm">
-				<div
-					class="w-[77px] rounded-[15px] bg-orange-50 px-3 py-1.5 text-center"
-				>
-					{{ selectedSubject.classdatetime[0] }}
-				</div>
-				<div class="rounded-[15px] bg-orange-50 px-3 py-1.5">
-					{{ selectedSubject.classdatetime[1] }}
-				</div>
-				<div
-					*ngIf="selectedSubject.classdatetime[2].trim() !== ''"
-					class="rounded-[15px] bg-orange-50 px-3 py-1.5"
-				>
-					+ {{ selectedSubject.classdatetime[2] }}
-				</div>
-			</div>
+		<div
+			class="flex w-full gap-x-2 rounded-t-[20px] bg-main-25 p-5 text-base font-semibold"
+		>
+			<div>{{ selectedSubject.subject_id }}</div>
+			<div>{{ selectedSubject.subject_name_en }}</div>
+			<div>{{ selectedSubject.subject_name_th }}</div>
 		</div>
-		<div class="col-span-3 flex flex-col gap-y-2">
-			<div class="font-bold">หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)</div>
-			<div class="flex flex-row">
-				<div class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm">
-					{{ selectedSubject.credit }}({{
-						selectedSubject.lect_hr
-					}}-{{ selectedSubject.prac_hr }}-{{
-						selectedSubject.self_hr
-					}})
-				</div>
-			</div>
+		<div class="flex w-full flex-col gap-y-2 px-5 text-sm">
+			<div class="font-semibold">คำอธิบายรายวิชา</div>
+			<div class="indent-8">{{ selectedSubject.detail }}</div>
 		</div>
-		<div class="col-span-3 flex flex-col gap-y-2 pe-4">
-			<div class="font-bold">อาจารย์ผู้สอน</div>
-			<div class="flex flex-row flex-wrap gap-x-2 gap-y-2 text-sm">
-				<div
-					*ngFor="
-						let data of selectedSubject.teacher_list_th.slice(0, 1)
-					"
-					class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1.5"
-				>
-					{{ data }}
-				</div>
-				<sdm-icon
-					*ngIf="selectedSubject.teacher_list_th.length > 2"
-					icon="ellipsis"
-					class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-dark-100"
-				></sdm-icon>
-			</div>
-		</div>
-		<div class="col-span-2 flex flex-col gap-y-2">
-			<div class="font-bold">หมวดหมู่วิชา</div>
-			<div class="flex flex-row">
-				<div class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm">
-					{{ selectedSubject.subject_type_name }}
-				</div>
-			</div>
-		</div>
-		<!-- ยังไม่รู้ว่าต้อง mockup ยังไง หาใน เว็บไม่เจอ -->
-		<div class="col-span-3 flex flex-col gap-y-2">
-			<div class="font-bold">วัน-เวลาสอบ</div>
-			<div class="flex flex-col gap-y-1.5">
-				<div class="flex flex-row items-center gap-x-1.5">
-					<div class="rounded-[15px] bg-red-200 px-3 py-1.5 text-sm">
-						กลางภาค
-					</div>
-					<div class="text-sm">ศุกร์ 23 ม.ค. 13.00 - 16.00 น.</div>
-				</div>
-				<div class="flex flex-row items-center gap-x-1.5">
+		<div class="grid w-full grid-cols-11 gap-y-5 px-5 text-sm">
+			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
+				<div class="font-semibold">วัน-เวลาเรียน</div>
+				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
 					<div
-						class="rounded-[15px] bg-indigo-200 px-3 py-1.5 text-sm"
+						class="w-[77px] rounded-[15px] bg-orange-50 px-3 py-1 text-center"
 					>
-						ปลายภาค
+						{{ selectedSubject.classdatetime[0] }}
 					</div>
-					<div class="text-sm">ศุกร์ 23 ธ.ค. 13.00 - 16.00 น.</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-span-3 flex flex-col gap-y-2">
-			<div class="font-bold">ห้องเรียน</div>
-			<div class="flex flex-row">
-				<div class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm">
-					{{ selectedSubject.room_no }}
-				</div>
-			</div>
-		</div>
-		<div class="col-span-4 flex flex-col gap-y-2">
-			<div class="font-bold">เงื่อนไข</div>
-			<div class="tooltip relative" *ngIf="selectedSubject.rule !== ''">
-				<sdm-icon
-					icon="circle-exclamation"
-					class="tooltip-icon h-4 w-4 text-red-400 hover:text-red-500"
-				>
-				</sdm-icon>
-				<div
-					[innerHTML]="selectedSubject.rule"
-					class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
-				></div>
-			</div>
-			<div class="flex flex-row" *ngIf="selectedSubject.rule === ''">
-				<div
-					class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400"
-					*ngIf="selectedSubject.rule === ''"
-				>
-					-
+					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+						{{ selectedSubject.classdatetime[1] }}
+					</div>
 					<div
+						*ngIf="selectedSubject.classdatetime[2].trim() !== ''"
+						class="rounded-[15px] bg-orange-50 px-3 py-1"
+					>
+						+ {{ selectedSubject.classdatetime[2] }}
+					</div>
+				</div>
+			</div>
+			<div class="col-span-3 flex flex-col gap-y-2">
+				<div class="font-semibold">
+					หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)
+				</div>
+				<div class="flex flex-row">
+					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+						{{ selectedSubject.credit }}({{
+							selectedSubject.lect_hr
+						}}-{{ selectedSubject.prac_hr }}-{{
+							selectedSubject.self_hr
+						}})
+					</div>
+				</div>
+			</div>
+			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
+				<div class="font-semibold">อาจารย์ผู้สอน</div>
+				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
+					<div
+						*ngFor="
+							let data of selectedSubject.teacher_list_th.slice(
+								0,
+								1
+							)
+						"
+						class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1"
+					>
+						{{ data }}
+					</div>
+					<sdm-icon
+						*ngIf="selectedSubject.teacher_list_th.length > 2"
+						icon="ellipsis"
+						class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100"
+					></sdm-icon>
+				</div>
+			</div>
+			<div class="col-span-2 flex flex-col gap-y-2">
+				<div class="font-semibold">หมวดหมู่วิชา</div>
+				<div class="flex flex-row">
+					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+						{{ selectedSubject.subject_type_name }}
+					</div>
+				</div>
+			</div>
+			<!-- ยังไม่รู้ว่าต้อง mockup ยังไง หาใน เว็บไม่เจอ -->
+			<div class="col-span-3 flex flex-col gap-y-2">
+				<div class="font-semibold">วัน-เวลาสอบ</div>
+				<div class="flex flex-col gap-y-1.5">
+					<div class="flex flex-row items-center gap-x-1.5">
+						<div class="rounded-[15px] bg-red-200 px-3 py-1">
+							กลางภาค
+						</div>
+						<div>ศุกร์ 23 ม.ค. 13.00 - 16.00 น.</div>
+					</div>
+					<div class="flex flex-row items-center gap-x-1.5">
+						<div class="rounded-[15px] bg-indigo-200 px-3 py-1">
+							ปลายภาค
+						</div>
+						<div>ศุกร์ 23 ธ.ค. 13.00 - 16.00 น.</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-span-3 flex flex-col gap-y-2">
+				<div class="font-semibold">ห้องเรียน</div>
+				<div class="flex flex-row">
+					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+						{{ selectedSubject.room_no }}
+					</div>
+				</div>
+			</div>
+			<div class="col-span-4 flex flex-col gap-y-2">
+				<div class="font-semibold">เงื่อนไข</div>
+				<div
+					class="tooltip relative"
+					*ngIf="selectedSubject.rule !== ''"
+				>
+					<sdm-icon
+						icon="circle-exclamation"
+						class="tooltip-icon h-4 w-4 text-red-400 hover:text-red-500"
+					>
+					</sdm-icon>
+					<div
+						[innerHTML]="selectedSubject.rule"
 						class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
+					></div>
+				</div>
+				<div class="flex flex-row" *ngIf="selectedSubject.rule === ''">
+					<div
+						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400"
+						*ngIf="selectedSubject.rule === ''"
 					>
-						ไม่มีเงื่อนไข
+						-
+						<div
+							class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
+						>
+							ไม่มีเงื่อนไข
+						</div>
 					</div>
 				</div>
 			</div>
+			<!-- <div class="flex items-end justify-end">
+				<button
+					class="col-span-1 flex h-min w-min flex-row items-center gap-x-2 rounded-[15px] bg-main-100 px-3 py-1.5 font-medium hover:bg-main-120"
+				>
+					<sdm-icon icon="plus" class="text-sm text-white"></sdm-icon>
+					<p class="text-sm text-white">เพิ่ม</p>
+				</button>
+			</div> -->
 		</div>
-		<div class="flex items-end justify-end">
+	</div>
+	<div class="flex items-end justify-end text-sm">
+		<button
+			class="flex h-min w-min flex-row items-center gap-x-2 rounded-[15px] bg-main-100 px-3 py-1 font-medium hover:bg-main-120 hover:ring-4 hover:ring-main-15"
+		>
+			<sdm-icon icon="plus" class="text-white"></sdm-icon>
+			<p class="text-white">เพิ่ม</p>
+		</button>
+	</div>
+	<div class="flex flex-col gap-y-2">
+		<div class="text-base font-semibold">
+			ความต้องการขอเปิดรายวิชาในภาคการศึกษาถัดไป
+		</div>
+		<div class="flex ps-5">
 			<button
-				class="col-span-1 flex h-min w-min flex-row items-center gap-x-2 rounded-[15px] bg-main-100 px-3 py-1.5 font-medium hover:bg-main-120"
+				class="flex h-min w-min flex-row items-center gap-x-2 rounded-[15px] bg-orange-50 px-3 py-1.5 hover:bg-orange-100 hover:ring-4 hover:ring-orange-50"
+				(click)="toggleFavorite()"
 			>
-				<sdm-icon icon="plus" class="text-sm text-white"></sdm-icon>
-				<p class="text-sm text-white">เพิ่ม</p>
+				<sdm-icon
+					icon="heart"
+					[iconStyle]="isFavorite ? 'fas' : 'far'"
+					class="text-sm text-dark-100"
+				></sdm-icon>
+				<p class="text-sm text-dark-100">ต้องการ</p>
+			</button>
+		</div>
+	</div>
+	<div class="flex flex-col gap-y-2">
+		<div class="text-base font-semibold">
+			จำนวนนักศึกษาที่ต้องการขอเปิดรายวิชาในภาคการศึกษาถัดไป
+		</div>
+		<div class="flex ps-5">
+			<button
+				class="flex flex-row items-center gap-x-2 rounded-[15px] bg-orange-50 px-3 py-1.5"
+			>
+				<p class="text-sm text-dark-100">30 คน</p>
 			</button>
 		</div>
 	</div>

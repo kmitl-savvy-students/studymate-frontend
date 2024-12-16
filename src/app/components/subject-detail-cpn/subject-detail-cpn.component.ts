@@ -12,6 +12,7 @@ import { IconComponent } from '../icon/icon.component.js';
 	styleUrl: './subject-detail-cpn.component.css',
 })
 export class SDMSubjectDetailCpnComponent {
+	public isFavorite: boolean = false;
 	public selectedSubject: SubjectDetailData | undefined;
 	public subjectDetailData: SubjectDetailData[] = [
 		{
@@ -45,7 +46,6 @@ export class SDMSubjectDetailCpnComponent {
 	];
 
 	constructor(private apiManagementService: APIManagementService) {
-		// this.selectedSubject = this.subjectDetailData[0];
 		if (this.subjectDetailData && this.subjectDetailData.length > 0) {
 			this.selectedSubject = this.subjectDetailData[0];
 		}
@@ -55,5 +55,9 @@ export class SDMSubjectDetailCpnComponent {
 		this.selectedSubject = this.subjectDetailData.find(
 			(subject) => subject.subject_id === subjectId,
 		);
+	}
+
+	toggleFavorite(): void {
+		this.isFavorite = !this.isFavorite; // เปลี่ยนสถานะเมื่อกดปุ่ม
 	}
 }
