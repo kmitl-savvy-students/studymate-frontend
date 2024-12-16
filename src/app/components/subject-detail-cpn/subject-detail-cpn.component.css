@@ -14,3 +14,7 @@
 .tooltip-shadow {
 	box-shadow: 0 0 6px 0 rgb(0 0 0 / 0.1);
 }
+
+.detail-data {
+	@apply rounded-[15px] bg-orange-50 px-3 py-1;
+}

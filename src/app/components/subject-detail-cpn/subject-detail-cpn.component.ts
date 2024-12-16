@@ -49,10 +49,4 @@ export class SDMSubjectDetailCpnComponent {
 			this.selectedSubject = this.subjectDetailData[0];
 		}
 	}
-
-	selectSubjectById(subjectId: string): void {
-		this.selectedSubject = this.subjectDetailData.find(
-			(subject) => subject.subject_id === subjectId,
-		);
-	}
 }

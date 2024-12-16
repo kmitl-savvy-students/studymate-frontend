@@ -18,17 +18,15 @@
 			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
 				<div class="font-semibold">วัน-เวลาเรียน</div>
 				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
-					<div
-						class="w-[77px] rounded-[15px] bg-orange-50 px-3 py-1 text-center"
-					>
+					<div class="detail-data w-[77px] text-center">
 						{{ selectedSubject.classdatetime[0] }}
 					</div>
-					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+					<div class="detail-data">
 						{{ selectedSubject.classdatetime[1] }}
 					</div>
 					<div
 						*ngIf="selectedSubject.classdatetime[2].trim() !== ''"
-						class="rounded-[15px] bg-orange-50 px-3 py-1"
+						class="detail-data"
 					>
 						+ {{ selectedSubject.classdatetime[2] }}
 					</div>
@@ -39,7 +37,7 @@
 					หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)
 				</div>
 				<div class="flex flex-row">
-					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+					<div class="detail-data">
 						{{ selectedSubject.credit }}({{
 							selectedSubject.lect_hr
 						}}-{{ selectedSubject.prac_hr }}-{{
@@ -58,21 +56,21 @@
 								1
 							)
 						"
-						class="min-w-max rounded-[15px] bg-orange-50 px-3 py-1"
+						class="detail-data min-w-max"
 					>
 						{{ data }}
 					</div>
 					<sdm-icon
 						*ngIf="selectedSubject.teacher_list_th.length > 2"
 						icon="ellipsis"
-						class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100"
+						class="detail-data text-dark-100"
 					></sdm-icon>
 				</div>
 			</div>
 			<div class="col-span-2 flex flex-col gap-y-2">
 				<div class="font-semibold">หมวดหมู่วิชา</div>
 				<div class="flex flex-row">
-					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+					<div class="detail-data">
 						{{ selectedSubject.subject_type_name }}
 					</div>
 				</div>
@@ -98,7 +96,7 @@
 			<div class="col-span-3 flex flex-col gap-y-2">
 				<div class="font-semibold">ห้องเรียน</div>
 				<div class="flex flex-row">
-					<div class="rounded-[15px] bg-orange-50 px-3 py-1">
+					<div class="detail-data">
 						{{ selectedSubject.room_no }}
 					</div>
 				</div>
