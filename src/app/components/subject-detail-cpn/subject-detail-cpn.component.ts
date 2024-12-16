@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { SubjectDetailData } from '../../shared/api-manage/models/SubjectDetailData.model.js';
 import { APIManagementService } from '../../shared/api-manage/api-management.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,6 @@ import { IconComponent } from '../icon/icon.component.js';
 	styleUrl: './subject-detail-cpn.component.css',
 })
 export class SDMSubjectDetailCpnComponent {
-	public isFavorite: boolean = false;
 	public selectedSubject: SubjectDetailData | undefined;
 	public subjectDetailData: SubjectDetailData[] = [
 		{
@@ -57,7 +56,9 @@ export class SDMSubjectDetailCpnComponent {
 		);
 	}
 
-	toggleFavorite(): void {
-		this.isFavorite = !this.isFavorite; // เปลี่ยนสถานะเมื่อกดปุ่ม
-	}
+	// public isInterested: boolean = false;
+
+	// toggleInterested(): void {
+	// 	this.isInterested = !this.isInterested;
+	// }
 }
