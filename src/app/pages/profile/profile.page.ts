@@ -1,9 +1,9 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { IconComponent } from '../../components/icon/icon.component';
-import { AuthService } from '../../shared/auth.service';
-import { User } from '../../shared/api-manage/models/User.model';
-import { UserToken } from '../../shared/api-manage/models/UserToken.model';
+import { AuthService } from '../../shared/services/auth.service.js';
+import { User } from '../../shared/models/User.model.js';
+import { UserToken } from '../../shared/models/UserToken.model.js';
 import { Router, NavigationEnd } from '@angular/router';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
