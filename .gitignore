@@ -9,4 +9,4 @@
 Thumbs.db
 
 #environment settings
-**/environment.ts
+# **/environment.ts
