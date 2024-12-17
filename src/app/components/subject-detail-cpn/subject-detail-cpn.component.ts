@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SubjectDetailData } from '../../shared/api-manage/models/SubjectDetailData.model.js';
-import { APIManagementService } from '../../shared/api-manage/api-management.service';
+import { SubjectDetailData } from '../../shared/models/SubjectDetailData.model.js';
+import { APIManagementService } from '../../shared/services/api-management.service.js';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component.js';
 

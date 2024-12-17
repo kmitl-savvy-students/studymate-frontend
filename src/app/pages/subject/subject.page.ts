@@ -52,7 +52,6 @@ import { CurriculumTeachtableSubject } from '../../shared/models/CurriculumTeach
 		SDMSearchBarComponent,
 		SDMSubjectAddedModalComponent,
 		SDMilterBarComponent,
-		RouterLink,
 		SDMPaginationComponent,
 		CommonModule,
 		SDMSubjectComponent,
