@@ -9,5 +9,6 @@ export class Curriculum {
 		public degree_name_th_short: string,
 		public degree_name_en: string,
 		public degree_name_en_short: string,
+		public pid: string,
 	) {}
 }

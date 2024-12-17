@@ -19,12 +19,12 @@ import {
 	ModalInterface,
 } from 'flowbite';
 import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
-import { AuthService } from '../../shared/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Modal } from 'flowbite';
 
 import type { InstanceOptions } from 'flowbite';
-import { User } from '../../shared/api-manage/models/User.model';
+import { User } from '../../shared/models/User.model';
 
 @Component({
 	selector: 'sdm-page-home',
@@ -33,10 +33,8 @@ import { User } from '../../shared/api-manage/models/User.model';
 		AnnounceComponent,
 		LetPlanComponent,
 		CardHomeComponent,
-		SDMButtonLink,
 		PicBoxHomeComponent,
 		TextBoxHomeComponent,
-		IconComponent,
 		SDMChooseCurriculumModalComponent,
 	],
 	templateUrl: './home.page.html',

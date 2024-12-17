@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../../shared/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { NgIf } from '@angular/common';
-import { APIManagementService } from '../../shared/api-manage/api-management.service';
+import { APIManagementService } from '../../shared/services/api-management.service';
 
 @Component({
 	selector: 'sdm-page-sign-up',

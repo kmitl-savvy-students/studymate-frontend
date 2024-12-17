@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../shared/auth.service';
-import { APIManagementService } from '../../shared/api-manage/api-management.service';
-import { TranscriptData } from '../../shared/api-manage/models/TranscriptData.model';
+import { APIManagementService } from '../../shared/services/api-management.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { TranscriptData } from '../../shared/models/TranscriptData.model';
+import { CurriculumSubject } from '../../shared/models/CurriculumSubject.model';
+import { CurriculumSubgroup } from '../../shared/models/CurriculumSubgroup.model';
+import { GenedSubject } from '../../shared/models/GenedSubject.model';
+import { initFlowbite } from 'flowbite';
+import { Curriculum } from '../../shared/models/Curriculum.model';
+import { CurriculumGroup } from '../../shared/models/CurriculumGroup.model';
+import { firstValueFrom } from 'rxjs';
+import { GenedGroup } from '../../shared/models/GenedGroup.model';
 import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
 
