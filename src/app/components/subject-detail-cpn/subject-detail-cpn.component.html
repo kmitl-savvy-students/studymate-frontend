@@ -1,34 +1,50 @@
 <div class="flex flex-col gap-y-5">
 	<div
-		*ngIf="selectedSubject"
 		class="flex w-full flex-col gap-y-5 rounded-[20px] border border-main-25 pb-5"
 	>
 		<div
 			class="flex w-full gap-x-2 rounded-t-[20px] bg-main-25 p-5 text-base font-semibold"
 		>
-			<div>{{ selectedSubject.subject_id }}</div>
-			<div>{{ selectedSubject.subject_name_en }}</div>
-			<div>{{ selectedSubject.subject_name_th }}</div>
+			<div>{{ subjectDetailData.subject_id }}</div>
+			<div>{{ subjectDetailData.subject_name_en }}</div>
+			<div>{{ subjectDetailData.subject_name_th }}</div>
 		</div>
 		<div class="flex w-full flex-col gap-y-2 px-5 text-sm">
 			<div class="font-semibold">คำอธิบายรายวิชา</div>
-			<div class="indent-8">{{ selectedSubject.detail }}</div>
+			<!-- <div class="indent-8">{{ subjectDetailData.detail }}</div> -->
+			<div class="indent-8">
+				ฟังก์ชันหลายตัวแปรและการประยุกต์ใช้ พีชคณิตของเวกเตอร์ในสามมิติ
+				พิกัดเชิงขั้ว แคลคูลัสของฟังก์ชันจำนวนจริงสองตัวแปร
+				การหาอนุพันธ์และปริพันธ์ของฟังก์ชันจำนวนจริงและฟังก์ชันเวกเตอร์จำนวนจริงหลายตัวแปร
+				แนะนำปริพันธ์เส้น เส้น ระนาบ และพื้นผิว ในปริภูมิสามมิติ
+				แคลคูลัสของฟังก์ชันจำนวนจริงในปริภูมิสามมิติ\r\nFunctions of
+				several variables and theirs applications, Vector algebra in
+				three dimensions, Polar coordinates, Calculus of real - valued
+				functions of two variables, Differentiation and integration of
+				real - valued and vector - valued functions of multiple real
+				variables, Introduction to line integrals, Lines, planes and
+				surfaces in three-dimensional space, Calculus of real-valued
+				functions in three-dimensional space.\r\n
+			</div>
 		</div>
 		<div class="grid w-full grid-cols-11 gap-y-5 px-5 text-sm">
 			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
 				<div class="font-semibold">วัน-เวลาเรียน</div>
 				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
 					<div class="detail-data w-[77px] text-center">
-						{{ selectedSubject.classdatetime[0] }}
+						{{ subjectDetailData.classdatetime[0] }}
 					</div>
 					<div class="detail-data">
-						{{ selectedSubject.classdatetime[1] }}
+						{{ subjectDetailData.classdatetime[1] }}
 					</div>
 					<div
-						*ngIf="selectedSubject.classdatetime[2].trim() !== ''"
-						class="detail-data"
+						*ngIf="
+							checkString(subjectDetailData.classdatetime[2]) !=
+							''
+						"
+						class="rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
-						+ {{ selectedSubject.classdatetime[2] }}
+						+ {{ subjectDetailData.classdatetime[2] }}
 					</div>
 				</div>
 			</div>
@@ -37,12 +53,16 @@
 					หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)
 				</div>
 				<div class="flex flex-row">
-					<div class="detail-data">
-						{{ selectedSubject.credit }}({{
-							selectedSubject.lect_hr
-						}}-{{ selectedSubject.prac_hr }}-{{
-							selectedSubject.self_hr
+					<!-- <div class="detail-data">
+						{{ subjectDetailData.credit }}({{
+							subjectDetailData.lect_hr
+						}}-{{ subjectDetailData.prac_hr }}-{{
+							subjectDetailData.self_hr
 						}})
+					</div> -->
+					<div class="detail-data">
+						{{ subjectDetailData.credit }}
+						<div>(3-0-6)</div>
 					</div>
 				</div>
 			</div>
@@ -51,7 +71,7 @@
 				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
 					<div
 						*ngFor="
-							let data of selectedSubject.teacher_list_th.slice(
+							let data of subjectDetailData.teacher_list_th.slice(
 								0,
 								1
 							)
@@ -61,7 +81,7 @@
 						{{ data }}
 					</div>
 					<sdm-icon
-						*ngIf="selectedSubject.teacher_list_th.length > 2"
+						*ngIf="subjectDetailData.teacher_list_th.length > 2"
 						icon="ellipsis"
 						class="detail-data text-dark-100"
 					></sdm-icon>
@@ -71,7 +91,7 @@
 				<div class="font-semibold">หมวดหมู่วิชา</div>
 				<div class="flex flex-row">
 					<div class="detail-data">
-						{{ selectedSubject.subject_type_name }}
+						{{ subjectDetailData.subject_type_name }}
 					</div>
 				</div>
 			</div>
@@ -97,7 +117,7 @@
 				<div class="font-semibold">ห้องเรียน</div>
 				<div class="flex flex-row">
 					<div class="detail-data">
-						{{ selectedSubject.room_no }}
+						{{ subjectDetailData.room_no }}
 					</div>
 				</div>
 			</div>
@@ -105,7 +125,7 @@
 				<div class="font-semibold">เงื่อนไข</div>
 				<div
 					class="tooltip relative"
-					*ngIf="selectedSubject.rule !== ''"
+					*ngIf="subjectDetailData.rule !== ''"
 				>
 					<sdm-icon
 						icon="circle-exclamation"
@@ -113,14 +133,17 @@
 					>
 					</sdm-icon>
 					<div
-						[innerHTML]="selectedSubject.rule"
+						[innerHTML]="subjectDetailData.rule"
 						class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
 					></div>
 				</div>
-				<div class="flex flex-row" *ngIf="selectedSubject.rule === ''">
+				<div
+					class="flex flex-row"
+					*ngIf="subjectDetailData.rule === ''"
+				>
 					<div
 						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400"
-						*ngIf="selectedSubject.rule === ''"
+						*ngIf="subjectDetailData.rule === ''"
 					>
 						-
 						<div
