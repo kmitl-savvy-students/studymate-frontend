@@ -20,11 +20,13 @@
                 placeholder="ค้นหาด้วยชื่อวิชา หรือ รหัสวิชา"
                 required
             />
-            <sdm-icon
-                icon="xmark"
-                class="absolute inset-y-0 end-0 m-auto cursor-pointer rounded-full px-3 py-2 text-dark-100 hover:bg-main-25"
-                (click)="clearSearch()"
-            ></sdm-icon>
+            <ng-container *ngIf="isFocus">
+                <sdm-icon
+                    icon="xmark"
+                    class="absolute inset-y-0 end-0 m-auto cursor-pointer rounded-full px-3 py-2 text-dark-100 hover:bg-main-25"
+                    (click)="clearSearch()"
+                ></sdm-icon>
+            </ng-container>
         </div>
         <button
             class="flex min-w-max gap-x-2 rounded-[20px] border-none bg-main-10 px-4 py-2 text-sm font-normal text-dark-100 hover:bg-main-25 focus:border-none focus:outline-none focus:ring-0"
