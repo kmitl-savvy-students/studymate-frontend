@@ -2,8 +2,8 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
-import { AuthService } from '../../../shared/auth.service';
-import { APIManagementService } from '../../../shared/api-manage/api-management.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { APIManagementService } from '../../../shared/services/api-management.service';
 
 @Component({
 	selector: 'sdm-import-transcript-modal',

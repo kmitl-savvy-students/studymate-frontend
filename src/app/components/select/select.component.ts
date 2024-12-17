@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnInit,
+	Output,
+} from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,12 +19,15 @@ import { CommonModule } from '@angular/common';
 	styleUrl: './select.component.css',
 })
 export class SDMSelectComponent implements OnInit {
-	@Input() selectName: string = '';
-	@Input() listOptions: string[] = [];
+	@Input() defaultLabel: string = '';
+	@Input() SelectName: string = '';
+	@Input() listOptions: any[] = [];
 	@Output() selectedValue = new EventEmitter<{
-		value: string;
+		label: string;
 		index?: number;
+		value?: any;
 	}>();
+	@Output() selectNameChange = new EventEmitter<string>();
 	form: FormGroup;
 
 	public isDropdownOpen: boolean = false;
@@ -30,24 +40,53 @@ export class SDMSelectComponent implements OnInit {
 		});
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		window.addEventListener('close-dropdowns', (event: any) => {
+			if (event.detail !== this) {
+				this.isDropdownOpen = false;
+			}
+		});
+	}
 
 	toggleDropdown() {
 		this.isDropdownOpen = !this.isDropdownOpen;
+		if (this.isDropdownOpen) {
+			this.closeOtherDropdowns();
+		}
+	}
+
+	closeOtherDropdowns() {
+		const event = new CustomEvent('close-dropdowns', { detail: this });
+		window.dispatchEvent(event);
 	}
 
 	get showSelectedOption(): string {
 		return this.form.get('selectedOption')?.value || '';
 	}
 
-	onSelectedOption(option: string, i?: number) {
+	onSelectedOption(option: string, i?: number, value?:any) {
 		this.form.get('selectedOption')?.setValue(option);
 		this.isSelect = option === '' ? false : true;
 		this.isDropdownOpen = false;
 		const data = {
-			value: option,
+			label: option,
 			index: i ?? -1,
+			value: value,
 		};
 		this.selectedValue.emit(data);
+		this.selectNameChange.emit(this.SelectName);
+	}
+
+	@HostListener('document:click', ['$event'])
+	handleClickOutside(event: MouseEvent) {
+		const target = event.target as HTMLElement;
+		const dropdownElement = document.querySelector('.test');
+		if (dropdownElement && !dropdownElement.contains(target)) {
+			this.isDropdownOpen = false;
+		}
+	}
+
+	preventPropagation(event: Event) {
+		event.stopPropagation();
 	}
 }

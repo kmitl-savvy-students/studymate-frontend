@@ -1,12 +1,12 @@
-import { AuthService } from './../../../shared/auth.service';
-import { APIManagementService } from '../../../shared/api-manage/api-management.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { APIManagementService } from '../../../shared/services/api-management.service';
 import { Component, Input } from '@angular/core';
 import { SDMSelectComponent } from '../../select/select.component';
 import { CommonModule } from '@angular/common';
-import { Curriculum } from '../../../shared/api-manage/models/Curriculum.model';
-import { SelectedData } from '../../../shared/api-manage/models/AppService.model';
+import { Curriculum } from '../../../shared/models/Curriculum.model';
+import { DropdownList, SelectedData } from '../../../shared/models/SdmAppService.model';
 import { distinctUntilChanged, filter } from 'rxjs';
-import { User } from '../../../shared/api-manage/models/User.model';
+import { User } from '../../../shared/models/User.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,9 +20,9 @@ export class SDMChooseCurriculumModalComponent {
 	@Input() modalID: string = '';
 	@Input() headerModal: string = '';
 	public curriculumsData: Curriculum[] = [];
-	public curriculumOptions: string[] = [];
+	public curriculumOptions: DropdownList[] = [];
 	public selectedData: SelectedData[] = [];
-	public curriculumId: number = 0;
+	public curriculumId?: number = 0;
 	public userTokenId: string | null = '';
 	public userId: string | null = '';
 	public user: User | null = null;
@@ -57,14 +57,19 @@ export class SDMChooseCurriculumModalComponent {
 	getCurriculumsData() {
 		this.apiManagementService.GetCurriculum().subscribe({
 			next: (res) => {
-				this.curriculumsData = res;
-				// .filter(
-				// 	(s) => s.id === 1 || s.id === 3 || s.id === 5,
-				// );
-				this.curriculumOptions = this.curriculumsData.map(
-					(curriculum) =>
-						`${curriculum.name_th} (${curriculum.year})`,
+				this.curriculumsData = res
+				.filter(
+					(s) => s.id === 3 || s.id === 5,
 				);
+				this.curriculumOptions = this.curriculumsData.map(
+					(curriculum) => {
+						const dropdown = new DropdownList();
+						dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
+						dropdown.value = curriculum.id;
+						return dropdown;
+					}
+				);
+				console.log(this.curriculumOptions)
 			},
 			error: (error) => {
 				if (error.status === 404) {
@@ -82,17 +87,9 @@ export class SDMChooseCurriculumModalComponent {
 	}
 
 	handleSelectedValueChange(selectedValue: SelectedData) {
-		console.log('Selected curriculum in home:', selectedValue.value);
-		console.log(
-			'Selected curriculum index:',
-			selectedValue.index !== -1
-				? Number(selectedValue.index) + 1
-				: selectedValue.index,
-		);
-		this.curriculumId =
-			selectedValue.index !== -1
-				? Number(selectedValue.index) + 1
-				: selectedValue.index;
+		console.log('Selected curriculum in home:', selectedValue.label);
+		console.log('Selected curriculum index:', selectedValue.value)
+		this.curriculumId = selectedValue.value
 	}
 
 	onSubmitUserCurriculum() {

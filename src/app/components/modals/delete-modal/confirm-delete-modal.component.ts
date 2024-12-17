@@ -7,8 +7,10 @@ import {
 	SimpleChanges,
 } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
-import { AuthService } from '../../../shared/auth.service';
-import { APIManagementService } from './../../../shared/api-manage/api-management.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { ImportTranscriptComponent } from '../import-transcript-modal/import-transcript-modal.component';
+import { APIManagementService } from '../../../shared/services/api-management.service.js';
+
 
 @Component({
 	selector: 'sdm-confirm-delete-modal',
