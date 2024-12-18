@@ -1,25 +1,42 @@
 <div
 	class="border-1 rounded-[20px] border border-main-25 bg-white p-6 text-dark-100"
 >
-	<div class="flex flex-col gap-y-4">
-		<div class="flex flex-row flex-wrap items-center gap-x-3">
-			<div class="text-lg font-semibold text-main-100">
-				{{ index }}
+	<div class="flex flex-col gap-y-6">
+		<div class="flex flex-col border-b border-main-25 pb-5">
+			<div class="flex flex-row flex-wrap items-center gap-x-3">
+				<!-- <div class="text-lg font-semibold text-main-100">
+					{{ index }}
+				</div> -->
+				<div class="text-lg font-semibold hover:cursor-pointer">
+					{{ subjectCardData.subject_id }}
+					{{ subjectCardData.subject_name_en }} [{{
+						subjectCardData.credit
+					}}
+					หน่วยกิต]
+				</div>
+				<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
+					{{ subjectCardData.subject_type_name }}
+				</div>
+				<div
+					*ngIf="subjectCardData.classLevel === '0'"
+					class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs"
+				>
+					ทุกชั้นปี
+				</div>
+				<div
+					*ngIf="subjectCardData.classLevel != '0'"
+					class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs"
+				>
+					ปี {{ subjectCardData.classLevel }}
+				</div>
+				<div
+					class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs"
+				>
+					Sec {{ subjectCardData.section }}
+				</div>
 			</div>
-			<div class="text-lg font-semibold hover:cursor-pointer">
-				{{ subjectCardData.subject_id }}
-				{{ subjectCardData.subject_name_en }} [{{
-					subjectCardData.credit
-				}}
-				หน่วยกิต]
-			</div>
-			<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
-				{{ subjectCardData.subject_type_name }}
-			</div>
-			<div
-				class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs"
-			>
-				Sec {{ subjectCardData.section }}
+			<div class="text-sm text-red-500">
+				{{ subjectCardData.subject_type_name_th }}
 			</div>
 		</div>
 		<div class="grid grid-cols-8 gap-y-5">
@@ -35,7 +52,9 @@
 						{{ subjectCardData.classdatetime[1] }}
 					</div>
 					<div
-						*ngIf="checkString(subjectCardData.classdatetime[2]) != ''"
+						*ngIf="
+							checkString(subjectCardData.classdatetime[2]) != ''
+						"
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5"
 					>
 						+ {{ subjectCardData.classdatetime[2] }}
@@ -65,25 +84,51 @@
 			</div>
 			<div class="col-span-1 flex flex-col gap-y-2">
 				<div class="font-normal">ห้องเรียน</div>
-				<div class="flex flex-row">
+				<div
+					class="flex flex-row"
+					*ngIf="subjectCardData.room_no != null"
+				>
 					<div
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm"
 					>
 						{{ subjectCardData.room_no }}
 					</div>
 				</div>
+				<div
+					class="flex flex-row"
+					*ngIf="subjectCardData.room_no === null"
+				>
+					<div
+						class="rounded-[15px] bg-gray-100 px-3 py-1.5 text-sm text-gray-500"
+					>
+						ไม่ระบุ
+					</div>
+				</div>
 			</div>
 			<div class="col-span-2 flex flex-col gap-y-2">
 				<div class="font-normal">ตึกเรียน</div>
-				<div class="flex flex-row">
+				<div
+					class="flex flex-row"
+					*ngIf="subjectCardData.classbuilding != null"
+				>
 					<div
 						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm"
 					>
 						{{ subjectCardData.classbuilding }}
 					</div>
 				</div>
+				<div
+					class="flex flex-row"
+					*ngIf="subjectCardData.classbuilding === null"
+				>
+					<div
+						class="rounded-[15px] bg-gray-100 px-3 py-1.5 text-sm text-gray-500"
+					>
+						ไม่ระบุ
+					</div>
+				</div>
 			</div>
-			<div class="col-span-1 flex flex-col gap-y-2">	
+			<div class="col-span-1 flex flex-col gap-y-2">
 				<div class="font-normal">เงื่อนไข</div>
 				<div
 					class="tooltip relative"
@@ -101,13 +146,15 @@
 				</div>
 				<div class="flex flex-row" *ngIf="subjectCardData.rule === ''">
 					<div
-						class="tooltip relative rounded-[15px] bg-gray-100 px-3 py-0.3 text-sm text-gray-400"
+						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400"
 						*ngIf="subjectCardData.rule === ''"
 					>
 						-
 						<div
-						class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
-						>ไม่มีเงื่อนไข</div>
+							class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
+						>
+							ไม่มีเงื่อนไข
+						</div>
 					</div>
 				</div>
 			</div>
@@ -121,13 +168,11 @@
 						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
 						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
 					</div>
-					<!-- <div>
-						{{ subjectCardData.review_score }}/5 ({{
-							subjectCardData.review_total
-						}}
-						รีวิว)
-					</div> -->
-					<div>1/5 review</div>
+					<div>
+						{{ subjectCardData.rating }}
+					</div>
+					<div>(1.1พันคน)</div>
+					<!-- <div>1/5 review</div> -->
 				</div>
 			</div>
 			<div class="col-span-4 flex flex-col gap-y-1">
@@ -137,8 +182,7 @@
 						icon="hand-holding-heart"
 						class="text-lg text-main-100"
 					></sdm-icon>
-					<!-- <div>{{ subjectCardData.student_total }} คน</div> -->
-					 <div>50</div>
+					<div>{{ subjectCardData.interested }} คน</div>
 				</div>
 			</div>
 			<div class="flex flex-row items-end justify-end">
@@ -152,7 +196,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-
