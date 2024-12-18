@@ -16,16 +16,35 @@ export class SDMPageSubjectDetail implements OnInit {
 
 	constructor(private router: Router) {}
 
+	// วิธีการดึงข้อมูลจาก sessionStorage แบบข้าม Tab
 	ngOnInit(): void {
-		this.eachSubjectData = history.state.subjectData;
-		if (!this.eachSubjectData) {
-			console.warn('Subject data is missing after refresh.');
+		const storedData = sessionStorage.getItem('subjectData');
+
+		if (storedData) {
+			// แปลงข้อมูลกลับจาก JSON string เป็น Object
+			this.eachSubjectData = JSON.parse(storedData);
+		} else {
+			// กรณีไม่มีข้อมูล ให้ redirect กลับไปหน้า subject
+			this.router.navigate(['/subject']);
+			console.warn('No subject data found in localStorage.');
 		}
 	}
+
+	// วิธีการดึงข้อมูลจาก  history.state แบบใน Tab เดียวกัน
+	// ngOnInit(): void {
+	// 	this.eachSubjectData = history.state.subjectData;
+	// 	// หากไม่มีข้อมูลที่ส่งมาจาก state ให้ navigate กลับไปที่ /subject
+	// 	if (!this.eachSubjectData) {
+	// 		console.warn('ไม่มีข้อมูลที่ส่งมาจาก state');
+	// 		this.router.navigate(['/subject']);
+	// 	}
+	// }
 
 	ngAfterViewInit(): void {
 		initFlowbite();
 	}
+
+	// ไม่ได้ใช้
 
 	// constructor(
 	// 	private route: ActivatedRoute,

@@ -7,6 +7,7 @@ import { SDMSubject } from './pages/subject/subject.page';
 import { AuthGuard } from './curriculum.guard';
 import { SDMPageProfile } from './pages/profile/profile.page';
 import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page';
+import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
 
 export const routes: Routes = [
 	{
@@ -22,7 +23,8 @@ export const routes: Routes = [
 		component: SDMMySubject,
 	},
 	{ path: 'subject', component: SDMSubject },
-	{ path: 'subject-detail', component: SDMPageSubjectDetail },
+	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
 
 	{ path: 'profile', component: SDMPageProfile },
+	{ path: '**', component: SDMPageNotFound },
 ];
