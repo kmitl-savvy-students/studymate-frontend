@@ -12,6 +12,7 @@
 		<div class="flex w-full flex-col gap-y-2 px-5 text-sm">
 			<div class="font-semibold">คำอธิบายรายวิชา</div>
 			<!-- <div class="indent-8">{{ subjectDetailData.detail }}</div> -->
+			<!-- รอดึง subjectDetailData.detail จาก api เส้นใหม่ที่กรจะทำ -->
 			<div class="indent-8">
 				ฟังก์ชันหลายตัวแปรและการประยุกต์ใช้ พีชคณิตของเวกเตอร์ในสามมิติ
 				พิกัดเชิงขั้ว แคลคูลัสของฟังก์ชันจำนวนจริงสองตัวแปร
@@ -54,11 +55,8 @@
 				</div>
 				<div class="flex flex-row">
 					<!-- <div class="detail-data">
-						{{ subjectDetailData.credit }}({{
-							subjectDetailData.lect_hr
-						}}-{{ subjectDetailData.prac_hr }}-{{
-							subjectDetailData.self_hr
-						}})
+						{{ subjectDetailData.credit
+						}}{{ subjectDetailData.credit_lps }}
 					</div> -->
 					<div class="detail-data">
 						{{ subjectDetailData.credit }}
