@@ -30,6 +30,7 @@ import { SDMSelectComponent } from '../../components/select/select.component';
 import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-added-modal/subject-added-modal.component';
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
+import { RouterLink } from '@angular/router';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
@@ -212,7 +213,6 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 							error.status,
 						);
 					}
-
 					this.isError = true;
 					this.isLoading = false;
 				},
