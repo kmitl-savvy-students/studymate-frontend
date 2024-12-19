@@ -3,4 +3,18 @@
 		[subjectDetailData]="eachSubjectData"
 		[subjectDetail]="subjectDetail"
 	></sdm-subject-detail-cpn>
+	<div class="grid w-full grid-cols-1 gap-4">
+		<!-- <ng-container
+			*ngFor="let data of paginatedItems; let i = index"
+			class="grid grid-cols-1 gap-4"
+		>
+			<sdm-subject-cpn
+				[subjectCardData]="data"
+				[selectedYear]="this.selectedYear"
+				[selectedSemester]="this.selectedSemester"
+				[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
+			></sdm-subject-cpn>
+		</ng-container> -->
+		<ng-container><sdm-subject-review></sdm-subject-review></ng-container>
+	</div>
 </div>
