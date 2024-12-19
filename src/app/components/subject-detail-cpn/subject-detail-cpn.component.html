@@ -11,22 +11,7 @@
 		</div>
 		<div class="flex w-full flex-col gap-y-2 px-5 text-sm">
 			<div class="font-semibold">คำอธิบายรายวิชา</div>
-			<!-- <div class="indent-8">{{ subjectDetailData.detail }}</div> -->
-			<!-- รอดึง subjectDetailData.detail จาก api เส้นใหม่ที่กรจะทำ -->
-			<div class="indent-8">
-				ฟังก์ชันหลายตัวแปรและการประยุกต์ใช้ พีชคณิตของเวกเตอร์ในสามมิติ
-				พิกัดเชิงขั้ว แคลคูลัสของฟังก์ชันจำนวนจริงสองตัวแปร
-				การหาอนุพันธ์และปริพันธ์ของฟังก์ชันจำนวนจริงและฟังก์ชันเวกเตอร์จำนวนจริงหลายตัวแปร
-				แนะนำปริพันธ์เส้น เส้น ระนาบ และพื้นผิว ในปริภูมิสามมิติ
-				แคลคูลัสของฟังก์ชันจำนวนจริงในปริภูมิสามมิติ\r\nFunctions of
-				several variables and theirs applications, Vector algebra in
-				three dimensions, Polar coordinates, Calculus of real - valued
-				functions of two variables, Differentiation and integration of
-				real - valued and vector - valued functions of multiple real
-				variables, Introduction to line integrals, Lines, planes and
-				surfaces in three-dimensional space, Calculus of real-valued
-				functions in three-dimensional space.\r\n
-			</div>
+			<div class="indent-8">{{ subjectDetail.detail }}</div>
 		</div>
 		<div class="grid w-full grid-cols-11 gap-y-5 px-5 text-sm">
 			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
@@ -54,13 +39,9 @@
 					หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)
 				</div>
 				<div class="flex flex-row">
-					<!-- <div class="detail-data">
+					<div class="detail-data">
 						{{ subjectDetailData.credit
 						}}{{ subjectDetailData.credit_lps }}
-					</div> -->
-					<div class="detail-data">
-						{{ subjectDetailData.credit }}
-						<div>(3-0-6)</div>
 					</div>
 				</div>
 			</div>
@@ -93,21 +74,46 @@
 					</div>
 				</div>
 			</div>
-			<!-- ยังไม่รู้ว่าต้อง mockup ยังไง หาใน เว็บไม่เจอ -->
 			<div class="col-span-3 flex flex-col gap-y-2">
 				<div class="font-semibold">วัน-เวลาสอบ</div>
 				<div class="flex flex-col gap-y-1.5">
 					<div class="flex flex-row items-center gap-x-1.5">
-						<div class="rounded-[15px] bg-red-200 px-3 py-1">
-							กลางภาค
+						<div
+							class="w-[77px] rounded-[15px] bg-red-200 px-3 py-1 text-center"
+						>
+							{{ subjectDetailData.midterm_date_time[0] }}
 						</div>
-						<div>ศุกร์ 23 ม.ค. 13.00 - 16.00 น.</div>
+						<div>
+							{{ subjectDetailData.midterm_date_time[1] }}
+						</div>
+						<div
+							*ngIf="
+								checkString(
+									subjectDetailData.midterm_date_time[2]
+								) != ''
+							"
+						>
+							+ {{ subjectDetailData.midterm_date_time[2] }}
+						</div>
 					</div>
 					<div class="flex flex-row items-center gap-x-1.5">
-						<div class="rounded-[15px] bg-indigo-200 px-3 py-1">
-							ปลายภาค
+						<div
+							class="w-[77px] rounded-[15px] bg-indigo-200 px-3 py-1 text-center"
+						>
+							{{ subjectDetailData.final_date_time[0] }}
 						</div>
-						<div>ศุกร์ 23 ธ.ค. 13.00 - 16.00 น.</div>
+						<div>
+							{{ subjectDetailData.final_date_time[1] }}
+						</div>
+						<div
+							*ngIf="
+								checkString(
+									subjectDetailData.final_date_time[2]
+								) != ''
+							"
+						>
+							+ {{ subjectDetailData.final_date_time[2] }}
+						</div>
 					</div>
 				</div>
 			</div>

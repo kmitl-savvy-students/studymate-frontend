@@ -22,26 +22,12 @@ export class SDMSubjectComponent {
 		return safeString;
 	}
 
-	// วิธี route ไปยังหน้า /subject/subject-detail โดยการส่งข้อมูลข้าม Tab
-	// โครงสร้างข้อมูล SubjectCardData นั้นซับซ้อนและยาว การใช้ Local Storage หรือ Session Storage จะเหมาะสมกว่า เพราะช่วยหลีกเลี่ยงข้อจำกัดของ URL ความยาว (เช่นใน queryParams) และจัดการได้ง่ายกว่า
 	public seeDetailSubject() {
-		// เก็บข้อมูลลงใน localStorage
-		sessionStorage.setItem(
-			'subjectData',
-			JSON.stringify(this.subjectCardData),
-		);
-
-		// เปิดแท็บใหม่
 		const url = this.router.serializeUrl(
-			this.router.createUrlTree(['/subject/subject-detail']),
+			this.router.createUrlTree(['/subject/subject-detail'], {
+				queryParams: { subject: JSON.stringify(this.subjectCardData) },
+			}),
 		);
 		window.open(url, '_blank');
 	}
-
-	// วิธี route ไปยังหน้า /subject/subject-detail พร้อมกับส่ง object ของแต่ละรายวิชาไปด้วย แต่ส่งข้อมูลกันภายใน Tab เดียวกัน
-	// public seeDetailSubject() {
-	// 	this.router.navigate(['/subject/subject-detail'], {
-	// 		state: { subjectData: this.subjectCardData },
-	// 	});
-	// }
 }

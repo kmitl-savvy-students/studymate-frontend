@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMSubjectDetailCpnComponent } from '../../components/subject-detail-cpn/subject-detail-cpn.component';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
+import { APIManagementService } from '../../shared/services/api-management.service';
+import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -13,72 +15,60 @@ import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
 })
 export class SDMPageSubjectDetail implements OnInit {
 	public eachSubjectData!: SubjectCardData;
+	public subjectDetail!: subjectDetailData;
 
-	constructor(private router: Router) {}
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private apiManagementService: APIManagementService,
+	) {}
 
-	// วิธีการดึงข้อมูลจาก sessionStorage แบบข้าม Tab
 	ngOnInit(): void {
-		const storedData = sessionStorage.getItem('subjectData');
+		// ดึง Query Parameters จาก URL
+		this.route.queryParams.subscribe((params) => {
+			const subjectData = params['subject'];
 
-		if (storedData) {
-			// แปลงข้อมูลกลับจาก JSON string เป็น Object
-			this.eachSubjectData = JSON.parse(storedData);
-		} else {
-			// กรณีไม่มีข้อมูล ให้ redirect กลับไปหน้า subject
-			this.router.navigate(['/subject']);
-			console.warn('No subject data found in localStorage.');
-		}
+			if (subjectData) {
+				// แปลง JSON String เป็น Object
+				this.eachSubjectData = JSON.parse(subjectData);
+			} else {
+				// หากไม่มีข้อมูล ให้ redirect กลับไปหน้า subject
+				this.router.navigate(['/subject']);
+				console.warn('No subject data found in queryParams.');
+			}
+		});
+		this.getSubjectDetail();
 	}
-
-	// วิธีการดึงข้อมูลจาก  history.state แบบใน Tab เดียวกัน
-	// ngOnInit(): void {
-	// 	this.eachSubjectData = history.state.subjectData;
-	// 	// หากไม่มีข้อมูลที่ส่งมาจาก state ให้ navigate กลับไปที่ /subject
-	// 	if (!this.eachSubjectData) {
-	// 		console.warn('ไม่มีข้อมูลที่ส่งมาจาก state');
-	// 		this.router.navigate(['/subject']);
-	// 	}
-	// }
 
 	ngAfterViewInit(): void {
 		initFlowbite();
 	}
 
-	// ไม่ได้ใช้
-
-	// constructor(
-	// 	private route: ActivatedRoute,
-	// 	private apiManagementService: APIManagementService,
-	// ) {}
-
-	// ngOnInit(): void {
-	// 	const subject_id = this.route.snapshot.paramMap.get('subject_id');
-	// 	const section = this.route.snapshot.paramMap.get('section');
-
-	// 	if (subject_id && section) {
-	// 		this.fetchSubjectDetail(subject_id, section);
-	// 	}
-	// }
-
-	// private fetchSubjectDetail(subject_id: string, section: string): void {
-	// 	this.apiManagementService
-	// 		.getSubjectDetail(subject_id, section)
-	// 		.subscribe({
-	// 			next: (data: SubjectCardData) => {
-	// 				this.subjectData = data;
-	// 				console.log('Subject Data:', this.subjectData);
-	// 			},
-	// 			error: (err) =>
-	// 				console.error('Failed to fetch subject detail', err),
-	// 		});
-	// }
-
-	// ngOnInit(): void {
-	// 	// ดึงข้อมูล subjectData จาก state ที่ส่งมา
-	// 	if (history.state.subjectData) {
-	// 		this.subjectData = history.state.subjectData;
-	// 	} else {
-	// 		console.warn('Subject data is missing!');
-	// 	}
-	// }
+	public getSubjectDetail() {
+		this.apiManagementService
+			.GetCurriculumTeachtableSubject(this.eachSubjectData.subject_id)
+			.subscribe({
+				next: (res) => {
+					console.log('API Response:', res);
+					if (res) {
+						this.subjectDetail = res;
+					} else {
+						console.log('No Subject Data Available.');
+						// this.subjectDetail = [];
+					}
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						console.error('Not found');
+					} else if (error.status === 500) {
+						console.error('Internal Server Error');
+					} else {
+						console.error(
+							'An unexpected error occurred:',
+							error.status,
+						);
+					}
+				},
+			});
+	}
 }
