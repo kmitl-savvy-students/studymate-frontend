@@ -60,7 +60,7 @@
 				<div role="status">
 					<svg
 						aria-hidden="true"
-						class="inline h-10 w-10 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
+						class="inline h-24 w-24 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
 						viewBox="0 0 100 101"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,7 @@
 			</div>
 		</ng-container>
 		<ng-container
-			*ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !SubjectDataIsNull && !isLoading"
+			*ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !getSubjectDataIsNull && !isLoading"
 		>
 			<div
 				class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-dark-75"
@@ -114,7 +114,16 @@
 				></sdm-pagination>
 			</div>
 		</ng-container>
-		<ng-container *ngIf="isSelectAllDropdown && SubjectDataIsNull">
+		<ng-container
+			*ngIf="(paginatedItems.length === 0) && !isLoading && searchSubjectDataIsNull"
+		>
+			<div
+				class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
+			>
+				ไม่พบข้อมูลรายวิชาที่ค้นหา
+			</div>
+		</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && getSubjectDataIsNull">
 			<div
 				class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
 			>
@@ -133,7 +142,7 @@
 					โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
 				</div>
 				<div
-					*ngIf="selectedClassYear == undefined || selectedClassYear === -1"
+					*ngIf="selectedClassYear === undefined || selectedClassYear === -1"
 				>
 					โปรดเลือกชั้นปี เพื่อดูรายวิชา
 				</div>

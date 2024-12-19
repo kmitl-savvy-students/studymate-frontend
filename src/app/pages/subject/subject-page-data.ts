@@ -1,52 +1,54 @@
-import { CirriculumnList, DropdownList } from "../../shared/models/SdmAppService.model.js";
-import { SubjectCardData } from "../../shared/models/SubjectCardData.model.js";
+import {
+	CirriculumnList,
+	DropdownList,
+} from '../../shared/models/SdmAppService.model.js';
+import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 
-  
 export const yearsList: DropdownList[] = [
-    {label: 'ปีการศึกษา 2567', value: 2567},
-    {label: 'ปีการศึกษา 2566', value: 2566},
-    {label: 'ปีการศึกษา 2565', value: 2565},
-    {label: 'ปีการศึกษา 2564', value: 2564},
+	{ label: 'ปีการศึกษา 2567', value: 2567 },
+	{ label: 'ปีการศึกษา 2566', value: 2566 },
+	{ label: 'ปีการศึกษา 2565', value: 2565 },
+	{ label: 'ปีการศึกษา 2564', value: 2564 },
 ];
 
 export const semesterList: DropdownList[] = [
-    {label: 'เทอม 1', value: 1},
-    {label: 'เทอม 2',value: 2},
-    {label: 'เทอม 3',value: 3},
+	{ label: 'เทอม 1', value: 1 },
+	{ label: 'เทอม 2', value: 2 },
+	{ label: 'เทอม 3', value: 3 },
 ];
 
 export const classYearList: DropdownList[] = [
-    {label: 'ทุกชั้นปี', value: 0},
-    {label: 'ปี 1', value: 1},
-    {label: 'ปี 2',value: 2},
-    {label: 'ปี 3',value: 3},
-    {label: 'ปี 4',value: 4},
+	{ label: 'ทุกชั้นปี', value: 0 },
+	{ label: 'ปี 1', value: 1 },
+	{ label: 'ปี 2', value: 2 },
+	{ label: 'ปี 3', value: 3 },
+	{ label: 'ปี 4', value: 4 },
 ];
 
 export const facultyList: DropdownList[] = [
-    {label: 'คณะวิศวกรรมศาสตร์', value: '01'},
-    {label: 'สำนักวิชาศึกษาทั่วไป',value: '90'},
+	{ label: 'คณะวิศวกรรมศาสตร์', value: '01' },
+	{ label: 'สำนักวิชาศึกษาทั่วไป', value: '90' },
 ];
 
 export const departmentList: DropdownList[] = [
-    {label: 'วิศวกรรมคอมพิวเตอร์', value: '05'},
-    {label: 'ศึกษาทั่วไป',value: '90'},
+	{ label: 'วิศวกรรมคอมพิวเตอร์', value: '05' },
+	{ label: 'ศึกษาทั่วไป', value: '90' },
 ];
 
 export const engineerDeList: DropdownList[] = [
-    {label: 'วิศวกรรมคอมพิวเตอร์', value: '05'},
+	{ label: 'วิศวกรรมคอมพิวเตอร์', value: '05' },
 ];
 
 export const genedDeList: DropdownList[] = [
-    {label: 'ศึกษาทั่วไป',value: '90'},
+	{ label: 'ศึกษาทั่วไป', value: '90' },
 ];
 
 export const engineerFacList: DropdownList[] = [
-    {label: 'คณะวิศวกรรมศาสตร์', value: '01'},
+	{ label: 'คณะวิศวกรรมศาสตร์', value: '01' },
 ];
 
 export const genedFacList: DropdownList[] = [
-    {label: 'สำนักวิชาศึกษาทั่วไป',value: '90'},
+	{ label: 'สำนักวิชาศึกษาทั่วไป', value: '90' },
 ];
 
 // export const cirriculumList: CirliculumnDropdownList[] = [
@@ -55,66 +57,66 @@ export const genedFacList: DropdownList[] = [
 // ];
 
 export const subjects_added = [
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076016',
-        name: 'COMPUTER ENGINEERING PROJECT PREPARATION',
-        credits: 2,
-        isSelected: false,
-    },
-    {
-        code: '01076032',
-        name: 'ELEMENTARY DIFFERENTIAL EQUATIONS AND LINEAR ALGEBRA',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
-    {
-        code: '01076149',
-        name: 'CHARM SCHOOL',
-        credits: 3,
-        isSelected: false,
-    },
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076016',
+		name: 'COMPUTER ENGINEERING PROJECT PREPARATION',
+		credits: 2,
+		isSelected: false,
+	},
+	{
+		code: '01076032',
+		name: 'ELEMENTARY DIFFERENTIAL EQUATIONS AND LINEAR ALGEBRA',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
+	{
+		code: '01076149',
+		name: 'CHARM SCHOOL',
+		credits: 3,
+		isSelected: false,
+	},
 ];
 
 // export const subjectCardData: SubjectCardData[] = [

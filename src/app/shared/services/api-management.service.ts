@@ -116,13 +116,13 @@ export class APIManagementService {
 	GetCurriculumSubjectsTeachtable(
 		year: number,
 		semester: number,
-		faculty : string,
-		department: string,	
-		curriculum : string,
+		faculty: string,
+		department: string,
+		curriculum: string,
 		classYear: number,
 		curriculumYear?: string,
 		uniqueId?: string,
-	): Observable<CurriculumTeachtableSubject[]> {
+	): Observable<SubjectCardData[]> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
 
 		if (curriculumYear) {
@@ -132,21 +132,20 @@ export class APIManagementService {
 			apiUrl += `/${uniqueId}`;
 		}
 
-		return this.http.get<CurriculumTeachtableSubject[]>(apiUrl);
+		return this.http.get<SubjectCardData[]>(apiUrl);
 	}
 
 	// GetCurriculumSubjectsTeachtable(
 	// 	year: number,
 	// 	semester: number,
 	// 	faculty : string,
-	// 	department: string,	
+	// 	department: string,
 	// 	curriculum : string,
 	// 	classYear: number,
 	// ): Observable<CurriculumTeachtableSubject> {
 	// 	const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
 	// 	return this.http.get<CurriculumTeachtableSubject>(apiUrl);
 	// }
-
 
 	GetCurriculumSubjectByUniqueIdYear(
 		subjectId: string,
@@ -158,15 +157,15 @@ export class APIManagementService {
 	}
 
 	GetCurriculumTeachtable(
-		year : number,
-		semester : number,
+		year: number,
+		semester: number,
 		faculty: string,
 		department: string,
 		curriculum: string,
-		classYear: number
-	){
+		classYear: number,
+	) {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
-		return this.http.get<CurriculumSubject>(apiUrl)
+		return this.http.get<CurriculumSubject>(apiUrl);
 	}
 
 	GetGenedSubject(subjectId: string) {
