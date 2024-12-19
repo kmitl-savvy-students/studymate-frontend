@@ -2,6 +2,7 @@
 	<div
 		class="flex w-full flex-col gap-y-5 rounded-[20px] border border-main-25 pb-5"
 	>
+		<!-- Header Section -->
 		<div
 			class="flex w-full gap-x-2 rounded-t-[20px] bg-main-25 p-5 text-base font-semibold"
 		>
@@ -9,45 +10,58 @@
 			<div>{{ subjectDetailData.subject_name_en }}</div>
 			<div>{{ subjectDetailData.subject_name_th }}</div>
 		</div>
+
+		<!-- Course Description -->
 		<div class="flex w-full flex-col gap-y-2 px-5 text-sm">
 			<div class="font-semibold">คำอธิบายรายวิชา</div>
 			<div class="indent-8">{{ subjectDetail.detail }}</div>
 		</div>
-		<div class="grid w-full grid-cols-11 gap-y-5 px-5 text-sm">
+
+		<!-- Course Details Section -->
+		<div class="grid w-full grid-cols-9 gap-y-5 px-5 text-sm">
+			<!-- Class Schedule -->
 			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
 				<div class="font-semibold">วัน-เวลาเรียน</div>
-				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
-					<div class="detail-data w-[77px] text-center">
-						{{ subjectDetailData.classdatetime[0] }}
-					</div>
-					<div class="detail-data">
-						{{ subjectDetailData.classdatetime[1] }}
-					</div>
-					<div
-						*ngIf="
-							checkString(subjectDetailData.classdatetime[2]) !=
-							''
-						"
-						class="rounded-[15px] bg-orange-50 px-3 py-1.5"
-					>
-						+ {{ subjectDetailData.classdatetime[2] }}
+				<div
+					*ngIf="
+						subjectDetailData.classdatetime.length > 1;
+						else noSchedule
+					"
+				>
+					<div class="flex flex-wrap gap-x-2 gap-y-2">
+						<div class="detail-data w-[77px] text-center">
+							{{ subjectDetailData.classdatetime[0] }}
+						</div>
+						<div class="detail-data">
+							{{ subjectDetailData.classdatetime[1] }}
+						</div>
+
+						<div
+							*ngIf="
+								checkString(
+									subjectDetailData.classdatetime[2]
+								) !== ''
+							"
+							class="detail-data"
+						>
+							+ {{ subjectDetailData.classdatetime[2] }}
+						</div>
 					</div>
 				</div>
+				<!-- No Schedule Template -->
+				<ng-template #noSchedule>
+					<div class="flex">
+						<div class="date-box-disabled">
+							{{ subjectDetailData.classdatetime }}
+						</div>
+					</div>
+				</ng-template>
 			</div>
-			<div class="col-span-3 flex flex-col gap-y-2">
-				<div class="font-semibold">
-					หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)
-				</div>
-				<div class="flex flex-row">
-					<div class="detail-data">
-						{{ subjectDetailData.credit
-						}}{{ subjectDetailData.credit_lps }}
-					</div>
-				</div>
-			</div>
-			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
+
+			<!-- Teachers -->
+			<div class="col-span-2 flex flex-col gap-y-2 pe-4">
 				<div class="font-semibold">อาจารย์ผู้สอน</div>
-				<div class="flex flex-row flex-wrap gap-x-2 gap-y-2">
+				<div class="flex flex-wrap items-center gap-x-2 gap-y-2">
 					<div
 						*ngFor="
 							let data of subjectDetailData.teacher_list_th.slice(
@@ -59,73 +73,162 @@
 					>
 						{{ data }}
 					</div>
-					<sdm-icon
-						*ngIf="subjectDetailData.teacher_list_th.length > 2"
-						icon="ellipsis"
-						class="detail-data text-dark-100"
-					></sdm-icon>
-				</div>
-			</div>
-			<div class="col-span-2 flex flex-col gap-y-2">
-				<div class="font-semibold">หมวดหมู่วิชา</div>
-				<div class="flex flex-row">
-					<div class="detail-data">
-						{{ subjectDetailData.subject_type_name }}
+					<div
+						class="tooltip"
+						*ngIf="subjectDetailData.teacher_list_th.length > 1"
+					>
+						<sdm-icon
+							icon="ellipsis"
+							class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-dark-100 hover:bg-orange-100"
+						></sdm-icon>
+						<div
+							class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
+						>
+							<div
+								*ngFor="
+									let teacher of subjectDetailData.teacher_list_th
+								"
+							>
+								{{ teacher }}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
+
+			<!-- Classroom -->
+			<div class="col-span-2 flex flex-col gap-y-2">
+				<div class="font-semibold">ห้องเรียน</div>
+				<div class="flex">
+					<div
+						[ngClass]="{
+							'detail-data': subjectDetailData.room_no !== null,
+							'date-box-disabled':
+								subjectDetailData.room_no === null,
+						}"
+					>
+						{{
+							subjectDetailData.room_no !== null
+								? subjectDetailData.room_no
+								: 'ไม่ระบุ'
+						}}
+					</div>
+				</div>
+			</div>
+
+			<!-- Subject Category -->
+			<div class="col-span-2 flex flex-col gap-y-2">
+				<div class="font-semibold">หมวดหมู่วิชา</div>
+				<div class="flex">
+					<span
+						[ngClass]="{
+							'detail-data':
+								subjectDetailData.subject_type_name !==
+								'ไม่ระบุ',
+							'date-box-disabled':
+								subjectDetailData.subject_type_name ===
+								'ไม่ระบุ',
+						}"
+					>
+						{{ subjectDetailData.subject_type_name }}
+					</span>
+				</div>
+			</div>
+
+			<!-- Exam Schedule -->
 			<div class="col-span-3 flex flex-col gap-y-2">
 				<div class="font-semibold">วัน-เวลาสอบ</div>
 				<div class="flex flex-col gap-y-1.5">
-					<div class="flex flex-row items-center gap-x-1.5">
-						<div
-							class="w-[77px] rounded-[15px] bg-red-200 px-3 py-1 text-center"
-						>
+					<!-- Midterm Exam -->
+					<div class="flex items-center gap-x-2">
+						<div class="date-box bg-red-200">
 							{{ subjectDetailData.midterm_date_time[0] }}
 						</div>
-						<div>
-							{{ subjectDetailData.midterm_date_time[1] }}
-						</div>
-						<div
-							*ngIf="
-								checkString(
-									subjectDetailData.midterm_date_time[2]
-								) != ''
+						<ng-container
+							*ngFor="
+								let item of subjectDetailData.midterm_date_time.slice(
+									1,
+									3
+								)
 							"
 						>
-							+ {{ subjectDetailData.midterm_date_time[2] }}
-						</div>
+							<div
+								[ngClass]="{
+									'detail-data': item !== 'ไม่ระบุ',
+									'date-box-disabled': item === 'ไม่ระบุ',
+								}"
+							>
+								{{ item }}
+							</div>
+						</ng-container>
 					</div>
-					<div class="flex flex-row items-center gap-x-1.5">
-						<div
-							class="w-[77px] rounded-[15px] bg-indigo-200 px-3 py-1 text-center"
-						>
+
+					<!-- Final Exam -->
+					<div class="flex items-center gap-x-2">
+						<div class="date-box bg-indigo-200">
 							{{ subjectDetailData.final_date_time[0] }}
 						</div>
-						<div>
-							{{ subjectDetailData.final_date_time[1] }}
-						</div>
-						<div
-							*ngIf="
-								checkString(
-									subjectDetailData.final_date_time[2]
-								) != ''
+						<ng-container
+							*ngFor="
+								let item of subjectDetailData.final_date_time.slice(
+									1,
+									3
+								)
 							"
 						>
-							+ {{ subjectDetailData.final_date_time[2] }}
-						</div>
+							<div
+								[ngClass]="{
+									'detail-data': item !== 'ไม่ระบุ',
+									'date-box-disabled': item === 'ไม่ระบุ',
+								}"
+							>
+								{{ item }}
+							</div>
+						</ng-container>
 					</div>
 				</div>
 			</div>
-			<div class="col-span-3 flex flex-col gap-y-2">
-				<div class="font-semibold">ห้องเรียน</div>
-				<div class="flex flex-row">
+
+			<!-- Credit Details -->
+			<div class="col-span-2 flex flex-col gap-y-2">
+				<div class="font-semibold">
+					หน่วยกิต (ทฤษฎี-ปฏิบัติ-ค้นคว้า)
+				</div>
+				<div class="flex">
 					<div class="detail-data">
-						{{ subjectDetailData.room_no }}
+						{{ subjectDetailData.credit
+						}}{{ subjectDetailData.credit_lps }}
 					</div>
 				</div>
 			</div>
-			<div class="col-span-4 flex flex-col gap-y-2">
+
+			<!-- Building Details -->
+			<div class="col-span-2 flex flex-col gap-y-2">
+				<div class="font-semibold">ตึกเรียน</div>
+				<div
+					class="flex"
+					*ngIf="subjectDetailData.classbuilding != null"
+				>
+					<div
+						class="rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm"
+					>
+						{{ subjectDetailData.classbuilding }}
+					</div>
+				</div>
+				<div
+					class="flex"
+					*ngIf="subjectDetailData.classbuilding === null"
+				>
+					<div
+						class="rounded-[15px] bg-gray-100 px-3 py-1.5 text-sm text-gray-500"
+					>
+						ไม่ระบุ
+					</div>
+				</div>
+			</div>
+
+			<!-- Conditions -->
+			<div class="col-span-1 flex flex-col gap-y-2">
 				<div class="font-semibold">เงื่อนไข</div>
 				<div
 					class="tooltip relative"
@@ -133,7 +236,7 @@
 				>
 					<sdm-icon
 						icon="circle-exclamation"
-						class="tooltip-icon h-4 w-4 text-red-400 hover:text-red-500"
+						class="h-4 w-4 text-red-400 hover:text-red-500"
 					>
 					</sdm-icon>
 					<div
@@ -141,12 +244,9 @@
 						class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
 					></div>
 				</div>
-				<div
-					class="flex flex-row"
-					*ngIf="subjectDetailData.rule === ''"
-				>
+				<div class="flex" *ngIf="subjectDetailData.rule === ''">
 					<div
-						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400"
+						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:bg-gray-200"
 						*ngIf="subjectDetailData.rule === ''"
 					>
 						-
@@ -158,9 +258,11 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex items-end justify-end">
+
+			<!-- Add Button -->
+			<div class="col-span-1 flex items-end justify-end">
 				<button
-					class="col-span-1 flex h-min w-min flex-row items-center gap-x-2 rounded-[15px] bg-main-100 px-3 py-1.5 font-medium hover:bg-main-120"
+					class="flex h-min w-min items-center gap-x-2 rounded-[15px] bg-main-100 px-3 py-1.5 font-medium hover:bg-main-120"
 				>
 					<sdm-icon icon="plus" class="text-sm text-white"></sdm-icon>
 					<p class="text-sm text-white">เพิ่ม</p>

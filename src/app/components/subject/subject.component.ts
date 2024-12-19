@@ -22,12 +22,11 @@ export class SDMSubjectComponent {
 		return safeString;
 	}
 
-	public seeDetailSubject() {
-		const url = this.router.serializeUrl(
+	public getSubjectDetailUrl(): string {
+		return this.router.serializeUrl(
 			this.router.createUrlTree(['/subject/subject-detail'], {
 				queryParams: { subject: JSON.stringify(this.subjectCardData) },
 			}),
 		);
-		window.open(url, '_blank');
 	}
 }

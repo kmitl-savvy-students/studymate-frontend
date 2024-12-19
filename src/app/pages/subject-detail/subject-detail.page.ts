@@ -24,20 +24,21 @@ export class SDMPageSubjectDetail implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		// ดึง Query Parameters จาก URL
 		this.route.queryParams.subscribe((params) => {
 			const subjectData = params['subject'];
 
 			if (subjectData) {
-				// แปลง JSON String เป็น Object
 				this.eachSubjectData = JSON.parse(subjectData);
 			} else {
-				// หากไม่มีข้อมูล ให้ redirect กลับไปหน้า subject
 				this.router.navigate(['/subject']);
 				console.warn('No subject data found in queryParams.');
 			}
 		});
 		this.getSubjectDetail();
+		console.log(
+			'eachSubjectData from subject-page.component',
+			this.eachSubjectData,
+		);
 	}
 
 	ngAfterViewInit(): void {
@@ -54,7 +55,6 @@ export class SDMPageSubjectDetail implements OnInit {
 						this.subjectDetail = res;
 					} else {
 						console.log('No Subject Data Available.');
-						// this.subjectDetail = [];
 					}
 				},
 				error: (error) => {
