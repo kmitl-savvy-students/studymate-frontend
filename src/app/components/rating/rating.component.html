@@ -1,0 +1,30 @@
+<div class="flex items-center gap-x-2">
+	<!-- Loop แสดงดาว -->
+	<div class="flex gap-x-0.5">
+		<ng-container *ngFor="let starIndex of [1, 2, 3, 4, 5]; let i = index">
+			<sdm-icon
+				[icon]="
+					rating >= starIndex
+						? 'star'
+						: rating > starIndex - 1
+							? 'star-half-stroke'
+							: 'star'
+				"
+				[iconStyle]="rating >= starIndex ? 'fas' : 'far'"
+				[class]="customClass"
+				[class.cursor-pointer]="mode === 'selector'"
+				(click)="mode === 'selector' ? onRatingChange(starIndex) : null"
+			>
+			</sdm-icon>
+		</ng-container>
+	</div>
+</div>
+
+<!-- Use this code for use rating component in selector mode. -->
+
+<!-- <sdm-rating
+	mode="selector"
+	[rating]="currentRating"
+	(ratingChange)="onRatingSelected($event)"
+    customClass="text-sm text-main-100"
+></sdm-rating> -->
