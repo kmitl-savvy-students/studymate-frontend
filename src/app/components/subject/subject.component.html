@@ -213,18 +213,16 @@
 			<!-- Review Score -->
 			<div class="col-span-2 flex flex-col gap-y-2">
 				<div class="font-normal">คะแนนรีวิว</div>
-				<div class="flex flex-row flex-wrap gap-x-2 text-sm">
-					<div class="flex flex-row gap-x-1">
-						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
-						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
-						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
-						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
-						<sdm-icon icon="star" class="text-main-100"></sdm-icon>
-					</div>
-					<div>
-						{{ subjectCardData.rating }}
-					</div>
-					<div>(1.1พันคน)</div>
+				<div class="flex items-center gap-x-1">
+					<sdm-rating
+						mode="display"
+						[rating]="subjectCardData.rating"
+						customClass="text-sm text-main-100"
+					></sdm-rating>
+					<span class="text-sm text-dark-100">{{
+						subjectCardData.rating
+					}}</span>
+					<span class="text-sm text-dark-100">({{ 0 }} รีวิว)</span>
 				</div>
 			</div>
 
