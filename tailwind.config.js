@@ -8,6 +8,7 @@ import {
 	orange as _orange,
 	teal as _teal,
 	red as _red,
+	lime as _lime,
 } from 'tailwindcss/colors';
 
 export const content = [
@@ -30,6 +31,7 @@ export const theme = {
 		orange: _orange,
 		teal: _teal,
 		red: _red,
+		lime: _lime,
 		white: '#ffffff',
 		main: {
 			120: '#4263AC',
