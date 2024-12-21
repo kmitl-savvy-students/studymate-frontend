@@ -7,6 +7,7 @@ export class subjectDetailData {
 		public lect_hr: string,
 		public prac_hr: string,
 		public self_hr: string,
-		public detail: string,
+		public detail_en: string,
+		public detail_th: string,
 	) {}
 }
