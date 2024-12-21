@@ -7,6 +7,7 @@ import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
 import { SDMSubjectReviewComponent } from '../../components/subject-review/subject-review.component';
+import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -21,7 +22,53 @@ import { SDMSubjectReviewComponent } from '../../components/subject-review/subje
 export class SDMPageSubjectDetail implements OnInit {
 	public eachSubjectData!: SubjectCardData;
 	public subjectDetail!: subjectDetailData;
-	// public subjectReviews!: SubjectReviewslData[];
+
+	// ถ้ามี api getSubjectReviews แล้ว
+	// public subjectReviews?: SubjectReviewData[];
+
+	// ถ้าใช้ mockup data อยู่
+	subjectReviewData: SubjectReviewData[] = [
+		{
+			student_id: 1001,
+			year: 2567,
+			term: 1,
+			subject_id: '01076149',
+			subject_name_en: 'Charm School',
+			review: 'เนื้อหาสนุกและมีประโยชน์มาก!',
+			rating: 4,
+			create_date: '26 มี.ค. 2024',
+		},
+		{
+			student_id: 1002,
+			year: 2567,
+			term: 2,
+			subject_id: '01076001',
+			subject_name_en: 'Introduction to Programming',
+			review: 'คอร์สนี้เหมาะสำหรับผู้เริ่มต้น',
+			rating: 2,
+			create_date: '30 ธ.ค. 2024',
+		},
+		{
+			student_id: 1003,
+			year: 2566,
+			term: 1,
+			subject_id: '01076015',
+			subject_name_en: 'Discrete Mathematics',
+			review: 'วิชานี้มีความท้าทาย แต่เรียนสนุก',
+			rating: 1,
+			create_date: '1 ม.ค. 2024',
+		},
+		{
+			student_id: 1004,
+			year: 2565,
+			term: 2,
+			subject_id: '01076100',
+			subject_name_en: 'Data Structures and Algorithms',
+			review: 'วิชานี้จำเป็นสำหรับสายคอมพิวเตอร์',
+			rating: 5,
+			create_date: '15 ม.ค. 2024',
+		},
+	];
 
 	public selectedYear: number = 0;
 	public selectedSemester: number = 0;
