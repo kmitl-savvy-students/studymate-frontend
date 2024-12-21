@@ -6,10 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
+import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box/write-review-box.component';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
-	imports: [SDMSubjectDetailCpnComponent, CommonModule],
+	imports: [
+		SDMSubjectDetailCpnComponent,
+		CommonModule,
+		SDMWriteReviewBoxComponent,
+	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
 })
