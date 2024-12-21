@@ -3,10 +3,11 @@ import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 import { Router } from '@angular/router';
+import { SDMRatingComponent } from '../rating/rating.component';
 @Component({
 	selector: 'sdm-subject-cpn',
 	standalone: true,
-	imports: [IconComponent, CommonModule],
+	imports: [IconComponent, CommonModule, SDMRatingComponent],
 	templateUrl: './subject.component.html',
 	styleUrl: './subject.component.css',
 })
