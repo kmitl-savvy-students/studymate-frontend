@@ -5,31 +5,41 @@
 	<div
 		class="flex w-full justify-between gap-x-2 rounded-t-[20px] bg-main-25 px-5 py-2.5 text-base font-semibold"
 	>
-		<div class="flex gap-2">
+		<div class="flex gap-4">
 			<div>ปีการศึกษา 2567</div>
 			<div>ภาคการศึกษาที่ 1</div>
 		</div>
-
-		<div class="flex flex-row gap-x-1">
-			<sdm-icon icon="star" class="text-dark-100"></sdm-icon>
-			<sdm-icon icon="star" class="text-dark-100"></sdm-icon>
-			<sdm-icon icon="star" class="text-dark-100"></sdm-icon>
-			<sdm-icon icon="star" class="text-dark-100"></sdm-icon>
-			<sdm-icon icon="star" class="text-dark-100"></sdm-icon>
+		<div class="flex items-center gap-x-1">
+			<sdm-rating
+				mode="display"
+				[rating]="4.7"
+				customClass="text-base text-dark-100"
+			></sdm-rating>
 		</div>
 	</div>
 
+	<!-- Subject Review -->
 	<div class="px-5 text-sm font-normal text-dark-100">
-		Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto, animi.
-		Assumenda repudiandae corporis quisquam ratione quam pariatur
-		necessitatibus, aspernatur ea fugiat doloremque veniam id ab iste dolor,
-		consequuntur eaque voluptates. Facilis similique reprehenderit,
-		accusamus consequatur at officiis dignissimos, aperiam ducimus sunt
-		distinctio magni dolorem.
+		Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati,
+		nesciunt, temporibus adipisci architecto, debitis asperiores maiores hic
+		pariatur cumque rerum voluptatum voluptates. Repellendus eaque corporis
+		architecto suscipit id ex, quam accusantium molestias facilis iste nemo
+		nulla provident autem cupiditate ab culpa! Maiores harum sapiente sed
+		soluta labore molestias officia aliquid illum, laborum suscipit alias ea
+		repellat odit aperiam excepturi porro beatae quae quos iste eum omnis
+		facilis. Aliquid dolore facere quos modi pariatur quia consequuntur
+		optio, est eos. Officiis adipisci libero accusamus laudantium, non eum
+		quas delectus ad vero atque aspernatur molestias, perspiciatis dolores
+		quisquam. Blanditiis at sint, maiores dolor exercitationem, ullam
+		dolores a quos enim eligendi quisquam minus nesciunt laudantium,
+		molestiae vero commodi nam dignissimos dolore similique dicta nobis in
+		odio? Culpa perspiciatis voluptates repudiandae animi illum nihil nemo?
+		Aut tempore saepe alias esse unde e.
 	</div>
 
-	<div class="flex justify-between px-5">
-		<div class="flex gap-2">
+	<!-- Footer Section -->
+	<div class="flex items-center justify-between px-5">
+		<div class="flex items-center gap-2">
 			<sdm-icon
 				icon="thumbs-up"
 				iconStyle="far"
@@ -37,17 +47,17 @@
 			></sdm-icon>
 			<div>15</div>
 		</div>
-		<div class="flex gap-2">
+		<div class="flex items-center gap-2.5">
 			<div class="text-sm font-normal text-dark-75">26 มี.ค. 2024</div>
 			<sdm-icon
 				icon="pen-to-square"
 				iconStyle="fas"
-				class="text-dark-100"
+				class="text-base text-dark-100"
 			></sdm-icon>
 			<sdm-icon
 				icon="trash-can"
 				iconStyle="fas"
-				class="text-red-400"
+				class="text-base text-red-400"
 			></sdm-icon>
 		</div>
 	</div>
