@@ -14,22 +14,9 @@ export class SDMRatingComponent {
 	@Input() rating: number = 0;
 	@Input() customClass: string = '';
 
-	// In selector mode
-	@Output() ratingChange = new EventEmitter<number>();
-
 	onRatingChange(newRating: number): void {
 		if (this.mode === 'selector') {
 			this.rating = newRating;
-			this.ratingChange.emit(newRating);
 		}
 	}
-
-	// In selector mode : Use this code in .ts file of Parent Component that use rating component.
-
-	// public currentRating: number = 0;
-
-	// onRatingSelected(newRating: number): void {
-	// 	console.log('User selected rating:', newRating);
-	// 	this.currentRating = newRating;
-	// }
 }
