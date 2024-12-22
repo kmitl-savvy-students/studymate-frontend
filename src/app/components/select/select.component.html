@@ -10,7 +10,9 @@
 			'bg-main-100 text-white hover:bg-main-120': isSelect,
 		}"
 	>
-		<div class="truncate">{{ showSelectedOption || defaultLabel }}</div>
+		<div class="truncate" [class]="customDdlHeader">
+			{{ showSelectedOption || defaultLabel }}
+		</div>
 		<sdm-icon
 			*ngIf="!isSelect"
 			icon="chevron-down"
@@ -38,6 +40,7 @@
 				'rounded-[10px] bg-main-100 text-white':
 					form.get('selectedOption')?.value === option.label,
 			}"
+			[class]="customDdlOptions"
 			class="mx-1.5 px-3 py-1.5 text-center text-base font-normal text-dark-100 hover:rounded-[10px] hover:bg-main-100 hover:text-white"
 		>
 			{{ option.label }}

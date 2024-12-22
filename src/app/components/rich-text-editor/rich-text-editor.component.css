@@ -1,0 +1,40 @@
+.editor {
+	/* border: 2px solid rgba(0, 0, 0, 0.2); */
+	border-radius: 4px;
+	border-color: #e4eaf7;
+}
+.NgxEditor__Wrapper .editor .NgxEditor__MenuBar {
+	/* display: flex;
+	width: 100%;
+	align-items: center;
+	gap: 2px;
+	border-radius: 15px;
+	font-size: 1rem;
+	font-weight: 600; */
+	background-color: #e4eaf7;
+	border-bottom: none;
+	border-radius: 15px;
+}
+
+.NgxEditor__Wrapper .editor ngx-editor {
+	border: none;
+}
+
+.NgxEditor__Wrapper .editor .CodeMirror {
+	border: 1px solid #180b0b;
+	height: auto;
+	margin-bottom: 0.7rem;
+}
+
+.NgxEditor__Wrapper .editor .CodeMirror pre {
+	white-space: pre !important;
+}
+
+.NgxEditor__Wrapper {
+	border-radius: 15px !important;
+	border-color: #d2dcf2 !important;
+}
+
+.NgxEditor__Content {
+	padding: 1.25 rem !important;
+}

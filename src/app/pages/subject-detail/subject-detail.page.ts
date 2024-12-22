@@ -10,6 +10,7 @@ import { SDMSubjectReviewComponent } from '../../components/subject-review/subje
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
 import { SelectedData } from '../../shared/models/SdmAppService.model';
+import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -18,6 +19,7 @@ import { SelectedData } from '../../shared/models/SdmAppService.model';
 		CommonModule,
 		SDMSubjectReviewComponent,
 		SDMReviewFilterComponent,
+		SDMWriteReviewBoxComponent,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',

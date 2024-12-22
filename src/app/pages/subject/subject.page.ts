@@ -43,6 +43,7 @@ import { UserToken } from '../../shared/models/UserToken.model';
 import { NavigationEnd, Router } from '@angular/router';
 import { Curriculum } from '../../shared/models/Curriculum.model.js';
 import { CurriculumTeachtableSubject } from '../../shared/models/CurriculumTeachtableSubject.model.js';
+import { SDMRichTextEditor } from '../../components/rich-text-editor/rich-text-editor.component';
 
 @Component({
 	selector: 'sdm-subject',
