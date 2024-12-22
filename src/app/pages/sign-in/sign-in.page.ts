@@ -5,11 +5,12 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { NgIf } from '@angular/common';
 import { APIManagementService } from '../../shared/services/api-management.service';
+import { SDMBaseButton } from '../../components/base-button/base-button.component';
 
 @Component({
 	selector: 'sdm-page-sign-in',
 	standalone: true,
-	imports: [RouterLink, ReactiveFormsModule, NgIf],
+	imports: [RouterLink, ReactiveFormsModule, NgIf, SDMBaseButton],
 	templateUrl: './sign-in.page.html',
 	styleUrl: './sign-in.page.css',
 })
