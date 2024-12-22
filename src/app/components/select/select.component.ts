@@ -64,7 +64,7 @@ export class SDMSelectComponent implements OnInit {
 		return this.form.get('selectedOption')?.value || '';
 	}
 
-	onSelectedOption(option: string, i?: number, value?:any) {
+	onSelectedOption(option: string, i?: number, value?: any) {
 		this.form.get('selectedOption')?.setValue(option);
 		this.isSelect = option === '' ? false : true;
 		this.isDropdownOpen = false;

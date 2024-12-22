@@ -31,8 +31,6 @@ export class SDMSubjectComponent {
 			this.router.createUrlTree(['/subject/subject-detail'], {
 				queryParams: {
 					subject: JSON.stringify(this.subjectCardData),
-					year: this.selectedYear,
-					semester: this.selectedSemester,
 				},
 			}),
 		);

@@ -8,6 +8,8 @@ import { APIManagementService } from '../../shared/services/api-management.servi
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
 import { SDMSubjectReviewComponent } from '../../components/subject-review/subject-review.component';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
+import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
+import { SelectedData } from '../../shared/models/SdmAppService.model';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -15,6 +17,7 @@ import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 		SDMSubjectDetailCpnComponent,
 		CommonModule,
 		SDMSubjectReviewComponent,
+		SDMReviewFilterComponent,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
@@ -129,8 +132,6 @@ export class SDMPageSubjectDetail implements OnInit {
 
 			if (subjectData) {
 				this.eachSubjectData = JSON.parse(subjectData);
-				this.selectedYear = +params['year'] || 0;
-				this.selectedSemester = +params['semester'] || 0;
 
 				console.log('selectedYear', this.selectedYear);
 				console.log('selectedSemester', this.selectedSemester);
@@ -203,4 +204,14 @@ export class SDMPageSubjectDetail implements OnInit {
 	// 			},
 	// 		});
 	// }
+
+	public onPopularFilterChange(selectedPopular: boolean) {
+		console.log('Filter Popular:', selectedPopular);
+	}
+	public onLatestFilterChange(selectedLastest: boolean) {
+		console.log('Filter Lastest:', selectedLastest);
+	}
+	public onRatingFilterChange(selectedRatingData: SelectedData) {
+		console.log('Filter Rating:', selectedRatingData);
+	}
 }
