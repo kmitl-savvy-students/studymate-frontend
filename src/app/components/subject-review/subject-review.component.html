@@ -6,19 +6,45 @@
 		class="flex w-full justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold"
 	>
 		<div *ngIf="viewMode === 'subject-detail'" class="flex gap-4">
-			<div>ปีการศึกษา {{ this.subjectReviewData.year }}</div>
-			<div>ภาคการศึกษาที่ {{ this.subjectReviewData.term }}</div>
+			<div>
+				ปีการศึกษา
+				{{
+					this.subjectReviewData.teachtable_subject.teachtable
+						.academic_year
+				}}
+			</div>
+			<div>
+				ภาคการศึกษาที่
+				{{
+					this.subjectReviewData.teachtable_subject.teachtable
+						.academic_term
+				}}
+			</div>
 		</div>
 		<div *ngIf="viewMode === 'review'" class="flex gap-4">
-			<div>{{ this.subjectReviewData.subject_id }}</div>
+			<div>
+				{{ this.subjectReviewData.teachtable_subject.subject_id }}
+			</div>
 			<div>{{ this.subjectReviewData.subject_name_en }}</div>
-			<div>ปีการศึกษา {{ this.subjectReviewData.year }}</div>
-			<div>ภาคการศึกษาที่ {{ this.subjectReviewData.term }}</div>
+			<div>
+				ปีการศึกษา
+				{{
+					this.subjectReviewData.teachtable_subject.teachtable
+						.academic_year
+				}}
+			</div>
+			<div>
+				ภาคการศึกษาที่
+				{{
+					this.subjectReviewData.teachtable_subject.teachtable
+						.academic_term
+				}}
+			</div>
 		</div>
 		<div class="flex items-center gap-x-1">
 			<sdm-rating
 				mode="display"
-				[rating]="this.subjectReviewData.rating"
+				[rating]="subjectReviewData.rating"
 				customClass="text-base text-dark-100"
 			></sdm-rating>
 		</div>
@@ -35,21 +61,27 @@
 			<sdm-icon
 				icon="thumbs-up"
 				[iconStyle]="isLiked ? 'fas' : 'far'"
-				class="cursor-pointer text-base text-dark-100"
-				(click)="toggleLike()"
+				class="text-base text-dark-100"
+				[ngClass]="{
+					'default-cursor': !isSignIn,
+					'cursor-pointer': isSignIn,
+				}"
+				(click)="isSignIn && toggleLike()"
 			></sdm-icon>
-			<div>15</div>
+			<div>{{ this.subjectReviewData.like }}</div>
 		</div>
 		<div class="flex items-center gap-2.5">
 			<div class="text-sm font-normal text-dark-75">
-				{{ this.subjectReviewData.create_date }}
+				{{ this.subjectReviewData.date }}
 			</div>
 			<sdm-icon
+				*ngIf="canEdit"
 				icon="pen-to-square"
 				iconStyle="fas"
 				class="cursor-pointer text-base text-dark-100"
 			></sdm-icon>
 			<sdm-icon
+				*ngIf="canDelete"
 				icon="trash-can"
 				iconStyle="fas"
 				class="cursor-pointer text-base text-red-400"
