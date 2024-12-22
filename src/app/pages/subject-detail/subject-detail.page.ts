@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
-import { SDMSubjectReviewComponent } from '../../components/subject-review/subject-review.component';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
 import { SelectedData } from '../../shared/models/SdmAppService.model';
@@ -17,7 +16,6 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 	imports: [
 		SDMSubjectDetailCpnComponent,
 		CommonModule,
-		SDMSubjectReviewComponent,
 		SDMReviewFilterComponent,
 		SDMWriteReviewBoxComponent,
 	],
@@ -206,14 +204,4 @@ export class SDMPageSubjectDetail implements OnInit {
 	// 			},
 	// 		});
 	// }
-
-	public onPopularFilterChange(selectedPopular: boolean) {
-		console.log('Filter Popular:', selectedPopular);
-	}
-	public onLatestFilterChange(selectedLastest: boolean) {
-		console.log('Filter Lastest:', selectedLastest);
-	}
-	public onRatingFilterChange(selectedRatingData: SelectedData) {
-		console.log('Filter Rating:', selectedRatingData);
-	}
 }

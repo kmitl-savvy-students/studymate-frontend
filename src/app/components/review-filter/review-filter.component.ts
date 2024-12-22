@@ -1,42 +1,53 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ViewChild,
+} from '@angular/core';
 import { SDMSelectComponent } from '../select/select.component';
 import { ratingList } from './review-filter-data';
 import { SelectedData } from '../../shared/models/SdmAppService.model';
 import { CommonModule } from '@angular/common';
+import { SDMSubjectReviewComponent } from '../subject-review/subject-review.component';
+import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 
 @Component({
 	selector: 'sdm-review-filter',
 	standalone: true,
-	imports: [SDMSelectComponent, CommonModule],
+	imports: [SDMSelectComponent, CommonModule, SDMSubjectReviewComponent],
 	templateUrl: './review-filter.component.html',
 	styleUrl: './review-filter.component.css',
 })
 export class SDMReviewFilterComponent {
-	public ratingList = ratingList;
-	public selectedPopular: boolean = false;
-	public selectedLatest: boolean = false;
-	public selectedStarRating: any = null;
+	@Input() subjectReviewData?: SubjectReviewData[];
 
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
 
-	@Output() selectedPopularValue = new EventEmitter<boolean>();
-	@Output() selectedLatestValue = new EventEmitter<boolean>();
-	@Output() selectedRatingValue = new EventEmitter<{
-		label: string;
-		index?: number;
-		value?: any;
-	}>();
+	public ratingList = ratingList;
+
+	public selectedPopular: boolean = false;
+	public selectedLatest: boolean = false;
+	public selectedRating: boolean = false;
+
+	public selectedStarRatingValue: any;
 
 	private resetOtherFilters(filter: string) {
-		if (filter === 'popular') {
-			this.selectedLatest = false;
-			this.clearSelect();
-		} else if (filter === 'latest') {
-			this.selectedPopular = false;
-			this.clearSelect();
-		} else if (filter === 'starRating') {
-			this.selectedPopular = false;
-			this.selectedLatest = false;
+		switch (filter) {
+			case 'popular':
+				this.selectedLatest = false;
+				this.clearSelect();
+				break;
+			case 'latest':
+				this.selectedPopular = false;
+				this.clearSelect();
+				break;
+			case 'starRating':
+				this.selectedPopular = false;
+				this.selectedLatest = false;
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -47,31 +58,22 @@ export class SDMReviewFilterComponent {
 	}
 
 	public onPopularFilterChange() {
-		this.selectedPopularValue.emit(this.selectedPopular);
+		this.selectedPopular = !this.selectedPopular;
+		this.resetOtherFilters('popular');
 	}
 
 	public onLatestFilterChange() {
-		this.selectedLatestValue.emit(this.selectedLatest);
+		this.selectedLatest = !this.selectedLatest;
+		this.resetOtherFilters('latest');
 	}
 
 	public onRatingFilterChange(selectedRatingData: SelectedData) {
-		this.selectedStarRating = selectedRatingData;
-		this.selectedRatingValue.emit(selectedRatingData);
-	}
-
-	public togglePopular() {
-		this.selectedPopular = !this.selectedPopular;
-		this.resetOtherFilters('popular');
-		this.onPopularFilterChange();
-	}
-
-	public toggleLatest() {
-		this.selectedLatest = !this.selectedLatest;
-		this.resetOtherFilters('latest');
-		this.onLatestFilterChange();
-	}
-
-	public toggleStarRating() {
-		this.resetOtherFilters('starRating');
+		this.selectedStarRatingValue = selectedRatingData.value;
+		if (this.selectedStarRatingValue) {
+			this.selectedRating = true;
+			this.resetOtherFilters('starRating');
+		} else {
+			this.selectedRating = false;
+		}
 	}
 }

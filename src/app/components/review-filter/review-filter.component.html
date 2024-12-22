@@ -1,30 +1,42 @@
-<div class="flex gap-3">
-	<button
-		(click)="togglePopular()"
-		class="filter-button"
-		[ngClass]="{
-			'bg-main-100 text-white': selectedPopular,
-			'bg-main-15 text-dark-100': !selectedPopular,
-		}"
-	>
-		ยอดนิยม
-	</button>
-	<button
-		(click)="toggleLatest()"
-		class="filter-button"
-		[ngClass]="{
-			'bg-main-100 text-white': selectedLatest,
-			'bg-main-15 text-dark-100': !selectedLatest,
-		}"
-	>
-		ล่าสุด
-	</button>
-	<sdm-select
-		defaultLabel="จำนวนดาว"
-		SelectName="starRating"
-		[listOptions]="ratingList"
-		class="w-40"
-		(selectedValue)="onRatingFilterChange($event)"
-		(click)="toggleStarRating()"
-	></sdm-select>
+<div class="grid w-full grid-cols-1 gap-4">
+	<div class="flex items-center gap-3">
+		<div class="font-medium text-dark-100">เรียงโดย</div>
+		<button
+			(click)="onPopularFilterChange()"
+			class="filter-button"
+			[ngClass]="{
+				'bg-main-100 text-white': selectedPopular,
+				'bg-main-15 text-dark-100': !selectedPopular,
+			}"
+		>
+			ยอดนิยม
+		</button>
+		<button
+			(click)="onLatestFilterChange()"
+			class="filter-button"
+			[ngClass]="{
+				'bg-main-100 text-white': selectedLatest,
+				'bg-main-15 text-dark-100': !selectedLatest,
+			}"
+		>
+			ล่าสุด
+		</button>
+		<sdm-select
+			defaultLabel="จำนวนดาว"
+			SelectName="starRating"
+			[listOptions]="ratingList"
+			class="w-40"
+			(selectedValue)="onRatingFilterChange($event)"
+		></sdm-select>
+	</div>
+	<ng-container
+		*ngFor="let data of subjectReviewData; let i = index"
+		class="grid grid-cols-1 gap-4"
+		><sdm-subject-review
+			viewMode="subject-detail"
+			[subjectReviewData]="data"
+			[isSignIn]="true"
+			[isReviewCreator]="true"
+		></sdm-subject-review
+	></ng-container>
 </div>
