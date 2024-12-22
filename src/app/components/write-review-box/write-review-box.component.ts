@@ -8,7 +8,7 @@ import {
 } from '../../pages/subject/subject-page-data.js';
 import { SelectedData } from '../../shared/models/SdmAppService.model.js';
 import { SDMRatingComponent } from '../rating/rating.component';
-import { SDMMarkdownEditorComponent } from '../markdown-editor/markdown-editor.component.js';
+import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
 
 @Component({
 	selector: 'sdm-write-review-box',
@@ -18,7 +18,7 @@ import { SDMMarkdownEditorComponent } from '../markdown-editor/markdown-editor.c
 		IconComponent,
 		SDMSelectComponent,
 		SDMRatingComponent,
-		SDMMarkdownEditorComponent,
+		SDMRichTextEditor,
 	],
 	templateUrl: './write-review-box.component.html',
 	styleUrl: './write-review-box.component.css',

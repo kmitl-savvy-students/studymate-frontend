@@ -7,6 +7,7 @@ import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
 import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
+import { SDMRichTextEditor } from '../../components/rich-text-editor/rich-text-editor.component';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -14,6 +15,7 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 		SDMSubjectDetailCpnComponent,
 		CommonModule,
 		SDMWriteReviewBoxComponent,
+		SDMRichTextEditor,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
@@ -32,12 +34,12 @@ export class SDMPageSubjectDetail implements OnInit {
 		this.route.queryParams.subscribe((params) => {
 			const subjectData = params['subject'];
 
-			// if (subjectData) {
-			// 	this.eachSubjectData = JSON.parse(subjectData);
-			// } else {
-			// 	this.router.navigate(['/subject']);
-			// 	console.warn('No subject data found in queryParams.');
-			// }
+			if (subjectData) {
+				this.eachSubjectData = JSON.parse(subjectData);
+			} else {
+				this.router.navigate(['/subject']);
+				console.warn('No subject data found in queryParams.');
+			}
 		});
 		this.getSubjectDetail();
 		console.log(
