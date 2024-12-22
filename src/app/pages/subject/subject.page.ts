@@ -43,7 +43,6 @@ import { UserToken } from '../../shared/models/UserToken.model';
 import { NavigationEnd, Router } from '@angular/router';
 import { Curriculum } from '../../shared/models/Curriculum.model.js';
 import { CurriculumTeachtableSubject } from '../../shared/models/CurriculumTeachtableSubject.model.js';
-import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box/write-review-box.component';
 
 @Component({
 	selector: 'sdm-subject',
@@ -56,7 +55,6 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 		SDMPaginationComponent,
 		CommonModule,
 		SDMSubjectComponent,
-		SDMWriteReviewBoxComponent,
 	],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',

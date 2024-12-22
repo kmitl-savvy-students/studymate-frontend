@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
-import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box/write-review-box.component';
+import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -32,12 +32,12 @@ export class SDMPageSubjectDetail implements OnInit {
 		this.route.queryParams.subscribe((params) => {
 			const subjectData = params['subject'];
 
-			if (subjectData) {
-				this.eachSubjectData = JSON.parse(subjectData);
-			} else {
-				this.router.navigate(['/subject']);
-				console.warn('No subject data found in queryParams.');
-			}
+			// if (subjectData) {
+			// 	this.eachSubjectData = JSON.parse(subjectData);
+			// } else {
+			// 	this.router.navigate(['/subject']);
+			// 	console.warn('No subject data found in queryParams.');
+			// }
 		});
 		this.getSubjectDetail();
 		console.log(
