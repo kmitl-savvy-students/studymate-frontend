@@ -22,6 +22,8 @@ export class SDMSelectComponent implements OnInit {
 	@Input() defaultLabel: string = '';
 	@Input() SelectName: string = '';
 	@Input() listOptions: any[] = [];
+	@Input() customDdlHeader: string = '';
+	@Input() customDdlOptions: string = '';
 	@Output() selectedValue = new EventEmitter<{
 		label: string;
 		index?: number;
@@ -64,7 +66,7 @@ export class SDMSelectComponent implements OnInit {
 		return this.form.get('selectedOption')?.value || '';
 	}
 
-	onSelectedOption(option: string, i?: number, value?:any) {
+	onSelectedOption(option: string, i?: number, value?: any) {
 		this.form.get('selectedOption')?.setValue(option);
 		this.isSelect = option === '' ? false : true;
 		this.isDropdownOpen = false;
