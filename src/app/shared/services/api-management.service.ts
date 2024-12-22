@@ -14,6 +14,7 @@ import { GenedGroup } from '../models/GenedGroup.model';
 import { GenedSubject } from '../models/GenedSubject.model';
 import { CurriculumTeachtableSubject } from '../models/CurriculumTeachtableSubject.model.js';
 import { subjectDetailData } from '../models/SubjectDetailData.model';
+import { SubjectReviewData } from '../models/SubjectReviewData.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -142,6 +143,12 @@ export class APIManagementService {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject-get/${subjectId}`;
 
 		return this.http.get<subjectDetailData>(apiUrl);
+	}
+
+	GetSubjectReviewsData(subjectId: string): Observable<SubjectReviewData[]> {
+		let apiUrl = `${environment.backendUrl}/api/api-name/${subjectId}`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
 	// GetCurriculumSubjectsTeachtable(

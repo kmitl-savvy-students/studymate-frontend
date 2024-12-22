@@ -13,6 +13,9 @@ import { SDMRatingComponent } from '../rating/rating.component';
 })
 export class SDMSubjectComponent {
 	@Input() subjectCardData!: SubjectCardData;
+	@Input() selectedYear: number = 0;
+	@Input() selectedSemester: number = 0;
+
 	@Input() index: number = 0;
 
 	constructor(private router: Router) {}
@@ -26,7 +29,9 @@ export class SDMSubjectComponent {
 	public getSubjectDetailUrl(): string {
 		return this.router.serializeUrl(
 			this.router.createUrlTree(['/subject/subject-detail'], {
-				queryParams: { subject: JSON.stringify(this.subjectCardData) },
+				queryParams: {
+					subject: JSON.stringify(this.subjectCardData),
+				},
 			}),
 		);
 	}
