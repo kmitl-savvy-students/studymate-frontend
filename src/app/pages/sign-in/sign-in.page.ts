@@ -5,12 +5,21 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { NgIf } from '@angular/common';
 import { APIManagementService } from '../../shared/services/api-management.service';
+import { SDMGoogleButton } from '../../components/google/google-button.component';
+import { StudyMateLogo } from '../../components/logo/studymate-logo.component';
 import { SDMBaseButton } from '../../components/base-button/base-button.component';
 
 @Component({
 	selector: 'sdm-page-sign-in',
 	standalone: true,
-	imports: [RouterLink, ReactiveFormsModule, NgIf, SDMBaseButton],
+	imports: [
+		RouterLink,
+		ReactiveFormsModule,
+		NgIf,
+		SDMGoogleButton,
+		StudyMateLogo,
+		SDMBaseButton,
+	],
 	templateUrl: './sign-in.page.html',
 	styleUrl: './sign-in.page.css',
 })
