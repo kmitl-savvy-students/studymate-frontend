@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMSubjectDetailCpnComponent } from '../../components/subject-detail-cpn/subject-detail-cpn.component';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,6 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 		SDMSubjectDetailCpnComponent,
 		CommonModule,
 		SDMReviewFilterComponent,
-		SDMWriteReviewBoxComponent,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
@@ -25,9 +24,7 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 export class SDMPageSubjectDetail implements OnInit {
 	public eachSubjectData!: SubjectCardData;
 	public subjectDetail!: subjectDetailData;
-
-	// ถ้ามี api getSubjectReviews แล้ว
-	// public subjectReviewsData?: SubjectReviewData[];
+	// public subjectReviewData: SubjectReviewData[] = [];
 
 	// ถ้าใช้ mockup data อยู่
 	subjectReviewData: SubjectReviewData[] = [
@@ -45,11 +42,11 @@ export class SDMPageSubjectDetail implements OnInit {
 				count_of_review: 5,
 				rating: 4.7,
 			},
-			user_id: '64010267',
+			user_id: '64010001',
 			review: 'วิชานี้เป็นอิ้ง 4 ค่ะ เนื้อหาหลัก ๆ คือเรียนว่า lay out บนหนังสือพิมพ์มีชื่อเรียกว่าอะไรบ้าง การตอบจดหมายจากทางบ้าน บทบรรณาธิการ โฆษณา รูปแบบ infographic โดยจะเรียนผ่านรูปแบบของสิ่งพิมพ์ เช่น หนังสือพิมพ์และนิตยสาร มีเรียนทั้งแกรมม่าและจำ prefix / suffix ด้วยค่ะ เรียนวิชานี้เราจะได้รับความรู้รอบตัวทั่วโลกไปด้วย เก็บคะแนนผ่านควิซเวลาเรียนจบบท มีงานกลุ่มคือทำคลิปวิดิโอนำเสนอสินค้าสั้นๆและทำข่าวเหมือนแม็กกาซีนค่ะ เราเรียนกับอาจารย์ปัญจนิส อาจารย์น่ารัก ใจดี positive energy สุดๆ',
 			rating: 5,
-			like: 19,
-			date: '25 มิ.ย 64',
+			like: 1,
+			created: '2024-12-23',
 			subject_name_en: 'MATHEMATICS IN DAILY LIFE',
 		},
 		{
@@ -66,11 +63,11 @@ export class SDMPageSubjectDetail implements OnInit {
 				count_of_review: 5,
 				rating: 4.7,
 			},
-			user_id: '64010359',
+			user_id: '64010002',
 			review: 'ได้ A แล้ววว วันนี้มาแจกสรุปฮะะ ปล.สรุปเนื้อหาของปลายภาคนะคะ อาจจะไม่ครบน้าา แต่หวังว่าจะเป็นประโยชน์ให้เพื่อน ๆ ที่ลงเรียนวิชานี้ได้นะ ส่วนรีวิวลองเลื่อน ๆ อ่านได้เลยย เราเองก็เคยรีวิวไว้ก่อนหน้านี้ และยังยืนยันคำเดิมว่าเป็นวิชาที่เรียนสนุกและเอาไปใช้ได้จริงนะ มาลงเรียนกันนะ',
-			rating: 4,
-			like: 20,
-			date: '23 มิ.ย 64',
+			rating: 5,
+			like: 2,
+			created: '2024-10-16',
 			subject_name_en: 'CALCULUS 2',
 		},
 		{
@@ -87,11 +84,11 @@ export class SDMPageSubjectDetail implements OnInit {
 				count_of_review: 5,
 				rating: 4.7,
 			},
-			user_id: '64010312',
+			user_id: '64010003',
 			review: 'อาจารย์สอนโอเค เนื้อหาน่าสนใจแต่มีปัญหาเรื่องเช็คชื่อกับTA นี้ไม่เคยสายขสด2ครั้ง แต่TAเช็คว่ามาสาย5ครั้ง ต้องไปคุยกับTA ที่หลังว่าวันนั้นเข้านะ ถ้าไม่ทำก็โดนไปทั้งอย่างงั้น ส่วนตัว',
-			rating: 3,
-			like: 7,
-			date: '1 มิ.ย 64',
+			rating: 4,
+			like: 3,
+			created: '2023-06-01',
 			subject_name_en: 'PROJECT 2',
 		},
 		{
@@ -108,17 +105,161 @@ export class SDMPageSubjectDetail implements OnInit {
 				count_of_review: 5,
 				rating: 3.5,
 			},
-			user_id: '64010009',
+			user_id: '64010004',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 4,
+			like: 4,
+			created: '2024-09-15',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 5,
+			teachtable_subject: {
+				id: 5,
+				teachtable: {
+					id: 5,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010005',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 3,
+			like: 5,
+			created: '2024-11-12',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 6,
+			teachtable_subject: {
+				id: 6,
+				teachtable: {
+					id: 6,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010006',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 3,
+			like: 6,
+			created: '2024-05-29',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 7,
+			teachtable_subject: {
+				id: 7,
+				teachtable: {
+					id: 7,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010007',
 			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
 			rating: 2,
-			like: 25,
-			date: '10 มิ.ย 64',
+			like: 7,
+			created: '2023-11-23',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 8,
+			teachtable_subject: {
+				id: 8,
+				teachtable: {
+					id: 8,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010008',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 2,
+			like: 8,
+			created: '2024-02-14',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 9,
+			teachtable_subject: {
+				id: 9,
+				teachtable: {
+					id: 9,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010009',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 3,
+			like: 9,
+			created: '2024-07-08',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 10,
+			teachtable_subject: {
+				id: 10,
+				teachtable: {
+					id: 10,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010010',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 3,
+			like: 10,
+			created: '2024-03-16',
+			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
+		},
+		{
+			id: 11,
+			teachtable_subject: {
+				id: 11,
+				teachtable: {
+					id: 11,
+					academic_year: 2569,
+					academic_term: 2,
+				},
+				subject_id: '90641237',
+				interested: 8,
+				count_of_review: 4,
+				rating: 3.5,
+			},
+			user_id: '64010011',
+			review: 'สำหรับวิชาปรัชญาหลายคนอาจจะมองว่ายากเเน่ๆลงมาเหมือนฆ่าตัวตายเเต่อ่านเม้นต์นี้ก่อนครับผมเรียนกับอ.เจินเจินครับอ.จะเน้นไปที่งานกลุ่มพรีเซ้นต์เเละก็งานในห้องอื่นๆกับควิทซ์ในกลุ่มเฟสเป็นส่วนใหญ่วิชานี้ไม่มีสอบมิดเทอมมีอีกทีคือไฟนอลเลยเนื้อหาในการจำก็เยอะอยู่เเต่ถ้าเข้าเรียนทุกคาบงานส่งครบมีสิทธิ์ได้Aสูงนะ',
+			rating: 3,
+			like: 11,
+			created: '2024-06-25',
 			subject_name_en: 'SOFTWARE DEVELOPMENT IN PRACTICE',
 		},
 	];
-
-	public selectedYear: number = 0;
-	public selectedSemester: number = 0;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -132,19 +273,12 @@ export class SDMPageSubjectDetail implements OnInit {
 
 			if (subjectData) {
 				this.eachSubjectData = JSON.parse(subjectData);
-
-				console.log('selectedYear', this.selectedYear);
-				console.log('selectedSemester', this.selectedSemester);
 			} else {
 				this.router.navigate(['/subject']);
-				console.warn('No subject data found in queryParams.');
 			}
 		});
 		this.getSubjectDetail();
-		console.log(
-			'eachSubjectData from subject-page.component',
-			this.eachSubjectData,
-		);
+		// this.getSubjectReviews();
 	}
 
 	ngAfterViewInit(): void {
@@ -156,9 +290,9 @@ export class SDMPageSubjectDetail implements OnInit {
 			.GetCurriculumTeachtableSubject(this.eachSubjectData.subject_id)
 			.subscribe({
 				next: (res) => {
-					console.log('API Response:', res);
 					if (res) {
 						this.subjectDetail = res;
+						console.log('Detail Response:', res);
 					} else {
 						console.log('No Subject Data Available.');
 					}
@@ -180,12 +314,15 @@ export class SDMPageSubjectDetail implements OnInit {
 
 	// public getSubjectReviews() {
 	// 	this.apiManagementService
-	// 		.GetSubjectReviewsData(this.eachSubjectData.subject_id)
+	// 		.GetSubjectReviewsBySubjectID(this.eachSubjectData.subject_id)
 	// 		.subscribe({
 	// 			next: (res) => {
-	// 				console.log('API Response:', res);
 	// 				if (res) {
-	// 					this.subjectReviewsData = res;
+	// 					this.subjectReviewData = res;
+	// 					console.log(
+	// 						'รีวิวของวิชานี้ :',
+	// 						this.subjectReviewData,
+	// 					);
 	// 				} else {
 	// 					console.log('No Subject Reviews Data Available.');
 	// 				}

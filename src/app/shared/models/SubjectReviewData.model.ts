@@ -6,7 +6,7 @@ export class SubjectReviewData {
 		public review: string,
 		public rating: number,
 		public like: number,
-		public date: string,
+		public created: string,
 		public subject_name_en: string,
 	) {}
 }
