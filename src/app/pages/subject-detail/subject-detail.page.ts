@@ -17,6 +17,7 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 		SDMSubjectDetailCpnComponent,
 		CommonModule,
 		SDMReviewFilterComponent,
+		SDMWriteReviewBoxComponent,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
