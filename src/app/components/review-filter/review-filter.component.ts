@@ -34,6 +34,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	@Input() subjectReviewData: SubjectReviewData[] = [];
 	@Input() isLoadingReview: boolean = false;
+	@Input() paginationType: 'single' | 'double' = 'single';
 
 	public ratingList = ratingList;
 

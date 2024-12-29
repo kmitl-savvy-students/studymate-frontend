@@ -85,6 +85,15 @@
 			!getSubjectReviewIsNull && !isLoadingReview && !filterReviewIsNull
 		"
 	>
+		<!-- Pagination -->
+		<sdm-pagination
+			*ngIf="paginationType === 'double'"
+			(pageChange)="changePage($event)"
+			[totalItems]="subjectReviewTotal"
+			[itemsPerPage]="itemsPerPage"
+			[currentPage]="currentPage"
+			[scrollTargetId]="'header-zone'"
+		></sdm-pagination>
 		<ng-container
 			*ngFor="let data of paginatedItems; let i = index"
 			class="grid grid-cols-1 gap-4"
