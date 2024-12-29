@@ -33,6 +33,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
 
 	@Input() subjectReviewData: SubjectReviewData[] = [];
+	@Input() isLoadingReview: boolean = false;
 
 	public ratingList = ratingList;
 
@@ -49,12 +50,15 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	public filterItems: SubjectReviewData[] = [];
 
+	public getSubjectReviewIsNull: boolean = false;
+	public filterReviewIsNull: boolean = false;
+
 	ngOnChanges(changes: SimpleChanges): void {
 		if (
 			changes['subjectReviewData'] &&
 			changes['subjectReviewData'].currentValue
 		) {
-			console.log('subjectReviewData onChange', this.subjectReviewData);
+			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
 			this.updatePaginatedItems();
 		}
@@ -113,6 +117,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	public filterData(): void {
 		const dataToFilter = this.subjectReviewData;
+
 		if (this.selectedPopular) {
 			this.filterItems = [...dataToFilter].sort(
 				(a, b) => b.like - a.like,
@@ -147,5 +152,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 		const dataToPaginate = this.filterItems;
 		this.paginatedItems = dataToPaginate.slice(start, end);
 		this.subjectReviewTotal = dataToPaginate.length;
+		this.filterReviewIsNull = dataToPaginate.length === 0;
 	}
 }

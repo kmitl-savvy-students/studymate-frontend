@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+} from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
 
@@ -13,13 +19,15 @@ export class SDMPaginationComponent {
 	@Input() totalItems: number = 0;
 	@Input() itemsPerPage: number = 0;
 	@Input() currentPage: number = 0;
+	@Input() scrollTargetId: string = '';
+	@Input() offset: number = 100;
 	@Output() pageChange = new EventEmitter<number>();
 
 	public visiblePages: number = 5;
 
 	public get totalPages(): number {
-		const showTotal =  Math.ceil(this.totalItems / this.itemsPerPage);
-		return showTotal
+		const showTotal = Math.ceil(this.totalItems / this.itemsPerPage);
+		return showTotal;
 	}
 
 	public get pagesToShow(): number[] {
@@ -45,24 +53,25 @@ export class SDMPaginationComponent {
 	}
 
 	public changePage(page: number) {
-		// if (page >= 1 && page <= this.totalPages) {
-		// 	this.pageChange.emit(page);
-		// }
-		// ถ้าเลือกหน้าเดิมจะไม่ทำอะไร
 		if (page === this.currentPage) return;
-
-		// อัปเดต currentPage
 		this.pageChange.emit(page);
-
-		// เลื่อนหน้าเว็บไปด้านบนสุด
-		this.scrollToTop();
+		this.scrollToTarget();
 	}
 
-	// ฟังก์ชันเลื่อนหน้าเว็บไปด้านบนสุด
-	private scrollToTop() {
-		window.scrollTo({
-			top: 0, // เลื่อนขึ้นไปที่ด้านบนสุด
-			behavior: 'smooth', // การเลื่อนแบบนุ่มนวล
-		});
+	private scrollToTarget() {
+		const targetElement = this.scrollTargetId
+			? document.getElementById(this.scrollTargetId)
+			: null;
+
+		if (targetElement) {
+			const targetPosition =
+				targetElement.getBoundingClientRect().top + window.scrollY;
+			window.scrollTo({
+				top: targetPosition - this.offset,
+				behavior: 'smooth',
+			});
+		} else {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
 	}
 }
