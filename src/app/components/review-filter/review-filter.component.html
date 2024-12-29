@@ -4,20 +4,26 @@
 		<div class="font-medium text-dark-100">เรียงโดย</div>
 		<button
 			(click)="onPopularFilterChange()"
+			[disabled]="getSubjectReviewIsNull"
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedPopular,
 				'bg-main-15 text-dark-100': !selectedPopular,
+				'hover:bg-main-25': !getSubjectReviewIsNull,
+				'cursor-not-allowed': getSubjectReviewIsNull,
 			}"
 		>
 			ยอดนิยม
 		</button>
 		<button
 			(click)="onLatestFilterChange()"
+			[disabled]="getSubjectReviewIsNull"
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedLatest,
 				'bg-main-15 text-dark-100': !selectedLatest,
+				'hover:bg-main-25': !getSubjectReviewIsNull,
+				'cursor-not-allowed': getSubjectReviewIsNull,
 			}"
 		>
 			ล่าสุด
@@ -28,6 +34,7 @@
 			[listOptions]="ratingList"
 			class="w-40"
 			(selectedValue)="onRatingFilterChange($event)"
+			[disabled]="getSubjectReviewIsNull"
 		></sdm-select>
 	</div>
 	<ng-container *ngIf="isLoadingReview">
