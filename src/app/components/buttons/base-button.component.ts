@@ -10,17 +10,20 @@ import { CommonModule } from '@angular/common';
 			[type]="isSubmit ? 'submit' : 'button'"
 			[disabled]="IsDisabled"
 			(click)="handleClick()"
-			class="
-				w-full justify-center rounded-xl flex gap-3
-				px-4 py-3
-				text-base font-semibold
-				{{ textColor }} hover:{{ textColorHover }}
-				{{ backgroundColor }} hover:{{ backgroundColorHover }}
-			"
+			[ngClass]="[
+				'flex w-full justify-center gap-3 rounded-xl text-base font-semibold',
+				textColor,
+				textColorHover ? 'hover:' + textColorHover : '',
+				backgroundColor,
+				backgroundColorHover ? 'hover:' + backgroundColorHover : '',
+				backgroundColor || backgroundColorHover ? 'px-4 py-3' : '',
+			]"
 		>
-			<sdm-icon *ngIf="icon" [icon]="icon" />
-			<ng-container *ngIf="iconCustom">
-				<ng-container *ngTemplateOutlet="iconCustom" />
+			<ng-container *ngIf="icon || iconCustom">
+				<sdm-icon *ngIf="icon" [icon]="icon"></sdm-icon>
+				<ng-container *ngIf="iconCustom">
+					<ng-container *ngTemplateOutlet="iconCustom"></ng-container>
+				</ng-container>
 			</ng-container>
 			<span>{{ text }}</span>
 		</button>
@@ -36,10 +39,10 @@ export class SDMBaseButton {
 	@Input() isSubmit: boolean = false;
 
 	@Input() textColor: string = 'text-dark-100';
-	@Input() textColorHover: string = 'text-dark-100';
+	@Input() textColorHover: string = '';
 
-	@Input() backgroundColor: string = 'bg-main-5';
-	@Input() backgroundColorHover: string = 'bg-main-10';
+	@Input() backgroundColor: string = '';
+	@Input() backgroundColorHover: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 

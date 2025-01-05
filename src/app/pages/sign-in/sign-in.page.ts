@@ -8,7 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { AlertService } from '../../shared/services/alert/alert.service';
-import { AuthenticationService } from '../../shared/services/authentication.service';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { BackendService } from '../../shared/services/backend.service';
 
 @Component({
 	selector: 'sdm-page-sign-in',
@@ -82,6 +83,7 @@ export class SDMPageSignIn {
 		private router: Router,
 		private alertService: AlertService,
 		private authService: AuthenticationService,
+		private backendService: BackendService,
 	) {
 		this.signInFormGroup = this.fb.group({
 			id: [''],
@@ -93,7 +95,7 @@ export class SDMPageSignIn {
 	loading: boolean = false;
 	onSubmit() {
 		if (this.signInFormGroup.valid) {
-			const backendUrl = `${environment.backendUrl}/api/auth/sign-in`;
+			const backendUrl = `${this.backendService.getBackendUrl()}/api/auth/sign-in`;
 			const formData = this.signInFormGroup.value;
 
 			this.loading = true;
@@ -101,7 +103,7 @@ export class SDMPageSignIn {
 				next: (response: any) => {
 					this.loading = false;
 
-					this.authService.setToken(response.id);
+					this.authService.signIn(response.id);
 					this.alertService.showAlert(
 						'success',
 						'เข้าสู่ระบบสำเร็จ!',

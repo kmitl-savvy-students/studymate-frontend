@@ -11,7 +11,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 		<div
 			*ngIf="alert"
 			@fadeInOut
-			class="fixed bottom-4 right-4 z-[9999] max-w-xs transform rounded-lg border p-4 shadow-xl"
+			class="fixed bottom-4 right-4 z-[9999] max-w-xs transform rounded-lg border p-4"
 			[ngClass]="alertClass"
 		>
 			<div class="flex items-start gap-3">

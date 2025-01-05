@@ -1,0 +1,124 @@
+<nav class="fixed left-0 right-0 top-0 z-40 bg-white text-dark-100 shadow-md">
+	<div class="container mx-auto">
+		<div class="flex h-20 content-center justify-between">
+			<a routerLink="/home" class="flex items-center">
+				<div class="flex flex-col items-center">
+					<p class="text-3xl font-semibold text-main-100">KMITL</p>
+					<p class="-mt-2 text-sm font-semibold text-main-100">
+						Study Mate
+					</p>
+				</div>
+			</a>
+			<div class="m-0 flex content-center">
+				<div class="flex items-center space-x-12 text-base font-medium">
+					<a
+						routerLink="/subject"
+						class="hover:text-main-100"
+						[ngClass]="{
+							'font-semibold text-main-100':
+								currentRoute === '/subject',
+						}"
+						>รายวิชาเรียน</a
+					>
+					<a routerLink="/subject-reviews" class="hover:text-main-100"
+						>รีวิววิชา</a
+					>
+					<a routerLink="/schedule" class="hover:text-main-100"
+						>จัดตารางเรียน</a
+					>
+					<a
+						routerLink="/my-subject"
+						class="hover:text-main-100"
+						[ngClass]="{
+							'font-semibold text-main-100':
+								currentRoute === '/my-subject',
+							'hidden': !isSignIn,
+						}"
+					>
+						รายวิชาของฉัน
+					</a>
+					<a routerLink="/about-us" class="hover:text-main-100"
+						>เกี่ยวกับเรา</a
+					>
+					<div
+						class="flex items-center space-x-6 text-base font-medium"
+						[ngClass]="{ hidden: isSignIn }"
+					>
+						<button
+							routerLink="/sign-in"
+							class="underline underline-offset-2 hover:text-main-100"
+						>
+							เข้าสู่ระบบ
+						</button>
+						<sdm-button-link text="สมัครสมาชิก" link="/sign-up" />
+					</div>
+
+					<button
+						[ngClass]="{ hidden: !isSignIn }"
+						id="dropdownUserAvatarButton"
+						data-dropdown-toggle="dropdownAvatar"
+						class="flex items-center space-x-6 text-base font-medium"
+						type="button"
+					>
+						<sdm-icon
+							[src]="user?.profile || null"
+							[fromLocation]="fromNavbar"
+							icon="circle-user"
+							class="icon-32px max-h-[32px] max-w-[32px] text-main-25 hover:text-main-50"
+						></sdm-icon>
+					</button>
+				</div>
+				<!-- Dropdown menu -->
+				<div
+					id="dropdownAvatar"
+					class="test-margin-left dropdown-shadow z-10 hidden w-60 divide-y divide-main-25 rounded-[20px] bg-white px-4"
+				>
+					<div
+						class="flex w-full items-center justify-between gap-x-3 py-4"
+					>
+						<sdm-icon
+							[src]="user?.profile || null"
+							[fromLocation]="fromNavbar"
+							icon="circle-user"
+							class="icon-40px flex max-h-[40px] max-w-[40px] cursor-pointer text-main-25 hover:text-main-50"
+						></sdm-icon>
+						<div>
+							<div
+								class="max-w-40 text-ellipsis text-base font-medium"
+							>
+								{{
+									(user?.name_first || '') +
+										' ' +
+										(user?.name_last || '')
+								}}
+							</div>
+							<div class="text-sm font-medium">
+								{{ user?.id || 'Undefined' }}
+							</div>
+						</div>
+					</div>
+
+					<div
+						class="flex flex-col py-3 text-sm font-medium text-dark-100"
+						aria-labelledby="dropdownUserAvatarButton"
+					>
+						<a
+							class="rounded-[10px] py-2 hover:bg-main-10"
+							routerLink="/profile"
+							(click)="closeDropdown()"
+						>
+							<div class="ps-2">โปรไฟล์</div>
+						</a>
+						<a
+							class="rounded-[10px] py-2 hover:bg-main-10"
+							(click)="closeDropdown(); userSignOut()"
+							routerLink="/sign-in"
+						>
+							<div class="ps-2">ออกจากระบบ</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>

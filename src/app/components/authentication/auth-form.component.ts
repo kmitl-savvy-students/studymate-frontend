@@ -15,13 +15,11 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 				/>
 			</div>
 			<div class="flex items-center justify-center bg-white">
-				<div
-					class="rounded-[40px] border border-main-25 px-20 py-12 2xl:px-28 2xl:py-24"
-				>
+				<div class="rounded-[40px] border border-main-25 px-20 py-12">
 					<div class="flex min-h-full w-80 flex-col 2xl:w-96">
 						<sdm-studymate-logo />
 						<h2
-							class="mt-10 text-center text-xl font-medium text-dark-100"
+							class="mt-4 text-center text-xl font-medium text-dark-100"
 						>
 							{{ authHeader }}
 						</h2>

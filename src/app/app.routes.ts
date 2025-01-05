@@ -4,7 +4,6 @@ import { SDMPageSignUp } from './pages/sign-up/sign-up.page';
 import { SDMPageSignIn } from './pages/sign-in/sign-in.page';
 import { SDMMySubject } from './pages/my-subject/my-subject.page';
 import { SDMSubject } from './pages/subject/subject.page';
-import { AuthGuard } from './curriculum.guard';
 import { SDMPageProfile } from './pages/profile/profile.page';
 import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page';
 import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
