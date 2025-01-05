@@ -6,10 +6,11 @@ import { SDMButtonLink } from '../../components/buttons/button-link.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { LoadingService } from '../../shared/services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 
 @Component({
 	selector: 'sdm-page-sign-up',
@@ -29,14 +30,6 @@ import { finalize } from 'rxjs';
 		>
 			<div class="flex flex-col gap-2">
 				<input
-					formControlName="id"
-					type="text"
-					autocomplete="username"
-					required
-					placeholder="รหัสนักศึกษา"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<input
 					formControlName="name_first"
 					type="text"
 					required
@@ -55,6 +48,14 @@ import { finalize } from 'rxjs';
 					type="text"
 					required
 					placeholder="ชื่อเล่น"
+					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
+				/>
+				<input
+					formControlName="id"
+					type="text"
+					autocomplete="username"
+					required
+					placeholder="รหัสนักศึกษา"
 					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
 				/>
 				<input
@@ -110,7 +111,9 @@ export class SDMPageSignUp {
 		private fb: FormBuilder,
 		private http: HttpClient,
 		private router: Router,
+		private route: ActivatedRoute,
 		private alertService: AlertService,
+		private authService: AuthenticationService,
 		private loadingService: LoadingService,
 	) {
 		this.signUpFormGroup = this.fb.group({
@@ -122,6 +125,49 @@ export class SDMPageSignUp {
 			password_confirm: [''],
 		});
 		this.onSubmit = this.onSubmit.bind(this);
+	}
+
+	ngOnInit(): void {
+		this.route.queryParams.subscribe((params) => {
+			const authCode = params['code'];
+			const error = params['error'];
+			if (authCode) {
+				this.loadingService.register();
+				this.handleGoogleCallback(authCode);
+			} else if (error) {
+				console.error('Google Sign-Up Callback error:', error);
+				this.alertService.showAlert(
+					'error',
+					'ไม่สามารถสมัครสมาชิกด้วย Google ได้ กรุณาลองอีกครั้ง',
+				);
+				this.router.navigate(['/sign-up']);
+			}
+		});
+	}
+	handleGoogleCallback(authCode: string): void {
+		this.authService
+			.handleGoogleCallback(authCode, 'sign-up')
+			.then(
+				(response) => {
+					this.authService.signIn(response.id);
+					this.alertService.showAlert(
+						'success',
+						'สมัครสมาชิกด้วย Google สำเร็จ!',
+					);
+					this.router.navigate(['/']);
+				},
+				(error) => {
+					console.error('Google Sign-Up Callback error:', error);
+					this.alertService.showAlert(
+						'error',
+						'ไม่สามารถสมัครสมาชิกด้วย Google ได้ กรุณาลองอีกครั้ง',
+					);
+					this.router.navigate(['/sign-up']);
+				},
+			)
+			.finally(() => {
+				this.loadingService.ready();
+			});
 	}
 
 	onSubmit() {

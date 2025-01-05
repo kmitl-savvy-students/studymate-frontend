@@ -39,7 +39,7 @@ export class LoadingService {
 	}
 
 	hide(): void {
-		this.loadingCount = 0;
+		if (this.loadingCount > 0) return;
 		this.clearAllTimeouts();
 		this.loadingSubject.next(false);
 	}

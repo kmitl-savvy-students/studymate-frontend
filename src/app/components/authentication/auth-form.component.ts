@@ -16,7 +16,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 			</div>
 			<div class="flex items-center justify-center bg-white">
 				<div class="rounded-[40px] border border-main-25 px-20 py-12">
-					<div class="flex min-h-full w-80 flex-col 2xl:w-96">
+					<div class="flex min-h-full w-96 flex-col">
 						<div class="flex w-full justify-center">
 							<sdm-studymate-logo />
 						</div>
@@ -25,11 +25,11 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 						>
 							{{ authHeader }}
 						</h2>
-						<div class="xl:mt-4 2xl:mt-6">
+						<div class="mt-6">
 							<form
 								[formGroup]="formGroup"
 								(ngSubmit)="handleSubmit()"
-								class="xl:space-y-2.5 2xl:space-y-4"
+								class="space-y-4"
 							>
 								<ng-content />
 							</form>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'sdm-avatar-icon',
@@ -8,13 +8,37 @@ import { Component } from '@angular/core';
 			class="h-8 w-8 overflow-hidden rounded-full border border-gray-300"
 		>
 			<img
-				[src]="imagePath"
+				[src]="resolvedImagePath"
 				alt="User Avatar"
 				class="h-full w-full object-cover"
 			/>
 		</div>
 	`,
 })
-export class SDMAvatarIcon {
-	imagePath: string = 'images/default-avatar.png';
+export class SDMAvatarIcon implements OnInit {
+	@Input() imagePath: string = 'images/default-avatar.png';
+	resolvedImagePath: string = 'images/default-avatar.png';
+
+	constructor() {}
+
+	ngOnInit(): void {
+		this.validateImagePath(this.imagePath)
+			.then((isValid) => {
+				this.resolvedImagePath = isValid
+					? this.imagePath
+					: 'images/default-avatar.png';
+			})
+			.catch(() => {
+				this.resolvedImagePath = 'images/default-avatar.png';
+			});
+	}
+
+	private validateImagePath(path: string): Promise<boolean> {
+		return new Promise((resolve) => {
+			const img = new Image();
+			img.onload = () => resolve(true);
+			img.onerror = () => resolve(false);
+			img.src = path;
+		});
+	}
 }

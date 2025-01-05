@@ -17,20 +17,18 @@ import { SDMAvatarDropdownNav } from './navbar-avatar-dropdown';
 		SDMAvatarDropdownNav,
 	],
 	templateUrl: './navbar.component.html',
-	styleUrl: './navbar.component.css',
+	styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
+	signedIn: boolean = false;
+	currentUser: any = null;
+
 	constructor(private authService: AuthenticationService) {}
 
-	signedIn: boolean = false;
-	token: string | null = null;
 	ngOnInit(): void {
-		this.authService.token$.subscribe((token) => {
-			this.signedIn = !!token;
-			this.token = token;
+		this.authService.user$.subscribe((user) => {
+			this.signedIn = !!user;
+			this.currentUser = user;
 		});
-	}
-	signOut(): void {
-		this.authService.signOut();
 	}
 }

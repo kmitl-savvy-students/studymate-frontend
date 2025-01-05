@@ -3,6 +3,7 @@ import { SDMBaseButton } from '../buttons/base-button.component';
 import { SDMButtonLink } from '../buttons/button-link.component';
 import { Dropdown, DropdownInterface } from 'flowbite';
 import { SDMAvatarIcon } from '../avatar/avatar.component';
+import { User } from '../../shared/models/User.model';
 
 @Component({
 	selector: 'sdm-avatar-dropdown-nav',
@@ -11,7 +12,8 @@ import { SDMAvatarIcon } from '../avatar/avatar.component';
 	template: `
 		<sdm-base-button
 			id="avatarDropdownButton"
-			text="กร โรจน์รัตนปัญญา"
+			[text]="'สวัสดีครับ คุณ ' + currentUser?.name_nick"
+			textColorHover="text-main-100"
 			[iconCustom]="customIconTemplate"
 			iconEnd="angle-down"
 			dropdownToggle="avatarDropdown"
@@ -51,11 +53,13 @@ import { SDMAvatarIcon } from '../avatar/avatar.component';
 		</div>
 
 		<ng-template #customIconTemplate>
-			<sdm-avatar-icon />
+			<sdm-avatar-icon [imagePath]="currentUser?.profile ?? ''" />
 		</ng-template>
 	`,
 })
 export class SDMAvatarDropdownNav implements OnInit {
+	@Input() currentUser: User | null = null;
+
 	dropdown: DropdownInterface | undefined;
 
 	ngOnInit(): void {

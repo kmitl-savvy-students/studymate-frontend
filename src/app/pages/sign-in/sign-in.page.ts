@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SDMAuthForm } from '../../components/authentication/auth-form.component';
 import { SDMGoogleButton } from '../../components/buttons/google/google-button.component';
 import { SDMBaseButton } from '../../components/buttons/base-button.component';
 import { SDMButtonLink } from '../../components/buttons/button-link.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { BackendService } from '../../shared/services/backend.service';
@@ -76,13 +75,14 @@ import { finalize } from 'rxjs';
 		</sdm-auth-form>
 	`,
 })
-export class SDMPageSignIn {
+export class SDMPageSignIn implements OnInit {
 	signInFormGroup: FormGroup;
 
 	constructor(
 		private fb: FormBuilder,
 		private http: HttpClient,
 		private router: Router,
+		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private authService: AuthenticationService,
 		private backendService: BackendService,
@@ -93,6 +93,49 @@ export class SDMPageSignIn {
 			password: [''],
 		});
 		this.onSubmit = this.onSubmit.bind(this);
+	}
+
+	ngOnInit(): void {
+		this.route.queryParams.subscribe((params) => {
+			const authCode = params['code'];
+			const error = params['error'];
+			if (authCode) {
+				this.loadingService.register();
+				this.handleGoogleCallback(authCode);
+			} else if (error) {
+				console.error('Google Sign-In Callback error:', error);
+				this.alertService.showAlert(
+					'error',
+					'ไม่สามารถเข้าสู่ระบบด้วย Google ได้ กรุณาลองอีกครั้ง',
+				);
+				this.router.navigate(['/sign-in']);
+			}
+		});
+	}
+	handleGoogleCallback(authCode: string): void {
+		this.authService
+			.handleGoogleCallback(authCode, 'sign-in')
+			.then(
+				(response) => {
+					this.authService.signIn(response.id);
+					this.alertService.showAlert(
+						'success',
+						'เข้าสู่ระบบด้วย Google สำเร็จ!',
+					);
+					this.router.navigate(['/']);
+				},
+				(error) => {
+					console.error('Google Sign-In Callback error:', error);
+					this.alertService.showAlert(
+						'error',
+						'ไม่สามารถเข้าสู่ระบบด้วย Google ได้ กรุณาลองอีกครั้ง',
+					);
+					this.router.navigate(['/sign-in']);
+				},
+			)
+			.finally(() => {
+				this.loadingService.ready();
+			});
 	}
 
 	onSubmit() {

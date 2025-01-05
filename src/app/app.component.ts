@@ -5,8 +5,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { initFlowbite } from 'flowbite';
 import { AlertComponent } from './shared/services/alert/alert.component';
 import { FontAwesomeIconsService } from './shared/services/font-awesome-icons.service';
-import { BackendService } from './shared/services/backend.service';
 import { LoadingOverlayComponent } from './shared/services/loading/loading-overlay.component';
+import { LoadingService } from './shared/services/loading/loading.service';
 
 @Component({
 	standalone: true,
@@ -21,14 +21,18 @@ import { LoadingOverlayComponent } from './shared/services/loading/loading-overl
 	templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
+	backendUrl: string | null = null;
+
 	constructor(
 		public router: Router,
 		public fontAwesomeService: FontAwesomeIconsService,
-		private backendService: BackendService,
+		private loadingService: LoadingService,
 	) {}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		initFlowbite();
-		this.backendService.resolveAvailableBackendUrl();
+		this.loadingService.show(() => {
+			this.loadingService.hide();
+		});
 	}
 }
