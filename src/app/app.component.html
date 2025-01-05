@@ -1,27 +1,16 @@
+<app-alert></app-alert>
 <div class="flex min-h-screen flex-col">
-	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
+	@if (router.url != '/sign-up' && router.url != '/sign-in') {
 		<header class="flex-none">
 			<sdm-navbar></sdm-navbar>
 		</header>
-	}
-
-	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
-		<!-- <main class="mx-32 mb-32 mt-28 flex-1 2xl:mx-48">
-			<router-outlet></router-outlet>
-		</main> -->
 		<main class="container mx-auto mb-32 mt-28 flex-1">
-			<!-- @if(){
-				<sdm-choose-curriculum-modal modalID="choose-curriculum-modal" headerModal="เลือกหลักสูตรที่คุณกำลังศึกษา"></sdm-choose-curriculum-modal>
-			} -->
 			<router-outlet></router-outlet>
 		</main>
-	} @else {
-		<router-outlet></router-outlet>
-	}
-
-	@if (router.url !== '/sign-up' && router.url !== '/sign-in') {
 		<footer class="flex-none">
 			<sdm-footer></sdm-footer>
 		</footer>
+	} @else {
+		<router-outlet></router-outlet>
 	}
 </div>

@@ -7,7 +7,8 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	template: `
 		<button
-			type="button"
+			[type]="isSubmit ? 'submit' : 'button'"
+			[disabled]="IsDisabled"
 			(click)="handleClick()"
 			class="
 				w-full justify-center rounded-xl flex gap-3
@@ -17,9 +18,9 @@ import { CommonModule } from '@angular/common';
 				{{ backgroundColor }} hover:{{ backgroundColorHover }}
 			"
 		>
-			<sdm-icon *ngIf="icon" [icon]="icon"></sdm-icon>
+			<sdm-icon *ngIf="icon" [icon]="icon" />
 			<ng-container *ngIf="iconCustom">
-				<ng-container *ngTemplateOutlet="iconCustom"></ng-container>
+				<ng-container *ngTemplateOutlet="iconCustom" />
 			</ng-container>
 			<span>{{ text }}</span>
 		</button>
@@ -30,6 +31,9 @@ export class SDMBaseButton {
 	@Input() text: string = 'Empty text';
 	@Input() icon: string = '';
 	@Input() iconCustom: any | null = null;
+
+	@Input() IsDisabled: boolean = false;
+	@Input() isSubmit: boolean = false;
 
 	@Input() textColor: string = 'text-dark-100';
 	@Input() textColorHover: string = 'text-dark-100';

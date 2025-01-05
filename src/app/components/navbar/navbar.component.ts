@@ -1,25 +1,19 @@
 import { Curriculum } from '../../shared/models/Curriculum.model';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import {
-	catchError,
-	distinctUntilChanged,
-	filter,
-	switchMap,
-	takeUntil,
-} from 'rxjs/operators';
-import { SDMButtonLink } from '../buttons/link/button-link.component';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { User } from '../../shared/models/User.model';
 import { of, Subject } from 'rxjs';
 import { UserToken } from '../../shared/models/UserToken.model';
+import { SDMButtonLink } from '../buttons/button-link.component';
 
 @Component({
 	selector: 'sdm-navbar',
 	standalone: true,
-	imports: [RouterLink, SDMButtonLink, CommonModule, IconComponent],
+	imports: [RouterLink, CommonModule, IconComponent, SDMButtonLink],
 	templateUrl: './navbar.component.html',
 	styleUrl: './navbar.component.css',
 })

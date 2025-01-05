@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SDMBaseButton } from '../base-button/base-button.component';
+import { SDMBaseButton } from '../base-button.component';
 import { SDMGoogleIconSVG } from './google-svg.component';
 
 @Component({
@@ -11,14 +11,15 @@ import { SDMGoogleIconSVG } from './google-svg.component';
 			*ngIf="isSignIn == true"
 			[iconCustom]="customIconTemplate"
 			text="เข้าสู่ระบบด้วย Google"
-		></sdm-base-button>
+		/>
 		<sdm-base-button
 			*ngIf="isSignUp == true"
+			[iconCustom]="customIconTemplate"
 			text="สมัครสมาชิกด้วย Google"
-		></sdm-base-button>
+		/>
 
 		<ng-template #customIconTemplate>
-			<sdm-google-icon-svg></sdm-google-icon-svg>
+			<sdm-google-icon-svg />
 		</ng-template>
 	`,
 	imports: [CommonModule, SDMBaseButton, SDMGoogleIconSVG],
