@@ -8,6 +8,8 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AlertService } from '../../shared/services/alert/alert.service';
+import { LoadingService } from '../../shared/services/loading/loading.service';
+import { finalize } from 'rxjs';
 
 @Component({
 	selector: 'sdm-page-sign-up',
@@ -73,8 +75,7 @@ import { AlertService } from '../../shared/services/alert/alert.service';
 				/>
 				<sdm-base-button
 					[isSubmit]="true"
-					[IsDisabled]="this.loading"
-					[text]="this.loading ? 'กำลังส่งข้อมูล...' : 'สมัครสมาชิก'"
+					text="สมัครสมาชิก"
 					icon="user-plus"
 					textColor="text-white"
 					textColorHover="text-white"
@@ -94,8 +95,9 @@ import { AlertService } from '../../shared/services/alert/alert.service';
 				</span>
 				<sdm-button-link
 					link="/sign-in"
-					icon="right-to-bracket"
 					text="เข้าสู่ระบบ"
+					textColorHover="text-main-100"
+					[isUnderlined]="true"
 				/>
 			</div>
 		</sdm-auth-form>
@@ -109,6 +111,7 @@ export class SDMPageSignUp {
 		private http: HttpClient,
 		private router: Router,
 		private alertService: AlertService,
+		private loadingService: LoadingService,
 	) {
 		this.signUpFormGroup = this.fb.group({
 			id: [''],
@@ -121,32 +124,36 @@ export class SDMPageSignUp {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	loading: boolean = false;
 	onSubmit() {
 		if (this.signUpFormGroup.valid) {
 			const backendUrl = `${environment.backendUrl}/api/auth/sign-up`;
 			const formData = this.signUpFormGroup.value;
 
-			this.loading = true;
-			this.http.post(backendUrl, formData).subscribe({
-				next: (response) => {
-					this.loading = false;
-
-					console.log('Sign-up successful:', response);
-					this.alertService.showAlert(
-						'success',
-						'สมัครสมาชิกสำเร็จ!',
-					);
-					this.router.navigate(['/sign-in']);
-				},
-				error: (error) => {
-					this.loading = false;
-					console.error('Sign-up failed:', error);
-					this.alertService.showAlert(
-						'error',
-						'ไม่สามารถสมัครสมาชิกได้ กรุณาลองอีกครั้ง',
-					);
-				},
+			this.loadingService.show(() => {
+				this.http
+					.post(backendUrl, formData)
+					.pipe(
+						finalize(() => {
+							this.loadingService.hide();
+						}),
+					)
+					.subscribe({
+						next: (response) => {
+							console.log('Sign-up successful:', response);
+							this.alertService.showAlert(
+								'success',
+								'สมัครสมาชิกสำเร็จ!',
+							);
+							this.router.navigate(['/sign-in']);
+						},
+						error: (error) => {
+							console.error('Sign-up failed:', error);
+							this.alertService.showAlert(
+								'error',
+								'ไม่สามารถสมัครสมาชิกได้ กรุณาลองอีกครั้ง',
+							);
+						},
+					});
 			});
 		} else {
 			this.alertService.showAlert(

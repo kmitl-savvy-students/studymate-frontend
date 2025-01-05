@@ -10,6 +10,8 @@ import { environment } from '../../../environments/environment';
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { BackendService } from '../../shared/services/backend.service';
+import { LoadingService } from '../../shared/services/loading/loading.service';
+import { finalize } from 'rxjs';
 
 @Component({
 	selector: 'sdm-page-sign-in',
@@ -46,8 +48,7 @@ import { BackendService } from '../../shared/services/backend.service';
 				/>
 				<sdm-base-button
 					[isSubmit]="true"
-					[IsDisabled]="this.loading"
-					[text]="this.loading ? 'กำลังส่งข้อมูล...' : 'เข้าสู่ระบบ'"
+					text="เข้าสู่ระบบ"
 					icon="right-to-bracket"
 					textColor="text-white"
 					textColorHover="text-white"
@@ -67,8 +68,9 @@ import { BackendService } from '../../shared/services/backend.service';
 				</span>
 				<sdm-button-link
 					link="/sign-up"
-					icon="user-plus"
 					text="สมัครสมาชิก"
+					textColorHover="text-main-100"
+					[isUnderlined]="true"
 				/>
 			</div>
 		</sdm-auth-form>
@@ -84,6 +86,7 @@ export class SDMPageSignIn {
 		private alertService: AlertService,
 		private authService: AuthenticationService,
 		private backendService: BackendService,
+		private loadingService: LoadingService,
 	) {
 		this.signInFormGroup = this.fb.group({
 			id: [''],
@@ -92,33 +95,36 @@ export class SDMPageSignIn {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	loading: boolean = false;
 	onSubmit() {
 		if (this.signInFormGroup.valid) {
 			const backendUrl = `${this.backendService.getBackendUrl()}/api/auth/sign-in`;
 			const formData = this.signInFormGroup.value;
 
-			this.loading = true;
-			this.http.post(backendUrl, formData).subscribe({
-				next: (response: any) => {
-					this.loading = false;
-
-					this.authService.signIn(response.id);
-					this.alertService.showAlert(
-						'success',
-						'เข้าสู่ระบบสำเร็จ!',
-					);
-					this.router.navigate(['/']);
-				},
-				error: (error) => {
-					this.loading = false;
-
-					console.error('Sign-in failed:', error);
-					this.alertService.showAlert(
-						'error',
-						'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองอีกครั้ง',
-					);
-				},
+			this.loadingService.show(() => {
+				this.http
+					.post(backendUrl, formData)
+					.pipe(
+						finalize(() => {
+							this.loadingService.hide();
+						}),
+					)
+					.subscribe({
+						next: (response: any) => {
+							this.authService.signIn(response.id);
+							this.alertService.showAlert(
+								'success',
+								'เข้าสู่ระบบสำเร็จ!',
+							);
+							this.router.navigate(['/']);
+						},
+						error: (error) => {
+							console.error('Sign-in failed:', error);
+							this.alertService.showAlert(
+								'error',
+								'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองอีกครั้ง',
+							);
+						},
+					});
 			});
 		} else {
 			this.alertService.showAlert(

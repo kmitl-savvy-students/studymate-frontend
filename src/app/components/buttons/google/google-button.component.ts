@@ -11,11 +11,15 @@ import { SDMGoogleIconSVG } from './google-svg.component';
 			*ngIf="isSignIn == true"
 			[iconCustom]="customIconTemplate"
 			text="เข้าสู่ระบบด้วย Google"
+			backgroundColor="bg-main-5"
+			backgroundColorHover="bg-main-10"
 		/>
 		<sdm-base-button
 			*ngIf="isSignUp == true"
 			[iconCustom]="customIconTemplate"
 			text="สมัครสมาชิกด้วย Google"
+			backgroundColor="bg-main-5"
+			backgroundColorHover="bg-main-10"
 		/>
 
 		<ng-template #customIconTemplate>

@@ -17,7 +17,9 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 			<div class="flex items-center justify-center bg-white">
 				<div class="rounded-[40px] border border-main-25 px-20 py-12">
 					<div class="flex min-h-full w-80 flex-col 2xl:w-96">
-						<sdm-studymate-logo />
+						<div class="flex w-full justify-center">
+							<sdm-studymate-logo />
+						</div>
 						<h2
 							class="mt-4 text-center text-xl font-medium text-dark-100"
 						>

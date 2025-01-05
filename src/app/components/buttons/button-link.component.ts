@@ -1,35 +1,57 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SDMBaseButton } from './base-button.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LoadingService } from '../../shared/services/loading/loading.service';
 
 @Component({
 	selector: 'sdm-button-link',
 	standalone: true,
-	imports: [RouterLink, SDMBaseButton],
+	imports: [SDMBaseButton],
 	template: `
-		<a [routerLink]="link">
-			<sdm-base-button
-				[icon]="icon"
-				[text]="text"
-				[textColor]="textColor"
-				[textColorHover]="textColorHover"
-				[backgroundColor]="backgroundColor"
-				[backgroundColorHover]="backgroundColorHover"
-			>
-			</sdm-base-button>
-		</a>
+		<sdm-base-button
+			[isUnderlined]="isUnderlined"
+			[icon]="icon"
+			[iconCustom]="iconCustom"
+			[iconEnd]="iconEnd"
+			[iconEndCustom]="iconEndCustom"
+			[text]="text"
+			[textColor]="textColor"
+			[textColorHover]="textColorHover"
+			[backgroundColor]="backgroundColor"
+			[backgroundColorHover]="backgroundColorHover"
+			(clickEvent)="handleClick()"
+		>
+		</sdm-base-button>
 	`,
 })
 export class SDMButtonLink {
+	constructor(
+		private loadingService: LoadingService,
+		private router: Router,
+	) {}
+
 	@Input() link: string = '/';
+
+	@Input() isUnderlined: boolean = false;
 
 	@Input() text: string = 'Empty text';
 	@Input() icon: string = '';
 	@Input() iconCustom: any | null = null;
+	@Input() iconEnd: string = '';
+	@Input() iconEndCustom: any | null = null;
 
-	@Input() textColor: string = 'text-dark-100';
-	@Input() textColorHover: string = 'text-dark-100';
+	@Input() textColor: string = '';
+	@Input() textColorHover: string = '';
 
-	@Input() backgroundColor: string = 'bg-main-5';
-	@Input() backgroundColorHover: string = 'bg-main-10';
+	@Input() backgroundColor: string = '';
+	@Input() backgroundColorHover: string = '';
+
+	@Output() clickEvent = new EventEmitter<void>();
+
+	handleClick() {
+		this.loadingService.pulse(() => {
+			this.clickEvent.emit();
+			this.router.navigate([this.link]);
+		});
+	}
 }

@@ -7,6 +7,7 @@ import { SDMSubject } from './pages/subject/subject.page';
 import { SDMPageProfile } from './pages/profile/profile.page';
 import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page';
 import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
+import { SDMPageSignOut } from './pages/sign-out/sign-out.page';
 
 export const routes: Routes = [
 	{
@@ -17,6 +18,7 @@ export const routes: Routes = [
 	{ path: 'home', component: SDMPageHome },
 	{ path: 'sign-up', component: SDMPageSignUp },
 	{ path: 'sign-in', component: SDMPageSignIn },
+	{ path: 'sign-out', component: SDMPageSignOut },
 	{
 		path: 'my-subject',
 		component: SDMMySubject,

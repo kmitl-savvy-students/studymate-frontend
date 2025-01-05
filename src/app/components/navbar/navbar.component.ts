@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { IconComponent } from '../icon/icon.component';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { StudyMateLogo } from '../logo/studymate-logo.component';
 import { SDMButtonNav } from './navbar-button.component';
+import { SDMButtonLink } from '../buttons/button-link.component';
+import { SDMAvatarDropdownNav } from './navbar-avatar-dropdown';
 
 @Component({
 	selector: 'sdm-navbar',
 	standalone: true,
 	imports: [
-		RouterLink,
 		CommonModule,
-		IconComponent,
 		StudyMateLogo,
 		SDMButtonNav,
+		SDMButtonLink,
+		SDMAvatarDropdownNav,
 	],
 	templateUrl: './navbar.component.html',
 	styleUrl: './navbar.component.css',

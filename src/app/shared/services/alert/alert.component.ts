@@ -1,7 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AlertService, Alert } from './alert.service';
 import { CommonModule } from '@angular/common';
-import { trigger, transition, style, animate } from '@angular/animations';
+import {
+	trigger,
+	transition,
+	style,
+	animate,
+	keyframes,
+	state,
+} from '@angular/animations';
 
 @Component({
 	selector: 'app-alert',
@@ -14,7 +21,11 @@ import { trigger, transition, style, animate } from '@angular/animations';
 			class="fixed bottom-4 right-4 z-[9999] max-w-xs transform rounded-lg border p-4"
 			[ngClass]="alertClass"
 		>
-			<div class="flex items-start gap-3">
+			<div
+				class="flex items-start gap-3"
+				[@bounce]="bounceState"
+				(@bounce.done)="onBounceDone()"
+			>
 				<div>
 					<p class="text-sm font-medium">{{ alert.message }}</p>
 				</div>
@@ -43,21 +54,50 @@ import { trigger, transition, style, animate } from '@angular/animations';
 				),
 			]),
 		]),
+		trigger('bounce', [
+			state('inactive', style({ transform: 'translateY(0)' })),
+			state('active', style({ transform: 'translateY(0)' })),
+			transition('inactive => active', [
+				animate(
+					'400ms ease-in-out',
+					keyframes([
+						style({ transform: 'translateY(0)', offset: 0 }),
+						style({ transform: 'translateY(-10px)', offset: 0.3 }),
+						style({ transform: 'translateY(5px)', offset: 0.5 }),
+						style({ transform: 'translateY(0)', offset: 1 }),
+					]),
+				),
+			]),
+		]),
 	],
 })
 export class AlertComponent implements OnInit {
 	alert: Alert | null = null;
+	bounceState: 'inactive' | 'active' = 'inactive';
 
-	constructor(private alertService: AlertService) {}
+	constructor(
+		private alertService: AlertService,
+		private cdr: ChangeDetectorRef,
+	) {}
 
 	ngOnInit(): void {
 		this.alertService.alert$.subscribe((alert) => {
-			this.alert = alert;
+			if (alert) {
+				if (this.alert) {
+					this.triggerBounce();
+				}
+				this.alert = alert;
+			} else {
+				this.alert = null;
+			}
+			this.cdr.detectChanges();
 		});
 	}
 
 	clearAlert(): void {
 		this.alertService.clearAlert();
+		this.alert = null;
+		this.cdr.detectChanges();
 	}
 
 	get alertClass(): string {
@@ -73,5 +113,13 @@ export class AlertComponent implements OnInit {
 			default:
 				return 'bg-gray-100 text-gray-700 border-gray-200';
 		}
+	}
+
+	triggerBounce(): void {
+		this.bounceState = 'active';
+	}
+
+	onBounceDone(): void {
+		this.bounceState = 'inactive';
 	}
 }

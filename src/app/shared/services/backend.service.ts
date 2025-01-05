@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { LoadingService } from './loading/loading.service';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class BackendService {
+export class BackendService implements OnInit {
 	private environmentFiles = [
 		import('../../../environments/environment.prod'),
 		import('../../../environments/environment.preprod'),
@@ -14,7 +15,14 @@ export class BackendService {
 
 	backendUrl: string = '';
 
-	constructor(private http: HttpClient) {}
+	constructor(
+		private http: HttpClient,
+		private loadingService: LoadingService,
+	) {}
+
+	ngOnInit(): void {
+		this.loadingService.register();
+	}
 
 	getBackendUrl(): string {
 		return this.backendUrl;
@@ -29,9 +37,11 @@ export class BackendService {
 			if (isAvailable) {
 				this.backendUrl = backendUrl;
 				console.log(`Using backend service from ${backendUrl}.`);
+				this.loadingService.ready();
 				return;
 			}
 		}
+		this.loadingService.ready();
 		console.error('ERROR: Any backend service URLs are not available.');
 	}
 
