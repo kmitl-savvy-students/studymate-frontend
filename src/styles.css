@@ -14,3 +14,6 @@ body {
 	font-family: 'IBM Plex Sans Thai', 'Helvetica Neue', sans-serif;
 	background-color: #ffffff;
 }
+html {
+	overflow-y: scroll;
+}

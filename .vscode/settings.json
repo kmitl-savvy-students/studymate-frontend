@@ -32,6 +32,7 @@
 	"editor.stickyScroll.enabled": false,
 	"editor.renderFinalNewline": "off",
 	"editor.insertSpaces": false,
+	"editor.wordWrap": "off",
 
 	"workbench.cloudChanges.autoResume": "off",
 	"workbench.cloudChanges.continueOn": "off",

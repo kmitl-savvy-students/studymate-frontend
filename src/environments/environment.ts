@@ -1,4 +1,4 @@
 export const environment = {
 	production: false,
-	backendUrl: 'http://macbook.tntdverse.com:5002',
+	backendUrl: 'http://localhost:5000',
 };
