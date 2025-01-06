@@ -7,7 +7,6 @@ import { UserToken } from '../../shared/models/UserToken.model.js';
 import { Router, NavigationEnd } from '@angular/router';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 
 @Component({
 	selector: 'sdm-page-profile',

@@ -15,7 +15,7 @@ export class IconComponent {
 	@Input() iconStyle: string = 'fas';
 	@Input() fromLocation: string = '';
 
-	public navbarPlaceholderUrl: string = 'images/navbar/user-placeholder.png';
+	public navbarPlaceholderUrl: string = '';
 
 	onError() {
 		if (this.fromLocation === 'navbar') {

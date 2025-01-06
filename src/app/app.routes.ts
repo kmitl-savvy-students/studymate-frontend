@@ -8,6 +8,7 @@ import { SDMPageProfile } from './pages/profile/profile.page';
 import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page';
 import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
 import { SDMPageSignOut } from './pages/sign-out/sign-out.page';
+import { AuthenticationGuard } from './shared/services/authentication/authentication.guard';
 
 export const routes: Routes = [
 	{
@@ -16,16 +17,27 @@ export const routes: Routes = [
 		pathMatch: 'full',
 	},
 	{ path: 'home', component: SDMPageHome },
-	{ path: 'sign-up', component: SDMPageSignUp },
-	{ path: 'sign-in', component: SDMPageSignIn },
-	{ path: 'sign-out', component: SDMPageSignOut },
-	{
-		path: 'my-subject',
-		component: SDMMySubject,
-	},
 	{ path: 'subject', component: SDMSubject },
 	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
 
-	{ path: 'profile', component: SDMPageProfile },
+	{ path: 'sign-in', component: SDMPageSignIn },
+	{ path: 'sign-up', component: SDMPageSignUp },
+
+	{
+		path: 'my-subject',
+		component: SDMMySubject,
+		canActivate: [AuthenticationGuard],
+	},
+	{
+		path: 'profile',
+		component: SDMPageProfile,
+		canActivate: [AuthenticationGuard],
+	},
+	{
+		path: 'sign-out',
+		component: SDMPageSignOut,
+		canActivate: [AuthenticationGuard],
+	},
+
 	{ path: '**', component: SDMPageNotFound },
 ];

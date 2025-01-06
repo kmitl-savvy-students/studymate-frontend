@@ -22,6 +22,7 @@ export class SDMPageSignOut implements OnInit {
 			this.authService.signOut();
 			this.alertService.showAlert('success', 'ออกจากระบบสำเร็จ!');
 			this.router.navigate(['/home']);
+			this.loadingService.hide();
 		});
 	}
 }

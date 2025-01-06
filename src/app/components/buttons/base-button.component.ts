@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	template: `
 		<button
-			[id]="id"
+			[id]="buttonId"
 			[type]="isSubmit ? 'submit' : 'button'"
 			[disabled]="isDisabled"
 			(click)="handleClick()"
@@ -43,7 +43,7 @@ import { CommonModule } from '@angular/common';
 	imports: [IconComponent, CommonModule],
 })
 export class SDMBaseButton {
-	@Input() id: string = '';
+	@Input() buttonId: string = '';
 
 	@Input() text: string = 'Empty text';
 	@Input() icon: string = '';

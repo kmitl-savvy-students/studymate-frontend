@@ -5,7 +5,6 @@ import { CardHomeComponent } from '../../components/card-home/card-home.componen
 import { PicBoxHomeComponent } from '../../components/pic-box-home/pic-box-home.component';
 import { TextBoxHomeComponent } from '../../components/text-box-home/text-box-home.component';
 import { initFlowbite, ModalOptions } from 'flowbite';
-import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Modal } from 'flowbite';
@@ -21,7 +20,6 @@ import { User } from '../../shared/models/User.model';
 		CardHomeComponent,
 		PicBoxHomeComponent,
 		TextBoxHomeComponent,
-		SDMChooseCurriculumModalComponent,
 	],
 	templateUrl: './home.page.html',
 	styleUrl: './home.page.css',
