@@ -1,28 +1,14 @@
-<div class="flex w-full flex-col gap-y-5">
+<div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn
 		[subjectDetailData]="eachSubjectData"
 		[subjectDetail]="subjectDetail"
 	></sdm-subject-detail-cpn>
-  <sdm-write-review-box [isEdit]="false"> </sdm-write-review-box>                                                                   
-	<div class="flex items-center gap-3">
-		<div class="font-medium text-dark-100">เรียงโดย</div>
+	<sdm-write-review-box [isEdit]="false"> </sdm-write-review-box>
+	<div class="grid w-full grid-cols-1 items-center gap-3">
 		<sdm-review-filter
-			(selectedPopularValue)="onPopularFilterChange($event)"
-			(selectedLatestValue)="onLatestFilterChange($event)"
-			(selectedRatingValue)="onRatingFilterChange($event)"
+			[subjectReviewData]="subjectReviewData"
+			[isLoadingReview]="isLoadingReview"
+			[paginationType]="'single'"
 		></sdm-review-filter>
-	</div>
-
-	<div class="grid w-full grid-cols-1 gap-4">
-		<ng-container
-			*ngFor="let data of subjectReviewData; let i = index"
-			class="grid grid-cols-1 gap-4"
-			><sdm-subject-review
-				viewMode="subject-detail"
-				[subjectReviewData]="data"
-				[isSignIn]="true"
-				[isReviewCreator]="true"
-			></sdm-subject-review
-		></ng-container>
 	</div>
 </div>
