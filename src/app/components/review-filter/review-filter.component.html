@@ -100,8 +100,8 @@
 			><sdm-subject-review
 				viewMode="subject-detail"
 				[subjectReviewData]="data"
-				[isSignIn]="true"
-				[isReviewCreator]="true"
+				[isSignIn]="signedIn"
+				[isReviewCreator]="isReviewOwner(data.user_id)"
 			></sdm-subject-review
 		></ng-container>
 		<!-- Pagination -->

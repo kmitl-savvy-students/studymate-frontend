@@ -10,6 +10,7 @@ import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
 import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
 import { subjectReviewData } from './subject-detail-page-data';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -31,10 +32,14 @@ export class SDMPageSubjectDetail implements OnInit {
 	// public subjectReviewData = subjectReviewData;
 	public isLoadingReview: boolean = false;
 
+	public signedIn: boolean = false;
+	public currentUser: any = null;
+
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
 		private apiManagementService: APIManagementService,
+		private authService: AuthenticationService,
 	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -44,6 +49,10 @@ export class SDMPageSubjectDetail implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.authService.user$.subscribe((user) => {
+			this.signedIn = !!user;
+			this.currentUser = user;
+		});
 		this.route.queryParams.subscribe((params) => {
 			const subjectData = params['subject'];
 
