@@ -1,29 +1,15 @@
-import {
-	AfterViewInit,
-	Component,
-	ElementRef,
-	OnInit,
-	ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { AnnounceComponent } from '../../components/announce/announce.component';
 import { LetPlanComponent } from '../../components/let-plan/let-plan.component';
 import { CardHomeComponent } from '../../components/card-home/card-home.component';
-import { SDMButtonLink } from '../../components/buttons/link/button-link.component';
 import { PicBoxHomeComponent } from '../../components/pic-box-home/pic-box-home.component';
 import { TextBoxHomeComponent } from '../../components/text-box-home/text-box-home.component';
-import { IconComponent } from '../../components/icon/icon.component';
-import {
-	initFlowbite,
-	initModals,
-	ModalOptions,
-	ModalInterface,
-} from 'flowbite';
+import { initFlowbite, ModalOptions } from 'flowbite';
 import { SDMChooseCurriculumModalComponent } from '../../components/modals/choose-curriculum-modal/choose-curriculum-modal.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { Modal } from 'flowbite';
 
-import type { InstanceOptions } from 'flowbite';
 import { User } from '../../shared/models/User.model';
 
 @Component({
