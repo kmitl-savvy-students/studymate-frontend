@@ -33,8 +33,6 @@ export class SDMPageSubjectDetail implements OnInit {
 	// public subjectReviewData = subjectReviewData;
 	public isLoadingReview: boolean = false;
 
-	// public signedIn: boolean = false;
-	// public currentUser: any = null;
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
 
@@ -52,10 +50,6 @@ export class SDMPageSubjectDetail implements OnInit {
 	}
 
 	ngOnInit(): void {
-		// this.authService.user$.subscribe((user) => {
-		// 	this.signedIn = !!user;
-		// 	this.currentUser = user;
-		// });
 		this.authService.signedIn$.subscribe((signedIn) => {
 			this.signedIn = signedIn;
 		});
