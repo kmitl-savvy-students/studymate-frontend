@@ -3,7 +3,14 @@
 		[subjectDetailData]="eachSubjectData"
 		[subjectDetail]="subjectDetail"
 	></sdm-subject-detail-cpn>
-	<sdm-write-review-box [isEdit]="false"> </sdm-write-review-box>
+	<sdm-write-review-box
+		[isEdit]="false"
+		[signedIn]="signedIn"
+		[currentUser]="currentUser"
+		[subjectId]="eachSubjectData.subject_id"
+		(reviewSuccess)="onReviewSuccess()"
+	>
+	</sdm-write-review-box>
 	<div class="grid w-full grid-cols-1 items-center gap-3">
 		<sdm-review-filter
 			[subjectReviewData]="subjectReviewData"
