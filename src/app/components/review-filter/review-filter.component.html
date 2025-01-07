@@ -102,7 +102,9 @@
 				[subjectReviewData]="data"
 				[isSignIn]="signedIn"
 				[isReviewCreator]="isReviewOwner(data.user_id)"
+				[currentUser]="currentUser"
 				(saveEditReview)="onSaveEditReview()"
+				(deleteUserReview)="onDeleteUserReview()"
 			></sdm-subject-review
 		></ng-container>
 		<!-- Pagination -->

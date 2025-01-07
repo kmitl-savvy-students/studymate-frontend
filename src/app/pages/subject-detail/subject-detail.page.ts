@@ -121,7 +121,7 @@ export class SDMPageSubjectDetail implements OnInit {
 				},
 				error: (error) => {
 					if (error.status === 404) {
-						console.error('Not found');
+						console.error('Not found!!!!!!!');
 					} else if (error.status === 500) {
 						console.error('Internal Server Error');
 					} else {
@@ -140,6 +140,10 @@ export class SDMPageSubjectDetail implements OnInit {
 	}
 
 	public onReviewSuccess() {
+		this.getSubjectReviews();
+	}
+
+	public onDeleteUserReview() {
 		this.getSubjectReviews();
 	}
 }

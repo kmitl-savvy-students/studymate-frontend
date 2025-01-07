@@ -17,6 +17,7 @@ import { SDMSubjectReviewComponent } from '../subject-review/subject-review.comp
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMPaginationComponent } from '../pagination/pagination.component';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { User } from '../../shared/models/User.model';
 
 @Component({
 	selector: 'sdm-review-filter',
@@ -37,10 +38,11 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType: 'single' | 'double' = 'single';
 	@Input() signedIn: boolean = false;
-	@Input() currentUser: any = null;
+	@Input() currentUser: User | null = null;
 	@Input() prioritizeUserReview: boolean = false;
 
 	@Output() saveEditReview = new EventEmitter<void>();
+	@Output() deleteUserReview = new EventEmitter<void>();
 
 	public ratingList = ratingList;
 
@@ -171,7 +173,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.currentUser
 		) {
 			userReview = dataToFilter.find(
-				(item) => item.user_id === this.currentUser.id,
+				(item) => item.user_id === this.currentUser?.id,
 			);
 		}
 
@@ -200,7 +202,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.filterItems = [
 				userReview,
 				...this.filterItems.filter(
-					(item) => item.user_id !== this.currentUser.id,
+					(item) => item.user_id !== this.currentUser?.id,
 				),
 			];
 		}
@@ -223,5 +225,9 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	public onSaveEditReview() {
 		this.saveEditReview.emit();
+	}
+
+	public onDeleteUserReview() {
+		this.deleteUserReview.emit();
 	}
 }

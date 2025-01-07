@@ -287,15 +287,10 @@ export class APIManagementService {
 		return this.http.delete(apiUrl, { headers });
 	}
 
-	// DeleteUserReviewData(
-	// 	userTokenId: string,
-	// 	subjectId: string,
-	// 	studentId: string,
-	// ) {
-	// 	const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}/${studentId}`;
-	// 	const headers = this.GetAuthHeader(userTokenId);
-	// 	return this.http.delete(apiUrl, { headers });
-	// }
+	DeleteUserReviewData(subjectId: string, studentId: string) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}/${studentId}`;
+		return this.http.delete(apiUrl);
+	}
 
 	SignoutUserfromSystem(userTokenId: string) {
 		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;

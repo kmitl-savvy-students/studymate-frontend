@@ -14,6 +14,7 @@ import { SDMWriteReviewBoxComponent } from '../write-review-box/write-review-box
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { UserToken } from '../../shared/models/UserToken.model';
 import { AuthService } from '../../shared/services/auth.service';
+import { User } from '../../shared/models/User.model';
 
 @Component({
 	selector: 'sdm-subject-review',
@@ -32,8 +33,10 @@ export class SDMSubjectReviewComponent implements OnInit {
 	@Input() subjectReviewData!: SubjectReviewData;
 	@Input() isSignIn: boolean = false;
 	@Input() isReviewCreator: boolean = false;
+	@Input() currentUser: User | null = null;
 
 	@Output() saveEditReview = new EventEmitter<void>();
+	@Output() deleteUserReview = new EventEmitter<void>();
 
 	public canEdit: boolean = false;
 	public canDelete: boolean = false;
@@ -87,7 +90,9 @@ export class SDMSubjectReviewComponent implements OnInit {
 	}
 
 	public onCancelEdit() {
-		this.toggleEdit();
+		// this.toggleEdit();
+		this.isEditing = false;
+		console.log('isEditing : ', this.isEditing);
 	}
 
 	public onSaveEditReview() {
@@ -95,31 +100,35 @@ export class SDMSubjectReviewComponent implements OnInit {
 		this.toggleEdit();
 	}
 
-	// public deleteReview() {
-	// 	this.apiManagementService
-	// 		.DeleteUserReviewData(
-	// 			this.userTokenId ?? '',
-	// 			this.subjectReviewData.teachtable_subject.subject_id,
-	// 			this.userId ?? '',
-	// 		)
-	// 		.subscribe({
-	// 			next: () => {
-	// 				console.log(
-	// 					'Review deleted successfully',
-	// 					this.userTokenId ?? '',
-	// 					this.subjectReviewData.teachtable_subject.subject_id,
-	// 					this.userId ?? '',
-	// 				);
-	// 			},
-	// 			error: (err) => {
-	// 				console.error('Error deleting review:', err);
-	// 				console.log('userTokenId : ', this.userTokenId ?? '');
-	// 				console.log(
-	// 					'subjectId : ',
-	// 					this.subjectReviewData.teachtable_subject.subject_id,
-	// 				);
-	// 				console.log('userId : ', this.userId ?? '');
-	// 			},
-	// 		});
-	// }
+	public deleteReview() {
+		if (this.currentUser) {
+			this.apiManagementService
+				.DeleteUserReviewData(
+					this.subjectReviewData.teachtable_subject.subject_id,
+					this.currentUser.id,
+				)
+				.subscribe({
+					next: () => {
+						console.log(
+							'Review deleted successfully',
+
+							this.subjectReviewData.teachtable_subject
+								.subject_id,
+							this.currentUser?.id,
+						);
+						this.deleteUserReview.emit();
+					},
+					error: (err) => {
+						console.error('Error deleting review:', err);
+
+						console.log(
+							'subjectId : ',
+							this.subjectReviewData.teachtable_subject
+								.subject_id,
+						);
+						console.log('userId : ', this.currentUser?.id);
+					},
+				});
+		}
+	}
 }
