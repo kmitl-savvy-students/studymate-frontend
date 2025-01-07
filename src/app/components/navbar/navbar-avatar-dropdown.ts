@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { SDMBaseButton } from '../buttons/base-button.component';
 import { SDMButtonLink } from '../buttons/button-link.component';
 import { Dropdown, DropdownInterface } from 'flowbite';
@@ -11,7 +11,7 @@ import { User } from '../../shared/models/User.model';
 	imports: [SDMBaseButton, SDMButtonLink, SDMAvatarIcon],
 	template: `
 		<sdm-base-button
-			id="avatarDropdownButton"
+			buttonId="avatarDropdownBtn"
 			[text]="'สวัสดีครับ คุณ ' + currentUser?.name_nick"
 			textColorHover="text-main-100"
 			[iconCustom]="customIconTemplate"
@@ -57,16 +57,14 @@ import { User } from '../../shared/models/User.model';
 		</ng-template>
 	`,
 })
-export class SDMAvatarDropdownNav implements OnInit {
+export class SDMAvatarDropdownNav implements AfterViewInit {
 	@Input() currentUser: User | null = null;
 
 	dropdown: DropdownInterface | undefined;
 
-	ngOnInit(): void {
+	ngAfterViewInit(): void {
 		const $dropdownTarget = document.getElementById('avatarDropdown');
-		const $dropdownTrigger = document.getElementById(
-			'avatarDropdownButton',
-		);
+		const $dropdownTrigger = document.getElementById('avatarDropdownBtn');
 		this.dropdown = new Dropdown($dropdownTarget, $dropdownTrigger);
 	}
 	closeDropdown() {

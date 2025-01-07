@@ -5,6 +5,7 @@ import { StudyMateLogo } from '../logo/studymate-logo.component';
 import { SDMButtonNav } from './navbar-button.component';
 import { SDMButtonLink } from '../buttons/button-link.component';
 import { SDMAvatarDropdownNav } from './navbar-avatar-dropdown';
+import { User } from '../../shared/models/User.model';
 
 @Component({
 	selector: 'sdm-navbar',
@@ -17,17 +18,18 @@ import { SDMAvatarDropdownNav } from './navbar-avatar-dropdown';
 		SDMAvatarDropdownNav,
 	],
 	templateUrl: './navbar.component.html',
-	styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
 	signedIn: boolean = false;
-	currentUser: any = null;
+	currentUser: User | null = null;
 
 	constructor(private authService: AuthenticationService) {}
 
-	ngOnInit(): void {
+	async ngOnInit(): Promise<void> {
+		this.authService.signedIn$.subscribe((signedIn) => {
+			this.signedIn = signedIn;
+		});
 		this.authService.user$.subscribe((user) => {
-			this.signedIn = !!user;
 			this.currentUser = user;
 		});
 	}

@@ -6,7 +6,9 @@ import { initFlowbite } from 'flowbite';
 import { AlertComponent } from './shared/services/alert/alert.component';
 import { FontAwesomeIconsService } from './shared/services/font-awesome-icons.service';
 import { LoadingOverlayComponent } from './shared/services/loading/loading-overlay.component';
-import { LoadingService } from './shared/services/loading/loading.service';
+import { SelectCurriculumModalComponent } from './components/select-curriculum/select-curriculum-modal.component';
+import { CommonModule } from '@angular/common';
+import { AuthenticationService } from './shared/services/authentication/authentication.service';
 
 @Component({
 	standalone: true,
@@ -16,23 +18,26 @@ import { LoadingService } from './shared/services/loading/loading.service';
 		NavbarComponent,
 		FooterComponent,
 		AlertComponent,
+		CommonModule,
 		LoadingOverlayComponent,
+		SelectCurriculumModalComponent,
 	],
 	templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
-	backendUrl: string | null = null;
-
 	constructor(
 		public router: Router,
 		public fontAwesomeService: FontAwesomeIconsService,
-		private loadingService: LoadingService,
+		private authService: AuthenticationService,
 	) {}
 
-	ngOnInit() {
+	shouldShowNavbarAndFooter(): boolean {
+		const urlPath = this.router.url.split('?')[0];
+		return urlPath !== '/sign-up' && urlPath !== '/sign-in';
+	}
+
+	async ngOnInit() {
 		initFlowbite();
-		this.loadingService.show(() => {
-			this.loadingService.hide();
-		});
+		await this.authService.validate();
 	}
 }

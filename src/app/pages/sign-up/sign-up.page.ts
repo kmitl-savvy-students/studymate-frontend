@@ -132,7 +132,6 @@ export class SDMPageSignUp {
 			const authCode = params['code'];
 			const error = params['error'];
 			if (authCode) {
-				this.loadingService.register();
 				this.handleGoogleCallback(authCode);
 			} else if (error) {
 				console.error('Google Sign-Up Callback error:', error);
@@ -145,6 +144,7 @@ export class SDMPageSignUp {
 		});
 	}
 	handleGoogleCallback(authCode: string): void {
+		this.loadingService.register('Google Authentication');
 		this.authService
 			.handleGoogleCallback(authCode, 'sign-up')
 			.then(
@@ -166,7 +166,7 @@ export class SDMPageSignUp {
 				},
 			)
 			.finally(() => {
-				this.loadingService.ready();
+				this.loadingService.ready('Google Authentication');
 			});
 	}
 
@@ -184,8 +184,7 @@ export class SDMPageSignUp {
 						}),
 					)
 					.subscribe({
-						next: (response) => {
-							console.log('Sign-up successful:', response);
+						next: (_) => {
 							this.alertService.showAlert(
 								'success',
 								'สมัครสมาชิกสำเร็จ!',

@@ -95,12 +95,11 @@ export class SDMPageSignIn implements OnInit {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	ngOnInit(): void {
+	async ngOnInit(): Promise<void> {
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];
 			const error = params['error'];
 			if (authCode) {
-				this.loadingService.register();
 				this.handleGoogleCallback(authCode);
 			} else if (error) {
 				console.error('Google Sign-In Callback error:', error);
@@ -112,30 +111,29 @@ export class SDMPageSignIn implements OnInit {
 			}
 		});
 	}
-	handleGoogleCallback(authCode: string): void {
-		this.authService
-			.handleGoogleCallback(authCode, 'sign-in')
-			.then(
-				(response) => {
-					this.authService.signIn(response.id);
-					this.alertService.showAlert(
-						'success',
-						'เข้าสู่ระบบด้วย Google สำเร็จ!',
-					);
-					this.router.navigate(['/']);
-				},
-				(error) => {
-					console.error('Google Sign-In Callback error:', error);
-					this.alertService.showAlert(
-						'error',
-						'ไม่สามารถเข้าสู่ระบบด้วย Google ได้ กรุณาลองอีกครั้ง',
-					);
-					this.router.navigate(['/sign-in']);
-				},
-			)
-			.finally(() => {
-				this.loadingService.ready();
-			});
+	async handleGoogleCallback(authCode: string): Promise<void> {
+		this.loadingService.register('Google Authentication');
+		try {
+			const response = await this.authService.handleGoogleCallback(
+				authCode,
+				'sign-in',
+			);
+			await this.authService.signIn(response.id);
+			this.alertService.showAlert(
+				'success',
+				'เข้าสู่ระบบด้วย Google สำเร็จ!',
+			);
+			this.router.navigate(['/']);
+		} catch (error) {
+			console.error('Google Sign-In Callback error:', error);
+			this.alertService.showAlert(
+				'error',
+				'ไม่สามารถเข้าสู่ระบบด้วย Google ได้ กรุณาลองอีกครั้ง',
+			);
+			this.router.navigate(['/sign-in']);
+		} finally {
+			this.loadingService.ready('Google Authentication');
+		}
 	}
 
 	onSubmit() {

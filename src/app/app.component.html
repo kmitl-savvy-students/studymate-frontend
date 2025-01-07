@@ -1,17 +1,19 @@
-<app-loading-overlay></app-loading-overlay>
-<app-alert></app-alert>
+<app-loading-overlay />
+<modal-select-curriculum />
+<app-alert />
 <div class="flex min-h-screen flex-col">
-	@if (router.url != '/sign-up' && router.url != '/sign-in') {
+	<div *ngIf="shouldShowNavbarAndFooter(); else authOnly">
 		<header class="flex-none">
-			<sdm-navbar></sdm-navbar>
+			<sdm-navbar />
 		</header>
 		<main class="container mx-auto mb-32 mt-28 flex-1">
-			<router-outlet></router-outlet>
+			<router-outlet />
 		</main>
 		<footer class="flex-none">
-			<sdm-footer></sdm-footer>
+			<sdm-footer />
 		</footer>
-	} @else {
-		<router-outlet></router-outlet>
-	}
+	</div>
+	<ng-template #authOnly>
+		<router-outlet />
+	</ng-template>
 </div>

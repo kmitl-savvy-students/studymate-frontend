@@ -12,25 +12,47 @@ export class LoadingService {
 	private fadeInTimeoutId: ReturnType<typeof setTimeout> | null = null;
 	private pulseTimeoutId: ReturnType<typeof setTimeout> | null = null;
 	private midPulseTimeoutId: ReturnType<typeof setTimeout> | null = null;
-	private isPulsing = false;
+	private autoLoadTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-	register(): void {
+	private isPulsing = false;
+	private autoLoadDelay = 1000;
+
+	constructor() {
+		this.startAutoLoadTimeout();
+	}
+
+	register(serviceName: string = 'unknown'): void {
+		if (this.autoLoadTimeoutId) {
+			clearTimeout(this.autoLoadTimeoutId);
+			this.autoLoadTimeoutId = null;
+		}
+
 		this.loadingCount++;
+		console.log(`DEBUG: [SERVICES] '${serviceName}' has been registered.`);
 		this.updateLoadingState();
 	}
 
-	ready(): void {
+	ready(serviceName: string = 'unknown'): void {
 		if (this.loadingCount > 0) {
 			this.loadingCount--;
 		}
+		const serviceLeft = `${this.loadingCount} services left.`;
+		console.log(
+			`DEBUG: [SERVICES] '${serviceName}' has been done. ${
+				this.loadingCount > 0 ? serviceLeft : ''
+			}`,
+		);
 		this.updateLoadingState();
+
+		if (this.loadingCount === 0 && !this.autoLoadTimeoutId) {
+			this.startAutoLoadTimeout();
+		}
 	}
 
 	show(afterFadeInCallback?: () => void): void {
 		this.clearFadeInTimeout();
 
-		this.loadingSubject.next(true);
-
+		this.register('Forcefully show');
 		if (afterFadeInCallback) {
 			this.fadeInTimeoutId = setTimeout(() => {
 				afterFadeInCallback();
@@ -39,6 +61,7 @@ export class LoadingService {
 	}
 
 	hide(): void {
+		this.ready('Forcefully hide');
 		if (this.loadingCount > 0) return;
 		this.clearAllTimeouts();
 		this.loadingSubject.next(false);
@@ -50,10 +73,10 @@ export class LoadingService {
 			return;
 		}
 
+		this.register('Manually Pulsing');
+
 		this.isPulsing = true;
 		this.clearAllTimeouts();
-
-		this.loadingSubject.next(true);
 
 		if (midCallback) {
 			this.midPulseTimeoutId = setTimeout(() => {
@@ -62,14 +85,31 @@ export class LoadingService {
 		}
 
 		this.pulseTimeoutId = setTimeout(() => {
-			this.loadingSubject.next(false);
 			this.isPulsing = false;
+			this.ready('Manually Pulsing');
 		}, 700);
 	}
 
 	private updateLoadingState(): void {
 		const isLoading = this.loadingCount > 0;
 		this.loadingSubject.next(isLoading);
+
+		if (!isLoading) {
+			console.log(
+				'DEBUG: [SERVICES] All services are done. Application is shown.',
+			);
+		}
+	}
+
+	private startAutoLoadTimeout(): void {
+		this.autoLoadTimeoutId = setTimeout(() => {
+			if (this.loadingCount === 0 && this.loadingSubject.value) {
+				console.log(
+					`DEBUG: [SERVICES] No services registered within ${this.autoLoadDelay}ms. Showing application.`,
+				);
+				this.loadingSubject.next(false);
+			}
+		}, this.autoLoadDelay);
 	}
 
 	private clearFadeInTimeout(): void {
