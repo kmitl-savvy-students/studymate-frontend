@@ -13,10 +13,12 @@ export class SDMRatingComponent {
 	@Input() mode: 'display' | 'selector' = 'display';
 	@Input() rating: number = 0;
 	@Input() customClass: string = '';
+	@Output() value = new EventEmitter<number>();
 
 	onRatingChange(newRating: number): void {
 		if (this.mode === 'selector') {
 			this.rating = newRating;
+			this.value.emit(this.rating);
 		}
 	}
 }

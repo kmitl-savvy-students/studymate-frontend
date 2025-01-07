@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { SDMSelectComponent } from '../select/select.component';
 import {
@@ -9,6 +9,8 @@ import {
 import { SelectedData } from '../../shared/models/SdmAppService.model.js';
 import { SDMRatingComponent } from '../rating/rating.component';
 import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
+import { SDMButtonLink } from '../buttons/button-link.component';
+import { User } from '../../shared/models/User.model.js';
 
 @Component({
 	selector: 'sdm-write-review-box',
@@ -19,12 +21,17 @@ import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.componen
 		SDMSelectComponent,
 		SDMRatingComponent,
 		SDMRichTextEditor,
+		SDMButtonLink,
 	],
 	templateUrl: './write-review-box.component.html',
 	styleUrl: './write-review-box.component.css',
 })
 export class SDMWriteReviewBoxComponent {
 	@Input() isEdit: boolean = false;
+	@Input() signedIn: boolean = false;
+	@Input() currentUser: User | null = null;
+	@Input() subjectId!: string;
+	@Output() reviewSuccess = new EventEmitter<void>();
 	public selectedYear: number = 0;
 	public selectedSemester: number = 0;
 
@@ -34,6 +41,8 @@ export class SDMWriteReviewBoxComponent {
 	public isSelectAllDropdown: boolean = false;
 
 	public markdownContent: string = '';
+
+	public reviewRating: number = 0;
 
 	public onMarkdownChange(content: string): void {
 		this.markdownContent = content; // รับค่าจาก Markdown Editor
@@ -57,6 +66,12 @@ export class SDMWriteReviewBoxComponent {
 		}
 	}
 
+	public updatePermission() {}
+
+	public onRatingChange(rating: number) {
+		this.reviewRating = rating;
+	}
+
 	public checkSelectAllDropdown() {
 		if (this.selectedYear && this.selectedSemester) {
 			this.isSelectAllDropdown = true;
@@ -65,5 +80,9 @@ export class SDMWriteReviewBoxComponent {
 		}
 
 		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
+	}
+
+	public onReviewSuccess() {
+		this.reviewSuccess.emit();
 	}
 }

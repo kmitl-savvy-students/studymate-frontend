@@ -14,6 +14,7 @@ import { GenedGroup } from '../models/GenedGroup.model';
 import { GenedSubject } from '../models/GenedSubject.model';
 import { subjectDetailData } from '../models/SubjectDetailData.model';
 import { SubjectReviewData } from '../models/SubjectReviewData.model';
+import { subjectReviewData } from '../../pages/subject-detail/subject-detail-page-data.js';
 
 @Injectable({ providedIn: 'root' })
 export class APIManagementService {
@@ -137,7 +138,7 @@ export class APIManagementService {
 	GetCurriculumTeachtableSubject(
 		subjectId: string,
 	): Observable<subjectDetailData> {
-		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject-get/${subjectId}`;
+		const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject-get/${subjectId}`;
 
 		return this.http.get<subjectDetailData>(apiUrl);
 	}
@@ -145,9 +146,47 @@ export class APIManagementService {
 	GetSubjectReviewsBySubjectID(
 		subjectId: string,
 	): Observable<SubjectReviewData[]> {
-		let apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
+	}
+
+	CreateSubjectReviewByUser(
+		student_id: string,
+		year: number,
+		term: number,
+		subject_id: string,
+		review: string,
+		rating: number,
+	) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review`;
+		return this.http.post(apiUrl, {
+			student_id: student_id,
+			year: year,
+			term: term,
+			subject_id: subject_id,
+			review: review,
+			rating: rating,
+		});
+	}
+
+	UpdateSubjectReviewByUser(
+		student_id: string,
+		year: number,
+		term: number,
+		subject_id: string,
+		review: string,
+		rating: number,
+	) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/update`;
+		return this.http.patch(apiUrl, {
+			student_id: student_id,
+			year: year,
+			term: term,
+			subject_id: subject_id,
+			review: review,
+			rating: rating,
+		});
 	}
 
 	// GetCurriculumSubjectsTeachtable(
