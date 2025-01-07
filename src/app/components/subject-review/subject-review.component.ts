@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+} from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
 import { CommonModule } from '@angular/common';
@@ -25,6 +32,8 @@ export class SDMSubjectReviewComponent implements OnInit {
 	@Input() subjectReviewData!: SubjectReviewData;
 	@Input() isSignIn: boolean = false;
 	@Input() isReviewCreator: boolean = false;
+
+	@Output() saveEditReview = new EventEmitter<void>();
 
 	public canEdit: boolean = false;
 	public canDelete: boolean = false;
@@ -75,6 +84,15 @@ export class SDMSubjectReviewComponent implements OnInit {
 
 	public toggleEdit() {
 		this.isEditing = !this.isEditing;
+	}
+
+	public onCancelEdit() {
+		this.toggleEdit();
+	}
+
+	public onSaveEditReview() {
+		this.saveEditReview.emit();
+		this.toggleEdit();
 	}
 
 	// public deleteReview() {

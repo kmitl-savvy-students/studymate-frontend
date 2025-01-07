@@ -7,9 +7,9 @@
 			[disabled]="getSubjectReviewIsNull"
 			class="filter-button"
 			[ngClass]="{
-				'bg-main-100 text-white': selectedPopular,
+				'bg-main-100 text-white hover:bg-main-120': selectedPopular,
 				'bg-main-15 text-dark-100': !selectedPopular,
-				'hover:bg-main-25': !getSubjectReviewIsNull,
+				'hover:bg-main-25': !getSubjectReviewIsNull && !selectedPopular,
 				'cursor-not-allowed': getSubjectReviewIsNull,
 			}"
 		>
@@ -20,9 +20,9 @@
 			[disabled]="getSubjectReviewIsNull"
 			class="filter-button"
 			[ngClass]="{
-				'bg-main-100 text-white': selectedLatest,
+				'bg-main-100 text-white hover:bg-main-120': selectedLatest,
 				'bg-main-15 text-dark-100': !selectedLatest,
-				'hover:bg-main-25': !getSubjectReviewIsNull,
+				'hover:bg-main-25': !getSubjectReviewIsNull && !selectedLatest,
 				'cursor-not-allowed': getSubjectReviewIsNull,
 			}"
 		>
@@ -102,6 +102,7 @@
 				[subjectReviewData]="data"
 				[isSignIn]="signedIn"
 				[isReviewCreator]="isReviewOwner(data.user_id)"
+				(saveEditReview)="onSaveEditReview()"
 			></sdm-subject-review
 		></ng-container>
 		<!-- Pagination -->

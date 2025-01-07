@@ -11,6 +11,7 @@ import { SDMReviewFilterComponent } from '../../components/review-filter/review-
 import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
 import { subjectReviewData } from './subject-detail-page-data';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { User } from '../../shared/models/User.model';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -32,8 +33,10 @@ export class SDMPageSubjectDetail implements OnInit {
 	// public subjectReviewData = subjectReviewData;
 	public isLoadingReview: boolean = false;
 
+	// public signedIn: boolean = false;
+	// public currentUser: any = null;
 	public signedIn: boolean = false;
-	public currentUser: any = null;
+	public currentUser: User | null = null;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -49,10 +52,17 @@ export class SDMPageSubjectDetail implements OnInit {
 	}
 
 	ngOnInit(): void {
+		// this.authService.user$.subscribe((user) => {
+		// 	this.signedIn = !!user;
+		// 	this.currentUser = user;
+		// });
+		this.authService.signedIn$.subscribe((signedIn) => {
+			this.signedIn = signedIn;
+		});
 		this.authService.user$.subscribe((user) => {
-			this.signedIn = !!user;
 			this.currentUser = user;
 		});
+
 		this.route.queryParams.subscribe((params) => {
 			const subjectData = params['subject'];
 
@@ -129,5 +139,9 @@ export class SDMPageSubjectDetail implements OnInit {
 					this.isLoadingReview = false;
 				},
 			});
+	}
+
+	public onSaveEditReview() {
+		this.getSubjectReviews();
 	}
 }

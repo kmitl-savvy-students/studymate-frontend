@@ -40,6 +40,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() currentUser: any = null;
 	@Input() prioritizeUserReview: boolean = false;
 
+	@Output() saveEditReview = new EventEmitter<void>();
+
 	public ratingList = ratingList;
 
 	public selectedPopular: boolean = false;
@@ -217,5 +219,9 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.paginatedItems = dataToPaginate.slice(start, end);
 		this.subjectReviewTotal = dataToPaginate.length;
 		this.filterReviewIsNull = dataToPaginate.length === 0;
+	}
+
+	public onSaveEditReview() {
+		this.saveEditReview.emit();
 	}
 }
