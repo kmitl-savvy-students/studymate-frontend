@@ -1,45 +1,80 @@
 <div>
-	<div class="grid w-full flex-none grid-cols-1 gap-2">
-		<ng-container *ngIf="!isEdit">
-			<div class="flex flex-row items-center gap-1">
-				<div class="text-base font-semibold">
-					เขียนรีวิวสำหรับรายวิชานี้
+	<ng-container *ngIf="!signedIn; else alreadySignin">
+		<div class="flex flex-col gap-1">
+			<div class="text-base font-semibold">
+				เขียนรีวิวสำหรับรายวิชานี้
+			</div>
+			<div
+				class="flex w-full flex-col items-center justify-center gap-2 rounded-[15px] border border-main-25 py-4"
+			>
+				<div>ขออภัย กรุณาเข้าสู่ระบบเพื่อรีวิวรายวิชา</div>
+				<sdm-button-link
+					text="เข้าสู่ระบบทันที"
+					link="/sign-in"
+					backgroundColor="bg-main-100"
+					textColor="text-white"
+				></sdm-button-link>
+			</div>
+		</div>
+	</ng-container>
+	<ng-template #alreadySignin>
+		<div class="grid w-full flex-none grid-cols-1 gap-2">
+			<ng-container *ngIf="!isEdit">
+				<div class="flex flex-row items-center gap-1">
+					<div class="text-base font-semibold">
+						เขียนรีวิวสำหรับรายวิชานี้
+					</div>
+					<div class="h-50 w-50">
+						<sdm-icon
+							icon="pen-to-square"
+							class="h-full w-full text-dark-100"
+						></sdm-icon>
+					</div>
 				</div>
-				<div class="h-50 w-50">
-					<sdm-icon
-						icon="pen-to-square"
-						class="h-full w-full text-dark-100"
-					></sdm-icon>
+				<div class="flex flex-row items-center gap-1.5">
+					<div class="text-sm font-semibold">ให้คะแนนรายวิชานี้</div>
+					<sdm-rating
+						mode="selector"
+						customClass="text-yellow-300"
+						(value)="onRatingChange($event)"
+					>
+					</sdm-rating>
 				</div>
-			</div>
-			<div class="flex flex-row items-center gap-1.5">
-				<div class="text-sm font-semibold">ให้คะแนนรายวิชานี้</div>
-				<sdm-rating mode="selector" customClass="text-yellow-300">
-				</sdm-rating>
-			</div>
-			<div class="flex flex-wrap justify-start gap-x-3 gap-y-3">
-				<sdm-select
-					defaultLabel="ปีการศึกษา"
-					SelectName="selectedYear"
-					customDdlHeader="text-sm"
-					customDdlOptions="text-sm"
-					[listOptions]="yearsList"
-					(selectedValue)="handleSelectChange('selectedYear', $event)"
-					class="w-32"
-				></sdm-select>
-				<sdm-select
-					defaultLabel="ภาคการศึกษา"
-					SelectName="selectedSemester"
-					customDdlHeader="text-sm"
-					customDdlOptions="text-sm"
-					[listOptions]="semesterList"
-					(selectedValue)="
-						handleSelectChange('selectedSemester', $event)
-					"
-					class="w-36"
-				></sdm-select>
-			</div>
-		</ng-container>
-		<sdm-rich-text-editor [isEdit]="isEdit"></sdm-rich-text-editor>
-	</div>
+				<div class="flex flex-wrap justify-start gap-x-3 gap-y-3">
+					<sdm-select
+						defaultLabel="ปีการศึกษา"
+						SelectName="selectedYear"
+						customDdlHeader="text-sm"
+						customDdlOptions="text-sm"
+						[listOptions]="yearsList"
+						(selectedValue)="
+							handleSelectChange('selectedYear', $event)
+						"
+						class="w-32"
+					></sdm-select>
+					<sdm-select
+						defaultLabel="ภาคการศึกษา"
+						SelectName="selectedSemester"
+						customDdlHeader="text-sm"
+						customDdlOptions="text-sm"
+						[listOptions]="semesterList"
+						(selectedValue)="
+							handleSelectChange('selectedSemester', $event)
+						"
+						class="w-36"
+					></sdm-select>
+				</div>
+			</ng-container>
+			<sdm-rich-text-editor
+				[isEdit]="isEdit"
+				[rating]="reviewRating"
+				[selectedYear]="selectedYear"
+				[selectedSemester]="selectedSemester"
+				[signedIn]="signedIn"
+				[currentUser]="currentUser"
+				[subjectId]="subjectId"
+				(reviewSuccess)="onReviewSuccess()"
+			></sdm-rich-text-editor>
+		</div>
+	</ng-template>
 </div>

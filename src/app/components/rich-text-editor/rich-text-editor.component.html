@@ -10,7 +10,7 @@
 		<div class="p-5">
 			<ngx-editor
 				[editor]="editor"
-				[(ngModel)]="content"
+				[(ngModel)]="review_content"
 				[placeholder]="'คุณคิดอย่างไรกับรายวิชานี้ ?'"
 				class="NgxEditor"
 			></ngx-editor>
@@ -19,17 +19,29 @@
 
 	<!-- Add Button -->
 	<div class="flex flex-row items-end justify-end gap-2 p-5">
-		<div class="col-span-1" *ngIf="isEdit">
-			<button
-				class="flex h-min w-min items-center gap-x-2 rounded-[15px] border border-gray-300 px-3 py-1.5 font-medium text-gray-400 hover:bg-gray-300 hover:text-white"
-			>
-				<p class="text-sm">ยกเลิก</p>
-			</button>
-		</div>
-		<div class="col-span-1">
+		<ng-container *ngIf="isEdit">
+			<div class="col-span-1">
+				<button
+					class="flex h-min w-min items-center gap-x-2 rounded-[15px] border border-gray-300 px-3 py-1.5 font-medium text-gray-400 hover:bg-gray-300 hover:text-white"
+					(click)="onCancleEditReview()"
+				>
+					<p class="text-sm">ยกเลิก</p>
+				</button>
+			</div>
+			<div class="col-span-1">
+				<button
+					class="flex h-min w-min items-center gap-x-2 rounded-[15px] border border-main-25 px-3 py-1.5 font-medium text-main-75 hover:bg-main-75 hover:text-white"
+					(click)="onConfirmEditReview()"
+				>
+					<sdm-icon icon="paper-plane" class="text-sm"></sdm-icon>
+					<p class="text-sm">บันทึก</p>
+				</button>
+			</div>
+		</ng-container>
+		<div class="col-span-1" *ngIf="!isEdit">
 			<button
 				class="flex h-min w-min items-center gap-x-2 rounded-[15px] border border-main-25 px-3 py-1.5 font-medium text-main-75 hover:bg-main-75 hover:text-white"
-				(click)="logContent()"
+				(click)="onSubmitReview()"
 			>
 				<sdm-icon icon="paper-plane" class="text-sm"></sdm-icon>
 				<p class="text-sm">รีวิว</p>
