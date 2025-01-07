@@ -1,6 +1,4 @@
-<div
-	class="flex w-full flex-col gap-y-3 rounded-[15px] border border-main-25 pb-3"
->
+<div class="flex w-full flex-col rounded-[15px] border border-main-25">
 	<!-- Header Section -->
 	<div
 		class="flex w-full justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold"
@@ -50,42 +48,55 @@
 		</div>
 	</div>
 
-	<!-- Subject Review -->
-	<div class="px-5 text-sm font-normal text-dark-100">
-		{{ this.subjectReviewData.review }}
-	</div>
+	<!-- แสดงผลการแก้ไขหรือรีวิว -->
+	<ng-container *ngIf="!isEditing">
+		<!-- Subject Review -->
+		<div class="px-5 pt-3 text-sm font-normal text-dark-100">
+			{{ this.subjectReviewData.review }}
+		</div>
 
-	<!-- Footer Section -->
-	<div class="flex items-center justify-between px-5">
-		<div class="flex items-center gap-2">
-			<sdm-icon
-				icon="thumbs-up"
-				[iconStyle]="isLiked ? 'fas' : 'far'"
-				class="text-base text-dark-100"
-				[ngClass]="{
-					'default-cursor': !isSignIn,
-					'cursor-pointer': isSignIn,
-				}"
-				(click)="isSignIn && toggleLike()"
-			></sdm-icon>
-			<div>{{ this.subjectReviewData.like }}</div>
-		</div>
-		<div class="flex items-center gap-2.5">
-			<div class="text-sm font-normal text-dark-75">
-				{{ this.subjectReviewData.date }}
+		<!-- Footer Section -->
+		<div class="flex items-center justify-between px-5 pb-3">
+			<div class="flex items-center gap-2">
+				<sdm-icon
+					icon="thumbs-up"
+					[iconStyle]="isLiked ? 'fas' : 'far'"
+					class="text-base text-dark-100"
+					[ngClass]="{
+						'default-cursor': !isSignIn,
+						'cursor-pointer': isSignIn,
+					}"
+					(click)="isSignIn && toggleLike()"
+				></sdm-icon>
+				<div>{{ this.subjectReviewData.like }}</div>
 			</div>
-			<sdm-icon
-				*ngIf="canEdit"
-				icon="pen-to-square"
-				iconStyle="fas"
-				class="cursor-pointer text-base text-dark-100"
-			></sdm-icon>
-			<sdm-icon
-				*ngIf="canDelete"
-				icon="trash-can"
-				iconStyle="fas"
-				class="cursor-pointer text-base text-red-400"
-			></sdm-icon>
+			<div class="flex items-center gap-2.5">
+				<div class="text-sm font-normal text-dark-75">
+					{{ this.subjectReviewData.created }}
+				</div>
+				<sdm-icon
+					*ngIf="canEdit"
+					icon="pen-to-square"
+					iconStyle="fas"
+					class="cursor-pointer text-base text-dark-100"
+					(click)="toggleEdit()"
+				></sdm-icon>
+				<sdm-icon
+					*ngIf="canDelete"
+					icon="trash-can"
+					iconStyle="fas"
+					class="cursor-pointer text-base text-red-400"
+				></sdm-icon>
+			</div>
 		</div>
-	</div>
+	</ng-container>
+
+	<!-- Editing -->
+	<ng-container *ngIf="isEditing">
+		<sdm-write-review-box
+			[isEdit]="true"
+			class="m-5"
+		></sdm-write-review-box>
+		<!-- sdm-write-review-box ต้องส่ง output อะไรสักอย่างออกมาตอนที่กด ยกเลิกการแก้ไข หรือ บันทึกการแก้ไข จะได้มาเรียก toggleEdit ใน sdm-subject-review แต่ยังคิดไม่ออกว่าจะให้ส่งอะไรมา เพราะตอนนี้ toggleEdit ไม่ได้รับ parameter -->
+	</ng-container>
 </div>

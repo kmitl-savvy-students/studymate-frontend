@@ -13,7 +13,7 @@ import { subjectDetailData } from '../../shared/models/SubjectDetailData.model.j
 })
 export class SDMSubjectDetailCpnComponent {
 	@Input() subjectDetailData!: SubjectCardData;
-	@Input() subjectDetail!: subjectDetailData;
+	@Input() subjectDetail?: subjectDetailData;
 
 	public checkString(dateTime: string) {
 		let safeString: string = '';

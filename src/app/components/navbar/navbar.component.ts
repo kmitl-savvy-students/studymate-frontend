@@ -1,74 +1,36 @@
-import { Curriculum } from '../../shared/models/Curriculum.model';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, Router, NavigationEnd } from '@angular/router';
-import {
-	catchError,
-	distinctUntilChanged,
-	filter,
-	switchMap,
-	takeUntil,
-} from 'rxjs/operators';
-import { SDMButtonLink } from '../buttons/link/button-link.component';
 import { CommonModule } from '@angular/common';
-import { IconComponent } from '../icon/icon.component';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { StudyMateLogo } from '../logo/studymate-logo.component';
+import { SDMButtonNav } from './navbar-button.component';
+import { SDMButtonLink } from '../buttons/button-link.component';
+import { SDMAvatarDropdownNav } from './navbar-avatar-dropdown';
 import { User } from '../../shared/models/User.model';
-import { of, Subject } from 'rxjs';
-import { UserToken } from '../../shared/models/UserToken.model';
 
 @Component({
 	selector: 'sdm-navbar',
 	standalone: true,
-	imports: [RouterLink, SDMButtonLink, CommonModule, IconComponent],
+	imports: [
+		CommonModule,
+		StudyMateLogo,
+		SDMButtonNav,
+		SDMButtonLink,
+		SDMAvatarDropdownNav,
+	],
 	templateUrl: './navbar.component.html',
-	styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit {
-	public currentRoute: string = '';
-	public user: User | null = null;
-	public isSignIn: boolean = false;
-	public fromNavbar: string = 'navbar';
-	public isDropdownOpen = false;
+	signedIn: boolean = false;
+	currentUser: User | null = null;
 
-	constructor(
-		private router: Router,
-		private authService: AuthService,
-	) {
-		this.router.events
-			.pipe(filter((event) => event instanceof NavigationEnd))
-			.subscribe((event: any) => {
-				this.currentRoute = event.url;
-			});
-	}
+	constructor(private authService: AuthenticationService) {}
 
-	public userTokenSubject: Subject<UserToken | null> =
-		new Subject<UserToken | null>();
-
-	ngOnInit(): void {
-		this.authService.userTokenSubject
-			.pipe(
-				filter((token) => token !== null),
-				distinctUntilChanged(),
-			)
-			.subscribe((userToken) => {
-				let user = userToken.user;
-				if (user) {
-					this.isSignIn = true;
-					this.user = user;
-				} else {
-					this.isSignIn = false;
-				}
-			});
-	}
-
-	public closeDropdown() {
-		const dropdown = document.getElementById('dropdownAvatar');
-		if (dropdown) {
-			dropdown.classList.add('hidden');
-		}
-	}
-
-	userSignOut(): void {
-		this.authService.signOut();
+	async ngOnInit(): Promise<void> {
+		this.authService.signedIn$.subscribe((signedIn) => {
+			this.signedIn = signedIn;
+		});
+		this.authService.user$.subscribe((user) => {
+			this.currentUser = user;
+		});
 	}
 }

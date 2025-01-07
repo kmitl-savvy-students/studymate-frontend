@@ -12,13 +12,10 @@ import { CurriculumSubgroup } from '../models/CurriculumSubgroup.model';
 import { CurriculumSubject } from '../models/CurriculumSubject.model';
 import { GenedGroup } from '../models/GenedGroup.model';
 import { GenedSubject } from '../models/GenedSubject.model';
-import { CurriculumTeachtableSubject } from '../models/CurriculumTeachtableSubject.model.js';
 import { subjectDetailData } from '../models/SubjectDetailData.model';
 import { SubjectReviewData } from '../models/SubjectReviewData.model';
 
-@Injectable({
-	providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class APIManagementService {
 	constructor(private http: HttpClient) {}
 
@@ -145,8 +142,10 @@ export class APIManagementService {
 		return this.http.get<subjectDetailData>(apiUrl);
 	}
 
-	GetSubjectReviewsData(subjectId: string): Observable<SubjectReviewData[]> {
-		let apiUrl = `${environment.backendUrl}/api/api-name/${subjectId}`;
+	GetSubjectReviewsBySubjectID(
+		subjectId: string,
+	): Observable<SubjectReviewData[]> {
+		let apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}

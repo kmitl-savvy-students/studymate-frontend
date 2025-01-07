@@ -24,6 +24,7 @@ export class SDMSelectComponent implements OnInit {
 	@Input() listOptions: any[] = [];
 	@Input() customDdlHeader: string = '';
 	@Input() customDdlOptions: string = '';
+	@Input() disabled: boolean = false;
 	@Output() selectedValue = new EventEmitter<{
 		label: string;
 		index?: number;

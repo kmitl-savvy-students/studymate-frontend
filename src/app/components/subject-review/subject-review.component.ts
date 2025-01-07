@@ -3,11 +3,17 @@ import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
 import { CommonModule } from '@angular/common';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
+import { SDMWriteReviewBoxComponent } from '../write-review-box/write-review-box.component';
 
 @Component({
 	selector: 'sdm-subject-review',
 	standalone: true,
-	imports: [IconComponent, SDMRatingComponent, CommonModule],
+	imports: [
+		IconComponent,
+		SDMRatingComponent,
+		CommonModule,
+		SDMWriteReviewBoxComponent,
+	],
 	templateUrl: './subject-review.component.html',
 	styleUrl: './subject-review.component.css',
 })
@@ -22,6 +28,7 @@ export class SDMSubjectReviewComponent implements OnInit {
 	public canLike: boolean = false;
 
 	public isLiked: boolean = false;
+	public isEditing: boolean = false;
 
 	ngOnInit(): void {
 		this.updatePermissions();
@@ -39,5 +46,9 @@ export class SDMSubjectReviewComponent implements OnInit {
 			return;
 		}
 		this.isLiked = !this.isLiked;
+	}
+
+	public toggleEdit() {
+		this.isEditing = !this.isEditing;
 	}
 }

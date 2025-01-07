@@ -1,42 +1,86 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	OnInit,
+	Output,
+	SimpleChanges,
+	ViewChild,
+} from '@angular/core';
 import { SDMSelectComponent } from '../select/select.component';
 import { ratingList } from './review-filter-data';
 import { SelectedData } from '../../shared/models/SdmAppService.model';
 import { CommonModule } from '@angular/common';
+import { SDMSubjectReviewComponent } from '../subject-review/subject-review.component';
+import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
+import { SDMPaginationComponent } from '../pagination/pagination.component';
 
 @Component({
 	selector: 'sdm-review-filter',
 	standalone: true,
-	imports: [SDMSelectComponent, CommonModule],
+	imports: [
+		SDMSelectComponent,
+		CommonModule,
+		SDMSubjectReviewComponent,
+		SDMPaginationComponent,
+	],
 	templateUrl: './review-filter.component.html',
 	styleUrl: './review-filter.component.css',
 })
-export class SDMReviewFilterComponent {
-	public ratingList = ratingList;
-	public selectedPopular: boolean = false;
-	public selectedLatest: boolean = false;
-	public selectedStarRating: any = null;
-
+export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
 
-	@Output() selectedPopularValue = new EventEmitter<boolean>();
-	@Output() selectedLatestValue = new EventEmitter<boolean>();
-	@Output() selectedRatingValue = new EventEmitter<{
-		label: string;
-		index?: number;
-		value?: any;
-	}>();
+	@Input() subjectReviewData: SubjectReviewData[] = [];
+	@Input() isLoadingReview: boolean = false;
+	@Input() paginationType: 'single' | 'double' = 'single';
+
+	public ratingList = ratingList;
+
+	public selectedPopular: boolean = false;
+	public selectedLatest: boolean = false;
+	public selectedRating: boolean = false;
+
+	public selectedStarRatingValue: any;
+
+	public currentPage: number = 1;
+	public itemsPerPage: number = 5;
+	public paginatedItems: SubjectReviewData[] = [];
+	public subjectReviewTotal: number = 0;
+
+	public filterItems: SubjectReviewData[] = [];
+
+	public getSubjectReviewIsNull: boolean = false;
+	public filterReviewIsNull: boolean = false;
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (
+			changes['subjectReviewData'] &&
+			changes['subjectReviewData'].currentValue
+		) {
+			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
+			this.filterData();
+			this.updatePaginatedItems();
+		}
+	}
 
 	private resetOtherFilters(filter: string) {
-		if (filter === 'popular') {
-			this.selectedLatest = false;
-			this.clearSelect();
-		} else if (filter === 'latest') {
-			this.selectedPopular = false;
-			this.clearSelect();
-		} else if (filter === 'starRating') {
-			this.selectedPopular = false;
-			this.selectedLatest = false;
+		switch (filter) {
+			case 'popular':
+				this.selectedLatest = false;
+				this.clearSelect();
+				break;
+			case 'latest':
+				this.selectedPopular = false;
+				this.clearSelect();
+				break;
+			case 'starRating':
+				this.selectedPopular = false;
+				this.selectedLatest = false;
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -47,31 +91,68 @@ export class SDMReviewFilterComponent {
 	}
 
 	public onPopularFilterChange() {
-		this.selectedPopularValue.emit(this.selectedPopular);
+		this.selectedPopular = !this.selectedPopular;
+		this.resetOtherFilters('popular');
+		this.currentPage = 1;
+		this.filterData();
 	}
 
 	public onLatestFilterChange() {
-		this.selectedLatestValue.emit(this.selectedLatest);
+		this.selectedLatest = !this.selectedLatest;
+		this.resetOtherFilters('latest');
+		this.currentPage = 1;
+		this.filterData();
 	}
 
 	public onRatingFilterChange(selectedRatingData: SelectedData) {
-		this.selectedStarRating = selectedRatingData;
-		this.selectedRatingValue.emit(selectedRatingData);
+		this.selectedStarRatingValue = selectedRatingData.value;
+		if (this.selectedStarRatingValue) {
+			this.selectedRating = true;
+			this.resetOtherFilters('starRating');
+			this.currentPage = 1;
+		} else {
+			this.selectedRating = false;
+		}
+		this.filterData();
 	}
 
-	public togglePopular() {
-		this.selectedPopular = !this.selectedPopular;
-		this.resetOtherFilters('popular');
-		this.onPopularFilterChange();
+	public filterData(): void {
+		const dataToFilter = this.subjectReviewData;
+
+		if (this.selectedPopular) {
+			this.filterItems = [...dataToFilter].sort(
+				(a, b) => b.like - a.like,
+			);
+		} else if (this.selectedLatest) {
+			this.filterItems = [...dataToFilter].sort(
+				(a, b) =>
+					new Date(b.created).getTime() -
+					new Date(a.created).getTime(),
+			);
+		} else if (
+			this.selectedRating &&
+			this.selectedStarRatingValue !== undefined
+		) {
+			this.filterItems = dataToFilter.filter(
+				(item) => item.rating === this.selectedStarRatingValue,
+			);
+		} else {
+			this.filterItems = this.subjectReviewData;
+		}
+		this.updatePaginatedItems();
 	}
 
-	public toggleLatest() {
-		this.selectedLatest = !this.selectedLatest;
-		this.resetOtherFilters('latest');
-		this.onLatestFilterChange();
+	public changePage(page: number) {
+		this.currentPage = page;
+		this.updatePaginatedItems();
 	}
 
-	public toggleStarRating() {
-		this.resetOtherFilters('starRating');
+	public updatePaginatedItems() {
+		const start = (this.currentPage - 1) * this.itemsPerPage;
+		const end = start + this.itemsPerPage;
+		const dataToPaginate = this.filterItems;
+		this.paginatedItems = dataToPaginate.slice(start, end);
+		this.subjectReviewTotal = dataToPaginate.length;
+		this.filterReviewIsNull = dataToPaginate.length === 0;
 	}
 }
