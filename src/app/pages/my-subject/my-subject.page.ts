@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { APIManagementService } from '../../shared/services/api-management.service';
-import { AuthService } from '../../shared/services/auth.service';
-import { TranscriptData } from '../../shared/models/TranscriptData.model';
-import { CurriculumSubject } from '../../shared/models/CurriculumSubject.model';
-import { CurriculumSubgroup } from '../../shared/models/CurriculumSubgroup.model';
-import { GenedSubject } from '../../shared/models/GenedSubject.model';
-import { initFlowbite } from 'flowbite';
-import { Curriculum } from '../../shared/models/Curriculum.model';
-import { CurriculumGroup } from '../../shared/models/CurriculumGroup.model';
-import { firstValueFrom } from 'rxjs';
-import { GenedGroup } from '../../shared/models/GenedGroup.model';
 import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { HttpClient } from '@angular/common/http';
+import { AlertService } from '../../shared/services/alert/alert.service';
+import { TranscriptData } from '../../shared/models/TranscriptData.model';
+import { User } from '../../shared/models/User.model';
+import { BackendService } from '../../shared/services/backend.service';
 
 @Component({
 	selector: 'sdm-my-subject',
@@ -30,51 +25,42 @@ export class SDMMySubject implements OnInit {
 	public curriculumName: string = '';
 	public isDataLoaded: boolean = false;
 	public errorMessage: string | null = null;
+	currentUser: User | null = null;
 
 	constructor(
-		private apiManagementService: APIManagementService,
-		private authService: AuthService,
+		private authService: AuthenticationService,
+		private http: HttpClient,
+		private backendService: BackendService,
 	) {}
 
 	ngOnInit(): void {
-		this.authService.getToken().subscribe({
-			next: (userToken) => {
-				if (!userToken) {
-					this.errorMessage = 'No user token found.';
-					this.isDataLoaded = true;
-					return;
-				}
+		this.authService.user$.subscribe((user) => {
+			this.currentUser = user;
 
-				const userTokenId = userToken.id;
-				const userId = userToken.user.id;
-				const curriculum = userToken.user.curriculum;
+			if (!this.currentUser) {
+				this.errorMessage = 'No authenticated user found.';
+				this.isDataLoaded = true;
+				return;
+			}
 
-				this.curriculumName =
-					curriculum?.name_th || 'ไม่พบข้อมูลหลักสูตร';
+			const curriculum = this.currentUser.curriculum;
+			this.curriculumName = curriculum?.name_th || 'ไม่พบข้อมูลหลักสูตร';
 
-				console.log('Fetching transcript data...');
-				this.apiManagementService
-					.GetTranscriptData(userTokenId, userId)
-					.subscribe({
-						next: (res: TranscriptData[]) => {
-							console.log('Transcript data fetched:', res);
-							this.transcriptData = res;
-							this.isDataLoaded = true;
-						},
-						error: (error) => {
-							console.error(
-								'Error fetching transcript data:',
-								error,
-							);
-							this.errorMessage =
-								'Error fetching transcript data.';
-							this.isDataLoaded = true;
-						},
-					});
+			this.fetchTranscriptData(this.currentUser.id);
+		});
+	}
+
+	private fetchTranscriptData(userId: string): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/get/${userId}`;
+
+		this.http.get<TranscriptData[]>(apiUrl).subscribe({
+			next: (res: TranscriptData[]) => {
+				this.transcriptData = res;
+				this.isDataLoaded = true;
 			},
 			error: (error) => {
-				console.error('Error fetching user token:', error);
-				this.errorMessage = 'Error fetching user token.';
+				console.error('Error fetching transcript data:', error);
+				this.errorMessage = 'ไม่พบข้อมูล Transcript';
 				this.isDataLoaded = true;
 			},
 		});

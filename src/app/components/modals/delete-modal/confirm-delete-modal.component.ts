@@ -1,16 +1,9 @@
-import {
-	Component,
-	Input,
-	AfterViewInit,
-	OnInit,
-	OnChanges,
-	SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
-import { AuthService } from '../../../shared/services/auth.service';
-import { ImportTranscriptComponent } from '../import-transcript-modal/import-transcript-modal.component';
-import { APIManagementService } from '../../../shared/services/api-management.service.js';
-
+import { HttpClient } from '@angular/common/http';
+import { BackendService } from '../../../shared/services/backend.service';
+import { AlertService } from '../../../shared/services/alert/alert.service';
+import { AuthenticationService } from '../../../shared/services/authentication/authentication.service';
 
 @Component({
 	selector: 'sdm-confirm-delete-modal',
@@ -19,63 +12,52 @@ import { APIManagementService } from '../../../shared/services/api-management.se
 	templateUrl: './confirm-delete-modal.component.html',
 	styleUrls: ['./confirm-delete-modal.component.css'],
 })
-export class SDMConfirmDeleteModalComponent
-	implements AfterViewInit, OnInit, OnChanges
-{
+export class SDMConfirmDeleteModalComponent implements OnInit {
 	@Input() modalID: string = '';
 	@Input() text: string = '';
 	@Input() subtext: string = '';
-
-	// Removed haveTranscriptData and transcriptFlag as it's not needed.
-	public userTokenId: string | null = '';
-	public userId: string | null = '';
+	userId: string | null = null;
 
 	constructor(
-		private apiManagementService: APIManagementService,
-		private authService: AuthService,
+		private http: HttpClient,
+		private backendService: BackendService,
+		private authService: AuthenticationService,
+		private alertService: AlertService,
 	) {}
 
-	ngOnInit(): void {}
-
-	ngOnChanges(changes: SimpleChanges) {
-		// No need to track haveTranscriptData changes now.
-	}
-
-	ngAfterViewInit() {
-		this.authService.getToken().subscribe({
-			next: (userToken) => {
-				if (!userToken) {
-					return;
-				}
-				this.userTokenId = userToken.id;
-				this.userId = userToken.user.id;
-			},
+	ngOnInit(): void {
+		this.authService.user$.subscribe((user) => {
+			this.userId = user?.id ?? null;
 		});
 	}
 
-	deleteTranscriptData() {
-		// Directly attempt to delete transcript data.
-		// If there's no data, server will respond with an error.
-		this.apiManagementService
-			.DeleteTranscriptData(this.userTokenId ?? '', this.userId ?? '')
-			.subscribe({
-				next: (res) => {
-					window.location.reload();
-				},
-				error: (error) => {
-					if (error.status === 404) {
-						console.error(
-							'Not found: No transcript data to delete.',
-						);
-					} else if (error.status === 500) {
-						console.error('Internal Server Error');
-					} else {
-						console.error(
-							'An unexpected error occurred:',
-							error.status,
-						);
-					}
-				},
-			});
+	deleteTranscriptData(): void {
+		if (!this.userId) {
+			this.alertService.showAlert('error', 'ไม่พบข้อมูลผู้ใช้งาน');
+			return;
+		}
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/delete/${this.userId}`;
+
+		this.http.delete(apiUrl).subscribe({
+			next: () => {
+				this.alertService.showAlert('success', 'ลบข้อมูลสำเร็จ!');
+				window.location.reload();
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					this.alertService.showAlert(
+						'warning',
+						'ไม่พบข้อมูลที่ต้องการลบ',
+					);
+				} else {
+					this.alertService.showAlert(
+						'error',
+						'เกิดข้อผิดพลาดในการลบข้อมูล',
+					);
+					console.error('Error deleting transcript data:', error);
+				}
+			},
+		});
 	}
 }
