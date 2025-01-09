@@ -123,7 +123,7 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges {
 		}
 	}
 
-	public onCancleEditReview() {
+	public onCancelEditReview() {
 		this.cancelEditReview.emit();
 	}
 

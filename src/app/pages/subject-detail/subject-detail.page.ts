@@ -134,16 +134,4 @@ export class SDMPageSubjectDetail implements OnInit {
 				},
 			});
 	}
-
-	public onSaveEditReview() {
-		this.getSubjectReviews();
-	}
-
-	public onReviewSuccess() {
-		this.getSubjectReviews();
-	}
-
-	public onDeleteUserReview() {
-		this.getSubjectReviews();
-	}
 }
