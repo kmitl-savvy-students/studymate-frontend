@@ -4,26 +4,34 @@
 		<div class="font-medium text-dark-100">เรียงโดย</div>
 		<button
 			(click)="onPopularFilterChange()"
-			[disabled]="getSubjectReviewIsNull"
+			[disabled]="getSubjectReviewIsNull || isEditingReview"
 			class="filter-button"
 			[ngClass]="{
-				'bg-main-100 text-white hover:bg-main-120': selectedPopular,
+				'bg-main-100 text-white': selectedPopular,
+				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedPopular,
-				'hover:bg-main-25': !getSubjectReviewIsNull && !selectedPopular,
-				'cursor-not-allowed': getSubjectReviewIsNull,
+				'hover:bg-main-25':
+					!getSubjectReviewIsNull &&
+					!selectedPopular &&
+					!isEditingReview,
+				'cursor-not-allowed': getSubjectReviewIsNull || isEditingReview,
 			}"
 		>
 			ยอดนิยม
 		</button>
 		<button
 			(click)="onLatestFilterChange()"
-			[disabled]="getSubjectReviewIsNull"
+			[disabled]="getSubjectReviewIsNull || isEditingReview"
 			class="filter-button"
 			[ngClass]="{
-				'bg-main-100 text-white hover:bg-main-120': selectedLatest,
+				'bg-main-100 text-white': selectedLatest,
+				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedLatest,
-				'hover:bg-main-25': !getSubjectReviewIsNull && !selectedLatest,
-				'cursor-not-allowed': getSubjectReviewIsNull,
+				'hover:bg-main-25':
+					!getSubjectReviewIsNull &&
+					!selectedLatest &&
+					!isEditingReview,
+				'cursor-not-allowed': getSubjectReviewIsNull || isEditingReview,
 			}"
 		>
 			ล่าสุด
@@ -34,7 +42,7 @@
 			[listOptions]="ratingList"
 			class="w-40"
 			(selectedValue)="onRatingFilterChange($event)"
-			[disabled]="getSubjectReviewIsNull"
+			[disabled]="getSubjectReviewIsNull || isEditingReview"
 		></sdm-select>
 	</div>
 	<ng-container *ngIf="isLoadingReview">
@@ -105,6 +113,7 @@
 				[currentUser]="currentUser"
 				(confirmEditReview)="onConfirmEditReview()"
 				(deleteUserReview)="onDeleteUserReview()"
+				(isEditingReview)="onEditReview($event)"
 			></sdm-subject-review
 		></ng-container>
 		<!-- Pagination -->

@@ -1,9 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
-import { HttpClient } from '@angular/common/http';
-import { BackendService } from '../../../shared/services/backend.service';
-import { AlertService } from '../../../shared/services/alert/alert.service';
-import { AuthenticationService } from '../../../shared/services/authentication/authentication.service';
 import { initFlowbite } from 'flowbite';
 
 @Component({

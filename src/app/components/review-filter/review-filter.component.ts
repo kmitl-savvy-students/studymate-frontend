@@ -63,6 +63,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public filterReviewIsNull: boolean = false;
 
 	public isReviewCreator: boolean = false;
+	public isEditingReview: boolean = false;
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (
@@ -195,6 +196,10 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.paginatedItems = dataToPaginate.slice(start, end);
 		this.subjectReviewTotal = dataToPaginate.length;
 		this.filterReviewIsNull = dataToPaginate.length === 0;
+	}
+
+	public onEditReview(isEditingReview: boolean) {
+		this.isEditingReview = isEditingReview;
 	}
 
 	public onConfirmEditReview() {

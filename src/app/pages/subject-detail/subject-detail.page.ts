@@ -27,10 +27,8 @@ import { User } from '../../shared/models/User.model';
 export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public eachSubjectData!: SubjectCardData;
 	public subjectDetail!: subjectDetailData;
-	// From API
 	public subjectReviewData: SubjectReviewData[] = [];
-	// From Mock up Data
-	// public subjectReviewData = subjectReviewData;
+
 	public isLoadingReview: boolean = false;
 
 	public signedIn: boolean = false;

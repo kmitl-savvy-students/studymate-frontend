@@ -90,7 +90,6 @@ export class SDMWriteReviewBoxComponent {
 
 	public onCancelEditReview() {
 		this.cancelEditReview.emit();
-		console.log('Cancel edit event emitted from rich-text-editor');
 	}
 
 	public onConfirmEditReview() {
