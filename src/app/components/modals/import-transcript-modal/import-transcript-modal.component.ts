@@ -1,10 +1,17 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	ElementRef,
+	Input,
+	ViewChild,
+} from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { AlertService } from '../../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../../shared/services/authentication/authentication.service';
 import { BackendService } from '../../../shared/services/backend.service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-import-transcript-modal',
@@ -13,7 +20,7 @@ import { BackendService } from '../../../shared/services/backend.service';
 	templateUrl: './import-transcript-modal.component.html',
 	styleUrls: ['./import-transcript-modal.component.css'],
 })
-export class ImportTranscriptComponent {
+export class ImportTranscriptComponent implements AfterViewInit {
 	@Input() modalID: string = '';
 	@Input() headerModal: string = '';
 	selectedFileName: string = '';
@@ -32,6 +39,10 @@ export class ImportTranscriptComponent {
 		private alertService: AlertService,
 		private backendService: BackendService,
 	) {}
+
+	ngAfterViewInit(): void {
+		initFlowbite();
+	}
 
 	onFileSelected(event: any): void {
 		const file: File = event.target.files[0];

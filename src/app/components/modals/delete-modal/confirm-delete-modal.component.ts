@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { HttpClient } from '@angular/common/http';
 import { BackendService } from '../../../shared/services/backend.service';
 import { AlertService } from '../../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../../shared/services/authentication/authentication.service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-confirm-delete-modal',
@@ -12,7 +13,7 @@ import { AuthenticationService } from '../../../shared/services/authentication/a
 	templateUrl: './confirm-delete-modal.component.html',
 	styleUrls: ['./confirm-delete-modal.component.css'],
 })
-export class SDMConfirmDeleteModalComponent implements OnInit {
+export class SDMConfirmDeleteModalComponent implements OnInit, AfterViewInit {
 	@Input() modalID: string = '';
 	@Input() text: string = '';
 	@Input() subtext: string = '';
@@ -29,6 +30,10 @@ export class SDMConfirmDeleteModalComponent implements OnInit {
 		this.authService.user$.subscribe((user) => {
 			this.userId = user?.id ?? null;
 		});
+	}
+
+	ngAfterViewInit(): void {
+		initFlowbite();
 	}
 
 	deleteTranscriptData(): void {

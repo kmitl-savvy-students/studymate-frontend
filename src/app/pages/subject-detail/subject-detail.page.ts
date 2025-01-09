@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMSubjectDetailCpnComponent } from '../../components/subject-detail-cpn/subject-detail-cpn.component';
 import { CommonModule } from '@angular/common';
@@ -24,7 +24,7 @@ import { User } from '../../shared/models/User.model';
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
 })
-export class SDMPageSubjectDetail implements OnInit {
+export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public eachSubjectData!: SubjectCardData;
 	public subjectDetail!: subjectDetailData;
 	// From API
