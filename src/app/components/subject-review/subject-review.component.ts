@@ -1,10 +1,10 @@
 import {
-	AfterViewInit,
 	Component,
 	EventEmitter,
 	Input,
 	OnInit,
 	Output,
+	ViewChild,
 } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
@@ -12,8 +12,9 @@ import { CommonModule } from '@angular/common';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMWriteReviewBoxComponent } from '../write-review-box/write-review-box.component';
 import { APIManagementService } from '../../shared/services/api-management.service';
-import { UserToken } from '../../shared/models/UserToken.model';
-import { AuthService } from '../../shared/services/auth.service';
+import { User } from '../../shared/models/User.model';
+import { AlertService } from '../../shared/services/alert/alert.service';
+import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
 
 @Component({
 	selector: 'sdm-subject-review',
@@ -28,12 +29,15 @@ import { AuthService } from '../../shared/services/auth.service';
 	styleUrl: './subject-review.component.css',
 })
 export class SDMSubjectReviewComponent implements OnInit {
+	@ViewChild(SDMRichTextEditor) richTextEditor!: SDMRichTextEditor;
 	@Input() viewMode: 'subject-detail' | 'review' = 'subject-detail';
 	@Input() subjectReviewData!: SubjectReviewData;
 	@Input() isSignIn: boolean = false;
 	@Input() isReviewCreator: boolean = false;
+	@Input() currentUser: User | null = null;
 
-	@Output() saveEditReview = new EventEmitter<void>();
+	@Output() confirmEditReview = new EventEmitter<void>();
+	@Output() deleteUserReview = new EventEmitter<void>();
 
 	public canEdit: boolean = false;
 	public canDelete: boolean = false;
@@ -42,31 +46,14 @@ export class SDMSubjectReviewComponent implements OnInit {
 	public isLiked: boolean = false;
 	public isEditing: boolean = false;
 
-	// public userTokenId: string | null = '';
-	// public userId: string | null = '';
-
 	constructor(
 		private apiManagementService: APIManagementService,
-		private authService: AuthService,
+		private alertService: AlertService,
 	) {}
 
 	ngOnInit(): void {
 		this.updatePermissions();
 	}
-
-	// ngAfterViewInit() {
-	// 	this.authService.getToken().subscribe({
-	// 		next: (userToken) => {
-	// 			if (!userToken) {
-	// 				return;
-	// 			}
-	// 			this.userTokenId = userToken.id;
-	// 			this.userId = userToken.user.id;
-	// 			console.log('userTokenId', this.userTokenId);
-	// 			console.log('userId', this.userId);
-	// 		},
-	// 	});
-	// }
 
 	public updatePermissions() {
 		this.canEdit = this.isSignIn && this.isReviewCreator;
@@ -84,42 +71,52 @@ export class SDMSubjectReviewComponent implements OnInit {
 
 	public toggleEdit() {
 		this.isEditing = !this.isEditing;
+		console.log(
+			'isEditing toggled from subject-review component:',
+			this.isEditing,
+		);
 	}
 
-	public onCancelEdit() {
+	public onCancelEditReview() {
+		this.toggleEdit();
+		console.log('Editing canceled. isEditing:', this.isEditing);
+	}
+
+	public onConfirmEditReview() {
+		this.confirmEditReview.emit();
 		this.toggleEdit();
 	}
 
-	public onSaveEditReview() {
-		this.saveEditReview.emit();
-		this.toggleEdit();
-	}
+	public deleteReview() {
+		if (this.currentUser) {
+			this.apiManagementService
+				.DeleteUserReviewData(
+					this.subjectReviewData.teachtable_subject.subject_id,
+					this.currentUser.id,
+				)
+				.subscribe({
+					next: () => {
+						console.log(
+							'Review deleted successfully',
 
-	// public deleteReview() {
-	// 	this.apiManagementService
-	// 		.DeleteUserReviewData(
-	// 			this.userTokenId ?? '',
-	// 			this.subjectReviewData.teachtable_subject.subject_id,
-	// 			this.userId ?? '',
-	// 		)
-	// 		.subscribe({
-	// 			next: () => {
-	// 				console.log(
-	// 					'Review deleted successfully',
-	// 					this.userTokenId ?? '',
-	// 					this.subjectReviewData.teachtable_subject.subject_id,
-	// 					this.userId ?? '',
-	// 				);
-	// 			},
-	// 			error: (err) => {
-	// 				console.error('Error deleting review:', err);
-	// 				console.log('userTokenId : ', this.userTokenId ?? '');
-	// 				console.log(
-	// 					'subjectId : ',
-	// 					this.subjectReviewData.teachtable_subject.subject_id,
-	// 				);
-	// 				console.log('userId : ', this.userId ?? '');
-	// 			},
-	// 		});
-	// }
+							this.subjectReviewData.teachtable_subject
+								.subject_id,
+							this.currentUser?.id,
+						);
+						this.deleteUserReview.emit();
+						this.alertService.showAlert('success', 'ลบรีวิวสำเร็จ');
+					},
+					error: (err) => {
+						console.error('Error deleting review:', err);
+
+						console.log(
+							'subjectId : ',
+							this.subjectReviewData.teachtable_subject
+								.subject_id,
+						);
+						console.log('userId : ', this.currentUser?.id);
+					},
+				});
+		}
+	}
 }

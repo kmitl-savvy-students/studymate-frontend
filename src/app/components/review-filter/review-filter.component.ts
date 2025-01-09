@@ -17,6 +17,7 @@ import { SDMSubjectReviewComponent } from '../subject-review/subject-review.comp
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMPaginationComponent } from '../pagination/pagination.component';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { User } from '../../shared/models/User.model';
 
 @Component({
 	selector: 'sdm-review-filter',
@@ -37,10 +38,11 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType: 'single' | 'double' = 'single';
 	@Input() signedIn: boolean = false;
-	@Input() currentUser: any = null;
+	@Input() currentUser: User | null = null;
 	@Input() prioritizeUserReview: boolean = false;
 
-	@Output() saveEditReview = new EventEmitter<void>();
+	@Output() confirmEditReview = new EventEmitter<void>();
+	@Output() deleteUserReview = new EventEmitter<void>();
 
 	public ratingList = ratingList;
 
@@ -131,32 +133,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.filterData();
 	}
 
-	// public filterData(): void {
-	// 	const dataToFilter = this.subjectReviewData;
-
-	// 	if (this.selectedPopular) {
-	// 		this.filterItems = [...dataToFilter].sort(
-	// 			(a, b) => b.like - a.like,
-	// 		);
-	// 	} else if (this.selectedLatest) {
-	// 		this.filterItems = [...dataToFilter].sort(
-	// 			(a, b) =>
-	// 				new Date(b.created).getTime() -
-	// 				new Date(a.created).getTime(),
-	// 		);
-	// 	} else if (
-	// 		this.selectedRating &&
-	// 		this.selectedStarRatingValue !== undefined
-	// 	) {
-	// 		this.filterItems = dataToFilter.filter(
-	// 			(item) => item.rating === this.selectedStarRatingValue,
-	// 		);
-	// 	} else {
-	// 		this.filterItems = this.subjectReviewData;
-	// 	}
-	// 	this.updatePaginatedItems();
-	// }
-
 	public filterData(): void {
 		const dataToFilter = this.subjectReviewData;
 
@@ -171,7 +147,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.currentUser
 		) {
 			userReview = dataToFilter.find(
-				(item) => item.user_id === this.currentUser.id,
+				(item) => item.user_id === this.currentUser?.id,
 			);
 		}
 
@@ -200,7 +176,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.filterItems = [
 				userReview,
 				...this.filterItems.filter(
-					(item) => item.user_id !== this.currentUser.id,
+					(item) => item.user_id !== this.currentUser?.id,
 				),
 			];
 		}
@@ -221,7 +197,11 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.filterReviewIsNull = dataToPaginate.length === 0;
 	}
 
-	public onSaveEditReview() {
-		this.saveEditReview.emit();
+	public onConfirmEditReview() {
+		this.confirmEditReview.emit();
+	}
+
+	public onDeleteUserReview() {
+		this.deleteUserReview.emit();
 	}
 }

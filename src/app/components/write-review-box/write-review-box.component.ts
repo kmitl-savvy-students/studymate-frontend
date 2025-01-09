@@ -32,6 +32,8 @@ export class SDMWriteReviewBoxComponent {
 	@Input() currentUser: User | null = null;
 	@Input() subjectId!: string;
 	@Output() reviewSuccess = new EventEmitter<void>();
+	@Output() confirmEditReview = new EventEmitter<void>();
+	@Output() cancelEditReview = new EventEmitter<void>();
 	public selectedYear: number = 0;
 	public selectedSemester: number = 0;
 
@@ -84,5 +86,14 @@ export class SDMWriteReviewBoxComponent {
 
 	public onReviewSuccess() {
 		this.reviewSuccess.emit();
+	}
+
+	public onCancelEditReview() {
+		this.cancelEditReview.emit();
+		console.log('Cancel edit event emitted from rich-text-editor');
+	}
+
+	public onConfirmEditReview() {
+		this.confirmEditReview.emit();
 	}
 }

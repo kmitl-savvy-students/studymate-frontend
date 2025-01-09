@@ -102,6 +102,7 @@
 					icon="trash-can"
 					iconStyle="fas"
 					class="cursor-pointer text-base text-red-400"
+					(click)="deleteReview()"
 				></sdm-icon>
 			</div>
 		</div>
@@ -112,15 +113,9 @@
 		<sdm-write-review-box
 			[isEdit]="true"
 			[signedIn]="isSignIn"
-			(confirmEditReview)="onSaveEditReview()"
-			(cancelEditReview)="onSaveEditReview()"
+			(confirmEditReview)="onConfirmEditReview()"
+			(cancelEditReview)="onCancelEditReview()"
 			class="m-5"
 		></sdm-write-review-box>
-		<!-- <sdm-write-review-box
-			[isEdit]="true"
-			class="m-5"
-			(saveEditReview)="onSaveEditReview()"
-			(cancelEditReview)="onSaveEditReview()"
-		></sdm-write-review-box> -->
 	</ng-container>
 </div>
