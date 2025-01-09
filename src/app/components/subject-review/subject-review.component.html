@@ -102,7 +102,8 @@
 					icon="trash-can"
 					iconStyle="fas"
 					class="cursor-pointer text-base text-red-400"
-					(click)="deleteReview()"
+					data-modal-target="confirm-delete-modal"
+					data-modal-toggle="confirm-delete-modal"
 				></sdm-icon>
 			</div>
 		</div>
@@ -119,3 +120,11 @@
 		></sdm-write-review-box>
 	</ng-container>
 </div>
+
+<!-- Delete Review Modal -->
+<sdm-confirm-delete-modal
+	modalID="confirm-delete-modal"
+	text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?"
+	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น"
+	[deleteFunction]="deleteReviewData.bind(this)"
+></sdm-confirm-delete-modal>

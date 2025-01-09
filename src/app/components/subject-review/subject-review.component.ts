@@ -15,6 +15,7 @@ import { APIManagementService } from '../../shared/services/api-management.servi
 import { User } from '../../shared/models/User.model';
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
+import { SDMConfirmDeleteModalComponent } from '../modals/delete-modal/confirm-delete-modal.component';
 
 @Component({
 	selector: 'sdm-subject-review',
@@ -24,6 +25,7 @@ import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.componen
 		SDMRatingComponent,
 		CommonModule,
 		SDMWriteReviewBoxComponent,
+		SDMConfirmDeleteModalComponent,
 	],
 	templateUrl: './subject-review.component.html',
 	styleUrl: './subject-review.component.css',
@@ -87,7 +89,7 @@ export class SDMSubjectReviewComponent implements OnInit {
 		this.toggleEdit();
 	}
 
-	public deleteReview() {
+	public deleteReviewData() {
 		if (this.currentUser) {
 			this.apiManagementService
 				.DeleteUserReviewData(

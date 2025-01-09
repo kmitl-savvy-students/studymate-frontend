@@ -26,6 +26,7 @@
 	modalID="confirm-delete-modal"
 	text="คุณต้องการลบข้อมูล Transcript ใช่หรือไม่?"
 	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องอัปโหลดใหม่เท่านั้น"
+	[deleteFunction]="deleteTranscriptData.bind(this)"
 ></sdm-confirm-delete-modal>
 
 <!-- Upload Transcript Modal -->

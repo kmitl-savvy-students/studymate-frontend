@@ -32,6 +32,7 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 		private authService: AuthenticationService,
 		private http: HttpClient,
 		private backendService: BackendService,
+		private alertService: AlertService,
 	) {}
 
 	ngOnInit(): void {
@@ -103,5 +104,35 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 		return this.transcriptData
 			.filter((d) => d.grade !== 'X')
 			.reduce((sum, d) => sum + (d.credit ?? 0), 0);
+	}
+
+	deleteTranscriptData(): void {
+		if (!this.currentUser?.id) {
+			this.alertService.showAlert('error', 'ไม่พบข้อมูลผู้ใช้งาน');
+			return;
+		}
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/delete/${this.currentUser?.id}`;
+
+		this.http.delete(apiUrl).subscribe({
+			next: () => {
+				this.alertService.showAlert('success', 'ลบข้อมูลสำเร็จ!');
+				window.location.reload();
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					this.alertService.showAlert(
+						'warning',
+						'ไม่พบข้อมูลที่ต้องการลบ',
+					);
+				} else {
+					this.alertService.showAlert(
+						'error',
+						'เกิดข้อผิดพลาดในการลบข้อมูล',
+					);
+					console.error('Error deleting transcript data:', error);
+				}
+			},
+		});
 	}
 }
