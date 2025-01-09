@@ -1,16 +1,17 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
-import { HttpEventType } from '@angular/common/http';
-import { AuthService } from '../../../shared/services/auth.service';
-import { APIManagementService } from '../../../shared/services/api-management.service';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { AlertService } from '../../../shared/services/alert/alert.service';
+import { AuthenticationService } from '../../../shared/services/authentication/authentication.service';
+import { BackendService } from '../../../shared/services/backend.service';
 
 @Component({
 	selector: 'sdm-import-transcript-modal',
 	standalone: true,
 	imports: [IconComponent, CommonModule],
 	templateUrl: './import-transcript-modal.component.html',
-	styleUrl: './import-transcript-modal.component.css',
+	styleUrls: ['./import-transcript-modal.component.css'],
 })
 export class ImportTranscriptComponent {
 	@Input() modalID: string = '';
@@ -21,16 +22,18 @@ export class ImportTranscriptComponent {
 
 	@ViewChild('fileInput') fileInput!: ElementRef;
 
-	constructor(
-		private authService: AuthService,
-		private apiManagementService: APIManagementService,
-	) {}
-
 	isUploading: boolean = false;
 	uploadComplete: boolean = false;
 	statusMessage: string = '';
 
-	onFileSelected(event: any) {
+	constructor(
+		private authService: AuthenticationService,
+		private http: HttpClient,
+		private alertService: AlertService,
+		private backendService: BackendService,
+	) {}
+
+	onFileSelected(event: any): void {
 		const file: File = event.target.files[0];
 		if (file) {
 			if (file.type === 'application/pdf') {
@@ -41,35 +44,43 @@ export class ImportTranscriptComponent {
 					this.isSubmitDisabled = false;
 					this.uploadComplete = false;
 				} else {
-					this.selectedFileName = '';
-					this.errorMessage = 'ขนาดไฟล์ต้องไม่เกิน 15 MB';
-					this.isSubmitDisabled = true;
+					this.resetFileSelection('ขนาดไฟล์ต้องไม่เกิน 15 MB');
 				}
 			} else {
-				this.selectedFileName = '';
-				this.errorMessage = 'อัปโหลดได้เฉพาะไฟล์ PDF เท่านั้น';
-				this.isSubmitDisabled = true;
+				this.resetFileSelection('อัปโหลดได้เฉพาะไฟล์ PDF เท่านั้น');
 			}
 		}
 	}
 
-	uploadFile() {
+	uploadFile(): void {
 		if (!this.selectedFileName) {
 			return;
 		}
 
 		const file: File = this.fileInput.nativeElement.files[0];
 		if (file) {
-			console.log('Uploading file:', file.name);
 			this.isUploading = true;
 
-			this.authService.getToken().subscribe((userToken) => {
-				this.apiManagementService
-					.UpdateUserTranscriptByUpload(
-						userToken?.user?.id ?? '',
-						userToken?.id ?? '',
-						file,
-					)
+			this.authService.user$.subscribe((user) => {
+				if (!user) {
+					this.alertService.showAlert(
+						'error',
+						'ไม่พบผู้ใช้งาน กรุณาเข้าสู่ระบบอีกครั้ง',
+					);
+					this.isUploading = false;
+					return;
+				}
+
+				const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/upload`;
+				const formData: FormData = new FormData();
+				formData.append('id', user.id.toString());
+				formData.append('file', file);
+
+				this.http
+					.post(apiUrl, formData, {
+						reportProgress: true,
+						observe: 'events',
+					})
 					.subscribe({
 						next: (event) => {
 							if (event.type === HttpEventType.Response) {
@@ -95,14 +106,20 @@ export class ImportTranscriptComponent {
 		}
 	}
 
-	clearFile() {
+	clearFile(): void {
 		this.selectedFileName = '';
 		this.errorMessage = '';
 		this.fileInput.nativeElement.value = '';
 		this.isSubmitDisabled = true;
 	}
 
-	onDivClick(event: MouseEvent) {
+	private resetFileSelection(message: string): void {
+		this.selectedFileName = '';
+		this.errorMessage = message;
+		this.isSubmitDisabled = true;
+	}
+
+	onDivClick(event: MouseEvent): void {
 		event.stopPropagation();
 		event.preventDefault();
 	}
