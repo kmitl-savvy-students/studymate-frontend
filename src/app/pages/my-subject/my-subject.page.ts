@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
@@ -8,6 +8,7 @@ import { AlertService } from '../../shared/services/alert/alert.service';
 import { TranscriptData } from '../../shared/models/TranscriptData.model';
 import { User } from '../../shared/models/User.model';
 import { BackendService } from '../../shared/services/backend.service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-my-subject',
@@ -20,7 +21,7 @@ import { BackendService } from '../../shared/services/backend.service';
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
-export class SDMMySubject implements OnInit {
+export class SDMMySubject implements OnInit, AfterViewInit {
 	public transcriptData: TranscriptData[] = [];
 	public curriculumName: string = '';
 	public isDataLoaded: boolean = false;
@@ -48,6 +49,10 @@ export class SDMMySubject implements OnInit {
 
 			this.fetchTranscriptData(this.currentUser.id);
 		});
+	}
+
+	ngAfterViewInit(): void {
+		initFlowbite();
 	}
 
 	private fetchTranscriptData(userId: string): void {
