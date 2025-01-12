@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	Component,
 	EventEmitter,
 	Input,
@@ -15,6 +16,8 @@ import { APIManagementService } from '../../shared/services/api-management.servi
 import { User } from '../../shared/models/User.model';
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
+import { SDMConfirmDeleteModalComponent } from '../modals/delete-modal/confirm-delete-modal.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-subject-review',
@@ -24,11 +27,12 @@ import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.componen
 		SDMRatingComponent,
 		CommonModule,
 		SDMWriteReviewBoxComponent,
+		SDMConfirmDeleteModalComponent,
 	],
 	templateUrl: './subject-review.component.html',
 	styleUrl: './subject-review.component.css',
 })
-export class SDMSubjectReviewComponent implements OnInit {
+export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	@ViewChild(SDMRichTextEditor) richTextEditor!: SDMRichTextEditor;
 	@Input() viewMode: 'subject-detail' | 'review' = 'subject-detail';
 	@Input() subjectReviewData!: SubjectReviewData;
@@ -38,6 +42,7 @@ export class SDMSubjectReviewComponent implements OnInit {
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
+	@Output() isEditingReview = new EventEmitter<boolean>();
 
 	public canEdit: boolean = false;
 	public canDelete: boolean = false;
@@ -55,6 +60,10 @@ export class SDMSubjectReviewComponent implements OnInit {
 		this.updatePermissions();
 	}
 
+	ngAfterViewInit(): void {
+		initFlowbite();
+	}
+
 	public updatePermissions() {
 		this.canEdit = this.isSignIn && this.isReviewCreator;
 		this.canDelete = this.isSignIn && this.isReviewCreator;
@@ -69,25 +78,25 @@ export class SDMSubjectReviewComponent implements OnInit {
 		this.isLiked = !this.isLiked;
 	}
 
-	public toggleEdit() {
-		this.isEditing = !this.isEditing;
-		console.log(
-			'isEditing toggled from subject-review component:',
-			this.isEditing,
-		);
+	public onEditReview() {
+		this.isEditing = true;
+		this.isEditingReview.emit(this.isEditing);
+		console.log('editReview() : ', this.isEditing);
 	}
 
 	public onCancelEditReview() {
-		this.toggleEdit();
-		console.log('Editing canceled. isEditing:', this.isEditing);
+		this.confirmEditReview.emit();
+		this.isEditing = false;
+		this.isEditingReview.emit(this.isEditing);
 	}
 
 	public onConfirmEditReview() {
 		this.confirmEditReview.emit();
-		this.toggleEdit();
+		this.isEditing = false;
+		this.isEditingReview.emit(this.isEditing);
 	}
 
-	public deleteReview() {
+	public deleteReviewData() {
 		if (this.currentUser) {
 			this.apiManagementService
 				.DeleteUserReviewData(
@@ -96,25 +105,11 @@ export class SDMSubjectReviewComponent implements OnInit {
 				)
 				.subscribe({
 					next: () => {
-						console.log(
-							'Review deleted successfully',
-
-							this.subjectReviewData.teachtable_subject
-								.subject_id,
-							this.currentUser?.id,
-						);
 						this.deleteUserReview.emit();
 						this.alertService.showAlert('success', 'ลบรีวิวสำเร็จ');
 					},
 					error: (err) => {
 						console.error('Error deleting review:', err);
-
-						console.log(
-							'subjectId : ',
-							this.subjectReviewData.teachtable_subject
-								.subject_id,
-						);
-						console.log('userId : ', this.currentUser?.id);
 					},
 				});
 		}
