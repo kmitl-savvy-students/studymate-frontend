@@ -9,6 +9,7 @@ import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page
 import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
 import { SDMPageSignOut } from './pages/sign-out/sign-out.page';
 import { AuthenticationGuard } from './shared/services/authentication/authentication.guard';
+import { SDMPageReview } from './pages/review/review.page';
 
 export const routes: Routes = [
 	{
@@ -19,6 +20,7 @@ export const routes: Routes = [
 	{ path: 'home', component: SDMPageHome },
 	{ path: 'subject', component: SDMSubject },
 	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
+	{ path: 'review', component: SDMPageReview },
 
 	{ path: 'sign-in', component: SDMPageSignIn },
 	{ path: 'sign-up', component: SDMPageSignUp },
