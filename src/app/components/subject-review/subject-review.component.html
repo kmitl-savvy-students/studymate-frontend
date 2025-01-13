@@ -123,6 +123,7 @@
 
 <!-- Delete Review Modal -->
 <sdm-confirm-delete-modal
+	*ngIf="canDelete"
 	modalID="confirm-delete-modal"
 	text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?"
 	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น"

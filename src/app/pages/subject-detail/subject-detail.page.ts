@@ -79,7 +79,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				next: (res) => {
 					if (res) {
 						this.subjectDetail = res;
-						console.log('Detail Response:', res);
 					} else {
 						console.log('No Subject Data Available.');
 					}
