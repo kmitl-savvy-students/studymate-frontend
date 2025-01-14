@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	Component,
 	EventEmitter,
 	Input,
@@ -17,17 +18,28 @@ import { APIManagementService } from '../../shared/services/api-management.servi
 import { User } from '../../shared/models/User.model.js';
 import { AlertService } from '../../shared/services/alert/alert.service.js';
 import { HttpEventType } from '@angular/common/http';
+import { SDMConfirmModalComponent } from '../modals/confirm-modal/confirm-modal.component';
+import { initFlowbite } from 'flowbite';
 
 @Component({
 	selector: 'sdm-rich-text-editor',
 	standalone: true,
-	imports: [NgxEditorModule, IconComponent, CommonModule, FormsModule],
+	imports: [
+		NgxEditorModule,
+		IconComponent,
+		CommonModule,
+		FormsModule,
+		SDMConfirmModalComponent,
+	],
 	templateUrl: './rich-text-editor.component.html',
 	styleUrl: './rich-text-editor.component.css',
 	encapsulation: ViewEncapsulation.None,
 })
-export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges {
+export class SDMRichTextEditor
+	implements OnInit, OnDestroy, OnChanges, AfterViewInit
+{
 	@Input() isEdit: boolean = false;
+	@Input() editReviewContent: string = '';
 	@Input() rating: number = 0;
 	@Input() selectedYear?: number = 0;
 	@Input() selectedSemester?: number = 0;
@@ -39,6 +51,9 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges {
 	@Output() reviewSuccess = new EventEmitter<void>();
 	public editor: Editor;
 	public review_content: string = '';
+	public defaultText: string =
+		'<p>very <strong>good </strong><u>eiei</u></p>';
+	public setupContent: string = 'hello world';
 	public toolbar: Toolbar = [
 		['bold', 'italic'],
 		['underline', 'strike'],
@@ -52,6 +67,9 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges {
 		private alertService: AlertService,
 	) {
 		this.editor = new Editor();
+	}
+	ngAfterViewInit(): void {
+		initFlowbite();
 	}
 
 	ngOnInit(): void {
@@ -102,24 +120,57 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges {
 							);
 							this.reviewSuccess.emit();
 							this.review_content = '';
-							this.rating = 0;
-							this.selectedYear = undefined;
-							this.selectedSemester = undefined;
 						},
 						error: (err) => {
-							const error = JSON.parse(err.error);
-							if (
-								error ===
-								'You have already reviewed this subject.'
-							) {
-								this.alertService.showAlert(
-									'error',
-									'ไม่สามารถรีวิวที่เคยรีวิวไปแล้วได้',
-								);
+							switch (err.status) {
+								case 409:
+									this.alertService.showAlert(
+										'error',
+										'คุณเคยรีวิวรายวิชานี้ไปแล้ว',
+									);
+									this.reviewSuccess.emit();
+									this.review_content = '';
+									break;
+								case 500:
+									this.alertService.showAlert(
+										'error',
+										'An error occurred while submitting your review. Please try again later.',
+									);
+									break;
 							}
 						},
 					});
 			}
+		}
+	}
+
+	public updateReview() {
+		if (this.currentUser) {
+			this.apiManagementService
+				.UpdateSubjectReviewByUser(
+					this.currentUser.id,
+					this.subjectId,
+					this.review_content,
+				)
+				.subscribe({
+					next: (res) => {
+						this.alertService.showAlert(
+							'success',
+							'แก้ไขรีวิวสำเร็จ',
+						);
+					},
+					error: (err) => {
+						const error = JSON.parse(err.error);
+						if (
+							error === 'You have already reviewed this subject.'
+						) {
+							this.alertService.showAlert(
+								'error',
+								'ไม่สามารถรีวิวที่เคยรีวิวไปแล้วได้',
+							);
+						}
+					},
+				});
 		}
 	}
 
@@ -128,6 +179,7 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges {
 	}
 
 	public onConfirmEditReview() {
+		this.updateReview();
 		this.confirmEditReview.emit();
 	}
 }

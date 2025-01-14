@@ -39,7 +39,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	@Input() isSignIn: boolean = false;
 	@Input() isReviewCreator: boolean = false;
 	@Input() currentUser: User | null = null;
-
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
 	@Output() isEditingReview = new EventEmitter<boolean>();
@@ -51,6 +50,8 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	public isLiked: boolean = false;
 	public isEditing: boolean = false;
 
+	public reviewContent: string = '';
+
 	constructor(
 		private apiManagementService: APIManagementService,
 		private alertService: AlertService,
@@ -58,6 +59,8 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {
 		this.updatePermissions();
+		this.reviewContent = this.subjectReviewData.review;
+		console.log('Review Content:', this.reviewContent);
 	}
 
 	ngAfterViewInit(): void {

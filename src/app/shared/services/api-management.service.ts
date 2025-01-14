@@ -172,20 +172,20 @@ export class APIManagementService {
 
 	UpdateSubjectReviewByUser(
 		student_id: string,
-		year: number,
-		term: number,
+		// year: number,
+		// term: number,
 		subject_id: string,
 		review: string,
-		rating: number,
+		// rating: number,
 	) {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/update`;
 		return this.http.patch(apiUrl, {
 			student_id: student_id,
-			year: year,
-			term: term,
+			// year: year,
+			// term: term,
 			subject_id: subject_id,
 			review: review,
-			rating: rating,
+			// rating: rating,
 		});
 	}
 

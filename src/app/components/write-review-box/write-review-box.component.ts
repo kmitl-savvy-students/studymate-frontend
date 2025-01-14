@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ViewChild,
+} from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { SDMSelectComponent } from '../select/select.component';
 import {
@@ -27,10 +33,13 @@ import { User } from '../../shared/models/User.model.js';
 	styleUrl: './write-review-box.component.css',
 })
 export class SDMWriteReviewBoxComponent {
+	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
+
 	@Input() isEdit: boolean = false;
 	@Input() signedIn: boolean = false;
 	@Input() currentUser: User | null = null;
 	@Input() subjectId!: string;
+	@Input() editReviewContent: string = '';
 	@Output() reviewSuccess = new EventEmitter<void>();
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() cancelEditReview = new EventEmitter<void>();
@@ -41,6 +50,7 @@ export class SDMWriteReviewBoxComponent {
 	public semesterList = semesterList;
 
 	public isSelectAllDropdown: boolean = false;
+	public showForm: boolean = true;
 
 	public markdownContent: string = '';
 
@@ -84,8 +94,24 @@ export class SDMWriteReviewBoxComponent {
 		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 	}
 
+	private clearSelect() {
+		if (this.sdmSelect) {
+			this.sdmSelect.onSelectedOption('');
+		}
+	}
+
+	public resetForm(): void {
+		this.showForm = false; // ซ่อนฟอร์ม
+		setTimeout(() => {
+			this.showForm = true; // แสดงฟอร์มใหม่
+		}, 0); // ใช้ delay เล็กน้อยเพื่อให้ Angular รีเฟรช
+	}
+
 	public onReviewSuccess() {
 		this.reviewSuccess.emit();
+		this.clearSelect();
+		this.reviewRating = 0;
+		this.resetForm();
 	}
 
 	public onCancelEditReview() {
