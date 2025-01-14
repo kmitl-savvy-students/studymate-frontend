@@ -18,6 +18,7 @@ import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMPaginationComponent } from '../pagination/pagination.component';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
+import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
 
 @Component({
 	selector: 'sdm-review-filter',
@@ -37,9 +38,11 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() subjectReviewData: SubjectReviewData[] = [];
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType: 'single' | 'double' = 'single';
+	@Input() viewMode: 'subject-detail' | 'review' = 'subject-detail';
 	@Input() signedIn: boolean = false;
 	@Input() currentUser: User | null = null;
 	@Input() prioritizeUserReview: boolean = false;
+	@Input() itemsPerPage: number = 10;
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
@@ -53,7 +56,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public selectedStarRatingValue: any;
 
 	public currentPage: number = 1;
-	public itemsPerPage: number = 5;
 	public paginatedItems: SubjectReviewData[] = [];
 	public subjectReviewTotal: number = 0;
 

@@ -143,6 +143,12 @@ export class APIManagementService {
 		return this.http.get<subjectDetailData>(apiUrl);
 	}
 
+	GetAllSubjectReviews(): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
+	}
+
 	GetSubjectReviewsBySubjectID(
 		subjectId: string,
 	): Observable<SubjectReviewData[]> {
