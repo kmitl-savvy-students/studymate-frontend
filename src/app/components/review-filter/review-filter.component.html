@@ -1,4 +1,10 @@
 <div class="grid w-full grid-cols-1 gap-5">
+	<!-- <sdm-search-bar
+		*ngIf="viewMode === 'review'"
+		[reviewData]="subjectReviewData"
+		(searchedSubjectCardDataList)="getFilterSubjectCardDataList($event)"
+	></sdm-search-bar> -->
+
 	<!-- Header Section -->
 	<div class="flex items-center gap-3" id="header-zone">
 		<div class="font-medium text-dark-100">เรียงโดย</div>
@@ -106,7 +112,7 @@
 			*ngFor="let data of paginatedItems; let i = index"
 			class="grid grid-cols-1 gap-4"
 			><sdm-subject-review
-				viewMode="subject-detail"
+				[viewMode]="viewMode"
 				[subjectReviewData]="data"
 				[isSignIn]="signedIn"
 				[isReviewCreator]="isReviewOwner(data.user_id)"

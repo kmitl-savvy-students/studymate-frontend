@@ -8,12 +8,23 @@
 			class="NgxEditor__MenuBar"
 		></ngx-editor-menu>
 		<div class="p-5">
-			<ngx-editor
-				[editor]="editor"
-				[(ngModel)]="review_content"
-				[placeholder]="'คุณคิดอย่างไรกับรายวิชานี้ ?'"
-				class="NgxEditor"
-			></ngx-editor>
+			<ng-container *ngIf="isEdit">
+				<ngx-editor
+					[editor]="editor"
+					[(ngModel)]="review_content"
+					[ngModel]="editReviewContent"
+					[placeholder]="'คุณคิดอย่างไรกับรายวิชานี้ ?'"
+					class="NgxEditor"
+				></ngx-editor>
+			</ng-container>
+			<ng-container *ngIf="!isEdit">
+				<ngx-editor
+					[editor]="editor"
+					[(ngModel)]="review_content"
+					[placeholder]="'คุณคิดอย่างไรกับรายวิชานี้ ?'"
+					class="NgxEditor"
+				></ngx-editor>
+			</ng-container>
 		</div>
 	</div>
 
@@ -23,7 +34,8 @@
 			<div class="col-span-1">
 				<button
 					class="flex h-min w-min items-center gap-x-2 rounded-[15px] border border-gray-300 px-3 py-1.5 font-medium text-gray-400 hover:bg-gray-300 hover:text-white"
-					(click)="onCancelEditReview()"
+					data-modal-target="confirm-cancel-modal"
+					data-modal-toggle="confirm-cancel-modal"
 				>
 					<p class="text-sm">ยกเลิก</p>
 				</button>
@@ -49,3 +61,19 @@
 		</div>
 	</div>
 </div>
+
+<!-- cancel delete Modal -->
+<sdm-confirm-modal
+	*ngIf="isEdit"
+	modalID="confirm-cancel-modal"
+	icon="circle-exclamation"
+	iconColor="text-dark-10"
+	text="คุณต้องการยกเลิกการแก้ไขรีวิวใช่หรือไม่?"
+	textColor="text-dark-100"
+	subtext="*หากยกเลิกแล้วข้อมูลที่ได้แก้ไขไปจะหายไปโดยไม่ถูกบันทึก"
+	subtextColor="text-red-500"
+	backgroundColor="bg-red-400"
+	backgroundColorHover="bg-red-500"
+	[confirmFunction]="onCancelEditReview.bind(this)"
+>
+</sdm-confirm-modal>

@@ -66,10 +66,12 @@
 	<!-- แสดงผลการแก้ไขหรือรีวิว -->
 	<ng-container *ngIf="!isEditing">
 		<!-- Subject Review -->
-		<div
-			class="px-5 pb-2 pt-3 text-sm font-normal text-dark-100"
-			[innerHTML]="this.subjectReviewData.review"
-		></div>
+		<div>
+			<div
+				class="px-5 pb-2 pt-3 text-sm font-normal text-dark-100"
+				[innerHTML]="this.subjectReviewData.review"
+			></div>
+		</div>
 
 		<!-- Footer Section -->
 		<div class="flex items-center justify-between px-5 pb-3">
@@ -114,6 +116,7 @@
 		<sdm-write-review-box
 			[isEdit]="true"
 			[signedIn]="isSignIn"
+			[editReviewContent]="reviewContent"
 			(confirmEditReview)="onConfirmEditReview()"
 			(cancelEditReview)="onCancelEditReview()"
 			class="m-5"
