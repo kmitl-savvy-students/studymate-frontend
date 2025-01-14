@@ -50,7 +50,7 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.reviewData = res;
-					console.log('รีวิวทั้งหมดในระบบ :', this.reviewData);
+					// console.log('รีวิวทั้งหมดในระบบ :', this.reviewData);
 				} else {
 					console.log('No Reviews Data Available.');
 				}

@@ -28,7 +28,6 @@ import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
 		CommonModule,
 		SDMSubjectReviewComponent,
 		SDMPaginationComponent,
-		SDMSearchBarComponent,
 	],
 	templateUrl: './review-filter.component.html',
 	styleUrl: './review-filter.component.css',
@@ -43,6 +42,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() signedIn: boolean = false;
 	@Input() currentUser: User | null = null;
 	@Input() prioritizeUserReview: boolean = false;
+	@Input() itemsPerPage: number = 10;
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
@@ -56,7 +56,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public selectedStarRatingValue: any;
 
 	public currentPage: number = 1;
-	public itemsPerPage: number = 5;
 	public paginatedItems: SubjectReviewData[] = [];
 	public subjectReviewTotal: number = 0;
 
