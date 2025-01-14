@@ -1,3 +1,5 @@
+import { CurriculumSubject } from './CurriculumSubject.model';
+
 export class CurriculumSubgroup {
 	constructor(
 		public category_id: number,
@@ -10,5 +12,7 @@ export class CurriculumSubgroup {
 		public credit2: number,
 		public condition: string,
 		public link: string,
+		public curriculum_subjects: CurriculumSubject[],
+		public isOpen: boolean,
 	) {}
 }
