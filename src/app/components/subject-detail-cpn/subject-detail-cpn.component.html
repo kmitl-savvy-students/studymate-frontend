@@ -14,6 +14,12 @@
 		>
 			{{ subjectDetailData.lect_or_prac }}
 		</div>
+		<div
+			class="border-1 rounded-[15px] bg-orange-400 px-3 py-1.5 text-xs font-semibold text-white"
+			*ngIf="subjectDetailData.lect_or_prac === 'ปฏิบัติ'"
+		>
+			{{ subjectDetailData.lect_or_prac }}
+		</div>
 	</div>
 
 	<!-- Course Description -->
