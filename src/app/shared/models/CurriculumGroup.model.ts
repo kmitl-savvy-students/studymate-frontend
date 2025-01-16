@@ -1,3 +1,5 @@
+import { CurriculumSubgroup } from './CurriculumSubgroup.model';
+
 export class CurriculumGroup {
 	constructor(
 		public category_id: number,
@@ -10,5 +12,7 @@ export class CurriculumGroup {
 		public subgroup_flag: string,
 		public condition: string,
 		public link: string,
+		public curriculum_subgroup: CurriculumSubgroup[],
+		public isOpen: boolean,
 	) {}
 }
