@@ -1,3 +1,4 @@
+import { finalize } from 'rxjs';
 import {
 	AfterViewInit,
 	Component,
@@ -93,11 +94,12 @@ export class SDMRichTextEditor
 	}
 
 	public onSubmitReview() {
-		if (this.rating === 0) {
+		console.log(this.selectedSemester);
+		if (!this.rating) {
 			this.alertService.showAlert('error', 'โปรดให้คะแนนรายวิชา');
-		} else if (this.selectedYear === undefined) {
+		} else if (!this.selectedYear) {
 			this.alertService.showAlert('error', 'โปรดเลือกปีการศึกษา');
-		} else if (this.selectedSemester === undefined) {
+		} else if (!this.selectedSemester) {
 			this.alertService.showAlert('error', 'โปรดเลือกภาคการศึกษา');
 		} else if (this.review_content === '') {
 			this.alertService.showAlert('error', 'โปรดเขียนรีวิว');
@@ -120,6 +122,10 @@ export class SDMRichTextEditor
 							);
 							this.reviewSuccess.emit();
 							this.review_content = '';
+
+							// TEMPORARY
+							this.selectedSemester = 0;
+							this.selectedYear = 0;
 						},
 						error: (err) => {
 							switch (err.status) {
