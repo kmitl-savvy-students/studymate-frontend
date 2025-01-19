@@ -33,3 +33,8 @@ export class SubjectData {
 	public midterm_date_time!: string[];
 	public final_date_time!: string[];
 }
+
+export enum paginationType {
+	single = 1,
+	double = 2,
+}

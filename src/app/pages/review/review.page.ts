@@ -5,6 +5,7 @@ import { initFlowbite } from 'flowbite';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
+import { paginationType } from '../../shared/models/SdmAppService.model';
 
 @Component({
 	selector: 'sdm-page-subject-detail',
@@ -40,8 +41,13 @@ export class SDMPageReview {
 		});
 		this.getSubjectReviews();
 	}
+
 	ngAfterViewInit(): void {
 		initFlowbite();
+	}
+
+	get paginationType() {
+		return paginationType;
 	}
 
 	public getSubjectReviews() {
@@ -50,7 +56,6 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.reviewData = res;
-					// console.log('รีวิวทั้งหมดในระบบ :', this.reviewData);
 				} else {
 					console.log('No Reviews Data Available.');
 				}

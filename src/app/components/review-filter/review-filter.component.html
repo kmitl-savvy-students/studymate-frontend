@@ -1,12 +1,14 @@
 <div class="grid w-full grid-cols-1 gap-5">
-	<!-- <sdm-search-bar
-		*ngIf="viewMode === 'review'"
-		[reviewData]="subjectReviewData"
-		(searchedSubjectCardDataList)="getFilterSubjectCardDataList($event)"
-	></sdm-search-bar> -->
+	<sdm-search-bar
+		*ngIf="isShowSearchBar"
+		[data]="subjectReviewData"
+		[filterFunction]="searchFunction"
+		(searchedDataList)="getSearchedReviewsDataList($event)"
+		id="search-bar"
+	></sdm-search-bar>
 
 	<!-- Header Section -->
-	<div class="flex items-center gap-3" id="header-zone">
+	<div class="flex items-center gap-3" id="filter-bar">
 		<div class="font-medium text-dark-100">เรียงโดย</div>
 		<button
 			(click)="onPopularFilterChange()"
@@ -101,18 +103,18 @@
 	>
 		<!-- Pagination -->
 		<sdm-pagination
-			*ngIf="paginationType === 'double'"
+			*ngIf="paginationType === paginationTypes.double"
 			(pageChange)="changePage($event)"
 			[totalItems]="subjectReviewTotal"
 			[itemsPerPage]="itemsPerPage"
 			[currentPage]="currentPage"
-			[scrollTargetId]="'header-zone'"
+			[scrollTargetId]="isShowSearchBar ? '' : 'filter-bar'"
 		></sdm-pagination>
 		<ng-container
 			*ngFor="let data of paginatedItems; let i = index"
 			class="grid grid-cols-1 gap-4"
 			><sdm-subject-review
-				[viewMode]="viewMode"
+				[isShowSubjectIdAndName]="isReviewPage"
 				[subjectReviewData]="data"
 				[isSignIn]="signedIn"
 				[isReviewCreator]="isReviewOwner(data.user_id)"
@@ -128,7 +130,7 @@
 			[totalItems]="subjectReviewTotal"
 			[itemsPerPage]="itemsPerPage"
 			[currentPage]="currentPage"
-			[scrollTargetId]="'header-zone'"
+			[scrollTargetId]="isShowSearchBar ? '' : 'filter-bar'"
 		></sdm-pagination>
 	</div>
 </div>

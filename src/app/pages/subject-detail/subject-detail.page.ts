@@ -12,6 +12,7 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 import { subjectReviewData } from './subject-detail-page-data';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
+import { paginationType } from '../../shared/models/SdmAppService.model';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -70,6 +71,10 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		initFlowbite();
+	}
+
+	get paginationType() {
+		return paginationType;
 	}
 
 	public getSubjectDetail() {
