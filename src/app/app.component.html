@@ -1,8 +1,11 @@
 <app-loading-overlay />
 <modal-select-curriculum />
 <app-alert />
-<div class="flex min-h-screen flex-col">
-	<div *ngIf="shouldShowNavbarAndFooter(); else authOnly">
+<div>
+	<div
+		*ngIf="shouldShowNavbarAndFooter(); else authOnly"
+		class="flex min-h-screen flex-col"
+	>
 		<header class="flex-none">
 			<sdm-navbar />
 		</header>
