@@ -48,8 +48,9 @@
 				></sdm-select>
 			</div>
 			<sdm-search-bar
-				[subjectData]="subjectCardData"
-				(searchedSubjectCardDataList)="getFilterSubjectCardDataList($event)"
+				[data]="subjectCardData"
+				[filterFunction]="searchFunction"
+				(searchedDataList)="getSearchedSubjectCardDataList($event)"
 			></sdm-search-bar>
 		</div>
 		<ng-container *ngIf="isSelectAllDropdown && isLoading">
@@ -159,9 +160,9 @@
 		</div>
 	</div>
 </div>
-<sdm-subject-added-modal
+<!-- <sdm-subject-added-modal
 	modalID="subject-added-modal"
 	headerModal="รายวิชาที่เพิ่ม"
 	[subjects_added]="subjects_added"
 >
-</sdm-subject-added-modal>
+</sdm-subject-added-modal> -->

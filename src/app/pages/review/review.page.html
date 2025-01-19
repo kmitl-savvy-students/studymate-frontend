@@ -2,14 +2,15 @@
 	<div class="text-center text-xl font-semibold">รีวิววิชา</div>
 	<div class="grid w-full grid-cols-1 items-center gap-3">
 		<sdm-review-filter
-			viewMode="review"
 			[subjectReviewData]="reviewData"
 			[isLoadingReview]="isLoadingReview"
-			[paginationType]="'double'"
+			[paginationType]="paginationType.double"
 			[signedIn]="signedIn"
 			[currentUser]="currentUser"
 			[prioritizeUserReview]="false"
 			[itemsPerPage]="10"
+			[isShowSearchBar]="true"
+			[isReviewPage]="true"
 			(confirmEditReview)="getSubjectReviews()"
 			(deleteUserReview)="getSubjectReviews()"
 		></sdm-review-filter>

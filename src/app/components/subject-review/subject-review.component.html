@@ -3,21 +3,22 @@
 	<div
 		class="flex w-full items-center justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold"
 	>
-		<div
-			*ngIf="viewMode === 'subject-detail'"
-			class="flex items-center gap-4"
-		>
+		<div class="flex items-center gap-4">
+			<ng-container *ngIf="isShowSubjectIdAndName">
+				<div>{{ subjectReviewData.teachtable_subject.subject_id }}</div>
+				<div>{{ subjectReviewData.subject_name_en }}</div>
+			</ng-container>
 			<div>
 				ปีการศึกษา
 				{{
-					this.subjectReviewData.teachtable_subject.teachtable
+					subjectReviewData.teachtable_subject.teachtable
 						.academic_year
 				}}
 			</div>
 			<div>
 				ภาคการศึกษาที่
 				{{
-					this.subjectReviewData.teachtable_subject.teachtable
+					subjectReviewData.teachtable_subject.teachtable
 						.academic_term
 				}}
 			</div>
@@ -28,32 +29,7 @@
 				รีวิวของฉัน
 			</div>
 		</div>
-		<div *ngIf="viewMode === 'review'" class="flex items-center gap-4">
-			<div>
-				{{ this.subjectReviewData.teachtable_subject.subject_id }}
-			</div>
-			<div>{{ this.subjectReviewData.subject_name_en }}</div>
-			<div>
-				ปีการศึกษา
-				{{
-					this.subjectReviewData.teachtable_subject.teachtable
-						.academic_year
-				}}
-			</div>
-			<div>
-				ภาคการศึกษาที่
-				{{
-					this.subjectReviewData.teachtable_subject.teachtable
-						.academic_term
-				}}
-			</div>
-			<div
-				*ngIf="isReviewCreator"
-				class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-white"
-			>
-				รีวิวของฉัน
-			</div>
-		</div>
+
 		<div class="flex items-center gap-x-1">
 			<sdm-rating
 				mode="display"

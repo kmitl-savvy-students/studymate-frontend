@@ -51,7 +51,6 @@ import { SDMRichTextEditor } from '../../components/rich-text-editor/rich-text-e
 	imports: [
 		SDMSelectComponent,
 		SDMSearchBarComponent,
-		SDMSubjectAddedModalComponent,
 		SDMilterBarComponent,
 		SDMPaginationComponent,
 		CommonModule,
@@ -360,7 +359,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 	}
 
-	public getFilterSubjectCardDataList(
+	public getSearchedSubjectCardDataList(
 		filteredSubjectCardDataList: SubjectCardData[],
 	) {
 		this.filteredSubjectCardDataList = filteredSubjectCardDataList;
@@ -369,5 +368,20 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 		this.isSearched = true;
 		this.currentPage = 1;
 		this.updatePaginatedItems();
+	}
+
+	public searchFunction(
+		data: SubjectCardData[],
+		searchValue: string,
+	): SubjectCardData[] {
+		return data.filter(
+			(subject) =>
+				subject.subject_id
+					.toLowerCase()
+					.includes(searchValue.toLowerCase()) ||
+				subject.subject_name_en
+					.toLowerCase()
+					.includes(searchValue.toLowerCase()),
+		);
 	}
 }
