@@ -33,8 +33,6 @@ import { User } from '../../shared/models/User.model.js';
 	styleUrl: './write-review-box.component.css',
 })
 export class SDMWriteReviewBoxComponent {
-	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
-
 	@Input() isEdit: boolean = false;
 	@Input() signedIn: boolean = false;
 	@Input() currentUser: User | null = null;
@@ -43,8 +41,8 @@ export class SDMWriteReviewBoxComponent {
 	@Output() reviewSuccess = new EventEmitter<void>();
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() cancelEditReview = new EventEmitter<void>();
-	public selectedYear: number = 0;
-	public selectedSemester: number = 0;
+	public selectedYear?: number = 0;
+	public selectedSemester?: number = 0;
 
 	public yearsList = yearsList;
 	public semesterList = semesterList;
@@ -64,17 +62,10 @@ export class SDMWriteReviewBoxComponent {
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
-				console.log('Selected Year !:', this.selectedYear);
 				break;
 			case 'selectedSemester':
 				this.selectedSemester = selectedData.value;
-				console.log('Selected Semester:', this.selectedSemester);
 				break;
-
-			// if (this.isSelectAllDropdown) {
-			//   console.log('All dropdowns selected, calling getSubjectData()');
-			//   this.getSubjectData();
-			// }
 		}
 	}
 
@@ -94,23 +85,18 @@ export class SDMWriteReviewBoxComponent {
 		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
 	}
 
-	private clearSelect() {
-		if (this.sdmSelect) {
-			this.sdmSelect.onSelectedOption('');
-		}
-	}
-
 	public resetForm(): void {
-		this.showForm = false; // ซ่อนฟอร์ม
+		this.reviewRating = 0;
+		this.selectedSemester = 0;
+		this.selectedYear = 0;
+		this.showForm = false;
 		setTimeout(() => {
-			this.showForm = true; // แสดงฟอร์มใหม่
-		}, 0); // ใช้ delay เล็กน้อยเพื่อให้ Angular รีเฟรช
+			this.showForm = true;
+		}, 0);
 	}
 
 	public onReviewSuccess() {
 		this.reviewSuccess.emit();
-		this.clearSelect();
-		this.reviewRating = 0;
 		this.resetForm();
 	}
 

@@ -92,13 +92,13 @@
 				<div class="text-sm font-normal text-dark-75">
 					{{ this.subjectReviewData.created }}
 				</div>
-				<sdm-icon
+				<!-- <sdm-icon
 					*ngIf="canEdit"
 					icon="pen-to-square"
 					iconStyle="fas"
 					class="cursor-pointer text-base text-dark-100"
 					(click)="onEditReview()"
-				></sdm-icon>
+				></sdm-icon> -->
 				<sdm-icon
 					*ngIf="canDelete"
 					icon="trash-can"
@@ -112,7 +112,7 @@
 	</ng-container>
 
 	<!-- Editing -->
-	<ng-container *ngIf="isEditing">
+	<!-- <ng-container *ngIf="isEditing">
 		<sdm-write-review-box
 			[isEdit]="true"
 			[signedIn]="isSignIn"
@@ -121,7 +121,7 @@
 			(cancelEditReview)="onCancelEditReview()"
 			class="m-5"
 		></sdm-write-review-box>
-	</ng-container>
+	</ng-container> -->
 </div>
 
 <!-- Delete Review Modal -->

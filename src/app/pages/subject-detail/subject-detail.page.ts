@@ -100,17 +100,13 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public getSubjectReviews() {
 		this.isLoadingReview = true;
-
+		console.log('Loading:', this.isLoadingReview);
 		this.apiManagementService
 			.GetSubjectReviewsBySubjectID(this.eachSubjectData.subject_id)
 			.subscribe({
 				next: (res) => {
 					if (res) {
 						this.subjectReviewData = res;
-						console.log(
-							'รีวิวของวิชานี้ :',
-							this.subjectReviewData,
-						);
 					} else {
 						console.log('No Subject Reviews Data Available.');
 					}

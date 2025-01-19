@@ -1,3 +1,4 @@
+import { finalize } from 'rxjs';
 import {
 	AfterViewInit,
 	Component,
@@ -48,7 +49,7 @@ export class SDMRichTextEditor
 	@Input() subjectId!: string;
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() cancelEditReview = new EventEmitter<void>();
-	@Output() reviewSuccess = new EventEmitter<void>();
+	@Output() resetComponent = new EventEmitter<void>();
 	public editor: Editor;
 	public review_content: string = '';
 	public defaultText: string =
@@ -88,16 +89,16 @@ export class SDMRichTextEditor
 			changes['content']
 		) {
 			console.log(this.rating, this.selectedYear, this.selectedSemester);
-			console.log('review : ', this.review_content);
 		}
 	}
 
 	public onSubmitReview() {
-		if (this.rating === 0) {
+		console.log(this.selectedSemester);
+		if (!this.rating) {
 			this.alertService.showAlert('error', 'โปรดให้คะแนนรายวิชา');
-		} else if (this.selectedYear === undefined) {
+		} else if (!this.selectedYear) {
 			this.alertService.showAlert('error', 'โปรดเลือกปีการศึกษา');
-		} else if (this.selectedSemester === undefined) {
+		} else if (!this.selectedSemester) {
 			this.alertService.showAlert('error', 'โปรดเลือกภาคการศึกษา');
 		} else if (this.review_content === '') {
 			this.alertService.showAlert('error', 'โปรดเขียนรีวิว');
@@ -118,8 +119,6 @@ export class SDMRichTextEditor
 								'success',
 								'รีวิวสำเร็จ',
 							);
-							this.reviewSuccess.emit();
-							this.review_content = '';
 						},
 						error: (err) => {
 							switch (err.status) {
@@ -128,8 +127,6 @@ export class SDMRichTextEditor
 										'error',
 										'คุณเคยรีวิวรายวิชานี้ไปแล้ว',
 									);
-									this.reviewSuccess.emit();
-									this.review_content = '';
 									break;
 								case 500:
 									this.alertService.showAlert(
@@ -140,6 +137,12 @@ export class SDMRichTextEditor
 							}
 						},
 					});
+				//reset
+				this.resetComponent.emit();
+				this.rating = 0;
+				this.selectedSemester = 0;
+				this.selectedYear = 0;
+				this.review_content = '';
 			}
 		}
 	}
