@@ -20,6 +20,10 @@ export const routes: Routes = [
 	{ path: 'home', component: SDMPageHome },
 	{ path: 'subject', component: SDMSubject },
 	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
+	{
+		path: 'subject/subject-detail/:subjectId',
+		component: SDMPageSubjectDetail,
+	},
 	{ path: 'review', component: SDMPageReview },
 
 	{ path: 'sign-in', component: SDMPageSignIn },
