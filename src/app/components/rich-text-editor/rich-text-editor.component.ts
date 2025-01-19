@@ -49,7 +49,7 @@ export class SDMRichTextEditor
 	@Input() subjectId!: string;
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() cancelEditReview = new EventEmitter<void>();
-	@Output() reviewSuccess = new EventEmitter<void>();
+	@Output() resetComponent = new EventEmitter<void>();
 	public editor: Editor;
 	public review_content: string = '';
 	public defaultText: string =
@@ -89,7 +89,6 @@ export class SDMRichTextEditor
 			changes['content']
 		) {
 			console.log(this.rating, this.selectedYear, this.selectedSemester);
-			console.log('review : ', this.review_content);
 		}
 	}
 
@@ -120,12 +119,6 @@ export class SDMRichTextEditor
 								'success',
 								'รีวิวสำเร็จ',
 							);
-							this.reviewSuccess.emit();
-							this.review_content = '';
-
-							// TEMPORARY
-							this.selectedSemester = 0;
-							this.selectedYear = 0;
 						},
 						error: (err) => {
 							switch (err.status) {
@@ -134,8 +127,6 @@ export class SDMRichTextEditor
 										'error',
 										'คุณเคยรีวิวรายวิชานี้ไปแล้ว',
 									);
-									this.reviewSuccess.emit();
-									this.review_content = '';
 									break;
 								case 500:
 									this.alertService.showAlert(
@@ -146,6 +137,12 @@ export class SDMRichTextEditor
 							}
 						},
 					});
+				//reset
+				this.resetComponent.emit();
+				this.rating = 0;
+				this.selectedSemester = 0;
+				this.selectedYear = 0;
+				this.review_content = '';
 			}
 		}
 	}
