@@ -26,7 +26,7 @@ import { paginationType } from '../../shared/models/SdmAppService.model';
 	styleUrl: './subject-detail.page.css',
 })
 export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
-	public eachSubjectData!: SubjectCardData;
+	public eachSubjectData?: SubjectCardData;
 	public subjectDetail!: subjectDetailData;
 	public subjectReviewData: SubjectReviewData[] = [];
 
@@ -34,6 +34,8 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
+
+	public subjectId: string = '';
 
 	constructor(
 		private route: ActivatedRoute,
@@ -61,8 +63,19 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 			if (subjectData) {
 				this.eachSubjectData = JSON.parse(subjectData);
+				if (this.eachSubjectData) {
+					this.subjectId = this.eachSubjectData.subject_id;
+				}
 			} else {
-				this.router.navigate(['/subject']);
+				this.route.params.subscribe((params) => {
+					const subjectIdFromParams = params['subjectId'];
+
+					if (subjectIdFromParams) {
+						this.subjectId = subjectIdFromParams;
+					} else {
+						this.router.navigate(['/subject']);
+					}
+				});
 			}
 		});
 		this.getSubjectDetail();
@@ -79,7 +92,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public getSubjectDetail() {
 		this.apiManagementService
-			.GetCurriculumTeachtableSubject(this.eachSubjectData.subject_id)
+			.GetCurriculumTeachtableSubject(this.subjectId)
 			.subscribe({
 				next: (res) => {
 					if (res) {
@@ -107,7 +120,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		this.isLoadingReview = true;
 		console.log('Loading:', this.isLoadingReview);
 		this.apiManagementService
-			.GetSubjectReviewsBySubjectID(this.eachSubjectData.subject_id)
+			.GetSubjectReviewsBySubjectID(this.subjectId)
 			.subscribe({
 				next: (res) => {
 					if (res) {

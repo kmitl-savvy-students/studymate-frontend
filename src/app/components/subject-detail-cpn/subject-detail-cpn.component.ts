@@ -12,7 +12,7 @@ import { subjectDetailData } from '../../shared/models/SubjectDetailData.model.j
 	styleUrl: './subject-detail-cpn.component.css',
 })
 export class SDMSubjectDetailCpnComponent {
-	@Input() subjectDetailData!: SubjectCardData;
+	@Input() subjectDetailData?: SubjectCardData;
 	@Input() subjectDetail?: subjectDetailData;
 
 	public checkString(dateTime: string) {

@@ -3,11 +3,18 @@
 	<div
 		class="flex w-full items-center justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold"
 	>
-		<div class="flex items-center gap-4">
-			<ng-container *ngIf="isShowSubjectIdAndName">
-				<div>{{ subjectReviewData.teachtable_subject.subject_id }}</div>
+		<a
+			class="flex items-center gap-4"
+			[href]="getSubjectDetailUrl()"
+			target="_blank"
+		>
+			<div class="flex items-center gap-4" *ngIf="isShowSubjectIdAndName">
+				<div>
+					{{ subjectReviewData.teachtable_subject.subject_id }}
+				</div>
 				<div>{{ subjectReviewData.subject_name_en }}</div>
-			</ng-container>
+			</div>
+
 			<div>
 				ปีการศึกษา
 				{{
@@ -28,7 +35,7 @@
 			>
 				รีวิวของฉัน
 			</div>
-		</div>
+		</a>
 
 		<div class="flex items-center gap-x-1">
 			<sdm-rating

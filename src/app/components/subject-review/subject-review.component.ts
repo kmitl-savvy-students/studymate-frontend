@@ -18,6 +18,7 @@ import { AlertService } from '../../shared/services/alert/alert.service';
 import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
 import { SDMConfirmDeleteModalComponent } from '../modals/delete-modal/confirm-delete-modal.component';
 import { initFlowbite } from 'flowbite';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'sdm-subject-review',
@@ -26,7 +27,6 @@ import { initFlowbite } from 'flowbite';
 		IconComponent,
 		SDMRatingComponent,
 		CommonModule,
-		SDMWriteReviewBoxComponent,
 		SDMConfirmDeleteModalComponent,
 	],
 	templateUrl: './subject-review.component.html',
@@ -56,6 +56,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	constructor(
 		private apiManagementService: APIManagementService,
 		private alertService: AlertService,
+		private router: Router,
 	) {}
 
 	ngOnInit(): void {
@@ -117,5 +118,14 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 					},
 				});
 		}
+	}
+
+	public getSubjectDetailUrl(): string {
+		return this.router.serializeUrl(
+			this.router.createUrlTree([
+				'/subject/subject-detail',
+				this.subjectReviewData.teachtable_subject.subject_id,
+			]),
+		);
 	}
 }
