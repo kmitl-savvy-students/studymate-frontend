@@ -102,7 +102,9 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 					}
 				},
 				error: (error) => {
-					if (error.status === 404) {
+					if (error.status === 400) {
+						this.router.navigate(['/subject']);
+					} else if (error.status === 404) {
 						console.error('Not found');
 					} else if (error.status === 500) {
 						console.error('Internal Server Error');
