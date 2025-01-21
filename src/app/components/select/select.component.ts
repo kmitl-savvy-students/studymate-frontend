@@ -30,7 +30,6 @@ export class SDMSelectComponent implements OnInit {
 		index?: number;
 		value?: any;
 	}>();
-	@Output() selectNameChange = new EventEmitter<string>();
 	form: FormGroup;
 
 	public isDropdownOpen: boolean = false;
@@ -77,7 +76,6 @@ export class SDMSelectComponent implements OnInit {
 			value: value,
 		};
 		this.selectedValue.emit(data);
-		this.selectNameChange.emit(this.SelectName);
 	}
 
 	@HostListener('document:click', ['$event'])

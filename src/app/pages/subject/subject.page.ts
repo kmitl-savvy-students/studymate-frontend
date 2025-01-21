@@ -14,7 +14,6 @@ import {
 	SelectedData,
 	DropdownList,
 	CirriculumnList,
-	SubjectData,
 } from './../../shared/models/SdmAppService.model.js';
 import {
 	Component,
@@ -28,22 +27,18 @@ import {
 import { initFlowbite } from 'flowbite';
 import { SDMSelectComponent } from '../../components/select/select.component';
 import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.component';
-import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-added-modal/subject-added-modal.component';
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
 import { APIManagementService } from '../../shared/services/api-management.service.js';
-import { AuthService } from '../../shared/services/auth.service';
+
 import { User } from '../../shared/models/User.model';
-import { distinctUntilChanged, filter, of, Subject } from 'rxjs';
-import { UserToken } from '../../shared/models/UserToken.model';
-import { NavigationEnd, Router } from '@angular/router';
+
+import { Router } from '@angular/router';
 import { Curriculum } from '../../shared/models/Curriculum.model.js';
-import { CurriculumTeachtableSubject } from '../../shared/models/CurriculumTeachtableSubject.model.js';
-import { SDMRichTextEditor } from '../../components/rich-text-editor/rich-text-editor.component';
 
 @Component({
 	selector: 'sdm-subject',
@@ -78,6 +73,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 
 	public currentRoute: string = '';
 	public user: User | null = null;
+	public isNavigating: boolean = false;
 
 	public yearsList = yearsList;
 	public semesterList = semesterList;
@@ -104,56 +100,129 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 
 	constructor(
 		private apiManagementService: APIManagementService,
-		// private router: Router,
-		// private authService: AuthService,
-	) {
-		// this.router.events
-		// 	.pipe(filter((event) => event instanceof NavigationEnd))
-		// 	.subscribe((event: any) => {
-		// 		this.currentRoute = event.url;
-		// 	});
-	}
+		private router: Router,
+		private route: ActivatedRoute,
+	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']) {
-			// ตรวจสอบว่ามีการเปลี่ยนแปลงใน isLoading
-			console.log('Loading:', changes['isLoading'].currentValue); // แสดงค่าปัจจุบัน
+			console.log('Loading:', changes['isLoading'].currentValue);
 		}
 	}
 
-	// public userTokenSubject: Subject<UserToken | null> =
-	// 	new Subject<UserToken | null>();
-
 	ngOnInit(): void {
-		this.getCurriculumsData();
-		// this.authService.userTokenSubject
-		// 	.pipe(
-		// 		filter((token) => token !== null),
-		// 		distinctUntilChanged(),
-		// 	)
-		// 	.subscribe((userToken) => {
-		// 		let user = userToken.user;
-		// 		if (user) {
-		// 			this.isSignIn = true;
-		// 			this.user = user;
-		// 		} else {
-		// 			this.isSignIn = false;
-		// 		}
-		// 	});
+		this.route.params.subscribe((params) => {
+			if (Object.keys(params).length > 0) {
+				this.selectedYear = +params['year'];
+				this.selectedSemester = +params['semester'];
+				this.selectedFaculty = params['faculty'];
+				this.selectedDepartment = params['department'];
+				this.selectedCurriculum = params['curriculum'];
+				this.selectedClassYear = +params['classYear'];
+				this.selectedCurriculumYear = params['curriculumYear'];
+				this.selectedUniqueId = params['uniqueId'];
+			}
+		});
+		this.getCurriculumsData().then(() => {
+			this.updateDropdownValues();
+			this.checkSelectAllDropdown();
+			if (this.isSelectAllDropdown) {
+				this.getSubjectData();
+			}
+		});
+		console.log('router url after navigate', this.router.url);
 	}
 
 	ngAfterViewInit(): void {
 		initFlowbite();
-		this.checkSelectAllDropdown();
 	}
 
-	// public closeAllDropdowns(except?: SDMSelectComponent) {
-	// 	this.dropdowns.forEach((dropdown) => {
-	// 		if (dropdown !== except) {
-	// 			dropdown.isDropdownOpen = false;
-	// 		}
-	// 	});
-	// }
+	public updateDropdownValues() {
+		this.dropdowns.forEach((dropdown) => {
+			switch (dropdown.SelectName) {
+				case 'selectedYear': {
+					const option = this.yearsList.find(
+						(option) => option.value === this.selectedYear,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.yearsList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedSemester': {
+					const option = this.semesterList.find(
+						(option) => option.value === this.selectedSemester,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.semesterList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedClassYear': {
+					const option = this.classYearList.find(
+						(option) => option.value === this.selectedClassYear,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.classYearList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedFaculty': {
+					const option = this.facultyList.find(
+						(option) => option.value === this.selectedFaculty,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.facultyList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedDepartment': {
+					const option = this.departmentList.find(
+						(option) => option.value === this.selectedDepartment,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.departmentList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedCurriculum': {
+					const option = this.curriculumList.find(
+						(option) => option.value === this.selectedCurriculum,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.curriculumList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				default:
+					break;
+			}
+		});
+	}
 
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -187,8 +256,6 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			)
 			.subscribe({
 				next: (res) => {
-					console.log('API Response:', res);
-
 					if (res && res.length > 0) {
 						this.subjectCardData = res;
 						this.subjectCardTotal = this.subjectCardData.length;
@@ -197,10 +264,9 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 						console.log('No Subject Data Available.');
 						this.subjectCardData = [];
 						this.getSubjectDataIsNull = true;
-						console.log(this.getSubjectDataIsNull);
 					}
-
 					this.isLoading = false;
+					this.currentPage = 1;
 				},
 				error: (error) => {
 					if (error.status === 404) {
@@ -213,47 +279,53 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 							error.status,
 						);
 					}
+
 					this.isError = true;
 					this.isLoading = false;
 				},
 			});
 	}
 
-	public getCurriculumsData() {
-		this.apiManagementService.GetCurriculum().subscribe({
-			next: (res) => {
-				this.curriculumsData = res.filter(
-					(s) => s.pid === '06' || s.pid === '101',
-				);
-				this.curriculumList = this.curriculumsData.map((curriculum) => {
-					const dropdown = new DropdownList();
-					dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
-					dropdown.value = curriculum.pid;
-					return dropdown;
-				});
-				this.curriculumOptions = this.curriculumsData.map(
-					(curriculum) => {
-						const curriculumOptions = new CirriculumnList();
-						curriculumOptions.value = curriculum.pid;
-						curriculumOptions.uniqueId = curriculum.unique_id;
-						curriculumOptions.curriculumYear = curriculum.year;
-						return curriculumOptions;
-					},
-				);
-				console.log(this.curriculumOptions);
-			},
-			error: (error) => {
-				if (error.status === 404) {
-					console.error('Not found');
-				} else if (error.status === 500) {
-					console.error('Internal Server Error');
-				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
+	public getCurriculumsData(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.apiManagementService.GetCurriculum().subscribe({
+				next: (res) => {
+					this.curriculumsData = res.filter(
+						(s) => s.pid === '06' || s.pid === '101',
 					);
-				}
-			},
+					this.curriculumList = this.curriculumsData.map(
+						(curriculum) => {
+							const dropdown = new DropdownList();
+							dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
+							dropdown.value = curriculum.pid;
+							return dropdown;
+						},
+					);
+					this.curriculumOptions = this.curriculumsData.map(
+						(curriculum) => {
+							const curriculumOptions = new CirriculumnList();
+							curriculumOptions.value = curriculum.pid;
+							curriculumOptions.uniqueId = curriculum.unique_id;
+							curriculumOptions.curriculumYear = curriculum.year;
+							return curriculumOptions;
+						},
+					);
+					resolve();
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						console.error('Not found');
+					} else if (error.status === 500) {
+						console.error('Internal Server Error');
+					} else {
+						console.error(
+							'An unexpected error occurred:',
+							error.status,
+						);
+					}
+					reject(error);
+				},
+			});
 		});
 	}
 
@@ -283,34 +355,26 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
-				console.log('Selected Year !:', this.selectedYear);
 				break;
 			case 'selectedSemester':
 				this.selectedSemester = selectedData.value;
-				console.log('Selected Semester:', this.selectedSemester);
 				break;
 			case 'selectedClassYear':
 				this.selectedClassYear = selectedData.value;
-				console.log('Selected Class:', this.selectedClassYear);
 				break;
 			case 'selectedFaculty':
 				this.selectedFaculty = selectedData.value;
-				console.log('Selected Faculty:', this.selectedFaculty);
 				break;
 			case 'selectedDepartment':
 				this.selectedDepartment = selectedData.value;
-				console.log('Selected Department:', this.selectedDepartment);
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
-
 				const matchedCurriculum = this.curriculumOptions.find(
 					(item) => item.value === selectedData.value,
 				);
 				this.selectedUniqueId = matchedCurriculum?.uniqueId;
 				this.selectedCurriculumYear = matchedCurriculum?.curriculumYear;
-
-				console.log('Selected Curriculum:', this.selectedCurriculum);
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
@@ -318,9 +382,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 
 		this.checkSelectAllDropdown();
 
-		if (this.isSelectAllDropdown) {
-			console.log('All dropdowns selected, calling getSubjectData()');
-			this.getSubjectData();
+		if (this.isSelectAllDropdown && !this.isNavigating) {
+			this.navigateToSubject();
 		}
 	}
 
@@ -356,7 +419,42 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				this.isSelectAllDropdown = false;
 			}
 		}
-		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
+	}
+
+	private isCurrentUrl(url: string): boolean {
+		return this.router.url === url;
+	}
+
+	public navigateToSubject() {
+		const latestSubjectUrl = this.router
+			.createUrlTree([
+				'/subject',
+				this.selectedYear,
+				this.selectedSemester,
+				this.selectedFaculty,
+				this.selectedDepartment,
+				this.selectedCurriculum,
+				this.selectedClassYear,
+				this.selectedCurriculumYear,
+				this.selectedUniqueId,
+			])
+			.toString();
+
+		if (!this.isCurrentUrl(latestSubjectUrl)) {
+			this.isNavigating = true;
+			this.router.navigateByUrl(latestSubjectUrl).then((success) => {
+				if (success) {
+					if (this.isSelectAllDropdown) {
+						this.getSubjectData();
+					}
+				} else {
+					console.error('Navigation failed.');
+				}
+				this.isNavigating = false;
+			});
+			console.log('router url before navigate', this.router.url);
+			console.log('goToSubjectUrl', latestSubjectUrl);
+		}
 	}
 
 	public getSearchedSubjectCardDataList(

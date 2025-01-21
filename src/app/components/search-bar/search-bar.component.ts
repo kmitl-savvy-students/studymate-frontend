@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 	templateUrl: './search-bar.component.html',
 	styleUrl: './search-bar.component.css',
 })
-export class SDMSearchBarComponent implements OnChanges {
+export class SDMSearchBarComponent {
 	@Input() data: any[] = [];
 	@Input() filterFunction!: (data: any[], searchValue: string) => any[];
 	@Output() searchedDataList = new EventEmitter<any[]>();
@@ -33,12 +33,6 @@ export class SDMSearchBarComponent implements OnChanges {
 		this.searchForm = this.fb.group({
 			search: [''],
 		});
-	}
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['data']) {
-			console.log('Data updated:', this.data);
-		}
 	}
 
 	onSearch() {
