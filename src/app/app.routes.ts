@@ -19,11 +19,21 @@ export const routes: Routes = [
 	},
 	{ path: 'home', component: SDMPageHome },
 
-	{ path: 'subject', component: SDMSubject },
+	{
+		path: 'subject',
+		component: SDMSubject,
+	},
+
+	{
+		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear',
+		component: SDMSubject,
+	},
+
 	{
 		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId',
 		component: SDMSubject,
 	},
+
 	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
 	{
 		path: 'subject/subject-detail/:subjectId',
