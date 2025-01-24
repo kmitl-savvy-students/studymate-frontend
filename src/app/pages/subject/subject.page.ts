@@ -28,7 +28,7 @@ import { initFlowbite } from 'flowbite';
 import { SDMSelectComponent } from '../../components/select/select.component';
 import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
@@ -370,6 +370,12 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				break;
 			case 'selectedDepartment':
 				this.selectedDepartment = selectedData.value;
+				if (
+					this.selectedDepartment === undefined ||
+					this.selectedDepartment === ''
+				) {
+					this.resetDropdowns('selectedCurriculum');
+				}
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
@@ -522,7 +528,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			this.isSelectAllDropdown === true &&
 			this.isSelectAllDropdown
 		) {
-			// ใช้เส้นทางสำหรับกรณีวิศวกรมมศาสตร์
+			// ใช้เส้นทางสำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
 			latestSubjectUrl = this.router
 				.createUrlTree([
 					'/subject',
