@@ -14,7 +14,6 @@ import {
 	SelectedData,
 	DropdownList,
 	CirriculumnList,
-	SubjectData,
 } from './../../shared/models/SdmAppService.model.js';
 import {
 	Component,
@@ -28,22 +27,20 @@ import {
 import { initFlowbite } from 'flowbite';
 import { SDMSelectComponent } from '../../components/select/select.component';
 import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.component';
-import { SDMSubjectAddedModalComponent } from '../../components/modals/subject-added-modal/subject-added-modal.component';
 import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
 import { APIManagementService } from '../../shared/services/api-management.service.js';
-import { AuthService } from '../../shared/services/auth.service';
+
 import { User } from '../../shared/models/User.model';
-import { distinctUntilChanged, filter, of, Subject } from 'rxjs';
-import { UserToken } from '../../shared/models/UserToken.model';
-import { NavigationEnd, Router } from '@angular/router';
+
+import { Router } from '@angular/router';
 import { Curriculum } from '../../shared/models/Curriculum.model.js';
-import { CurriculumTeachtableSubject } from '../../shared/models/CurriculumTeachtableSubject.model.js';
-import { SDMRichTextEditor } from '../../components/rich-text-editor/rich-text-editor.component';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
 
 @Component({
 	selector: 'sdm-subject',
@@ -78,6 +75,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 
 	public currentRoute: string = '';
 	public user: User | null = null;
+	public isNavigating: boolean = false;
 
 	public yearsList = yearsList;
 	public semesterList = semesterList;
@@ -101,59 +99,140 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	public isSignIn: boolean = false;
 	public getSubjectDataIsNull: boolean = false;
 	public searchSubjectDataIsNull: boolean = false;
+	public disableCurriculumSelectDropdown: boolean = false;
+	public disableDepartmentSelectDropdown: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
-		// private router: Router,
-		// private authService: AuthService,
-	) {
-		// this.router.events
-		// 	.pipe(filter((event) => event instanceof NavigationEnd))
-		// 	.subscribe((event: any) => {
-		// 		this.currentRoute = event.url;
-		// 	});
-	}
+		private router: Router,
+		private route: ActivatedRoute,
+	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoading']) {
-			// ตรวจสอบว่ามีการเปลี่ยนแปลงใน isLoading
-			console.log('Loading:', changes['isLoading'].currentValue); // แสดงค่าปัจจุบัน
+			console.log('Loading:', changes['isLoading'].currentValue);
 		}
 	}
 
-	// public userTokenSubject: Subject<UserToken | null> =
-	// 	new Subject<UserToken | null>();
-
 	ngOnInit(): void {
-		this.getCurriculumsData();
-		// this.authService.userTokenSubject
-		// 	.pipe(
-		// 		filter((token) => token !== null),
-		// 		distinctUntilChanged(),
-		// 	)
-		// 	.subscribe((userToken) => {
-		// 		let user = userToken.user;
-		// 		if (user) {
-		// 			this.isSignIn = true;
-		// 			this.user = user;
-		// 		} else {
-		// 			this.isSignIn = false;
-		// 		}
-		// 	});
+		this.route.params
+			.pipe(
+				switchMap((params) => {
+					if (Object.keys(params).length > 0) {
+						this.selectedYear = +params['year'];
+						this.selectedSemester = +params['semester'];
+						this.selectedFaculty = params['faculty'];
+						this.selectedDepartment = params['department'];
+						this.selectedCurriculum = params['curriculum'];
+						this.selectedClassYear = +params['classYear'];
+						this.selectedCurriculumYear = params['curriculumYear'];
+						this.selectedUniqueId = params['uniqueId'];
+					}
+
+					return this.getCurriculumsData();
+				}),
+			)
+			.subscribe(() => {
+				this.updateDropdownValues();
+
+				this.checkSelectAllDropdown();
+
+				if (this.isSelectAllDropdown) {
+					this.getSubjectData();
+				}
+			});
 	}
 
 	ngAfterViewInit(): void {
 		initFlowbite();
-		this.checkSelectAllDropdown();
 	}
 
-	// public closeAllDropdowns(except?: SDMSelectComponent) {
-	// 	this.dropdowns.forEach((dropdown) => {
-	// 		if (dropdown !== except) {
-	// 			dropdown.isDropdownOpen = false;
-	// 		}
-	// 	});
-	// }
+	public updateDropdownValues() {
+		this.dropdowns.forEach((dropdown) => {
+			switch (dropdown.SelectName) {
+				case 'selectedYear': {
+					const option = this.yearsList.find(
+						(option) => option.value === this.selectedYear,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.yearsList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedSemester': {
+					const option = this.semesterList.find(
+						(option) => option.value === this.selectedSemester,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.semesterList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedClassYear': {
+					const option = this.classYearList.find(
+						(option) => option.value === this.selectedClassYear,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.classYearList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedFaculty': {
+					const option = this.facultyList.find(
+						(option) => option.value === this.selectedFaculty,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.facultyList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedDepartment': {
+					const option = this.departmentList.find(
+						(option) => option.value === this.selectedDepartment,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.departmentList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				case 'selectedCurriculum': {
+					const option = this.curriculumList.find(
+						(option) => option.value === this.selectedCurriculum,
+					);
+					if (option) {
+						dropdown.onSelectedOption(
+							option.label,
+							this.curriculumList.indexOf(option),
+							option.value,
+						);
+					}
+					break;
+				}
+				default:
+					break;
+			}
+		});
+	}
 
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -187,8 +266,6 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			)
 			.subscribe({
 				next: (res) => {
-					console.log('API Response:', res);
-
 					if (res && res.length > 0) {
 						this.subjectCardData = res;
 						this.subjectCardTotal = this.subjectCardData.length;
@@ -197,10 +274,9 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 						console.log('No Subject Data Available.');
 						this.subjectCardData = [];
 						this.getSubjectDataIsNull = true;
-						console.log(this.getSubjectDataIsNull);
 					}
-
 					this.isLoading = false;
+					this.currentPage = 1;
 				},
 				error: (error) => {
 					if (error.status === 404) {
@@ -213,6 +289,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 							error.status,
 						);
 					}
+
 					this.isError = true;
 					this.isLoading = false;
 				},
@@ -220,8 +297,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	}
 
 	public getCurriculumsData() {
-		this.apiManagementService.GetCurriculum().subscribe({
-			next: (res) => {
+		return this.apiManagementService.GetCurriculum().pipe(
+			tap((res) => {
 				this.curriculumsData = res.filter(
 					(s) => s.pid === '06' || s.pid === '101',
 				);
@@ -240,21 +317,12 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 						return curriculumOptions;
 					},
 				);
-				console.log(this.curriculumOptions);
-			},
-			error: (error) => {
-				if (error.status === 404) {
-					console.error('Not found');
-				} else if (error.status === 500) {
-					console.error('Internal Server Error');
-				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
-					);
-				}
-			},
-		});
+			}),
+			catchError((error) => {
+				console.error('Error fetching curriculum:', error);
+				return EMPTY;
+			}),
+		);
 	}
 
 	public handleChooseFaculty(list: DropdownList[]) {
@@ -283,80 +351,218 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
-				console.log('Selected Year !:', this.selectedYear);
 				break;
 			case 'selectedSemester':
 				this.selectedSemester = selectedData.value;
-				console.log('Selected Semester:', this.selectedSemester);
 				break;
 			case 'selectedClassYear':
 				this.selectedClassYear = selectedData.value;
-				console.log('Selected Class:', this.selectedClassYear);
 				break;
 			case 'selectedFaculty':
 				this.selectedFaculty = selectedData.value;
-				console.log('Selected Faculty:', this.selectedFaculty);
+				if (
+					this.selectedFaculty === undefined ||
+					this.selectedFaculty === ''
+				) {
+					this.resetDropdowns('selectedDepartment');
+					this.resetDropdowns('selectedCurriculum');
+				}
 				break;
 			case 'selectedDepartment':
 				this.selectedDepartment = selectedData.value;
-				console.log('Selected Department:', this.selectedDepartment);
+				if (
+					this.selectedDepartment === undefined ||
+					this.selectedDepartment === ''
+				) {
+					this.resetDropdowns('selectedCurriculum');
+				}
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
-
 				const matchedCurriculum = this.curriculumOptions.find(
 					(item) => item.value === selectedData.value,
 				);
 				this.selectedUniqueId = matchedCurriculum?.uniqueId;
 				this.selectedCurriculumYear = matchedCurriculum?.curriculumYear;
-
-				console.log('Selected Curriculum:', this.selectedCurriculum);
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
 		}
-
 		this.checkSelectAllDropdown();
-
-		if (this.isSelectAllDropdown) {
-			console.log('All dropdowns selected, calling getSubjectData()');
-			this.getSubjectData();
+		if (this.isSelectAllDropdown && !this.isNavigating) {
+			this.navigateToSubject();
 		}
 	}
 
 	public checkSelectAllDropdown() {
 		if (this.selectedFaculty === '90' && this.selectedDepartment === '90') {
 			if (
-				this.selectedYear &&
-				this.selectedSemester &&
+				this.selectedYear !== 0 &&
+				this.selectedYear !== undefined &&
+				this.selectedSemester !== 0 &&
+				this.selectedSemester !== undefined &&
+				this.selectedClassYear !== -1 &&
 				this.selectedClassYear !== undefined &&
-				this.selectedFaculty &&
-				this.selectedDepartment
+				this.selectedFaculty === '90' &&
+				this.selectedDepartment === '90'
 			) {
 				this.selectedCurriculum = 'x';
 				this.selectedCurriculumYear = '';
 				this.selectedUniqueId = '';
 				this.isSelectAllDropdown = true;
-				this.updatePaginatedItems();
 			} else {
 				this.isSelectAllDropdown = false;
 			}
 		} else {
 			this.isGened = false;
 			if (
-				this.selectedYear &&
-				this.selectedSemester &&
+				this.selectedYear !== 0 &&
+				this.selectedYear !== undefined &&
+				this.selectedSemester !== 0 &&
+				this.selectedSemester !== undefined &&
+				this.selectedClassYear !== -1 &&
 				this.selectedClassYear !== undefined &&
-				this.selectedFaculty &&
+				this.selectedFaculty !== '90' &&
+				this.selectedFaculty !== undefined &&
 				this.selectedDepartment &&
-				this.selectedCurriculum
+				this.selectedDepartment !== '90' &&
+				this.selectedDepartment !== undefined &&
+				this.selectedCurriculum !== 'x' &&
+				this.selectedCurriculum !== undefined &&
+				this.selectedUniqueId !== '' &&
+				this.selectedUniqueId !== undefined &&
+				this.selectedCurriculumYear !== '' &&
+				this.selectedCurriculumYear !== undefined
 			) {
 				this.isSelectAllDropdown = true;
 			} else {
 				this.isSelectAllDropdown = false;
 			}
 		}
-		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
+		console.log('isSelectAllDropdown:', this.isSelectAllDropdown);
+		this.checkDisableSelectDropdown();
+	}
+
+	public resetDropdowns(selectName?: string) {
+		this.dropdowns.forEach((dropdown) => {
+			if (dropdown.SelectName === selectName) {
+				dropdown.onSelectedOption('', -1, '');
+			}
+		});
+	}
+
+	public checkDisableSelectDropdown() {
+		if (
+			this.selectedFaculty === '90' ||
+			this.selectedDepartment === '90' ||
+			this.isGened ||
+			this.selectedFaculty === '' ||
+			this.selectedFaculty === undefined ||
+			this.selectedDepartment === '' ||
+			this.selectedDepartment === undefined
+		) {
+			this.disableCurriculumSelectDropdown = true;
+		} else {
+			this.disableCurriculumSelectDropdown = false;
+		}
+
+		if (
+			this.selectedFaculty === '' ||
+			(this.selectedFaculty === undefined && this.dropdowns)
+		) {
+			this.disableDepartmentSelectDropdown = true;
+		} else {
+			this.disableDepartmentSelectDropdown = false;
+		}
+	}
+
+	private isCurrentUrl(url: string): boolean {
+		return this.router.url === url;
+	}
+
+	public navigateToSubject() {
+		let latestSubjectUrl: string;
+
+		if (
+			this.selectedYear === 0 &&
+			this.selectedSemester === 0 &&
+			this.selectedClassYear === -1 &&
+			this.selectedFaculty === '' &&
+			this.selectedDepartment === '' &&
+			this.selectedCurriculum === '' &&
+			this.selectedUniqueId === '' &&
+			this.selectedCurriculumYear === ''
+		) {
+			// ใช้เส้นทางเริ่มต้นแบบไม่เลือกอะไรเลย
+			latestSubjectUrl = this.router
+				.createUrlTree(['/subject'])
+				.toString();
+		} else if (
+			this.selectedFaculty === '90' &&
+			this.selectedDepartment === '90' &&
+			this.selectedCurriculum === 'x' &&
+			this.isSelectAllDropdown
+		) {
+			// ใช้เส้นทางสำหรับกรณี selectedFaculty === '90' && selectedDepartment === '90'
+			latestSubjectUrl = this.router
+				.createUrlTree([
+					'/subject',
+					this.selectedYear,
+					this.selectedSemester,
+					this.selectedFaculty,
+					this.selectedDepartment,
+					this.selectedCurriculum,
+					this.selectedClassYear,
+				])
+				.toString();
+		} else if (
+			this.selectedFaculty !== '90' &&
+			this.selectedFaculty !== '' &&
+			this.selectedFaculty !== undefined &&
+			this.selectedDepartment !== '90' &&
+			this.selectedDepartment !== '' &&
+			this.selectedDepartment !== undefined &&
+			this.selectedCurriculum !== 'x' &&
+			this.selectedCurriculum !== '' &&
+			this.selectedCurriculum !== undefined &&
+			this.isSelectAllDropdown === true &&
+			this.isSelectAllDropdown
+		) {
+			// ใช้เส้นทางสำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
+			latestSubjectUrl = this.router
+				.createUrlTree([
+					'/subject',
+					this.selectedYear,
+					this.selectedSemester,
+					this.selectedFaculty,
+					this.selectedDepartment,
+					this.selectedCurriculum,
+					this.selectedClassYear,
+					this.selectedCurriculumYear,
+					this.selectedUniqueId,
+				])
+				.toString();
+		} else {
+			return;
+		}
+
+		if (!this.isCurrentUrl(latestSubjectUrl)) {
+			this.isNavigating = true;
+			this.router
+				.navigateByUrl(latestSubjectUrl)
+				.then((success) => {
+					if (success) {
+						console.log('Navigation successful!');
+					} else {
+						console.error('Navigation failed.');
+					}
+					this.isNavigating = false;
+				})
+				.catch((error) => {
+					console.error('Navigation error:', error);
+					this.isNavigating = false;
+				});
+		}
 	}
 
 	public getSearchedSubjectCardDataList(
