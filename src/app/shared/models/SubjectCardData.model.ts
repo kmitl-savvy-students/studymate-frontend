@@ -22,5 +22,6 @@ export class SubjectCardData {
 		public final_date_time: string[],
 		public interested: number,
 		public rating: number,
+		public remark: string,
 	) {}
 }

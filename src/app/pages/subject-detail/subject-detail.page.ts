@@ -9,7 +9,6 @@ import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
 import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
-import { subjectReviewData } from './subject-detail-page-data';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
 import { paginationType } from '../../shared/models/SdmAppService.model';
@@ -26,7 +25,7 @@ import { paginationType } from '../../shared/models/SdmAppService.model';
 	styleUrl: './subject-detail.page.css',
 })
 export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
-	public eachSubjectData?: SubjectCardData;
+	public eachSubjectData: SubjectCardData[] = [];
 	public subjectDetail!: subjectDetailData;
 	public subjectReviewData: SubjectReviewData[] = [];
 
@@ -35,7 +34,18 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
 
+	public selectedYear: number = 0;
+	public selectedSemester: number = 0;
+	public selectedFaculty: string = '';
+	public selectedDepartment: string = '';
+	public selectedCurriculum?: string = '';
+	public selectedClassYear: number = -1;
+	public selectedCurriculumYear?: string = '';
+	public selectedUniqueId?: string = '';
 	public subjectId: string = '';
+	public section: number = 0;
+
+	public subjectIdFromParams: string = '';
 
 	constructor(
 		private route: ActivatedRoute,
@@ -58,28 +68,48 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			this.currentUser = user;
 		});
 
-		this.route.queryParams.subscribe((params) => {
-			const subjectData = params['subject'];
+		this.route.params.subscribe((params) => {
+			this.selectedYear = +params['year'];
+			this.selectedSemester = +params['semester'];
+			this.selectedFaculty = params['faculty'];
+			this.selectedDepartment = params['department'];
+			this.selectedCurriculum = params['curriculum'];
+			this.selectedClassYear = +params['classYear'];
+			this.selectedCurriculumYear = params['curriculumYear'];
+			this.selectedUniqueId = params['uniqueId'];
+			this.section = params['section'];
+			this.subjectId = params['subjectId'];
 
-			if (subjectData) {
-				this.eachSubjectData = JSON.parse(subjectData);
-				if (this.eachSubjectData) {
-					this.subjectId = this.eachSubjectData.subject_id;
-				}
-			} else {
-				this.route.params.subscribe((params) => {
-					const subjectIdFromParams = params['subjectId'];
+			console.log('From Subject Detail Page');
+			console.log(`
+				selectedYear = ${this.selectedYear},
+				selectedSemester = ${this.selectedSemester},
+				selectedFaculty = ${this.selectedFaculty},
+				selectedDepartment = ${this.selectedDepartment},
+				selectedCurriculum = ${this.selectedCurriculum},
+				selectedClassYear = ${this.selectedClassYear},
+				selectedCurriculumYear = ${this.selectedCurriculumYear},
+				selectedUniqueId = ${this.selectedUniqueId},
+				section = ${this.section},
+				subjectId = ${this.subjectId}
+			`);
 
-					if (subjectIdFromParams) {
-						this.subjectId = subjectIdFromParams;
-					} else {
-						this.router.navigate(['/subject']);
-					}
-				});
+			if (
+				this.selectedYear &&
+				this.selectedSemester &&
+				this.selectedFaculty &&
+				this.selectedDepartment &&
+				this.selectedCurriculum &&
+				this.selectedClassYear &&
+				this.section &&
+				this.subjectId
+			) {
+				this.getEachSubjectData();
 			}
+
+			this.getSubjectDetail();
+			this.getSubjectReviews();
 		});
-		this.getSubjectDetail();
-		this.getSubjectReviews();
 	}
 
 	ngAfterViewInit(): void {
@@ -90,6 +120,49 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		return paginationType;
 	}
 
+	public getEachSubjectData() {
+		this.apiManagementService
+			.GetEachSubjectData(
+				this.selectedYear,
+				this.selectedSemester,
+				this.selectedFaculty,
+				this.selectedDepartment,
+				this.selectedCurriculum!,
+				this.selectedClassYear,
+				this.subjectId,
+				this.section,
+				this.selectedCurriculumYear,
+				this.selectedUniqueId,
+			)
+			.subscribe({
+				next: (res) => {
+					if (res) {
+						this.eachSubjectData = res;
+						console.log(
+							'eachSubjectData in subject-detail.page : ',
+							this.eachSubjectData,
+						);
+						console.log(this.eachSubjectData[0].subject_id);
+						console.log('getEachSubjectData เสร็จแล้วจ้า');
+					} else {
+						console.log('No Subject Data Available.');
+					}
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						console.error('Not found');
+					} else if (error.status === 500) {
+						console.error('Internal Server Error');
+					} else {
+						console.error(
+							'An unexpected error occurred:',
+							error.status,
+						);
+					}
+				},
+			});
+	}
+
 	public getSubjectDetail() {
 		this.apiManagementService
 			.GetCurriculumTeachtableSubject(this.subjectId)
@@ -97,6 +170,8 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				next: (res) => {
 					if (res) {
 						this.subjectDetail = res;
+						console.log('subjectDetail : ', this.subjectDetail);
+						console.log('getSubjectDetail เสร็จแล้วจ้า');
 					} else {
 						console.log('No Subject Data Available.');
 					}

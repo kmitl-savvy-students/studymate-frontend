@@ -135,6 +135,32 @@ export class APIManagementService {
 		return this.http.get<SubjectCardData[]>(apiUrl);
 	}
 
+	GetEachSubjectData(
+		year: number,
+		semester: number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number,
+		subjectId: string,
+		section: number,
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<SubjectCardData[]> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+
+		if (curriculumYear) {
+			apiUrl += `/${curriculumYear}`;
+		}
+		if (uniqueId) {
+			apiUrl += `/${uniqueId}`;
+		}
+
+		apiUrl += `/${subjectId}/${section}`;
+
+		return this.http.get<SubjectCardData[]>(apiUrl);
+	}
+
 	GetCurriculumTeachtableSubject(
 		subjectId: string,
 	): Observable<subjectDetailData> {

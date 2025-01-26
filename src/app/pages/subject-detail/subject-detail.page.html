@@ -1,7 +1,7 @@
 <div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn
+		[subjectDetailData]="eachSubjectData[0]"
 		[subjectDetail]="subjectDetail"
-		[subjectDetailData]="eachSubjectData || undefined"
 	></sdm-subject-detail-cpn>
 	<sdm-write-review-box
 		[isEdit]="false"
