@@ -1,12 +1,12 @@
 services:
     frontend:
-        container_name: sdm-frontend-container
-        image: front-img
+        container_name: sdm-frontend-prod-container
+        image: frontend-prod-img
         restart: always
         ports:
             - '4200:4200'
         networks:
-            - frontend-network
+            - prod-network
         labels:
             traefik.enable: 'true'
             traefik.http.services.sdm-frontend.loadbalancer.server.port: '4200'
@@ -17,7 +17,5 @@ services:
             traefik.http.routers.sdm-frontend-https.tls.certresolver: 'cloudflare'
 
 networks:
-    backend-network:
-        external: true
-    frontend-network:
+    prod-network:
         external: true
