@@ -93,16 +93,40 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				section = ${this.section},
 				subjectId = ${this.subjectId}
 			`);
+			console.log(
+				this.selectedYear &&
+					this.selectedSemester !== undefined &&
+					this.selectedFaculty !== undefined &&
+					this.selectedDepartment !== undefined &&
+					this.selectedCurriculum !== undefined &&
+					this.selectedClassYear !== undefined &&
+					this.section !== undefined &&
+					this.subjectId !== undefined &&
+					this.selectedYear !== 0 &&
+					this.selectedSemester !== 0 &&
+					this.selectedFaculty !== '' &&
+					this.selectedDepartment !== '' &&
+					this.selectedCurriculum !== '' &&
+					this.selectedClassYear !== -1 &&
+					this.section !== 0,
+			);
 
 			if (
 				this.selectedYear &&
-				this.selectedSemester &&
-				this.selectedFaculty &&
-				this.selectedDepartment &&
-				this.selectedCurriculum &&
-				this.selectedClassYear &&
-				this.section &&
-				this.subjectId
+				this.selectedSemester !== undefined &&
+				this.selectedFaculty !== undefined &&
+				this.selectedDepartment !== undefined &&
+				this.selectedCurriculum !== undefined &&
+				this.selectedClassYear !== undefined &&
+				this.section !== undefined &&
+				this.subjectId !== undefined &&
+				this.selectedYear !== 0 &&
+				this.selectedSemester !== 0 &&
+				this.selectedFaculty !== '' &&
+				this.selectedDepartment !== '' &&
+				this.selectedCurriculum !== '' &&
+				this.selectedClassYear !== -1 &&
+				this.section !== 0
 			) {
 				this.getEachSubjectData();
 			}
@@ -136,7 +160,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			)
 			.subscribe({
 				next: (res) => {
-					if (res) {
+					if (res && res.length === 1) {
 						this.eachSubjectData = res;
 						console.log(
 							'eachSubjectData in subject-detail.page : ',
@@ -145,6 +169,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 						console.log(this.eachSubjectData[0].subject_id);
 						console.log('getEachSubjectData เสร็จแล้วจ้า');
 					} else {
+						this.router.navigate(['/subject']);
 						console.log('No Subject Data Available.');
 					}
 				},
@@ -173,6 +198,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 						console.log('subjectDetail : ', this.subjectDetail);
 						console.log('getSubjectDetail เสร็จแล้วจ้า');
 					} else {
+						this.router.navigate(['/subject']);
 						console.log('No Subject Data Available.');
 					}
 				},

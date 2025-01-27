@@ -1,4 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	OnInit,
+	QueryList,
+	ViewChild,
+	ViewChildren,
+} from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
@@ -76,5 +86,11 @@ export class SDMSubjectComponent {
 
 		// เพิ่มการคืนค่า undefined ในกรณีที่ไม่มีเงื่อนไขใดตรงกัน
 		return undefined;
+	}
+
+	getTeacherListContent(): string {
+		return this.subjectCardData.teacher_list_th
+			.map((teacher: string) => `<div>${teacher}</div>`)
+			.join('');
 	}
 }
