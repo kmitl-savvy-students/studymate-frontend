@@ -1,0 +1,27 @@
+<div
+	[id]="modalID"
+	tabindex="-1"
+	aria-hidden="true"
+	class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center"
+>
+	<div class="relative w-full max-w-4xl p-4">
+		<div
+			class="relative max-h-[728px] overflow-y-auto rounded-[40px] bg-white"
+		>
+			<div class="pl-14 pt-14">
+				<p class="text-xl font-medium text-dark-100">
+					{{ headerModal }}
+				</p>
+			</div>
+			<div class="space-y-2 px-16 pb-16 pt-6 text-dark-100">
+				<div
+					*ngFor="let course of courseList"
+					class="flex gap-5 gap-x-20 rounded-2xl border-2 border-main-50 px-8 py-5"
+				>
+					<p class="text-base">{{ course.code }}</p>
+					<p>{{ course.title }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

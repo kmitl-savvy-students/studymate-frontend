@@ -1,0 +1,52 @@
+<nav aria-label="Page navigation example">
+	<ul class="flex h-8 items-center justify-center -space-x-px text-sm">
+		<li>
+			<button
+				(click)="changePage(1)"
+				[disabled]="currentPage === 1"
+				class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-main-25 px-3 hover:bg-main-15"
+			>
+				<sdm-icon icon="angles-left"></sdm-icon>
+			</button>
+		</li>
+		<li>
+			<button
+				(click)="changePage(currentPage - 1)"
+				[disabled]="currentPage === 1"
+				class="flex h-8 items-center justify-center border border-main-25 px-3 hover:bg-main-15"
+			>
+				<sdm-icon icon="angle-left"></sdm-icon>
+			</button>
+		</li>
+		<li *ngFor="let page of pagesToShow">
+			<button
+				(click)="changePage(page)"
+				[ngClass]="{ 'bg-main-15 text-dark-100': currentPage === page }"
+				class="flex h-8 items-center justify-center border border-main-25 px-3 hover:bg-main-15"
+			>
+				{{ page }}
+			</button>
+		</li>
+		<li>
+			<button
+				(click)="changePage(currentPage + 1)"
+				[disabled]="currentPage === totalPages"
+				class="flex h-8 items-center justify-center border border-main-25 px-3 hover:bg-main-15"
+			>
+				<sdm-icon icon="angle-right"></sdm-icon>
+			</button>
+		</li>
+		<li>
+			<button
+				(click)="changePage(totalPages)"
+				[disabled]="currentPage === totalPages"
+				class="flex h-8 items-center justify-center rounded-e-lg border border-main-25 px-3 hover:bg-main-15"
+			>
+				<sdm-icon icon="angles-right"></sdm-icon>
+			</button>
+		</li>
+	</ul>
+	<div class="w-full flex justify-center mt-2 text-main-50 text-sm">
+		หน้า {{currentPage}} ใน {{totalPages}}
+	</div>
+</nav>

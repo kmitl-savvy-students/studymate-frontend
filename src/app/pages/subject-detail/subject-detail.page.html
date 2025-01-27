@@ -1,0 +1,27 @@
+<div class="grid w-full grid-cols-1 gap-y-10">
+	<sdm-subject-detail-cpn
+		[subjectDetail]="subjectDetail"
+		[subjectDetailData]="eachSubjectData || undefined"
+	></sdm-subject-detail-cpn>
+	<sdm-write-review-box
+		[isEdit]="false"
+		[signedIn]="signedIn"
+		[currentUser]="currentUser"
+		[subjectId]="subjectId"
+		(reviewSuccess)="getSubjectReviews()"
+	>
+	</sdm-write-review-box>
+	<div class="grid w-full grid-cols-1 items-center gap-3">
+		<sdm-review-filter
+			[subjectReviewData]="subjectReviewData"
+			[isLoadingReview]="isLoadingReview"
+			[paginationType]="paginationType.single"
+			[signedIn]="signedIn"
+			[currentUser]="currentUser"
+			[prioritizeUserReview]="true"
+			[itemsPerPage]="5"
+			(confirmEditReview)="getSubjectReviews()"
+			(deleteUserReview)="getSubjectReviews()"
+		></sdm-review-filter>
+	</div>
+</div>

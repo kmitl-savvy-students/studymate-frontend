@@ -1,0 +1,21 @@
+services:
+    frontend:
+        container_name: sdm-frontend-prod-container
+        image: frontend-prod-img
+        restart: always
+        ports:
+            - '4200:4200'
+        networks:
+            - prod-network
+        labels:
+            traefik.enable: 'true'
+            traefik.http.services.sdm-frontend.loadbalancer.server.port: '4200'
+            traefik.http.services.sdm-frontend.loadbalancer.server.scheme: 'http'
+            traefik.http.routers.sdm-frontend-https.entrypoints: 'websecure'
+            traefik.http.routers.sdm-frontend-https.rule: 'Host(`prod.savvystudymate.com`) || Host(`kmitl.savvystudymate.com`)'
+            traefik.http.routers.sdm-frontend-https.tls: 'true'
+            traefik.http.routers.sdm-frontend-https.tls.certresolver: 'cloudflare'
+
+networks:
+    prod-network:
+        external: true

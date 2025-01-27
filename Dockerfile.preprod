@@ -1,0 +1,15 @@
+FROM node:18 AS prod
+
+WORKDIR /app
+EXPOSE 4200
+
+COPY package*.json ./
+
+COPY . .
+RUN npm install -g @angular/cli
+RUN npm install
+
+RUN ng build --configuration=preprod
+
+CMD ["ng", "serve", "--host", "0.0.0.0", "--configuration", "preprod", "--poll", "1"]
+

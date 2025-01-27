@@ -6,17 +6,14 @@ If not necessary, do not add anything in this file please.
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-	html {
-		@apply bg-orange-50 text-orange-950;
-	}
-}
-
 html,
 body {
 	height: 100%;
 }
 body {
-	margin: 0;
-	font-family: Roboto, 'Helvetica Neue', sans-serif;
+	font-family: 'IBM Plex Sans Thai', 'Helvetica Neue', sans-serif;
+	background-color: #ffffff;
+}
+html {
+	overflow-y: scroll;
 }

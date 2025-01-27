@@ -1,0 +1,109 @@
+<div class="relative overflow-x-auto rounded-[20px] border border-main-50">
+	<table
+		class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
+	>
+		<thead>
+			<tr>
+				<th
+					*ngFor="let item of listThead; let i = index"
+					scope="col"
+					class="bg-main-50 px-[30px] py-9 text-lg font-medium text-dark-100
+	{{
+						i > 0 && i < listThead.length
+							? 'border-l border-white text-center'
+							: ''
+					}} {{ i === 0 ? 'w-2/4' : 'w-1/4' }}"
+				>
+					{{ item }}
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<ng-container *ngFor="let row of tableData; let rowIndex = index">
+				<tr
+					class=" bg-main-5 font-medium text-dark-100 hover:cursor-pointer {{
+						!isExpanded(rowIndex) ? 'border-b border-main-5' : ''
+					}}"
+					(click)="
+						hasSubCategories(row) ? toggleExpand(rowIndex) : null
+					"
+				>
+					<td
+						scope="row"
+						class="flex whitespace-nowrap px-6 py-7"
+						[ngClass]="{
+							'gap-[17px]': isExpanded(rowIndex),
+							'gap-[22px]':
+								!isExpanded(rowIndex) && hasSubCategories(row),
+							'ps-14': !hasSubCategories(row),
+						}"
+					>
+						<sdm-icon
+							*ngIf="hasSubCategories(row)"
+							[icon]="
+								isExpanded(rowIndex)
+									? 'chevron-down'
+									: 'chevron-right'
+							"
+							class="text-sm text-main-50"
+						>
+						</sdm-icon>
+						<p class="text-base">{{ row.category }}</p>
+					</td>
+					<td
+						class="border-l border-main-50 px-6 py-7 text-center text-base"
+					>
+						{{ row.completed }}
+					</td>
+					<td
+						class="border-l border-main-50 px-6 py-7 text-center text-base"
+					>
+						{{ row.remaining }}
+					</td>
+				</tr>
+
+				<ng-container *ngIf="isExpanded(rowIndex)">
+					<tr
+						*ngFor="let subRow of row.subCategories"
+						class="bg-white font-normal text-dark-100 hover:cursor-pointer"
+						data-modal-target="my-subject-modal"
+						data-modal-toggle="my-subject-modal"
+						(click)="selectSubRow(subRow)"
+					>
+						<td class="py-5 pe-6 ps-14 text-base">
+							{{ subRow.name }}
+						</td>
+						<td
+							class="border-l border-main-50 px-6 py-5 text-center text-base"
+						>
+							{{ subRow.completed }}
+						</td>
+						<td
+							class="border-l border-main-50 px-6 py-5 text-center text-base"
+						>
+							{{ subRow.remaining }}
+						</td>
+					</tr>
+				</ng-container>
+			</ng-container>
+			<sdm-my-subject-modal
+				modalID="my-subject-modal"
+				[headerModal]="selectedSubRowName"
+				[courseList]="selectedCourses"
+			></sdm-my-subject-modal>
+			<tr class="bg-white font-medium text-dark-100">
+				<td class="py-5 pe-6 ps-14 text-base">รวม</td>
+				<td
+					class="border-l border-main-50 px-6 py-5 text-center text-base"
+				>
+					{{ totalCompleted }}
+				</td>
+				<td
+					class="border-l border-main-50 px-6 py-5 text-center text-base"
+				>
+					{{ totalRemaining }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

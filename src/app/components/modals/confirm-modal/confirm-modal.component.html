@@ -1,0 +1,53 @@
+<div
+	[id]="modalID"
+	tabindex="-1"
+	class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0"
+>
+	<div class="relative max-h-full w-full max-w-md p-4">
+		<div class="relative rounded-[20px] bg-white shadow">
+			<button
+				type="button"
+				class="absolute end-2.5 top-3 ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg text-sm text-dark-100 text-main-50 hover:bg-main-10 hover:text-dark-100"
+				[attr.data-modal-hide]="modalID"
+			>
+				<sdm-icon
+					icon="xmark"
+					class="-mb-1 text-lg text-main-50"
+				></sdm-icon>
+			</button>
+			<div class="p-8 text-center">
+				<sdm-icon
+					[icon]="icon"
+					[ngClass]="['text-5xl', iconColor]"
+				></sdm-icon>
+				<h1 [ngClass]="['mb-4 mt-8 text-lg font-normal', textColor]">
+					{{ text }}
+				</h1>
+				<div [ngClass]="['mb-8 text-sm font-normal', subtextColor]">
+					{{ subtext }}
+				</div>
+				<button
+					[attr.data-modal-hide]="modalID"
+					type="button"
+					[ngClass]="[
+						'inline-flex items-center rounded-lg px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4',
+						backgroundColor,
+						backgroundColorHover
+							? 'hover:' + backgroundColorHover
+							: '',
+					]"
+					(click)="confirmAction()"
+				>
+					ใช่, ฉันมั่นใจ
+				</button>
+				<button
+					[attr.data-modal-hide]="modalID"
+					type="button"
+					class="ms-3 rounded-lg border border-main-25 bg-white px-5 py-2.5 text-sm font-medium text-dark-100 hover:bg-main-5"
+				>
+					ไม่, ยกเลิก
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

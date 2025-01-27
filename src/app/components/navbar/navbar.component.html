@@ -1,0 +1,41 @@
+<nav
+	class="border-b-main-20 fixed left-0 right-0 top-0 z-40 border-b bg-white text-dark-100"
+>
+	<div class="container mx-auto">
+		<div class="flex h-20 content-center justify-between">
+			<div class="flex items-center">
+				<sdm-studymate-logo />
+			</div>
+			<div class="m-0 flex content-center gap-16">
+				<div class="flex items-center gap-8 text-base font-medium">
+					<sdm-button-nav link="/subject" text="ค้นหารายวิชาเรียน" />
+					<sdm-button-nav link="/review" text="ดูรีวิวรายวิชาเรียน" />
+					<sdm-button-nav link="/about" text="เกี่ยวกับเรา" />
+				</div>
+				<ng-container *ngIf="signedIn; else guestOptions">
+					<div class="flex items-center gap-8">
+						<sdm-avatar-dropdown-nav [currentUser]="currentUser" />
+					</div>
+				</ng-container>
+				<ng-template #guestOptions>
+					<div class="flex items-center gap-8">
+						<sdm-button-link
+							link="/sign-in"
+							text="เข้าสู่ระบบ"
+							textColorHover="text-main-100"
+							[isUnderlined]="true"
+						/>
+						<sdm-button-link
+							icon="user-plus"
+							link="/sign-up"
+							text="สมัครสมาชิก"
+							textColor="text-white"
+							backgroundColor="bg-main-100"
+							backgroundColorHover="bg-main-120"
+						/>
+					</div>
+				</ng-template>
+			</div>
+		</div>
+	</div>
+</nav>

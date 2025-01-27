@@ -1,0 +1,31 @@
+ul.show {
+	display: block; /* แสดง ul เมื่อเปิด dropdown */
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #4d74cb26;
+	margin-top: 6px;
+	margin-bottom: 6px;
+	border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #4d74cb40;
+	border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #4d74cb80;
+}
+
+.dropdown-shadow {
+	box-shadow: 0 0 6px 0 rgb(0 0 0 / 0.1);
+}

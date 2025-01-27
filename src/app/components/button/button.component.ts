@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+	selector: 'sdm-button',
 	standalone: true,
-	selector: 'app-button',
-
 	templateUrl: './button.component.html',
 })
 export class ButtonComponent {
