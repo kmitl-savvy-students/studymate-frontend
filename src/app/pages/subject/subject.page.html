@@ -8,43 +8,45 @@
 					defaultLabel="ปีการศึกษา"
 					SelectName="selectedYear"
 					[listOptions]="yearsList"
-					class="w-40"
 					(selectedValue)="handleSelectChange('selectedYear',$event)"
+					class="w-40"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ภาคการศึกษา"
 					SelectName="selectedSemester"
 					[listOptions]="semesterList"
-					class="w-40"
 					(selectedValue)="handleSelectChange('selectedSemester',$event)"
+					class="w-40"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ชั้นปี"
 					SelectName="selectedClassYear"
 					[listOptions]="classYearList"
-					class="w-24"
 					(selectedValue)="handleSelectChange('selectedClassYear',$event)"
+					class="w-24"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="คณะ"
 					SelectName="selectedFaculty"
 					[listOptions]="handleChooseDepartment(facultyList)"
-					class="w-48"
 					(selectedValue)="handleSelectChange('selectedFaculty',$event)"
+					class="w-48"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ภาควิชา"
 					SelectName="selectedDepartment"
 					[listOptions]="handleChooseFaculty(departmentList)"
-					class="w-48"
 					(selectedValue)="handleSelectChange('selectedDepartment',$event)"
+					class="w-48"
+					[disabled]="disableDepartmentSelectDropdown"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="หลักสูตร"
 					SelectName="selectedCurriculum"
 					[listOptions]="curriculumList"
-					class="w-64"
 					(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
+					class="w-64"
+					[disabled]="disableCurriculumSelectDropdown"
 				></sdm-select>
 			</div>
 			<sdm-search-bar
