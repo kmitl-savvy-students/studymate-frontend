@@ -44,6 +44,13 @@ import { User } from '../../shared/models/User.model';
 				(clickEvent)="closeDropdown()"
 			/>
 			<sdm-button-link
+				link="/admin/faculty"
+				text="จัดการหลักสูตร"
+				textColorHover="text-main-100"
+				backgroundColor="bg-white"
+				(clickEvent)="closeDropdown()"
+			/>
+			<sdm-button-link
 				link="/sign-out"
 				text="ออกจากระบบ"
 				textColorHover="text-main-100"

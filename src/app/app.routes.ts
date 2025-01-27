@@ -10,6 +10,8 @@ import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
 import { SDMPageSignOut } from './pages/sign-out/sign-out.page';
 import { AuthenticationGuard } from './shared/services/authentication/authentication.guard';
 import { SDMPageReview } from './pages/review/review.page';
+import { SDMPageFaculty } from './pages/admin/faculty/faculty.page';
+import { SDMPageDepartment } from './pages/admin/department/department.page';
 
 export const routes: Routes = [
 	{
@@ -58,6 +60,9 @@ export const routes: Routes = [
 		component: SDMPageSignOut,
 		canActivate: [AuthenticationGuard],
 	},
+
+	{ path: 'admin/faculty', component: SDMPageFaculty },
+	{ path: 'admin/department/:facultyId', component: SDMPageDepartment },
 
 	{ path: '**', component: SDMPageNotFound },
 ];

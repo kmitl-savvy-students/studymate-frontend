@@ -1,0 +1,119 @@
+<div class="mb-3 flex">
+	<sdm-base-button
+		icon="right-to-bracket"
+		text="ย้อนกลับ"
+		textColor="text-white"
+		backgroundColor="bg-main-100"
+		backgroundColorHover="bg-main-120"
+		(clickEvent)="navigateToFaculty()"
+	></sdm-base-button>
+</div>
+
+<h1 class="mt-5 text-3xl font-semibold">
+	คณะ{{ faculty?.name_th }} · {{ faculty?.name_en }}
+</h1>
+<hr class="my-4" />
+
+<sdm-base-modal
+	#createDepartmentModal
+	modalId="createDepartment"
+	header="สร้างภาควิชาใหม่"
+	(confirmEvent)="onConfirmCreate()"
+>
+	<form [formGroup]="departmentCreateForm">
+		<div class="input-primary mb-5">
+			<label for="nameTh">ชื่อภาควิชาภาษาไทย</label>
+			<input
+				type="text"
+				id="nameTh"
+				formControlName="nameTh"
+				placeholder="ชื่อภาควิชาภาษาไทย"
+				required
+			/>
+		</div>
+		<div class="input-primary mb-5">
+			<label for="nameEn">ชื่อภาควิชาภาษาอังกฤษ</label>
+			<input
+				type="text"
+				id="nameEn"
+				formControlName="nameEn"
+				placeholder="ชื่อภาควิชาภาษาอังกฤษ"
+				required
+			/>
+		</div>
+	</form>
+</sdm-base-modal>
+
+<sdm-base-modal
+	#editDepartmentModal
+	modalId="editDepartment"
+	header="แก้ไขภาควิชา"
+	(confirmEvent)="onConfirmEdit()"
+>
+	<form [formGroup]="departmentEditForm">
+		<div class="input-primary mb-5">
+			<label for="editNameTh">ชื่อภาควิชาภาษาไทย</label>
+			<input
+				type="text"
+				id="editNameTh"
+				formControlName="nameTh"
+				placeholder="ชื่อภาควิชาภาษาไทย"
+				required
+			/>
+		</div>
+		<div class="input-primary mb-5">
+			<label for="editNameEn">ชื่อภาควิชาภาษาอังกฤษ</label>
+			<input
+				type="text"
+				id="editNameEn"
+				formControlName="nameEn"
+				placeholder="ชื่อภาควิชาภาษาอังกฤษ"
+				required
+			/>
+		</div>
+	</form>
+</sdm-base-modal>
+
+<div>
+	<h1 class="text-2xl font-semibold">เลือกภาควิชา</h1>
+	<h2>ภาควิชาทั้งหมด</h2>
+	<div *ngIf="isLoading" class="my-2 text-center">
+		<div class="spinner-border animate-spin"></div>
+	</div>
+	<div *ngIf="!isLoading">
+		<div *ngIf="departments.length === 0" class="my-2 border p-5">
+			<div class="text-center">ไม่มีผลลัพธ์</div>
+		</div>
+		<div *ngIf="departments.length > 0" class="my-2 border p-5">
+			<ul class="flex flex-col gap-1">
+				<li
+					*ngFor="let department of departments"
+					class="flex items-center justify-between"
+				>
+					<span
+						(click)="navigateToCurriculumType(department.id)"
+						class="cursor-pointer text-lg hover:text-main-100"
+					>
+						{{ department.name_th }} · {{ department.name_en }}
+					</span>
+					<sdm-base-button
+						icon="pen"
+						text="แก้ไข"
+						textColor="text-white"
+						backgroundColor="bg-main-100"
+						backgroundColorHover="bg-main-120"
+						(clickEvent)="onEditDepartment(department)"
+					></sdm-base-button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<sdm-base-button
+		icon="plus"
+		text="สร้างภาควิชาใหม่"
+		textColor="text-white"
+		backgroundColor="bg-main-100"
+		backgroundColorHover="bg-main-120"
+		(clickEvent)="onCreateDepartment()"
+	></sdm-base-button>
+</div>
