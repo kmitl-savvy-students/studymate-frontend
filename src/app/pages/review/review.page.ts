@@ -58,6 +58,10 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.reviewData = res;
+					console.log(
+						'SubjectReviewData from review page: ',
+						this.reviewData,
+					);
 				} else {
 					console.log('No Reviews Data Available.');
 				}

@@ -1,7 +1,7 @@
 <div class="grid w-full grid-cols-1 gap-5">
 	<sdm-search-bar
 		*ngIf="isShowSearchBar"
-		[data]="subjectReviewData"
+		[data]="srcReviewData"
 		[filterFunction]="searchFunction"
 		(searchedDataList)="getSearchedReviewsDataList($event)"
 		id="search-bar"
