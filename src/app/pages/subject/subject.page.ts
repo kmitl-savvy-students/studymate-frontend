@@ -493,7 +493,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			this.selectedUniqueId === '' &&
 			this.selectedCurriculumYear === ''
 		) {
-			// ใช้เส้นทางเริ่มต้นแบบไม่เลือกอะไรเลย
+			// ใช้ path เริ่มต้นแบบไม่เลือกอะไรเลย
 			latestSubjectUrl = this.router
 				.createUrlTree(['/subject'])
 				.toString();
@@ -503,7 +503,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			this.selectedCurriculum === 'x' &&
 			this.isSelectAllDropdown
 		) {
-			// ใช้เส้นทางสำหรับกรณี selectedFaculty === '90' && selectedDepartment === '90'
+			// ใช้ path สำหรับกรณี selectedFaculty === '90' && selectedDepartment === '90'
 			latestSubjectUrl = this.router
 				.createUrlTree([
 					'/subject',
@@ -528,7 +528,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			this.isSelectAllDropdown === true &&
 			this.isSelectAllDropdown
 		) {
-			// ใช้เส้นทางสำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
+			// ใช้ path สำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
 			latestSubjectUrl = this.router
 				.createUrlTree([
 					'/subject',

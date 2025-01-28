@@ -12,52 +12,76 @@ import { AuthenticationGuard } from './shared/services/authentication/authentica
 import { SDMPageReview } from './pages/review/review.page';
 
 export const routes: Routes = [
+	// Redirect Page
 	{
 		path: '',
 		redirectTo: '/home',
 		pathMatch: 'full',
 	},
+
+	// Hpme Page
 	{ path: 'home', component: SDMPageHome },
 
+	// Subject Page
 	{
 		path: 'subject',
 		component: SDMSubject,
 	},
-
 	{
 		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear',
 		component: SDMSubject,
 	},
-
 	{
 		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId',
 		component: SDMSubject,
 	},
 
+	// Subject Detail Page
 	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
+
 	{
 		path: 'subject/subject-detail/:subjectId',
 		component: SDMPageSubjectDetail,
 	},
+	{
+		path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId',
+		component: SDMPageSubjectDetail,
+	},
+	{
+		path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId',
+		component: SDMPageSubjectDetail,
+	},
+
+	// Review Page
 	{ path: 'review', component: SDMPageReview },
 
+	// Sign In Page
 	{ path: 'sign-in', component: SDMPageSignIn },
+
+	// Sign Up Page
 	{ path: 'sign-up', component: SDMPageSignUp },
+
+	// My Subject Page
 	{
 		path: 'my-subject',
 		component: SDMMySubject,
 		canActivate: [AuthenticationGuard],
 	},
+
+	// Profile Page
 	{
 		path: 'profile',
 		component: SDMPageProfile,
 		canActivate: [AuthenticationGuard],
 	},
+
+	// Sign Out Page
 	{
 		path: 'sign-out',
 		component: SDMPageSignOut,
 		canActivate: [AuthenticationGuard],
 	},
 
+	// Page Not Found Page
 	{ path: '**', component: SDMPageNotFound },
 ];
