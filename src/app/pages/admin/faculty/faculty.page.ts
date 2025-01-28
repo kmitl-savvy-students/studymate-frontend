@@ -100,7 +100,7 @@ export class SDMPageFaculty implements OnInit {
 
 		this.loadingService.show(() => {
 			this.http
-				.patch(apiUrl, faculty)
+				.put(apiUrl, faculty)
 				.pipe(
 					finalize(() => {
 						this.loadingService.hide();

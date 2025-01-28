@@ -129,7 +129,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 						this.selectedUniqueId = params['uniqueId'];
 					}
 
-					return this.getCurriculumsData();
+					//return this.getCurriculumsData();
+					return [];
 				}),
 			)
 			.subscribe(() => {
@@ -296,6 +297,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			});
 	}
 
+	/* TODO: FIX THIS
 	public getCurriculumsData() {
 		return this.apiManagementService.GetCurriculum().pipe(
 			tap((res) => {
@@ -324,6 +326,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			}),
 		);
 	}
+	*/
 
 	public handleChooseFaculty(list: DropdownList[]) {
 		if (this.selectedFaculty === '90') {

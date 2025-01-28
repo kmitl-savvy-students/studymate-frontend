@@ -12,6 +12,8 @@ import { AuthenticationGuard } from './shared/services/authentication/authentica
 import { SDMPageReview } from './pages/review/review.page';
 import { SDMPageFaculty } from './pages/admin/faculty/faculty.page';
 import { SDMPageDepartment } from './pages/admin/department/department.page';
+import { SDMPageCurriculumType } from './pages/admin/curriculum-type/curriculum-type.page';
+import { SDMPageCurriculum } from './pages/admin/curriculum/curriculum.page';
 
 export const routes: Routes = [
 	{
@@ -63,6 +65,14 @@ export const routes: Routes = [
 
 	{ path: 'admin/faculty', component: SDMPageFaculty },
 	{ path: 'admin/department/:facultyId', component: SDMPageDepartment },
+	{
+		path: 'admin/curriculum-type/:departmentId',
+		component: SDMPageCurriculumType,
+	},
+	{
+		path: 'admin/curriculum/:curriculumTypeId',
+		component: SDMPageCurriculum,
+	},
 
 	{ path: '**', component: SDMPageNotFound },
 ];

@@ -47,7 +47,7 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 			}
 			const cur = user.curriculum;
 			this.curriculumName = cur?.name_th || 'ไม่พบข้อมูลหลักสูตร';
-			this.fetchTranscriptData(user.id);
+			// this.fetchTranscriptData(user.id);
 		});
 	}
 
@@ -55,6 +55,7 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 		initFlowbite();
 	}
 
+	/* TODO: FIX THIS
 	fetchTranscriptData(userId: string) {
 		const url = `${this.backendService.getBackendUrl()}/api/transcript/get/${userId}`;
 		this.http.get<TranscriptData[]>(url).subscribe({
@@ -73,6 +74,7 @@ export class SDMMySubject implements OnInit, AfterViewInit {
 			},
 		});
 	}
+	*/
 
 	deleteTranscriptData() {
 		if (!this.currentUser?.id) {

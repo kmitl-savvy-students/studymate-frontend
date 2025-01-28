@@ -78,6 +78,9 @@ export class SDMPageDepartment implements OnInit {
 
 						if (this.departments.length != 0)
 							this.faculty = this.departments[0].faculty;
+						else {
+							this.fetchFaculty();
+						}
 					},
 					error: (error) => {
 						console.error('Error fetching departments:', error);
@@ -86,7 +89,33 @@ export class SDMPageDepartment implements OnInit {
 				});
 		});
 	}
+	fetchFaculty(): void {
+		if (!this.facultyId) return;
+		this.isLoading = true;
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/get/${this.facultyId}`;
 
+		this.loadingService.show(() => {
+			this.http
+				.get<Faculty>(apiUrl)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: (data) => {
+						this.faculty = data;
+						this.isLoading = false;
+					},
+					error: (error) => {
+						console.error('Error fetching faculty:', error);
+						this.isLoading = false;
+					},
+				});
+		});
+	}
+
+	// #region Navigations
 	navigateToCurriculumType(id: number): void {
 		this.loadingService.pulse(() =>
 			this.router.navigate([`/admin/curriculum-type/${id}`]),
@@ -97,49 +126,8 @@ export class SDMPageDepartment implements OnInit {
 			this.router.navigate([`/admin/faculty`]),
 		);
 	}
-
-	onEditDepartment(department: Department): void {
-		this.selectedDepartment = department;
-		this.departmentEditForm.patchValue({
-			nameTh: department.name_th,
-			nameEn: department.name_en,
-		});
-		this.editDepartmentModal.show();
-	}
-
-	onConfirmEdit(): void {
-		if (this.selectedDepartment) {
-			const updatedDepartment = {
-				...this.selectedDepartment,
-				name_th: this.departmentEditForm.value.nameTh,
-				name_en: this.departmentEditForm.value.nameEn,
-			};
-			this.updateDepartment(updatedDepartment);
-		}
-	}
-
-	updateDepartment(department: Department): void {
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/department/update`;
-
-		this.loadingService.show(() => {
-			this.http
-				.patch(apiUrl, department)
-				.pipe(
-					finalize(() => {
-						this.loadingService.hide();
-					}),
-				)
-				.subscribe({
-					next: () => {
-						this.fetchDepartments();
-					},
-					error: (error) => {
-						console.error('Error updating department:', error);
-					},
-				});
-		});
-	}
-
+	// #endregion
+	// #region Create
 	onCreateDepartment(): void {
 		this.departmentCreateForm.patchValue({
 			nameTh: '',
@@ -147,7 +135,6 @@ export class SDMPageDepartment implements OnInit {
 		});
 		this.createDepartmentModal.show();
 	}
-
 	onConfirmCreate(): void {
 		const createdDepartment = {
 			id: -1,
@@ -157,7 +144,6 @@ export class SDMPageDepartment implements OnInit {
 		};
 		this.createDepartment(createdDepartment);
 	}
-
 	createDepartment(department: Department): void {
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/department/create`;
 
@@ -179,4 +165,46 @@ export class SDMPageDepartment implements OnInit {
 				});
 		});
 	}
+	// #endregion
+	// #region Edit
+	onEditDepartment(department: Department): void {
+		this.selectedDepartment = department;
+		this.departmentEditForm.patchValue({
+			nameTh: department.name_th,
+			nameEn: department.name_en,
+		});
+		this.editDepartmentModal.show();
+	}
+	onConfirmEdit(): void {
+		if (this.selectedDepartment) {
+			const updatedDepartment = {
+				...this.selectedDepartment,
+				name_th: this.departmentEditForm.value.nameTh,
+				name_en: this.departmentEditForm.value.nameEn,
+			};
+			this.updateDepartment(updatedDepartment);
+		}
+	}
+	updateDepartment(department: Department): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/department/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, department)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchDepartments();
+					},
+					error: (error) => {
+						console.error('Error updating department:', error);
+					},
+				});
+		});
+	}
+	// #endregion
 }
