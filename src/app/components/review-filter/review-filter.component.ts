@@ -40,6 +40,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
 
 	@Input() subjectReviewData: SubjectReviewData[] = [];
+	@Input() currentYearTermReviewData: SubjectReviewData[] = [];
+
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType!: number;
 	@Input() signedIn: boolean = false;
@@ -57,6 +59,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public selectedPopular: boolean = false;
 	public selectedLatest: boolean = false;
 	public selectedRating: boolean = false;
+	public selectedCurrentYearTerm: boolean = false;
 
 	public selectedStarRatingValue: any;
 
@@ -100,14 +103,22 @@ export class SDMReviewFilterComponent implements OnChanges {
 			case 'popular':
 				this.selectedLatest = false;
 				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
 				break;
 			case 'latest':
 				this.selectedPopular = false;
 				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
 				break;
 			case 'starRating':
 				this.selectedPopular = false;
 				this.selectedLatest = false;
+				this.selectedCurrentYearTerm = false;
+				break;
+			case 'currentYearTerm':
+				this.selectedLatest = false;
+				this.selectedPopular = false;
+				this.clearSelect();
 				break;
 			default:
 				break;
@@ -143,6 +154,13 @@ export class SDMReviewFilterComponent implements OnChanges {
 		} else {
 			this.selectedRating = false;
 		}
+		this.filterData();
+	}
+
+	public onCurrentYearTermFilterChange() {
+		this.selectedCurrentYearTerm = !this.selectedCurrentYearTerm;
+		this.resetOtherFilters('currentYearTerm');
+		this.currentPage = 1;
 		this.filterData();
 	}
 
@@ -182,6 +200,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.filterItems = dataToFilter.filter(
 				(item) => item.rating === this.selectedStarRatingValue,
 			);
+		} else if (this.selectedCurrentYearTerm) {
+			console.log('please do something about this filter');
 		} else {
 			this.filterItems = dataToFilter;
 		}

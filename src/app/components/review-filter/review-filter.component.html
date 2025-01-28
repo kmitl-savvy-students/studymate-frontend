@@ -52,6 +52,24 @@
 			(selectedValue)="onRatingFilterChange($event)"
 			[disabled]="getSubjectReviewIsNull || isEditingReview"
 		></sdm-select>
+		<button
+			*ngIf="isReviewPage"
+			(click)="onCurrentYearTermFilterChange()"
+			[disabled]="getSubjectReviewIsNull || isEditingReview"
+			class="filter-button"
+			[ngClass]="{
+				'bg-main-100 text-white': selectedCurrentYearTerm,
+				'hover:bg-main-120': !isEditingReview,
+				'bg-main-15 text-dark-100': !selectedCurrentYearTerm,
+				'hover:bg-main-25':
+					!getSubjectReviewIsNull &&
+					!selectedCurrentYearTerm &&
+					!isEditingReview,
+				'cursor-not-allowed': getSubjectReviewIsNull || isEditingReview,
+			}"
+		>
+			เปิดในปีการศึกษาและภาคการศึกษาปัจจุบัน
+		</button>
 	</div>
 	<ng-container *ngIf="isLoadingReview">
 		<div

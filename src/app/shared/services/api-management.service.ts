@@ -183,6 +183,12 @@ export class APIManagementService {
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
+	GetSubjectReviewsCurrentYearTerm(): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/current`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
+	}
+
 	CreateSubjectReviewByUser(
 		student_id: string,
 		year: number,

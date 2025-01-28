@@ -34,7 +34,6 @@ import { Router } from '@angular/router';
 })
 export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	@ViewChild(SDMRichTextEditor) richTextEditor!: SDMRichTextEditor;
-	@Input() viewMode: 'subject-detail' | 'review' = 'subject-detail';
 	@Input() isShowSubjectIdAndName: boolean = false;
 	@Input() subjectReviewData!: SubjectReviewData;
 	@Input() isSignIn: boolean = false;
