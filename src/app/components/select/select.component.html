@@ -8,7 +8,7 @@
 		[ngClass]="{
 			'text-dark bg-main-10': !isSelect,
 			'bg-main-100 text-white hover:bg-main-120': isSelect,
-			'cursor-default': disabled,
+			'cursor-not-allowed': disabled,
 			'hover:bg-main-25': !isSelect && !disabled,
 		}"
 		[attr.disabled]="disabled ? true : null"
@@ -43,7 +43,6 @@
 				'hover': hoveredOption === option,
 				'rounded-[10px] bg-main-100 text-white':
 					form.get('selectedOption')?.value === option.label,
-				'cursor-default': disabled,
 			}"
 			[class]="customDdlOptions"
 			class="mx-1.5 px-3 py-1.5 text-center text-base font-normal text-dark-100 hover:rounded-[10px] hover:bg-main-100 hover:text-white"

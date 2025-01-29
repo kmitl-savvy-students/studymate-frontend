@@ -16,7 +16,6 @@
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedPopular,
-				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedPopular,
 				'hover:bg-main-25':
 					!getSubjectReviewIsNull &&
@@ -33,7 +32,6 @@
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedLatest,
-				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedLatest,
 				'hover:bg-main-25':
 					!getSubjectReviewIsNull &&
@@ -59,7 +57,6 @@
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedCurrentYearTerm,
-				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedCurrentYearTerm,
 				'hover:bg-main-25':
 					!getSubjectReviewIsNull &&
