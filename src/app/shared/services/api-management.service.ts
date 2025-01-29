@@ -14,7 +14,6 @@ import { GenedGroup } from '../models/GenedGroup.model';
 import { GenedSubject } from '../models/GenedSubject.model';
 import { subjectDetailData } from '../models/SubjectDetailData.model';
 import { SubjectReviewData } from '../models/SubjectReviewData.model';
-import { subjectReviewData } from '../../pages/subject-detail/subject-detail-page-data.js';
 
 @Injectable({ providedIn: 'root' })
 export class APIManagementService {

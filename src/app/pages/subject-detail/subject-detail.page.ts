@@ -12,6 +12,7 @@ import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/wr
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
 import { paginationType } from '../../shared/models/SdmAppService.model';
+import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-open/show-subjects-open.component';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -20,6 +21,7 @@ import { paginationType } from '../../shared/models/SdmAppService.model';
 		CommonModule,
 		SDMReviewFilterComponent,
 		SDMWriteReviewBoxComponent,
+		SDMShowSubjectsOpenComponent,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
