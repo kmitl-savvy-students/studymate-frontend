@@ -61,7 +61,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	ngOnInit(): void {
 		this.updatePermissions();
 		this.reviewContent = this.subjectReviewData.review;
-		// console.log('Review Content:', this.reviewContent);
 	}
 
 	ngAfterViewInit(): void {

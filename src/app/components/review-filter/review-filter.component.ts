@@ -96,7 +96,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 			!this.selectedCurrentYearTerm
 		) {
 			this.srcReviewData = this.subjectReviewData;
-			console.log('ไม่เลือกอะไรเลย srcReviewData : ', this.srcReviewData);
 		} else if (
 			(this.selectedPopular ||
 				this.selectedLatest ||
@@ -104,10 +103,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 			!this.selectedCurrentYearTerm
 		) {
 			this.srcReviewData = this.subjectReviewData;
-			console.log(
-				'เลือก ยอดนิยม || ล่าสุด || ดาว srcReviewData : ',
-				this.srcReviewData,
-			);
 		} else if (
 			!this.selectedPopular &&
 			!this.selectedLatest &&
@@ -115,7 +110,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.selectedCurrentYearTerm
 		) {
 			this.srcReviewData = this.currentYearTermReviewData;
-			console.log('เลือก current srcReviewData : ', this.srcReviewData);
 		}
 	}
 
@@ -180,7 +174,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.paginatedItems = this.dataToPaginate.slice(start, end);
 		this.subjectReviewTotal = this.dataToPaginate.length;
 		this.filterReviewIsNull = this.dataToPaginate.length === 0;
-		console.log('dataToPaginate : ', this.dataToPaginate);
 	}
 
 	get paginationTypes() {
@@ -281,7 +274,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 		searchedReviewDataList: SubjectReviewData[],
 	) {
 		this.searchedReviewDataList = searchedReviewDataList;
-		console.log('ผลการค้นหา : ', this.searchedReviewDataList);
 		this.isSearched = true;
 		this.currentPage = 1;
 		this.filterData();
