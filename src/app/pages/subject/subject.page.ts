@@ -71,6 +71,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	public selectedCurriculum?: string = '';
 	public selectedUniqueId?: string = '';
 	public selectedCurriculumYear?: string = '';
+	public selectedCurriculumIndex?: number = -1;
 	public selectedData?: SelectedData;
 
 	public currentRoute: string = '';
@@ -126,6 +127,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 						this.selectedCurriculum = params['curriculum'];
 						this.selectedClassYear = +params['classYear'];
 						this.selectedCurriculumYear = params['curriculumYear'];
+						this.selectedCurriculumIndex =
+							+params['curriculumIndex'];
 						this.selectedUniqueId = params['uniqueId'];
 					}
 
@@ -217,7 +220,9 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				}
 				case 'selectedCurriculum': {
 					const option = this.curriculumList.find(
-						(option) => option.value === this.selectedCurriculum,
+						(option) =>
+							option.value === this.selectedCurriculum &&
+							option.index === this.selectedCurriculumIndex,
 					);
 					if (option) {
 						dropdown.onSelectedOption(
@@ -302,18 +307,22 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				this.curriculumsData = res.filter(
 					(s) => s.pid === '06' || s.pid === '101',
 				);
-				this.curriculumList = this.curriculumsData.map((curriculum) => {
-					const dropdown = new DropdownList();
-					dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
-					dropdown.value = curriculum.pid;
-					return dropdown;
-				});
+				this.curriculumList = this.curriculumsData.map(
+					(curriculum, index) => {
+						const dropdown = new DropdownList();
+						dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
+						dropdown.value = curriculum.pid;
+						dropdown.index = index;
+						return dropdown;
+					},
+				);
 				this.curriculumOptions = this.curriculumsData.map(
-					(curriculum) => {
+					(curriculum, index) => {
 						const curriculumOptions = new CirriculumnList();
 						curriculumOptions.value = curriculum.pid;
 						curriculumOptions.uniqueId = curriculum.unique_id;
 						curriculumOptions.curriculumYear = curriculum.year;
+						curriculumOptions.index = index;
 						return curriculumOptions;
 					},
 				);
@@ -379,8 +388,11 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
+				this.selectedCurriculumIndex = selectedData.index;
 				const matchedCurriculum = this.curriculumOptions.find(
-					(item) => item.value === selectedData.value,
+					(item) =>
+						item.value === selectedData.value &&
+						item.index === selectedData.index,
 				);
 				this.selectedUniqueId = matchedCurriculum?.uniqueId;
 				this.selectedCurriculumYear = matchedCurriculum?.curriculumYear;
@@ -432,14 +444,15 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				this.selectedUniqueId !== '' &&
 				this.selectedUniqueId !== undefined &&
 				this.selectedCurriculumYear !== '' &&
-				this.selectedCurriculumYear !== undefined
+				this.selectedCurriculumYear !== undefined &&
+				this.selectedCurriculumIndex !== -1 &&
+				this.selectedCurriculumIndex !== undefined
 			) {
 				this.isSelectAllDropdown = true;
 			} else {
 				this.isSelectAllDropdown = false;
 			}
 		}
-		console.log('isSelectAllDropdown:', this.isSelectAllDropdown);
 		this.checkDisableSelectDropdown();
 	}
 
@@ -491,7 +504,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			this.selectedDepartment === '' &&
 			this.selectedCurriculum === '' &&
 			this.selectedUniqueId === '' &&
-			this.selectedCurriculumYear === ''
+			this.selectedCurriculumYear === '' &&
+			this.selectedCurriculumIndex === -1
 		) {
 			// ใช้ path เริ่มต้นแบบไม่เลือกอะไรเลย
 			latestSubjectUrl = this.router
@@ -525,6 +539,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			this.selectedCurriculum !== 'x' &&
 			this.selectedCurriculum !== '' &&
 			this.selectedCurriculum !== undefined &&
+			this.selectedCurriculumIndex !== -1 &&
+			this.selectedCurriculumIndex !== undefined &&
 			this.isSelectAllDropdown === true &&
 			this.isSelectAllDropdown
 		) {
@@ -539,6 +555,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 					this.selectedCurriculum,
 					this.selectedClassYear,
 					this.selectedCurriculumYear,
+					this.selectedCurriculumIndex,
 					this.selectedUniqueId,
 				])
 				.toString();

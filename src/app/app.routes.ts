@@ -32,7 +32,7 @@ export const routes: Routes = [
 		component: SDMSubject,
 	},
 	{
-		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId',
+		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:curriculumIndex/:uniqueId',
 		component: SDMSubject,
 	},
 

@@ -53,7 +53,7 @@
 			[disabled]="getSubjectReviewIsNull || isEditingReview"
 		></sdm-select>
 		<button
-			*ngIf="isReviewPage"
+			*ngIf="isReviewPage && signedIn"
 			(click)="onCurrentYearTermFilterChange()"
 			[disabled]="getSubjectReviewIsNull || isEditingReview"
 			class="filter-button"
