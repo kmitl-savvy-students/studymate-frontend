@@ -7,12 +7,14 @@ export class SelectedData {
 export class DropdownList {
 	public label!: string;
 	public value?: string | number;
+	public index?: number;
 }
 
 export class CirriculumnList {
 	public value?: string | number;
 	public uniqueId?: string;
 	public curriculumYear?: string;
+	public index?: number;
 }
 
 export class SubjectData {

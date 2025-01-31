@@ -39,7 +39,10 @@ import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
 export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
 
+	@Input() srcReviewData: SubjectReviewData[] = [];
 	@Input() subjectReviewData: SubjectReviewData[] = [];
+	@Input() currentYearTermReviewData: SubjectReviewData[] = [];
+
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType!: number;
 	@Input() signedIn: boolean = false;
@@ -57,6 +60,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public selectedPopular: boolean = false;
 	public selectedLatest: boolean = false;
 	public selectedRating: boolean = false;
+	public selectedCurrentYearTerm: boolean = false;
 
 	public selectedStarRatingValue: any;
 
@@ -77,11 +81,99 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public isEditingReview: boolean = false;
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['subjectReviewData']) {
+		if (changes['subjectReviewData'] && changes['subjectReviewData']) {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
 			this.updatePaginatedItems();
 		}
+	}
+
+	public checkSrcReviewData() {
+		if (
+			!this.selectedPopular &&
+			!this.selectedLatest &&
+			!this.selectedRating &&
+			!this.selectedCurrentYearTerm
+		) {
+			this.srcReviewData = this.subjectReviewData;
+		} else if (
+			(this.selectedPopular ||
+				this.selectedLatest ||
+				this.selectedRating) &&
+			!this.selectedCurrentYearTerm
+		) {
+			this.srcReviewData = this.subjectReviewData;
+		} else if (
+			!this.selectedPopular &&
+			!this.selectedLatest &&
+			!this.selectedRating &&
+			this.selectedCurrentYearTerm
+		) {
+			this.srcReviewData = this.currentYearTermReviewData;
+		}
+	}
+
+	public filterData(): void {
+		this.checkSrcReviewData();
+		const dataToFilter = this.isSearched
+			? this.searchedReviewDataList
+			: this.srcReviewData;
+		let userReview = null;
+
+		if (
+			this.prioritizeUserReview &&
+			!this.selectedPopular &&
+			!this.selectedLatest &&
+			this.selectedStarRatingValue === undefined &&
+			this.signedIn &&
+			this.currentUser
+		) {
+			userReview = dataToFilter.find(
+				(item) => item.user_id === this.currentUser?.id,
+			);
+		}
+
+		if (this.selectedPopular) {
+			this.filterItems = [...dataToFilter].sort(
+				(a, b) => b.like - a.like,
+			);
+		} else if (this.selectedLatest) {
+			this.filterItems = [...dataToFilter].sort(
+				(a, b) =>
+					new Date(b.created).getTime() -
+					new Date(a.created).getTime(),
+			);
+		} else if (
+			this.selectedRating &&
+			this.selectedStarRatingValue !== undefined
+		) {
+			this.filterItems = dataToFilter.filter(
+				(item) => item.rating === this.selectedStarRatingValue,
+			);
+		} else if (this.selectedCurrentYearTerm) {
+			this.filterItems = dataToFilter;
+		} else {
+			this.filterItems = dataToFilter;
+		}
+
+		if (userReview) {
+			this.filterItems = [
+				userReview,
+				...this.filterItems.filter(
+					(item) => item.user_id !== this.currentUser?.id,
+				),
+			];
+		}
+		this.updatePaginatedItems();
+	}
+
+	public updatePaginatedItems() {
+		const start = (this.currentPage - 1) * this.itemsPerPage;
+		const end = start + this.itemsPerPage;
+		this.dataToPaginate = this.filterItems;
+		this.paginatedItems = this.dataToPaginate.slice(start, end);
+		this.subjectReviewTotal = this.dataToPaginate.length;
+		this.filterReviewIsNull = this.dataToPaginate.length === 0;
 	}
 
 	get paginationTypes() {
@@ -100,14 +192,22 @@ export class SDMReviewFilterComponent implements OnChanges {
 			case 'popular':
 				this.selectedLatest = false;
 				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
 				break;
 			case 'latest':
 				this.selectedPopular = false;
 				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
 				break;
 			case 'starRating':
 				this.selectedPopular = false;
 				this.selectedLatest = false;
+				this.selectedCurrentYearTerm = false;
+				break;
+			case 'currentYearTerm':
+				this.selectedLatest = false;
+				this.selectedPopular = false;
+				this.clearSelect();
 				break;
 			default:
 				break;
@@ -146,69 +246,16 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.filterData();
 	}
 
-	public filterData(): void {
-		const dataToFilter = this.isSearched
-			? this.searchedReviewDataList
-			: this.subjectReviewData;
-		let userReview = null;
-
-		if (
-			this.prioritizeUserReview &&
-			!this.selectedPopular &&
-			!this.selectedLatest &&
-			this.selectedStarRatingValue === undefined &&
-			this.signedIn &&
-			this.currentUser
-		) {
-			userReview = dataToFilter.find(
-				(item) => item.user_id === this.currentUser?.id,
-			);
-		}
-
-		if (this.selectedPopular) {
-			this.filterItems = [...dataToFilter].sort(
-				(a, b) => b.like - a.like,
-			);
-		} else if (this.selectedLatest) {
-			this.filterItems = [...dataToFilter].sort(
-				(a, b) =>
-					new Date(b.created).getTime() -
-					new Date(a.created).getTime(),
-			);
-		} else if (
-			this.selectedRating &&
-			this.selectedStarRatingValue !== undefined
-		) {
-			this.filterItems = dataToFilter.filter(
-				(item) => item.rating === this.selectedStarRatingValue,
-			);
-		} else {
-			this.filterItems = dataToFilter;
-		}
-
-		if (userReview) {
-			this.filterItems = [
-				userReview,
-				...this.filterItems.filter(
-					(item) => item.user_id !== this.currentUser?.id,
-				),
-			];
-		}
-		this.updatePaginatedItems();
+	public onCurrentYearTermFilterChange() {
+		this.selectedCurrentYearTerm = !this.selectedCurrentYearTerm;
+		this.resetOtherFilters('currentYearTerm');
+		this.currentPage = 1;
+		this.filterData();
 	}
 
 	public changePage(page: number) {
 		this.currentPage = page;
 		this.updatePaginatedItems();
-	}
-
-	public updatePaginatedItems() {
-		const start = (this.currentPage - 1) * this.itemsPerPage;
-		const end = start + this.itemsPerPage;
-		this.dataToPaginate = this.filterItems;
-		this.paginatedItems = this.dataToPaginate.slice(start, end);
-		this.subjectReviewTotal = this.dataToPaginate.length;
-		this.filterReviewIsNull = this.dataToPaginate.length === 0;
 	}
 
 	public onEditReview(isEditingReview: boolean) {
