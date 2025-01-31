@@ -1,98 +1,120 @@
 <div class="flex flex-col gap-y-2">
 	<div class="text-base font-semibold">
-		ข้อมูลการเปิดรายวิชา ( 3 ปีการศึกษาล่าสุด )
+		ข้อมูลการเปิดรายวิชา ( 4 ปีการศึกษาล่าสุด )
 	</div>
 	<div
 		class="flex w-1/2 min-w-96 flex-col gap-y-5 rounded-[20px] border border-main-25"
 	>
 		<table class="table-auto">
 			<thead>
-				<tr class="h-10">
+				<tr class="h-14">
 					<th
-						class="w-1/3 rounded-tl-[19px] bg-main-25 text-sm font-medium"
+						class="w-1/4 rounded-tl-[19px] bg-main-25 text-sm font-semibold"
 					>
-						ปีการศึกษา
+						ปีการศึกษา \ เทอม
 					</th>
-					<th class="w-1/3 bg-main-25 text-sm font-medium">เทอม</th>
+					<th class="w-1/4 bg-main-25 text-sm font-semibold">
+						เทอม 1
+					</th>
+					<th class="w-1/4 bg-main-25 text-sm font-semibold">
+						เทอม 2
+					</th>
 					<th
-						class="w-1/3 rounded-tr-[19px] bg-main-25 text-sm font-medium"
+						class="w-1/4 rounded-tr-[19px] bg-main-25 text-sm font-semibold"
 					>
-						สถานะ
+						เทอม 3 ( ซัมเมอร์ )
 					</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="h-8">
-					<td class="text-center text-sm">2564</td>
-					<td class="text-center text-sm">1</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-emerald-100 px-2"
-							>เปิดรับ</span
+				<tr class="h-12">
+					<td class="text-center text-sm font-semibold">
+						<span>ปี </span><span>{{ classYear[0] }}</span>
+					</td>
+					<td
+						*ngFor="let semester of firstYear"
+						class="text-center text-sm"
+					>
+						<ng-container
+							*ngIf="semester === true; else closeBlock"
 						>
+							<span class="rounded-[20px] bg-emerald-100 px-2"
+								>เปิด</span
+							>
+						</ng-container>
+						<ng-template #closeBlock>
+							<span class="rounded-[20px] bg-gray-100 px-2"
+								>ปิด</span
+							>
+						</ng-template>
 					</td>
 				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2564</td>
-					<td class="text-center text-sm">2</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-dark-10 px-2">ปิด</span>
+				<tr class="h-12 bg-main-5">
+					<td class="text-center text-sm font-semibold">
+						<span>ปี </span><span>{{ classYear[1] }}</span>
 					</td>
-				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2564</td>
-					<td class="text-center text-sm">3</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-dark-10 px-2">ปิด</span>
-					</td>
-				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2563</td>
-					<td class="text-center text-sm">1</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-emerald-100 px-2"
-							>เปิดรับ</span
+					<td
+						*ngFor="let semester of secondYear"
+						class="text-center text-sm"
+					>
+						<ng-container
+							*ngIf="semester === true; else closeBlock"
 						>
+							<span class="rounded-[20px] bg-emerald-100 px-2"
+								>เปิด</span
+							>
+						</ng-container>
+						<ng-template #closeBlock>
+							<span class="rounded-[20px] bg-gray-100 px-2"
+								>ปิด</span
+							>
+						</ng-template>
 					</td>
 				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2563</td>
-					<td class="text-center text-sm">2</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-emerald-100 px-2"
-							>เปิดรับ</span
+				<tr class="h-12">
+					<td class="text-center text-sm font-semibold">
+						<span>ปี </span><span>{{ classYear[2] }}</span>
+					</td>
+					<td
+						*ngFor="let semester of thirdYear"
+						class="text-center text-sm"
+					>
+						<ng-container
+							*ngIf="semester === true; else closeBlock"
 						>
+							<span class="rounded-[20px] bg-emerald-100 px-2"
+								>เปิด</span
+							>
+						</ng-container>
+						<ng-template #closeBlock>
+							<span class="rounded-[20px] bg-gray-100 px-2"
+								>ปิด</span
+							>
+						</ng-template>
 					</td>
 				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2563</td>
-					<td class="text-center text-sm">3</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-emerald-100 px-2"
-							>เปิดรับ</span
+				<tr class="h-12 bg-main-5">
+					<td
+						class="rounded-bl-[19px] text-center text-sm font-semibold"
+					>
+						<span>ปี </span><span>{{ classYear[3] }}</span>
+					</td>
+					<td
+						*ngFor="let semester of fourthYear"
+						class="text-center text-sm"
+					>
+						<ng-container
+							*ngIf="semester === true; else closeBlock"
 						>
-					</td>
-				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2562</td>
-					<td class="text-center text-sm">1</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-dark-10 px-2">ปิด</span>
-					</td>
-				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2562</td>
-					<td class="text-center text-sm">2</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-emerald-100 px-2"
-							>เปิดรับ</span
-						>
-					</td>
-				</tr>
-				<tr class="h-8">
-					<td class="text-center text-sm">2562</td>
-					<td class="text-center text-sm">3</td>
-					<td class="text-center text-sm">
-						<span class="rounded-[20px] bg-dark-10 px-2">ปิด</span>
+							<span class="rounded-[20px] bg-emerald-100 px-2"
+								>เปิด</span
+							>
+						</ng-container>
+						<ng-template #closeBlock>
+							<span class="rounded-[20px] bg-gray-100 px-2"
+								>ปิด</span
+							>
+						</ng-template>
 					</td>
 				</tr>
 			</tbody>

@@ -134,7 +134,7 @@ export class APIManagementService {
 		return this.http.get<SubjectCardData[]>(apiUrl);
 	}
 
-	GetEachSubjectData(
+	GetCurriculumnSubjectDataBySection(
 		year: number,
 		semester: number,
 		faculty: string,
@@ -145,8 +145,8 @@ export class APIManagementService {
 		section: number,
 		curriculumYear?: string,
 		uniqueId?: string,
-	): Observable<SubjectCardData[]> {
-		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+	): Observable<SubjectCardData> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
 
 		if (curriculumYear) {
 			apiUrl += `/${curriculumYear}`;
@@ -155,9 +155,9 @@ export class APIManagementService {
 			apiUrl += `/${uniqueId}`;
 		}
 
-		apiUrl += `/${subjectId}/${section}`;
+		// apiUrl += `/${subjectId}/${section}`;
 
-		return this.http.get<SubjectCardData[]>(apiUrl);
+		return this.http.get<SubjectCardData>(apiUrl);
 	}
 
 	GetCurriculumTeachtableSubject(
@@ -203,34 +203,16 @@ export class APIManagementService {
 
 	UpdateSubjectReviewByUser(
 		student_id: string,
-		// year: number,
-		// term: number,
 		subject_id: string,
 		review: string,
-		// rating: number,
 	) {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/update`;
 		return this.http.patch(apiUrl, {
 			student_id: student_id,
-			// year: year,
-			// term: term,
 			subject_id: subject_id,
 			review: review,
-			// rating: rating,
 		});
 	}
-
-	// GetCurriculumSubjectsTeachtable(
-	// 	year: number,
-	// 	semester: number,
-	// 	faculty : string,
-	// 	department: string,
-	// 	curriculum : string,
-	// 	classYear: number,
-	// ): Observable<CurriculumTeachtableSubject> {
-	// 	const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
-	// 	return this.http.get<CurriculumTeachtableSubject>(apiUrl);
-	// }
 
 	GetCurriculumSubjectByUniqueIdYear(
 		subjectId: string,

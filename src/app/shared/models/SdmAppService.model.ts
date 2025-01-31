@@ -38,3 +38,10 @@ export enum paginationType {
 	single = 1,
 	double = 2,
 }
+
+export enum semesters {
+	first = 1,
+	second = 2,
+	summer = 3,
+	length,
+}

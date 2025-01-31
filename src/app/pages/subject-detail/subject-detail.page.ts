@@ -27,7 +27,7 @@ import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-ope
 	styleUrl: './subject-detail.page.css',
 })
 export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
-	public eachSubjectData: SubjectCardData[] = [];
+	public eachSubjectData!: SubjectCardData;
 	public subjectDetail!: subjectDetailData;
 	public subjectReviewData: SubjectReviewData[] = [];
 
@@ -132,7 +132,24 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			) {
 				this.getEachSubjectData();
 			}
-
+			console.log(
+				'test if condition : ',
+				this.selectedYear &&
+					this.selectedSemester !== undefined &&
+					this.selectedFaculty !== undefined &&
+					this.selectedDepartment !== undefined &&
+					this.selectedCurriculum !== undefined &&
+					this.selectedClassYear !== undefined &&
+					this.section !== undefined &&
+					this.subjectId !== undefined &&
+					this.selectedYear !== 0 &&
+					this.selectedSemester !== 0 &&
+					this.selectedFaculty !== '' &&
+					this.selectedDepartment !== '' &&
+					this.selectedCurriculum !== '' &&
+					this.selectedClassYear !== -1 &&
+					this.section !== 0,
+			);
 			this.getSubjectDetail();
 			this.getSubjectReviews();
 		});
@@ -148,7 +165,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public getEachSubjectData() {
 		this.apiManagementService
-			.GetEachSubjectData(
+			.GetCurriculumnSubjectDataBySection(
 				this.selectedYear,
 				this.selectedSemester,
 				this.selectedFaculty,
@@ -162,15 +179,16 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			)
 			.subscribe({
 				next: (res) => {
-					if (res && res.length === 1) {
+					if (res) {
 						this.eachSubjectData = res;
 						console.log(
 							'eachSubjectData in subject-detail.page : ',
 							this.eachSubjectData,
 						);
-						console.log(this.eachSubjectData[0].subject_id);
+
 						console.log('getEachSubjectData เสร็จแล้วจ้า');
 					} else {
+						console.log('navigate to /subject');
 						this.router.navigate(['/subject']);
 						console.log('No Subject Data Available.');
 					}
@@ -200,12 +218,14 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 						console.log('subjectDetail : ', this.subjectDetail);
 						console.log('getSubjectDetail เสร็จแล้วจ้า');
 					} else {
+						console.log(' navigate to /subject');
 						this.router.navigate(['/subject']);
 						console.log('No Subject Data Available.');
 					}
 				},
 				error: (error) => {
 					if (error.status === 400) {
+						console.log('navigate to /subject');
 						this.router.navigate(['/subject']);
 					} else if (error.status === 404) {
 						console.error('Not found');
