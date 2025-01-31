@@ -23,6 +23,7 @@ import {
 	QueryList,
 	OnChanges,
 	SimpleChanges,
+	ViewChild,
 } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMSelectComponent } from '../../components/select/select.component';
@@ -58,6 +59,8 @@ import { EMPTY } from 'rxjs';
 })
 export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	@ViewChildren(SDMSelectComponent) dropdowns!: QueryList<SDMSelectComponent>;
+	@ViewChild(SDMSearchBarComponent) sdmSearchBar!: SDMSearchBarComponent;
+
 	public currentPage: number = 1;
 	public itemsPerPage: number = 10;
 	public paginatedItems: SubjectCardData[] = [];
@@ -402,7 +405,14 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 		}
 		this.checkSelectAllDropdown();
 		if (this.isSelectAllDropdown && !this.isNavigating) {
+			// this.clearSearch();
 			this.navigateToSubject();
+		}
+	}
+
+	private clearSearch() {
+		if (this.sdmSearchBar) {
+			this.sdmSearchBar.clearSearch();
 		}
 	}
 
@@ -565,6 +575,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 
 		if (!this.isCurrentUrl(latestSubjectUrl)) {
 			this.isNavigating = true;
+			this.clearSearch();
 			this.router
 				.navigateByUrl(latestSubjectUrl)
 				.then((success) => {
