@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class IconComponent {
 	@Input() src: string | null = null;
-	@Input() icon: string = '';
+	@Input() icon: string = 'user-circle';
 	@Input() iconStyle: string = 'fas';
 	@Input() fromLocation: string = '';
 
