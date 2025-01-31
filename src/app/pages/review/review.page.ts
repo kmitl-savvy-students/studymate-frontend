@@ -58,12 +58,8 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.reviewData = res;
-					console.log(
-						'SubjectReviewData from review page: ',
-						this.reviewData,
-					);
 				} else {
-					console.log('No Reviews Data Available.');
+					console.log('No allReview Data Available.');
 				}
 				this.isLoadingReview = false;
 			},
@@ -88,12 +84,8 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.currentYearTermReviewData = res;
-					console.log(
-						'currentYearTermReviewData from review page: ',
-						this.currentYearTermReviewData,
-					);
 				} else {
-					console.log('No Subject Reviews Data Available.');
+					console.log('No currentReview Data Available.');
 				}
 				this.isLoadingReview = false;
 			},
