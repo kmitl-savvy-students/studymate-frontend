@@ -405,7 +405,6 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 		}
 		this.checkSelectAllDropdown();
 		if (this.isSelectAllDropdown && !this.isNavigating) {
-			// this.clearSearch();
 			this.navigateToSubject();
 		}
 	}
