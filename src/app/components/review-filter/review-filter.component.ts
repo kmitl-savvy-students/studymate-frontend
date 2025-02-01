@@ -38,6 +38,7 @@ import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
 })
 export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
+	@ViewChild(SDMSearchBarComponent) sdmSearchBar!: SDMSearchBarComponent;
 
 	@Input() srcReviewData: SubjectReviewData[] = [];
 	@Input() subjectReviewData: SubjectReviewData[] = [];
@@ -84,7 +85,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 		if (changes['subjectReviewData'] && changes['subjectReviewData']) {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
-			this.updatePaginatedItems();
 		}
 	}
 
@@ -220,7 +220,17 @@ export class SDMReviewFilterComponent implements OnChanges {
 		}
 	}
 
+	private clearSearch() {
+		if (this.sdmSearchBar) {
+			this.sdmSearchBar.clearSearch();
+		}
+	}
+
 	public onPopularFilterChange() {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
 		this.selectedPopular = !this.selectedPopular;
 		this.resetOtherFilters('popular');
 		this.currentPage = 1;
@@ -228,6 +238,10 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public onLatestFilterChange() {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
 		this.selectedLatest = !this.selectedLatest;
 		this.resetOtherFilters('latest');
 		this.currentPage = 1;
@@ -235,6 +249,10 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public onRatingFilterChange(selectedRatingData: SelectedData) {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
 		this.selectedStarRatingValue = selectedRatingData.value;
 		if (this.selectedStarRatingValue) {
 			this.selectedRating = true;
@@ -249,6 +267,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public onCurrentYearTermFilterChange() {
 		this.selectedCurrentYearTerm = !this.selectedCurrentYearTerm;
 		this.resetOtherFilters('currentYearTerm');
+		this.clearSearch();
+		this.isSearched = false;
 		this.currentPage = 1;
 		this.filterData();
 	}
