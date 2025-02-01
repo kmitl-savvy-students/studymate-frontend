@@ -7,13 +7,14 @@
 				<div *ngIf="currentUser?.profile" class="h-32 w-32">
 					<sdm-icon
 						[src]="currentUser?.profile || null"
-						class="h-full w-full text-main-25"
+						class="h-full w-full"
 					></sdm-icon>
 				</div>
 				<div *ngIf="!currentUser?.profile" class="h-32 w-32">
-					<sdm-icon [src]="'images/default-avatar.png'"></sdm-icon>
+					<sdm-icon
+						[src]="'images/default-user-avatar.png'"
+					></sdm-icon>
 				</div>
-
 				<div class="text-center">
 					<div class="text-xl font-semibold text-dark-100">
 						{{ currentUser?.name_first }}
@@ -71,7 +72,7 @@
 				></sdm-icon>
 			</div>
 			<div *ngIf="!currentUser?.profile" class="col-span-4 h-12 w-12">
-				<sdm-icon [src]="'images/default-avatar.png'"></sdm-icon>
+				<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
 			</div>
 			<div class="col-span-1 text-sm font-medium text-dark-75">ชื่อ</div>
 			<div class="col-span-4 text-base font-normal text-dark-100">
