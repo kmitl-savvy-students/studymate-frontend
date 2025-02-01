@@ -47,6 +47,7 @@ export class SDMSearchBarComponent {
 		} else {
 			throw new Error('filterFunction is required');
 		}
+		console.log('ผลการค้นหาใน onSearch() : ', this.filteredDataList);
 		this.searchedDataList.emit(this.filteredDataList);
 	}
 
