@@ -4,12 +4,17 @@ import {
 } from '../../shared/models/SdmAppService.model.js';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 
-export const yearsList: DropdownList[] = [
-	{ label: 'ปีการศึกษา 2567', value: 2567 },
-	{ label: 'ปีการศึกษา 2566', value: 2566 },
-	{ label: 'ปีการศึกษา 2565', value: 2565 },
-	{ label: 'ปีการศึกษา 2564', value: 2564 },
-];
+// export const yearsList: DropdownList[] = [
+// 	{ label: 'ปีการศึกษา 2567', value: 2567 },
+// 	{ label: 'ปีการศึกษา 2566', value: 2566 },
+// 	{ label: 'ปีการศึกษา 2565', value: 2565 },
+// 	{ label: 'ปีการศึกษา 2564', value: 2564 },
+// ];
+
+export const yearsList: DropdownList[] = Array.from({ length: 5 }, (_, i) => {
+	const year = new Date().getFullYear() + 543 - i; // แปลงปี ค.ศ. เป็น พ.ศ.
+	return { label: `ปีการศึกษา ${year}`, value: year };
+});
 
 export const semesterList: DropdownList[] = [
 	{ label: 'เทอม 1', value: 1 },
