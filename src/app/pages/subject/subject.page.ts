@@ -49,7 +49,6 @@ import { EMPTY } from 'rxjs';
 	imports: [
 		SDMSelectComponent,
 		SDMSearchBarComponent,
-		SDMilterBarComponent,
 		SDMPaginationComponent,
 		CommonModule,
 		SDMSubjectComponent,
@@ -142,6 +141,9 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				this.updateDropdownValues();
 
 				this.checkSelectAllDropdown();
+
+				this.filteredSubjectCardDataList = [];
+				this.isSearched = false;
 
 				if (this.isSelectAllDropdown) {
 					this.getSubjectData();
@@ -250,6 +252,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 			: this.subjectCardData;
 		this.paginatedItems = dataToPaginate.slice(start, end);
 		this.subjectCardTotal = dataToPaginate.length;
+		console.log('dataToPaginate.length : ', dataToPaginate.length);
 	}
 
 	public changePage(page: number) {
@@ -276,6 +279,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 				next: (res) => {
 					if (res && res.length > 0) {
 						this.subjectCardData = res;
+						console.log('subjectCardData : ', this.subjectCardData);
 						this.subjectCardTotal = this.subjectCardData.length;
 						this.updatePaginatedItems();
 					} else {
@@ -360,6 +364,8 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	public handleSelectChange(selectName: string, selectedData: SelectedData) {
 		this.subjectCardData = [];
 		this.getSubjectDataIsNull = false;
+		this.isSearched = false;
+
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
@@ -595,6 +601,7 @@ export class SDMSubject implements AfterViewInit, OnInit, OnChanges {
 	public getSearchedSubjectCardDataList(
 		filteredSubjectCardDataList: SubjectCardData[],
 	) {
+		console.log('เรียก getSearchedSubjectCardDataList()');
 		this.filteredSubjectCardDataList = filteredSubjectCardDataList;
 		this.searchSubjectDataIsNull =
 			this.filteredSubjectCardDataList.length === 0;
