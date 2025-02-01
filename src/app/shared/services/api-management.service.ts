@@ -146,7 +146,7 @@ export class APIManagementService {
 		curriculumYear?: string,
 		uniqueId?: string,
 	): Observable<SubjectCardData> {
-		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-section/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
 
 		if (curriculumYear) {
 			apiUrl += `/${curriculumYear}`;
@@ -155,7 +155,28 @@ export class APIManagementService {
 			apiUrl += `/${uniqueId}`;
 		}
 
-		// apiUrl += `/${subjectId}/${section}`;
+		return this.http.get<SubjectCardData>(apiUrl);
+	}
+
+	GetOpenSubjectData(
+		year: number,
+		semester: number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number,
+		subjectId: string,
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<SubjectCardData> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}`;
+
+		if (curriculumYear) {
+			apiUrl += `/${curriculumYear}`;
+		}
+		if (uniqueId) {
+			apiUrl += `/${uniqueId}`;
+		}
 
 		return this.http.get<SubjectCardData>(apiUrl);
 	}

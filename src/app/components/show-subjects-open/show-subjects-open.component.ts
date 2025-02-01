@@ -56,20 +56,22 @@ export class SDMShowSubjectsOpenComponent implements OnInit {
 	public checkSubjectOpen(year: number, semester: number): Promise<any> {
 		return new Promise((resolve) => {
 			this.apiManagementService
-				.GetCurriculumnSubjectDataBySection(
+				.GetOpenSubjectData(
 					year,
 					semester,
 					this.selectedFaculty,
 					this.selectedDepartment,
 					this.selectedCurriculum!,
-					this.selectedClassYear!,
+					0,
 					this.subjectId,
-					this.section,
 					this.selectedCurriculumYear,
 					this.selectedUniqueId,
 				)
 				.subscribe({
-					next: (res) => resolve(res ? res : null),
+					next: (res) => {
+						console.log(res);
+						resolve(res ? res : null);
+					},
 					error: (error) => {
 						console.error('Error:', error.status);
 						resolve(null);
@@ -77,52 +79,4 @@ export class SDMShowSubjectsOpenComponent implements OnInit {
 				});
 		});
 	}
-
-	// initOpenSubjects(year: number) {
-	// 	let openSubjects: boolean[] = [];
-	// 	for (let i = 0; i < this.currentSemesters.length; i++) {
-	// 		console.log(year, this.currentSemesters[i]);
-	// 		let res = this.checkSubjectOpen(year, this.currentSemesters[i]);
-	// 		console.log(res);
-	// 		if (res !== undefined) {
-	// 			openSubjects.push(true);
-	// 		} else {
-	// 			openSubjects.push(false);
-	// 		}
-	// 	}
-	// 	return openSubjects;
-	// }
-
-	// public checkSubjectOpen(year: number, semester: number) {
-	// 	this.apiManagementService
-	// 		.GetCurriculumnSubjectDataBySection(
-	// 			year,
-	// 			semester,
-	// 			this.selectedFaculty,
-	// 			this.selectedDepartment,
-	// 			this.selectedCurriculum!,
-	// 			this.selectedClassYear!,
-	// 			this.subjectId,
-	// 			this.section,
-	// 			this.selectedCurriculumYear,
-	// 			this.selectedUniqueId,
-	// 		)
-	// 		.subscribe({
-	// 			next: (res) => {
-	// 				return res;
-	// 			},
-	// 			error: (error) => {
-	// 				if (error.status === 404) {
-	// 					console.error('Not found');
-	// 				} else if (error.status === 500) {
-	// 					console.error('Internal Server Error');
-	// 				} else {
-	// 					console.error(
-	// 						'An unexpected error occurred:',
-	// 						error.status,
-	// 					);
-	// 				}
-	// 			},
-	// 		});
-	// }
 }
