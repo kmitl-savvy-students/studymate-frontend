@@ -10,6 +10,7 @@
 					[listOptions]="yearsList"
 					(selectedValue)="handleSelectChange('selectedYear',$event)"
 					class="w-40"
+					[disabled]="isLoading"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ภาคการศึกษา"
@@ -17,6 +18,7 @@
 					[listOptions]="semesterList"
 					(selectedValue)="handleSelectChange('selectedSemester',$event)"
 					class="w-40"
+					[disabled]="isLoading"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ชั้นปี"
@@ -24,6 +26,7 @@
 					[listOptions]="classYearList"
 					(selectedValue)="handleSelectChange('selectedClassYear',$event)"
 					class="w-24"
+					[disabled]="isLoading"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="คณะ"
@@ -31,6 +34,7 @@
 					[listOptions]="handleChooseDepartment(facultyList)"
 					(selectedValue)="handleSelectChange('selectedFaculty',$event)"
 					class="w-48"
+					[disabled]="isLoading"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="ภาควิชา"
@@ -38,7 +42,7 @@
 					[listOptions]="handleChooseFaculty(departmentList)"
 					(selectedValue)="handleSelectChange('selectedDepartment',$event)"
 					class="w-48"
-					[disabled]="disableDepartmentSelectDropdown"
+					[disabled]="disableDepartmentSelectDropdown || isLoading"
 				></sdm-select>
 				<sdm-select
 					defaultLabel="หลักสูตร"
@@ -46,7 +50,7 @@
 					[listOptions]="curriculumList"
 					(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
 					class="w-64"
-					[disabled]="disableCurriculumSelectDropdown"
+					[disabled]="disableCurriculumSelectDropdown || isLoading"
 				></sdm-select>
 			</div>
 			<sdm-search-bar

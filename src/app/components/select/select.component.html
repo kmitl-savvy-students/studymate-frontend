@@ -7,7 +7,8 @@
 		(click)="!disabled && toggleDropdown()"
 		[ngClass]="{
 			'text-dark bg-main-10': !isSelect,
-			'bg-main-100 text-white hover:bg-main-120': isSelect,
+			'bg-main-100 text-white': isSelect,
+			'hover:bg-main-120': isSelect && !disabled,
 			'cursor-not-allowed': disabled,
 			'hover:bg-main-25': !isSelect && !disabled,
 		}"
