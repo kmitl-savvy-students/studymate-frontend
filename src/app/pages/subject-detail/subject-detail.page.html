@@ -4,6 +4,7 @@
 		[subjectDetail]="subjectDetail"
 	></sdm-subject-detail-cpn>
 	<sdm-show-subjects-open
+		*ngIf="eachSubjectData"
 		[selectedFaculty]="selectedFaculty"
 		[selectedDepartment]="selectedDepartment"
 		[selectedCurriculum]="selectedCurriculum"
