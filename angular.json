@@ -84,6 +84,9 @@
 				},
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
+					"options": {
+						"allowedHosts": ["preprod.savvystudymate.com"]
+					},
 					"configurations": {
 						"prod": {
 							"buildTarget": "studymate-frontend:build:prod"
