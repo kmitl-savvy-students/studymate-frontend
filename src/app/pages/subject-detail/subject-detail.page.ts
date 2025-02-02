@@ -189,7 +189,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 						console.log('getEachSubjectData เสร็จแล้วจ้า');
 					} else {
 						console.log('navigate to /subject');
-						this.router.navigate(['/subject']);
+						// this.router.navigate(['/subject']);
 						console.log('No Subject Data Available.');
 					}
 				},
@@ -219,14 +219,14 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 						console.log('getSubjectDetail เสร็จแล้วจ้า');
 					} else {
 						console.log(' navigate to /subject');
-						this.router.navigate(['/subject']);
+						// this.router.navigate(['/subject']);
 						console.log('No Subject Data Available.');
 					}
 				},
 				error: (error) => {
 					if (error.status === 400) {
 						console.log('navigate to /subject');
-						this.router.navigate(['/subject']);
+						// this.router.navigate(['/subject']);
 					} else if (error.status === 404) {
 						console.error('Not found');
 					} else if (error.status === 500) {

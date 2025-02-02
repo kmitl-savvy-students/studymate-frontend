@@ -22,6 +22,20 @@ export const routes: Routes = [
 	// Hpme Page
 	{ path: 'home', component: SDMPageHome },
 
+	// Subject Detail Page
+	{
+		path: 'subject/subject-detail/:subjectId',
+		component: SDMPageSubjectDetail,
+	},
+	{
+		path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId',
+		component: SDMPageSubjectDetail,
+	},
+	{
+		path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId',
+		component: SDMPageSubjectDetail,
+	},
+
 	// Subject Page
 	{
 		path: 'subject',
@@ -34,22 +48,6 @@ export const routes: Routes = [
 	{
 		path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:curriculumIndex/:uniqueId',
 		component: SDMSubject,
-	},
-
-	// Subject Detail Page
-	{ path: 'subject/subject-detail', component: SDMPageSubjectDetail },
-
-	{
-		path: 'subject/subject-detail/:subjectId',
-		component: SDMPageSubjectDetail,
-	},
-	{
-		path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId',
-		component: SDMPageSubjectDetail,
-	},
-	{
-		path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId',
-		component: SDMPageSubjectDetail,
 	},
 
 	// Review Page
