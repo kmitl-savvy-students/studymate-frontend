@@ -1,65 +1,71 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
 	<div class="flex w-full flex-col">
-		<div class="grid w-full flex-none grid-cols-1 gap-3">
-			<div class="text-xl font-semibold">รายวิชาเรียน</div>
-			<div class="flex flex-wrap justify-between gap-y-3">
-				<sdm-select
-					defaultLabel="ปีการศึกษา"
-					SelectName="selectedYear"
-					[listOptions]="yearsList"
-					(selectedValue)="handleSelectChange('selectedYear',$event)"
-					class="w-40"
-				></sdm-select>
-				<sdm-select
-					defaultLabel="ภาคการศึกษา"
-					SelectName="selectedSemester"
-					[listOptions]="semesterList"
-					(selectedValue)="handleSelectChange('selectedSemester',$event)"
-					class="w-40"
-				></sdm-select>
-				<sdm-select
-					defaultLabel="ชั้นปี"
-					SelectName="selectedClassYear"
-					[listOptions]="classYearList"
-					(selectedValue)="handleSelectChange('selectedClassYear',$event)"
-					class="w-24"
-				></sdm-select>
-				<sdm-select
-					defaultLabel="คณะ"
-					SelectName="selectedFaculty"
-					[listOptions]="handleChooseDepartment(facultyList)"
-					(selectedValue)="handleSelectChange('selectedFaculty',$event)"
-					class="w-48"
-				></sdm-select>
-				<sdm-select
-					defaultLabel="ภาควิชา"
-					SelectName="selectedDepartment"
-					[listOptions]="handleChooseFaculty(departmentList)"
-					(selectedValue)="handleSelectChange('selectedDepartment',$event)"
-					class="w-48"
-					[disabled]="disableDepartmentSelectDropdown"
-				></sdm-select>
-				<sdm-select
-					defaultLabel="หลักสูตร"
-					SelectName="selectedCurriculum"
-					[listOptions]="curriculumList"
-					(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
-					class="w-64"
-					[disabled]="disableCurriculumSelectDropdown"
-				></sdm-select>
+		<div class="flex w-full flex-col">
+			<div class="grid w-full flex-none grid-cols-1 gap-3">
+				<div class="text-xl font-semibold">รายวิชาเรียน</div>
+				<div class="flex flex-wrap justify-between gap-y-3">
+					<sdm-select
+						defaultLabel="ปีการศึกษา"
+						SelectName="selectedYear"
+						[listOptions]="yearsList"
+						(selectedValue)="handleSelectChange('selectedYear',$event)"
+						class="w-40"
+						[disabled]="isLoading"
+					></sdm-select>
+					<sdm-select
+						defaultLabel="ภาคการศึกษา"
+						SelectName="selectedSemester"
+						[listOptions]="semesterList"
+						(selectedValue)="handleSelectChange('selectedSemester',$event)"
+						class="w-40"
+						[disabled]="isLoading"
+					></sdm-select>
+					<sdm-select
+						defaultLabel="ชั้นปี"
+						SelectName="selectedClassYear"
+						[listOptions]="classYearList"
+						(selectedValue)="handleSelectChange('selectedClassYear',$event)"
+						class="w-24"
+						[disabled]="isLoading"
+					></sdm-select>
+					<sdm-select
+						defaultLabel="คณะ"
+						SelectName="selectedFaculty"
+						[listOptions]="handleChooseDepartment(facultyList)"
+						(selectedValue)="handleSelectChange('selectedFaculty',$event)"
+						class="w-48"
+						[disabled]="isLoading"
+					></sdm-select>
+					<sdm-select
+						defaultLabel="ภาควิชา"
+						SelectName="selectedDepartment"
+						[listOptions]="handleChooseFaculty(departmentList)"
+						(selectedValue)="handleSelectChange('selectedDepartment',$event)"
+						class="w-48"
+						[disabled]="disableDepartmentSelectDropdown || isLoading"
+					></sdm-select>
+					<sdm-select
+						defaultLabel="หลักสูตร"
+						SelectName="selectedCurriculum"
+						[listOptions]="curriculumList"
+						(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
+						class="w-64"
+						[disabled]="disableCurriculumSelectDropdown || isLoading"
+					></sdm-select>
+				</div>
+				<sdm-search-bar
+					[data]="subjectCardData"
+					[filterFunction]="searchFunction"
+					(searchedDataList)="getSearchedSubjectCardDataList($event)"
+				></sdm-search-bar>
 			</div>
-			<sdm-search-bar
-				[data]="subjectCardData"
-				[filterFunction]="searchFunction"
-				(searchedDataList)="getSearchedSubjectCardDataList($event)"
-			></sdm-search-bar>
 		</div>
 		<ng-container *ngIf="isSelectAllDropdown && isLoading">
 			<div
-				class="flex w-full flex-1 flex-col items-center justify-center"
+				class="flex w-full flex-1 flex-col items-center justify-center p-20"
 			>
-				<!-- loading website		 -->
+				<!-- loading website -->
 				<div role="status">
 					<svg
 						aria-hidden="true"
@@ -79,7 +85,7 @@
 					</svg>
 					<span class="sr-only">Loading...</span>
 				</div>
-				<!-- loading website		 -->
+				<!-- loading website -->
 			</div>
 		</ng-container>
 		<ng-container
@@ -104,9 +110,14 @@
 					>
 						<sdm-subject-cpn
 							[subjectCardData]="data"
-							[selectedYear]="this.selectedYear"
-							[selectedSemester]="this.selectedSemester"
-							[index]=" i + 1 + (currentPage - 1) * itemsPerPage"
+							[selectedYear]="selectedYear"
+							[selectedSemester]="selectedSemester"
+							[selectedFaculty]="selectedFaculty"
+							[selectedDepartment]="selectedDepartment"
+							[selectedCurriculum]="selectedCurriculum"
+							[selectedClassYear]="selectedClassYear"
+							[selectedCurriculumYear]="selectedCurriculumYear"
+							[selectedUniqueId]="selectedUniqueId"
 						></sdm-subject-cpn>
 					</ng-container>
 				</div>
@@ -123,43 +134,47 @@
 			*ngIf="(paginatedItems.length === 0) && !isLoading && searchSubjectDataIsNull"
 		>
 			<div
-				class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
+				class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75"
 			>
 				ไม่พบข้อมูลรายวิชาที่ค้นหา
 			</div>
 		</ng-container>
 		<ng-container *ngIf="isSelectAllDropdown && getSubjectDataIsNull">
 			<div
-				class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
+				class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75"
 			>
 				ไม่พบข้อมูลรายวิชา
 			</div>
 		</ng-container>
 		<!-- คำแนะนำการดูรายวิชา -->
-		<div
-			class="flex w-full flex-1 flex-col items-center justify-center gap-3 text-center text-dark-75"
-		>
-			<div class="flex flex-col gap-y-4">
-				<div *ngIf="!selectedYear">
-					โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
-				</div>
-				<div *ngIf="!selectedSemester">
-					โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
-				</div>
-				<div
-					*ngIf="selectedClassYear === undefined || selectedClassYear === -1"
-				>
-					โปรดเลือกชั้นปี เพื่อดูรายวิชา
-				</div>
-				<div *ngIf="!selectedFaculty">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
-				<div *ngIf="!selectedDepartment">
-					โปรดเลือกภาควิชา เพื่อดูรายวิชา
-				</div>
-				<div *ngIf="!selectedCurriculum && !isGened">
-					โปรดเลือกหลักสูตร เพื่อดูรายวิชา
+		<ng-container *ngIf="!isSelectAllDropdown">
+			<div
+				class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75"
+			>
+				<div class="flex flex-col gap-y-4">
+					<div *ngIf="!selectedYear">
+						โปรดเลือกปีการศึกษา เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedSemester">
+						โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา
+					</div>
+					<div
+						*ngIf="selectedClassYear === undefined || selectedClassYear === -1"
+					>
+						โปรดเลือกชั้นปี เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedFaculty">
+						โปรดเลือกคณะ เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedDepartment">
+						โปรดเลือกภาควิชา เพื่อดูรายวิชา
+					</div>
+					<div *ngIf="!selectedCurriculum && !isGened">
+						โปรดเลือกหลักสูตร เพื่อดูรายวิชา
+					</div>
 				</div>
 			</div>
-		</div>
+		</ng-container>
 	</div>
 </div>
 <!-- <sdm-subject-added-modal

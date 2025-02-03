@@ -14,7 +14,6 @@ import { GenedGroup } from '../models/GenedGroup.model';
 import { GenedSubject } from '../models/GenedSubject.model';
 import { subjectDetailData } from '../models/SubjectDetailData.model';
 import { SubjectReviewData } from '../models/SubjectReviewData.model';
-import { subjectReviewData } from '../../pages/subject-detail/subject-detail-page-data.js';
 
 @Injectable({ providedIn: 'root' })
 export class APIManagementService {
@@ -135,6 +134,53 @@ export class APIManagementService {
 		return this.http.get<SubjectCardData[]>(apiUrl);
 	}
 
+	GetCurriculumnSubjectDataBySection(
+		year: number,
+		semester: number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number,
+		subjectId: string,
+		section: number,
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<SubjectCardData> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-section/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
+
+		if (curriculumYear) {
+			apiUrl += `/${curriculumYear}`;
+		}
+		if (uniqueId) {
+			apiUrl += `/${uniqueId}`;
+		}
+
+		return this.http.get<SubjectCardData>(apiUrl);
+	}
+
+	GetOpenSubjectData(
+		year: number,
+		semester: number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number,
+		subjectId: string,
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<SubjectCardData> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}`;
+
+		if (curriculumYear) {
+			apiUrl += `/${curriculumYear}`;
+		}
+		if (uniqueId) {
+			apiUrl += `/${uniqueId}`;
+		}
+
+		return this.http.get<SubjectCardData>(apiUrl);
+	}
+
 	GetCurriculumTeachtableSubject(
 		subjectId: string,
 	): Observable<subjectDetailData> {
@@ -153,6 +199,12 @@ export class APIManagementService {
 		subjectId: string,
 	): Observable<SubjectReviewData[]> {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
+	}
+
+	GetSubjectReviewsCurrentYearTerm(): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/current`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
@@ -178,34 +230,16 @@ export class APIManagementService {
 
 	UpdateSubjectReviewByUser(
 		student_id: string,
-		// year: number,
-		// term: number,
 		subject_id: string,
 		review: string,
-		// rating: number,
 	) {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/update`;
 		return this.http.patch(apiUrl, {
 			student_id: student_id,
-			// year: year,
-			// term: term,
 			subject_id: subject_id,
 			review: review,
-			// rating: rating,
 		});
 	}
-
-	// GetCurriculumSubjectsTeachtable(
-	// 	year: number,
-	// 	semester: number,
-	// 	faculty : string,
-	// 	department: string,
-	// 	curriculum : string,
-	// 	classYear: number,
-	// ): Observable<CurriculumTeachtableSubject> {
-	// 	const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
-	// 	return this.http.get<CurriculumTeachtableSubject>(apiUrl);
-	// }
 
 	GetCurriculumSubjectByUniqueIdYear(
 		subjectId: string,

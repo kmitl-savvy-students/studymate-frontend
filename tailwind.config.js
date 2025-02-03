@@ -1,20 +1,7 @@
+import { amber as _amber, blue as _blue, emerald as _emerald, indigo as _indigo, lime as _lime, orange as _orange, red as _red, teal as _teal, violet as _violet } from 'tailwindcss/colors';
 import { fontFamily as _fontFamily } from 'tailwindcss/defaultTheme';
-import {
-	violet as _violet,
-	indigo as _indigo,
-	blue as _blue,
-	emerald as _emerald,
-	amber as _amber,
-	orange as _orange,
-	teal as _teal,
-	red as _red,
-	lime as _lime,
-} from 'tailwindcss/colors';
 
-export const content = [
-	'./src/**/*.{html,ts}',
-	'./node_modules/flowbite/**/*.js',
-];
+export const content = ['./src/**/*.{html,ts}', './node_modules/flowbite/**/*.js'];
 export const plugins = [require('flowbite/plugin')];
 export const theme = {
 	extend: {

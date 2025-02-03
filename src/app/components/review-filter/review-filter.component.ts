@@ -38,8 +38,12 @@ import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
 })
 export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
+	@ViewChild(SDMSearchBarComponent) sdmSearchBar!: SDMSearchBarComponent;
 
+	@Input() srcReviewData: SubjectReviewData[] = [];
 	@Input() subjectReviewData: SubjectReviewData[] = [];
+	@Input() currentYearTermReviewData: SubjectReviewData[] = [];
+
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType!: number;
 	@Input() signedIn: boolean = false;
@@ -57,6 +61,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public selectedPopular: boolean = false;
 	public selectedLatest: boolean = false;
 	public selectedRating: boolean = false;
+	public selectedCurrentYearTerm: boolean = false;
 
 	public selectedStarRatingValue: any;
 
@@ -77,79 +82,42 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public isEditingReview: boolean = false;
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['subjectReviewData']) {
+		if (changes['subjectReviewData'] && changes['subjectReviewData']) {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
-			this.updatePaginatedItems();
 		}
 	}
 
-	get paginationTypes() {
-		return paginationType;
-	}
-
-	public isReviewOwner(reviewUserId: string): boolean {
-		if (this.signedIn && this.currentUser) {
-			return reviewUserId === this.currentUser.id;
+	public checkSrcReviewData() {
+		if (
+			!this.selectedPopular &&
+			!this.selectedLatest &&
+			!this.selectedRating &&
+			!this.selectedCurrentYearTerm
+		) {
+			this.srcReviewData = this.subjectReviewData;
+		} else if (
+			(this.selectedPopular ||
+				this.selectedLatest ||
+				this.selectedRating) &&
+			!this.selectedCurrentYearTerm
+		) {
+			this.srcReviewData = this.subjectReviewData;
+		} else if (
+			!this.selectedPopular &&
+			!this.selectedLatest &&
+			!this.selectedRating &&
+			this.selectedCurrentYearTerm
+		) {
+			this.srcReviewData = this.currentYearTermReviewData;
 		}
-		return false;
-	}
-
-	private resetOtherFilters(filter: string) {
-		switch (filter) {
-			case 'popular':
-				this.selectedLatest = false;
-				this.clearSelect();
-				break;
-			case 'latest':
-				this.selectedPopular = false;
-				this.clearSelect();
-				break;
-			case 'starRating':
-				this.selectedPopular = false;
-				this.selectedLatest = false;
-				break;
-			default:
-				break;
-		}
-	}
-
-	private clearSelect() {
-		if (this.sdmSelect) {
-			this.sdmSelect.onSelectedOption('');
-		}
-	}
-
-	public onPopularFilterChange() {
-		this.selectedPopular = !this.selectedPopular;
-		this.resetOtherFilters('popular');
-		this.currentPage = 1;
-		this.filterData();
-	}
-
-	public onLatestFilterChange() {
-		this.selectedLatest = !this.selectedLatest;
-		this.resetOtherFilters('latest');
-		this.currentPage = 1;
-		this.filterData();
-	}
-
-	public onRatingFilterChange(selectedRatingData: SelectedData) {
-		this.selectedStarRatingValue = selectedRatingData.value;
-		if (this.selectedStarRatingValue) {
-			this.selectedRating = true;
-			this.resetOtherFilters('starRating');
-			this.currentPage = 1;
-		} else {
-			this.selectedRating = false;
-		}
-		this.filterData();
 	}
 
 	public filterData(): void {
+		this.checkSrcReviewData();
 		const dataToFilter = this.isSearched
 			? this.searchedReviewDataList
-			: this.subjectReviewData;
+			: this.srcReviewData;
 		let userReview = null;
 
 		if (
@@ -182,6 +150,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.filterItems = dataToFilter.filter(
 				(item) => item.rating === this.selectedStarRatingValue,
 			);
+		} else if (this.selectedCurrentYearTerm) {
+			this.filterItems = dataToFilter;
 		} else {
 			this.filterItems = dataToFilter;
 		}
@@ -197,11 +167,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.updatePaginatedItems();
 	}
 
-	public changePage(page: number) {
-		this.currentPage = page;
-		this.updatePaginatedItems();
-	}
-
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
@@ -209,6 +174,108 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.paginatedItems = this.dataToPaginate.slice(start, end);
 		this.subjectReviewTotal = this.dataToPaginate.length;
 		this.filterReviewIsNull = this.dataToPaginate.length === 0;
+	}
+
+	get paginationTypes() {
+		return paginationType;
+	}
+
+	public isReviewOwner(reviewUserId: string): boolean {
+		if (this.signedIn && this.currentUser) {
+			return reviewUserId === this.currentUser.id;
+		}
+		return false;
+	}
+
+	private resetOtherFilters(filter: string) {
+		switch (filter) {
+			case 'popular':
+				this.selectedLatest = false;
+				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
+				break;
+			case 'latest':
+				this.selectedPopular = false;
+				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
+				break;
+			case 'starRating':
+				this.selectedPopular = false;
+				this.selectedLatest = false;
+				this.selectedCurrentYearTerm = false;
+				break;
+			case 'currentYearTerm':
+				this.selectedLatest = false;
+				this.selectedPopular = false;
+				this.clearSelect();
+				break;
+			default:
+				break;
+		}
+	}
+
+	private clearSelect() {
+		if (this.sdmSelect) {
+			this.sdmSelect.onSelectedOption('');
+		}
+	}
+
+	private clearSearch() {
+		if (this.sdmSearchBar) {
+			this.sdmSearchBar.clearSearch();
+		}
+	}
+
+	public onPopularFilterChange() {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedPopular = !this.selectedPopular;
+		this.resetOtherFilters('popular');
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public onLatestFilterChange() {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedLatest = !this.selectedLatest;
+		this.resetOtherFilters('latest');
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public onRatingFilterChange(selectedRatingData: SelectedData) {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedStarRatingValue = selectedRatingData.value;
+		if (this.selectedStarRatingValue) {
+			this.selectedRating = true;
+			this.resetOtherFilters('starRating');
+			this.currentPage = 1;
+		} else {
+			this.selectedRating = false;
+		}
+		this.filterData();
+	}
+
+	public onCurrentYearTermFilterChange() {
+		this.selectedCurrentYearTerm = !this.selectedCurrentYearTerm;
+		this.resetOtherFilters('currentYearTerm');
+		this.clearSearch();
+		this.isSearched = false;
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public changePage(page: number) {
+		this.currentPage = page;
+		this.updatePaginatedItems();
 	}
 
 	public onEditReview(isEditingReview: boolean) {

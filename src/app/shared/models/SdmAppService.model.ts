@@ -7,12 +7,14 @@ export class SelectedData {
 export class DropdownList {
 	public label!: string;
 	public value?: string | number;
+	public index?: number;
 }
 
 export class CirriculumnList {
 	public value?: string | number;
 	public uniqueId?: string;
 	public curriculumYear?: string;
+	public index?: number;
 }
 
 export class SubjectData {
@@ -37,4 +39,11 @@ export class SubjectData {
 export enum paginationType {
 	single = 1,
 	double = 2,
+}
+
+export enum semesters {
+	first = 1,
+	second = 2,
+	summer = 3,
+	length,
 }

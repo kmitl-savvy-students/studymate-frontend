@@ -16,8 +16,8 @@ import { Component, Input, OnInit } from '@angular/core';
 	`,
 })
 export class SDMAvatarIcon implements OnInit {
-	@Input() imagePath: string = 'images/default-avatar.png';
-	resolvedImagePath: string = 'images/default-avatar.png';
+	@Input() imagePath: string = 'images/default-user-avatar.png';
+	resolvedImagePath: string = 'images/default-user-avatar.png';
 
 	constructor() {}
 
@@ -26,10 +26,10 @@ export class SDMAvatarIcon implements OnInit {
 			.then((isValid) => {
 				this.resolvedImagePath = isValid
 					? this.imagePath
-					: 'images/default-avatar.png';
+					: 'images/default-user-avatar.png';
 			})
 			.catch(() => {
-				this.resolvedImagePath = 'images/default-avatar.png';
+				this.resolvedImagePath = 'images/default-user-avatar.png';
 			});
 	}
 

@@ -16,7 +16,7 @@
 					หน่วยกิต]
 				</a>
 				<div
-					class="border-1 rounded-[15px] bg-lime-500 px-3 py-1.5 text-xs font-semibold text-white"
+					class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-white"
 					*ngIf="subjectCardData.lect_or_prac === 'ทฤษฎี'"
 				>
 					{{ subjectCardData.lect_or_prac }}
@@ -121,12 +121,13 @@
 					>
 						<sdm-icon
 							icon="ellipsis"
-							class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100 hover:bg-orange-100"
+							class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100 hover:cursor-pointer hover:bg-orange-100"
 						></sdm-icon>
 						<div
-							class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
+							class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-dark-100"
 						>
 							<div
+								class="text-sm"
 								*ngFor="
 									let teacher of subjectCardData.teacher_list_th
 								"
@@ -186,17 +187,17 @@
 				>
 					<sdm-icon
 						icon="circle-exclamation"
-						class="h-4 w-4 text-red-400 hover:text-red-500"
+						class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"
 					>
 					</sdm-icon>
 					<div
 						[innerHTML]="subjectCardData.rule"
-						class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
+						class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"
 					></div>
 				</div>
 				<div class="flex" *ngIf="subjectCardData.rule === ''">
 					<div
-						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:bg-gray-200"
+						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200"
 						*ngIf="subjectCardData.rule === ''"
 					>
 						-
@@ -204,6 +205,39 @@
 							class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100"
 						>
 							ไม่มีเงื่อนไข
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Remarks -->
+			<div class="col-span-1 flex flex-col gap-y-2">
+				<div class="font-normal">หมายเหตุ</div>
+				<div
+					class="tooltip relative"
+					*ngIf="subjectCardData.remark !== ''"
+				>
+					<sdm-icon
+						icon="circle-exclamation"
+						class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"
+					>
+						>
+					</sdm-icon>
+					<div
+						[innerHTML]="subjectCardData.remark"
+						class="tooltiptext tooltip-shadow absolute mt-3 max-h-[450px] w-[240px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"
+					></div>
+				</div>
+				<div class="flex" *ngIf="subjectCardData.remark === ''">
+					<div
+						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200"
+						*ngIf="subjectCardData.remark === ''"
+					>
+						-
+						<div
+							class="tooltiptext tooltip-shadow absolute mt-3 min-w-max rounded-[10px] bg-white p-4 text-center text-dark-100"
+						>
+							ไม่มีหมายเหตุ
 						</div>
 					</div>
 				</div>
@@ -226,7 +260,7 @@
 			</div>
 
 			<!-- Interesed Subject -->
-			<div class="col-span-4 flex flex-col gap-y-1">
+			<div class="col-span-3 flex flex-col gap-y-1">
 				<div class="font-normal">นักศึกษาที่ขอเปิดรายวิชา</div>
 				<div class="flex flex-row items-center gap-x-2 text-sm">
 					<sdm-icon

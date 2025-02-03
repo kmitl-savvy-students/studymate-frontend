@@ -1,7 +1,7 @@
 <div class="grid w-full grid-cols-1 gap-5">
 	<sdm-search-bar
 		*ngIf="isShowSearchBar"
-		[data]="subjectReviewData"
+		[data]="srcReviewData"
 		[filterFunction]="searchFunction"
 		(searchedDataList)="getSearchedReviewsDataList($event)"
 		id="search-bar"
@@ -16,7 +16,6 @@
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedPopular,
-				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedPopular,
 				'hover:bg-main-25':
 					!getSubjectReviewIsNull &&
@@ -33,7 +32,6 @@
 			class="filter-button"
 			[ngClass]="{
 				'bg-main-100 text-white': selectedLatest,
-				'hover:bg-main-120': !isEditingReview,
 				'bg-main-15 text-dark-100': !selectedLatest,
 				'hover:bg-main-25':
 					!getSubjectReviewIsNull &&
@@ -52,6 +50,23 @@
 			(selectedValue)="onRatingFilterChange($event)"
 			[disabled]="getSubjectReviewIsNull || isEditingReview"
 		></sdm-select>
+		<button
+			*ngIf="isReviewPage && signedIn"
+			(click)="onCurrentYearTermFilterChange()"
+			[disabled]="getSubjectReviewIsNull || isEditingReview"
+			class="filter-button"
+			[ngClass]="{
+				'bg-main-100 text-white': selectedCurrentYearTerm,
+				'bg-main-15 text-dark-100': !selectedCurrentYearTerm,
+				'hover:bg-main-25':
+					!getSubjectReviewIsNull &&
+					!selectedCurrentYearTerm &&
+					!isEditingReview,
+				'cursor-not-allowed': getSubjectReviewIsNull || isEditingReview,
+			}"
+		>
+			เปิดในปีการศึกษาและภาคการศึกษาปัจจุบัน
+		</button>
 	</div>
 	<ng-container *ngIf="isLoadingReview">
 		<div
