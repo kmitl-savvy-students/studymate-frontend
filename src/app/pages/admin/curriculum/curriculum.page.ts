@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SDMBaseButton } from '../../../components/buttons/base-button.component';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BackendService } from '../../../shared/services/backend.service';
 import { CommonModule } from '@angular/common';
-import { SDMBaseModal } from '../../../components/modals/base-modal.component';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { LoadingService } from '../../../shared/services/loading/loading.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SDMBaseButton } from '@components/buttons/base-button.component';
+import { SDMBaseModal } from '@components/modals/base-modal.component';
+import { Curriculum } from '@models/Curriculum.model';
+import { CurriculumType } from '@models/CurriculumType.model';
+import { BackendService } from '@services/backend.service';
+import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
-import { CurriculumType } from '../../../shared/models/CurriculumType.model';
-import { Curriculum } from '../../../shared/models/Curriculum.model';
 
 @Component({
 	selector: 'sdm-page-curriculum',
@@ -27,10 +27,8 @@ export class SDMPageCurriculum implements OnInit {
 	curriculumCreateForm: FormGroup;
 	curriculumEditForm: FormGroup;
 
-	@ViewChild('createCurriculumModal')
-	createCurriculumModal!: SDMBaseModal;
-	@ViewChild('editCurriculumModal')
-	editCurriculumModal!: SDMBaseModal;
+	@ViewChild('createCurriculumModal') createCurriculumModal!: SDMBaseModal;
+	@ViewChild('editCurriculumModal') editCurriculumModal!: SDMBaseModal;
 
 	constructor(
 		private http: HttpClient,
@@ -41,10 +39,12 @@ export class SDMPageCurriculum implements OnInit {
 		private loadingService: LoadingService,
 	) {
 		this.curriculumCreateForm = this.fb.group({
+			year: [0],
 			nameTh: [''],
 			nameEn: [''],
 		});
 		this.curriculumEditForm = this.fb.group({
+			year: [0],
 			nameTh: [''],
 			nameEn: [''],
 		});
@@ -60,6 +60,7 @@ export class SDMPageCurriculum implements OnInit {
 		});
 	}
 
+	// #region Fetchings
 	fetchCurriculums(): void {
 		if (!this.curriculumTypeId) return;
 		this.isLoading = true;
@@ -76,12 +77,12 @@ export class SDMPageCurriculum implements OnInit {
 				.subscribe({
 					next: (data) => {
 						this.curriculums = data;
+						this.curriculums.sort((a, b) => b.year - a.year);
 						this.isLoading = false;
 
-						if (this.curriculums.length != 0)
-							this.curriculumType =
-								this.curriculums[0].curriculum_type;
-						else {
+						if (this.curriculums.length != 0) {
+							this.curriculumType = this.curriculums[0].curriculum_type;
+						} else {
 							this.fetchCurriculumType();
 						}
 					},
@@ -117,26 +118,21 @@ export class SDMPageCurriculum implements OnInit {
 				});
 		});
 	}
-
+	// #endregion
 	// #region Navigations
 	navigateToCurriculumGroup(id: number): void {
-		this.loadingService.pulse(() =>
-			this.router.navigate([`/admin/curriculum-group/${id}`]),
-		);
+		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum-group/${id}`]));
 	}
 	navigateToCurriculumType(): void {
 		if (!this.curriculumTypeId) return;
 
-		this.loadingService.pulse(() =>
-			this.router.navigate([
-				`/admin/curriculum-type/${this.curriculumType?.department?.id}`,
-			]),
-		);
+		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum-type/${this.curriculumType?.department?.id}`]));
 	}
 	// #endregion
 	// #region Create
 	onCreateCurriculum(): void {
 		this.curriculumCreateForm.patchValue({
+			year: 0,
 			nameTh: '',
 			nameEn: '',
 		});
@@ -146,9 +142,10 @@ export class SDMPageCurriculum implements OnInit {
 		const createdCurriculum = {
 			id: -1,
 			curriculum_type: this.curriculumType,
-			year: -1,
+			year: this.curriculumCreateForm.value.year,
 			name_th: this.curriculumCreateForm.value.nameTh,
 			name_en: this.curriculumCreateForm.value.nameEn,
+			curriculum_group: null,
 		};
 		this.createCurriculum(createdCurriculum);
 	}
@@ -178,6 +175,7 @@ export class SDMPageCurriculum implements OnInit {
 	onEditCurriculum(curriculum: Curriculum): void {
 		this.selectedCurriculum = curriculum;
 		this.curriculumEditForm.patchValue({
+			year: curriculum.year,
 			nameTh: curriculum.name_th,
 			nameEn: curriculum.name_en,
 		});
@@ -187,8 +185,10 @@ export class SDMPageCurriculum implements OnInit {
 		if (this.selectedCurriculum) {
 			const updatedCurriculum = {
 				...this.selectedCurriculum,
+				year: this.curriculumEditForm.value.year,
 				name_th: this.curriculumEditForm.value.nameTh,
 				name_en: this.curriculumEditForm.value.nameEn,
+				curriculum_group: null,
 			};
 			this.updateCurriculum(updatedCurriculum);
 		}

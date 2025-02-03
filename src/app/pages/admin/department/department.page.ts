@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SDMBaseButton } from '../../../components/buttons/base-button.component';
-import { Router, ActivatedRoute } from '@angular/router';
-import { BackendService } from '../../../shared/services/backend.service';
 import { CommonModule } from '@angular/common';
-import { SDMBaseModal } from '../../../components/modals/base-modal.component';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Department } from '../../../shared/models/Department';
-import { Faculty } from '../../../shared/models/Faculty';
-import { LoadingService } from '../../../shared/services/loading/loading.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SDMBaseButton } from '@components/buttons/base-button.component';
+import { SDMBaseModal } from '@components/modals/base-modal.component';
+import { Department } from '@models/Department';
+import { Faculty } from '@models/Faculty';
+import { BackendService } from '@services/backend.service';
+import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -58,6 +58,7 @@ export class SDMPageDepartment implements OnInit {
 		});
 	}
 
+	// #region Fetchings
 	fetchDepartments(): void {
 		if (!this.facultyId) return;
 		this.isLoading = true;
@@ -76,9 +77,9 @@ export class SDMPageDepartment implements OnInit {
 						this.departments = data;
 						this.isLoading = false;
 
-						if (this.departments.length != 0)
+						if (this.departments.length != 0) {
 							this.faculty = this.departments[0].faculty;
-						else {
+						} else {
 							this.fetchFaculty();
 						}
 					},
@@ -114,17 +115,13 @@ export class SDMPageDepartment implements OnInit {
 				});
 		});
 	}
-
+	// #endregion
 	// #region Navigations
 	navigateToCurriculumType(id: number): void {
-		this.loadingService.pulse(() =>
-			this.router.navigate([`/admin/curriculum-type/${id}`]),
-		);
+		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum-type/${id}`]));
 	}
 	navigateToFaculty(): void {
-		this.loadingService.pulse(() =>
-			this.router.navigate([`/admin/faculty`]),
-		);
+		this.loadingService.pulse(() => this.router.navigate([`/admin/faculty`]));
 	}
 	// #endregion
 	// #region Create

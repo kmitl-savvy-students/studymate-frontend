@@ -1,19 +1,20 @@
 import { Routes } from '@angular/router';
-import { SDMPageHome } from './pages/home/home.page';
-import { SDMPageSignUp } from './pages/sign-up/sign-up.page';
-import { SDMPageSignIn } from './pages/sign-in/sign-in.page';
-import { SDMMySubject } from './pages/my-subject/my-subject.page';
-import { SDMSubject } from './pages/subject/subject.page';
-import { SDMPageProfile } from './pages/profile/profile.page';
-import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page';
-import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
-import { SDMPageSignOut } from './pages/sign-out/sign-out.page';
-import { AuthenticationGuard } from './shared/services/authentication/authentication.guard';
-import { SDMPageReview } from './pages/review/review.page';
-import { SDMPageFaculty } from './pages/admin/faculty/faculty.page';
-import { SDMPageDepartment } from './pages/admin/department/department.page';
+import { SDMPageCurriculumGroup } from '@pages/admin/curriculum-group/curriculum-group.page';
 import { SDMPageCurriculumType } from './pages/admin/curriculum-type/curriculum-type.page';
 import { SDMPageCurriculum } from './pages/admin/curriculum/curriculum.page';
+import { SDMPageDepartment } from './pages/admin/department/department.page';
+import { SDMPageFaculty } from './pages/admin/faculty/faculty.page';
+import { SDMPageHome } from './pages/home/home.page';
+import { SDMMySubject } from './pages/my-subject/my-subject.page';
+import { SDMPageNotFound } from './pages/page-not-found/page-not-found.page';
+import { SDMPageProfile } from './pages/profile/profile.page';
+import { SDMPageReview } from './pages/review/review.page';
+import { SDMPageSignIn } from './pages/sign-in/sign-in.page';
+import { SDMPageSignOut } from './pages/sign-out/sign-out.page';
+import { SDMPageSignUp } from './pages/sign-up/sign-up.page';
+import { SDMPageSubjectDetail } from './pages/subject-detail/subject-detail.page';
+import { SDMSubject } from './pages/subject/subject.page';
+import { AuthenticationGuard } from './shared/services/authentication/authentication.guard';
 
 export const routes: Routes = [
 	{
@@ -65,14 +66,9 @@ export const routes: Routes = [
 
 	{ path: 'admin/faculty', component: SDMPageFaculty },
 	{ path: 'admin/department/:facultyId', component: SDMPageDepartment },
-	{
-		path: 'admin/curriculum-type/:departmentId',
-		component: SDMPageCurriculumType,
-	},
-	{
-		path: 'admin/curriculum/:curriculumTypeId',
-		component: SDMPageCurriculum,
-	},
+	{ path: 'admin/curriculum-type/:departmentId', component: SDMPageCurriculumType },
+	{ path: 'admin/curriculum/:curriculumTypeId', component: SDMPageCurriculum },
+	{ path: 'admin/curriculum-group/:curriculumId', component: SDMPageCurriculumGroup },
 
 	{ path: '**', component: SDMPageNotFound },
 ];

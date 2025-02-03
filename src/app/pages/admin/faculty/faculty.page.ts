@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SDMBaseButton } from '../../../components/buttons/base-button.component';
-import { Router } from '@angular/router';
-import { BackendService } from '../../../shared/services/backend.service';
-import { Faculty } from '../../../shared/models/Faculty';
 import { CommonModule } from '@angular/common';
-import { SDMBaseModal } from '../../../components/modals/base-modal.component';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { LoadingService } from '../../../shared/services/loading/loading.service';
+import { Router } from '@angular/router';
+import { SDMBaseButton } from '@components/buttons/base-button.component';
+import { SDMBaseModal } from '@components/modals/base-modal.component';
+import { Faculty } from '@models/Faculty';
+import { BackendService } from '@services/backend.service';
+import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -47,6 +47,7 @@ export class SDMPageFaculty implements OnInit {
 		this.fetchFaculties();
 	}
 
+	// #region Fetchings
 	fetchFaculties(): void {
 		this.isLoading = true;
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/get`;
@@ -70,13 +71,51 @@ export class SDMPageFaculty implements OnInit {
 				});
 		});
 	}
-
+	// #endregion
+	// #region Navigations
 	navigateToDepartment(id: number): void {
-		this.loadingService.pulse(() =>
-			this.router.navigate([`/admin/department/${id}`]),
-		);
+		this.loadingService.pulse(() => this.router.navigate([`/admin/department/${id}`]));
 	}
+	// #endregion
+	// #region Create
+	onCreateFaculty(): void {
+		this.facultyCreateForm.patchValue({
+			nameTh: '',
+			nameEn: '',
+		});
+		this.createFacultyModal.show();
+	}
+	onConfirmCreate(): void {
+		const createdFaculty = {
+			id: -1,
+			name_th: this.facultyCreateForm.value.nameTh,
+			name_en: this.facultyCreateForm.value.nameEn,
+		};
+		this.createFaculty(createdFaculty);
+	}
+	createFaculty(faculty: Faculty): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/create`;
 
+		this.loadingService.show(() => {
+			this.http
+				.post(apiUrl, faculty)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchFaculties();
+					},
+					error: (error) => {
+						console.error('Error creating faculty:', error);
+					},
+				});
+		});
+	}
+	// #endregion
+	// #region Edit
 	onEditFaculty(faculty: Faculty): void {
 		this.selectedFaculty = faculty;
 		this.facultyEditForm.patchValue({
@@ -116,41 +155,5 @@ export class SDMPageFaculty implements OnInit {
 				});
 		});
 	}
-
-	onCreateFaculty(): void {
-		this.facultyCreateForm.patchValue({
-			nameTh: '',
-			nameEn: '',
-		});
-		this.createFacultyModal.show();
-	}
-	onConfirmCreate(): void {
-		const createdFaculty = {
-			id: -1,
-			name_th: this.facultyCreateForm.value.nameTh,
-			name_en: this.facultyCreateForm.value.nameEn,
-		};
-		this.createFaculty(createdFaculty);
-	}
-	createFaculty(faculty: Faculty): void {
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/create`;
-
-		this.loadingService.show(() => {
-			this.http
-				.post(apiUrl, faculty)
-				.pipe(
-					finalize(() => {
-						this.loadingService.hide();
-					}),
-				)
-				.subscribe({
-					next: () => {
-						this.fetchFaculties();
-					},
-					error: (error) => {
-						console.error('Error creating faculty:', error);
-					},
-				});
-		});
-	}
+	// #endregion
 }

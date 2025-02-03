@@ -58,6 +58,7 @@ export class SDMPageCurriculumType implements OnInit {
 		});
 	}
 
+	// #region Fetchings
 	fetchCurriculumTypes(): void {
 		if (!this.departmentId) return;
 		this.isLoading = true;
@@ -76,8 +77,9 @@ export class SDMPageCurriculumType implements OnInit {
 						this.curriculumTypes = data;
 						this.isLoading = false;
 
-						if (this.curriculumTypes.length != 0) this.department = this.curriculumTypes[0].department;
-						else {
+						if (this.curriculumTypes.length != 0) {
+							this.department = this.curriculumTypes[0].department;
+						} else {
 							this.fetchDepartment();
 						}
 					},
@@ -113,7 +115,7 @@ export class SDMPageCurriculumType implements OnInit {
 				});
 		});
 	}
-
+	// #endregion
 	// #region Navigations
 	navigateToCurriculum(id: number): void {
 		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum/${id}`]));
