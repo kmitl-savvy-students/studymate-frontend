@@ -2,22 +2,20 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
-import { SDMConfirmDeleteModalComponent } from '../../components/modals/delete-modal/confirm-delete-modal.component';
 import { ImportTranscriptComponent } from '../../components/modals/import-transcript-modal/import-transcript-modal.component';
 import { TranscriptData } from '../../shared/models/TranscriptData.model';
 import { User } from '../../shared/models/User.model';
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { BackendService } from '../../shared/services/backend.service';
-
 @Component({
-	selector: 'sdm-my-subject',
+	selector: 'sdm-page-my-subject',
 	standalone: true,
-	imports: [CommonModule, SDMConfirmDeleteModalComponent, ImportTranscriptComponent],
+	imports: [CommonModule, ImportTranscriptComponent],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
-export class SDMMySubject implements OnInit, AfterViewInit {
+export class SDMPageMySubject implements OnInit, AfterViewInit {
 	transcriptData: TranscriptData[] = [];
 	curriculumName = '';
 	isDataLoaded = false;

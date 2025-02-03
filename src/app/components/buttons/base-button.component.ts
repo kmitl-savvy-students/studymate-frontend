@@ -35,8 +35,8 @@ export class SDMBaseButton {
 	@Input() isDisabled: boolean = false;
 	@Input() isUnderlined: boolean = false;
 	@Input() isSubmit: boolean = false;
-	@Input() textColor: string = 'text-dark-100';
-	@Input() textColorHover: string = '';
+	@Input() textColor: string = 'text-dark';
+	@Input() textColorHover: string = 'hover:text-primary-300';
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorHover: string = '';
 
@@ -46,21 +46,32 @@ export class SDMBaseButton {
 		this.clickEvent.emit();
 	}
 
-	getButtonClasses(): string[] {
-		const classes = ['flex', 'w-full', 'items-center', 'justify-center', 'gap-3', 'rounded-xl', 'text-base', 'font-semibold', this.textColor, this.backgroundColor || this.backgroundColorHover ? 'px-4 py-3' : '', this.isUnderlined ? 'underline decoration-1' : '', this.isDisabled ? 'opacity-50 cursor-not-allowed' : ''];
+	getButtonClasses(): string {
+		const classes = ['transition-all', 'flex', 'w-full', 'items-center', 'justify-center', 'gap-3', 'rounded-xl', 'text-base', 'font-semibold'];
 
-		if (this.textColorHover) {
-			classes.push(`hover:${this.textColorHover}`);
+		if (this.textColor) {
+			classes.push(this.textColor);
 		}
-
+		if (this.textColorHover) {
+			classes.push(this.textColorHover);
+		}
 		if (this.backgroundColor) {
 			classes.push(this.backgroundColor);
 		}
-
 		if (this.backgroundColorHover) {
-			classes.push(`hover:${this.backgroundColorHover}`);
+			classes.push(this.backgroundColorHover);
+		}
+		if (this.backgroundColor || this.backgroundColorHover) {
+			classes.push('px-4', 'py-3');
+		}
+		if (this.isUnderlined) {
+			classes.push('underline', 'decoration-1');
+		}
+		if (this.isDisabled) {
+			classes.push('opacity-50', 'cursor-not-allowed');
 		}
 
-		return classes;
+		console.log(classes.join(' '));
+		return classes.join(' ');
 	}
 }
