@@ -45,7 +45,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 			return;
 		}
 		if (this.currentUser.curriculum == null) {
-			this.modal?.show();
+			//this.modal?.show();
 		}
 	}
 
