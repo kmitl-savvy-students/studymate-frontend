@@ -14,7 +14,6 @@ services:
             - frontend-network
         volumes:
             - ./default.conf:/etc/nginx/conf.d/default.conf
-            - ./dist/studymate-frontend/:/usr/share/nginx/html
         depends_on:
             - frontend
         labels:
