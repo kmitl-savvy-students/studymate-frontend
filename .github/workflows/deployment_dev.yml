@@ -57,8 +57,12 @@ jobs:
               run: |
                   docker compose -f docker-compose.preprod.yml down -v || true
 
+            - name: build container without cache
+              run: |
+                  docker compose -f docker-compose.preprod.yml build --no-cache
+
             - name: Deploy application using Docker Compose
               run: |
-                  docker compose -f docker-compose.preprod.yml up -d --build --force-recreate --remove-orphans
+                  docker compose -f docker-compose.preprod.yml up -d --force-recreate --remove-orphans
             - name: ✅✅ Finish ✅✅
               run: echo "All Passed => Fisnish !!"
