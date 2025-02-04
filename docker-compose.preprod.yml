@@ -1,28 +1,25 @@
 services:
-    nginx:
-        image: nginx:latest
-        ports:
-        - "80:80"
-        volumes:
-        - ./nginx.conf:/etc/nginx/nginx.conf
-        - ./dist:/usr/share/nginx/html
-        depends_on:
-        - frontend
-
     frontend:
         container_name: sdm-frontend-container
         image: front-img
         restart: always
-        ports:
-            - '4200:4200'
         networks:
+            - backend-network
             - frontend-network
-        environment:
-            - VITE_SERVER_HOST=preprod.savvystudymate.com
+        volumes:
+            - ./dist:/app/dist
+    nginx:
+        image: nginx:latest
+        networks:
+            - backend-network
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./dist:/usr/share/nginx/html
+        depends_on:
+            - frontend
         labels:
             traefik.enable: 'true'
             traefik.http.services.sdm-frontend.loadbalancer.server.port: '80'
-            traefik.http.services.sdm-frontend.loadbalancer.server.scheme: 'http'
             traefik.http.routers.sdm-frontend-https.entrypoints: 'websecure'
             traefik.http.routers.sdm-frontend-https.rule: 'Host(`preprod.savvystudymate.com`) || Host(`test.savvystudymate.com`)'
             traefik.http.routers.sdm-frontend-https.tls: 'true'
