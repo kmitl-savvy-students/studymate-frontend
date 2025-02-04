@@ -5,8 +5,8 @@ services:
         restart: always
         networks:
             - frontend-network
-        volumes:
-            - ./dist:/app/dist
+        # volumes:
+        #     - ./dist:/app/dist/studymate-frontend
     nginx:
         container_name: sdm-nginx-container
         image: nginx:latest
