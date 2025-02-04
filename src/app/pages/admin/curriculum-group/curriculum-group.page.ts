@@ -7,6 +7,7 @@ import { SDMBaseButton } from '@components/buttons/base-button.component';
 import { SDMBaseModal } from '@components/modals/base-modal.component';
 import { Curriculum } from '@models/Curriculum.model';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
+import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
@@ -16,15 +17,17 @@ import { IconComponent } from '../../../components/icon/icon.component';
 	selector: 'sdm-page-curriculum-group',
 	standalone: true,
 	imports: [ReactiveFormsModule, CommonModule, SDMBaseModal, SDMBaseButton, IconComponent],
-	templateUrl: './curriculum-group.page.html',
-	styleUrl: './curriculum-group.page.css',
+	templateUrl: 'curriculum-group.page.html',
+	styleUrl: 'curriculum-group.page.css',
 })
 export class SDMPageCurriculumGroup implements OnInit {
 	curriculumId: number | null = null;
 	curriculum: Curriculum | null = null;
 
+	curriculumGroupSubjects: Array<CurriculumGroupSubject> = [];
+	isFetchingCurriculumGroupSubjects = false;
+
 	rootNode: CurriculumGroup | null = null;
-	isLoading = false;
 
 	addNodeForm: FormGroup;
 	editNodeForm: FormGroup;
@@ -73,7 +76,6 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #region Fetchings
 	fetchCurriculumAndNode(): void {
 		if (!this.curriculumId) return;
-		this.isLoading = true;
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/get/${this.curriculumId}`;
 
 		this.loadingService.show(() => {
@@ -88,27 +90,45 @@ export class SDMPageCurriculumGroup implements OnInit {
 					next: (data) => {
 						this.curriculum = data;
 
-						if (data.curriculum_group) {
-							this.rootNode = data.curriculum_group;
-						} else {
-							this.createRootNode();
-						}
-
-						this.isLoading = false;
+						if (data.curriculum_group) this.rootNode = data.curriculum_group;
+						else this.createRootNode();
 					},
 					error: (error) => {
 						console.error('Error fetching curriculum and root node:', error);
-						this.isLoading = false;
 					},
 				});
 		});
 	}
+
+	fetchCurriculumGroupSubjects(): void {
+		if (!this.currentParentNode) return;
+		this.isFetchingCurriculumGroupSubjects = true;
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group-subject/get-by-curriculum-group/${this.currentParentNode.id}`;
+
+		this.http
+			.get<Array<CurriculumGroupSubject>>(apiUrl)
+			.pipe(
+				finalize(() => {
+					this.loadingService.hide();
+					this.isFetchingCurriculumGroupSubjects = false;
+				}),
+			)
+			.subscribe({
+				next: (data) => {
+					this.curriculumGroupSubjects = data.slice().sort((a: any, b: any) => parseInt(a.subject?.id) - parseInt(b.subject?.id));
+				},
+				error: (error) => {
+					console.error('Error fetching curriculum group subjects:', error);
+				},
+			});
+	}
+
 	// #endregion
 	// #region Navigations
 	navigateToCurriculum(): void {
 		if (!this.curriculumId) return;
 
-		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum/${this.curriculum?.curriculum_type?.id}`]));
+		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum/${this.curriculum?.program?.id}`]));
 	}
 	// #endregion
 	// #region Update Root Node
@@ -215,7 +235,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			parent_id: this.currentParentNode.parent_id,
 			name: this.editNodeForm.value.name,
 			type: this.editNodeForm.value.type,
-			credit: 0,
+			credit: this.editNodeForm.value.credit,
 			children: [],
 		};
 		this.loadingService.show(() => {
@@ -258,12 +278,55 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #endregion
 	// #region Edit Subjects
 	onEditSubjects(): void {
+		this.fetchCurriculumGroupSubjects();
 		this.editNodeModal.hide();
 		this.editSubjectsModal.show();
 	}
 	onAddSubject(): void {
+		this.addSubjectForm.reset({ subjects: '' });
 		this.editSubjectsModal.hide();
 		this.addSubjectModal.show();
+	}
+	onConfirmAddSubject(): void {
+		if (!this.currentParentNode) return;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group-subject/create`;
+		const payload: any = {
+			curriculum_group_id: this.currentParentNode.id,
+			subject_string: this.addSubjectForm.value.subjects,
+		};
+		this.loadingService.show(() => {
+			this.http
+				.post(apiUrl, payload)
+				.pipe(finalize(() => this.loadingService.hide()))
+				.subscribe({
+					next: () => {
+						this.editSubjectsModal.show();
+						this.addSubjectModal.hide();
+						this.fetchCurriculumGroupSubjects();
+						this.fetchCurriculumAndNode();
+					},
+					error: () => {
+						console.error('Error adding subject');
+					},
+				});
+		});
+	}
+	onDeleteSubject(curriculumGroupSubjectId: number): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group-subject/delete/${curriculumGroupSubjectId}`;
+		this.loadingService.show(() => {
+			this.http
+				.delete(apiUrl)
+				.pipe(finalize(() => this.loadingService.hide()))
+				.subscribe({
+					next: () => {
+						this.fetchCurriculumGroupSubjects();
+					},
+					error: () => {
+						console.error('Error deleting subject');
+					},
+				});
+		});
 	}
 	// #endregion
 }

@@ -7,6 +7,7 @@ import { SDMBaseButton } from '@components/buttons/base-button.component';
 import { SDMBaseModal } from '@components/modals/base-modal.component';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
+import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
@@ -15,7 +16,7 @@ import { finalize } from 'rxjs';
 	selector: 'sdm-page-department',
 	standalone: true,
 	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule],
-	templateUrl: './department.page.html',
+	templateUrl: 'department.page.html',
 })
 export class SDMPageDepartment implements OnInit {
 	facultyId: number | null = null;
@@ -37,12 +38,15 @@ export class SDMPageDepartment implements OnInit {
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
 		private loadingService: LoadingService,
+		private alertService: AlertService,
 	) {
 		this.departmentCreateForm = this.fb.group({
+			kmitlId: [''],
 			nameTh: [''],
 			nameEn: [''],
 		});
 		this.departmentEditForm = this.fb.group({
+			kmitlId: [''],
 			nameTh: [''],
 			nameEn: [''],
 		});
@@ -118,7 +122,7 @@ export class SDMPageDepartment implements OnInit {
 	// #endregion
 	// #region Navigations
 	navigateToCurriculumType(id: number): void {
-		this.loadingService.pulse(() => this.router.navigate([`/admin/curriculum-type/${id}`]));
+		this.loadingService.pulse(() => this.router.navigate([`/admin/program/${id}`]));
 	}
 	navigateToFaculty(): void {
 		this.loadingService.pulse(() => this.router.navigate([`/admin/faculty`]));
@@ -127,14 +131,22 @@ export class SDMPageDepartment implements OnInit {
 	// #region Create
 	onCreateDepartment(): void {
 		this.departmentCreateForm.patchValue({
+			kmitlId: [''],
 			nameTh: '',
 			nameEn: '',
 		});
 		this.createDepartmentModal.show();
 	}
 	onConfirmCreate(): void {
+		if (this.departmentCreateForm.value.nameTh.trim().length == 0 || this.departmentCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อภาควิชา');
+			return;
+		}
+		this.createDepartmentModal.hide();
+
 		const createdDepartment = {
 			id: -1,
+			kmitl_id: this.departmentCreateForm.value.kmitlId,
 			faculty: this.faculty,
 			name_th: this.departmentCreateForm.value.nameTh,
 			name_en: this.departmentCreateForm.value.nameEn,
@@ -167,20 +179,28 @@ export class SDMPageDepartment implements OnInit {
 	onEditDepartment(department: Department): void {
 		this.selectedDepartment = department;
 		this.departmentEditForm.patchValue({
+			kmitlId: department.kmitl_id,
 			nameTh: department.name_th,
 			nameEn: department.name_en,
 		});
 		this.editDepartmentModal.show();
 	}
 	onConfirmEdit(): void {
-		if (this.selectedDepartment) {
-			const updatedDepartment = {
-				...this.selectedDepartment,
-				name_th: this.departmentEditForm.value.nameTh,
-				name_en: this.departmentEditForm.value.nameEn,
-			};
-			this.updateDepartment(updatedDepartment);
+		if (!this.selectedDepartment) return;
+
+		if (this.departmentEditForm.value.nameTh.trim().length == 0 || this.departmentEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อภาควิชา');
+			return;
 		}
+		this.editDepartmentModal.hide();
+
+		const updatedDepartment = {
+			...this.selectedDepartment,
+			kmitl_id: this.departmentEditForm.value.kmitlId,
+			name_th: this.departmentEditForm.value.nameTh,
+			name_en: this.departmentEditForm.value.nameEn,
+		};
+		this.updateDepartment(updatedDepartment);
 	}
 	updateDepartment(department: Department): void {
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/department/update`;

@@ -2,7 +2,7 @@
 	"name": "studymate-frontend",
 	"version": "1.0.0",
 	"scripts": {
-		"start": "ng serve --no-hmr"
+		"start": "ng serve --no-hmr --configuration=dev"
 	},
 	"dependencies": {
 		"@angular/animations": "^19.0.0",

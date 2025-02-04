@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { SDMBaseButton } from '@components/buttons/base-button.component';
 import { SDMBaseModal } from '@components/modals/base-modal.component';
 import { Faculty } from '@models/Faculty';
+import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
@@ -14,7 +15,7 @@ import { finalize } from 'rxjs';
 	selector: 'sdm-page-faculty',
 	standalone: true,
 	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule],
-	templateUrl: './faculty.page.html',
+	templateUrl: 'faculty.page.html',
 })
 export class SDMPageFaculty implements OnInit {
 	faculties: Faculty[] = [];
@@ -32,12 +33,15 @@ export class SDMPageFaculty implements OnInit {
 		private router: Router,
 		private fb: FormBuilder,
 		private loadingService: LoadingService,
+		private alertService: AlertService,
 	) {
 		this.facultyCreateForm = this.fb.group({
+			kmitlId: [''],
 			nameTh: [''],
 			nameEn: [''],
 		});
 		this.facultyEditForm = this.fb.group({
+			kmitlId: [''],
 			nameTh: [''],
 			nameEn: [''],
 		});
@@ -80,14 +84,22 @@ export class SDMPageFaculty implements OnInit {
 	// #region Create
 	onCreateFaculty(): void {
 		this.facultyCreateForm.patchValue({
+			kmitlId: '',
 			nameTh: '',
 			nameEn: '',
 		});
 		this.createFacultyModal.show();
 	}
 	onConfirmCreate(): void {
+		if (this.facultyCreateForm.value.nameTh.trim().length == 0 || this.facultyCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อคณะ');
+			return;
+		}
+		this.createFacultyModal.hide();
+
 		const createdFaculty = {
 			id: -1,
+			kmitl_id: this.facultyCreateForm.value.kmitlId,
 			name_th: this.facultyCreateForm.value.nameTh,
 			name_en: this.facultyCreateForm.value.nameEn,
 		};
@@ -119,20 +131,28 @@ export class SDMPageFaculty implements OnInit {
 	onEditFaculty(faculty: Faculty): void {
 		this.selectedFaculty = faculty;
 		this.facultyEditForm.patchValue({
+			kmitlId: faculty.kmitl_id,
 			nameTh: faculty.name_th,
 			nameEn: faculty.name_en,
 		});
 		this.editFacultyModal.show();
 	}
 	onConfirmEdit(): void {
-		if (this.selectedFaculty) {
-			const updatedFaculty = {
-				...this.selectedFaculty,
-				name_th: this.facultyEditForm.value.nameTh,
-				name_en: this.facultyEditForm.value.nameEn,
-			};
-			this.updateFaculty(updatedFaculty);
+		if (!this.selectedFaculty) return;
+
+		if (this.facultyEditForm.value.nameTh.trim().length == 0 || this.facultyEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อคณะ');
+			return;
 		}
+		this.editFacultyModal.hide();
+
+		const updatedFaculty = {
+			...this.selectedFaculty,
+			kmitl_id: this.facultyEditForm.value.kmitlId,
+			name_th: this.facultyEditForm.value.nameTh,
+			name_en: this.facultyEditForm.value.nameEn,
+		};
+		this.updateFaculty(updatedFaculty);
 	}
 	updateFaculty(faculty: Faculty): void {
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/update`;

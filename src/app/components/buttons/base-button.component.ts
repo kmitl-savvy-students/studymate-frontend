@@ -49,29 +49,14 @@ export class SDMBaseButton {
 	getButtonClasses(): string {
 		const classes = ['transition-all', 'flex', 'w-full', 'items-center', 'justify-center', 'gap-3', 'rounded-xl', 'text-base', 'font-semibold'];
 
-		if (this.textColor) {
-			classes.push(this.textColor);
-		}
-		if (this.textColorHover) {
-			classes.push(this.textColorHover);
-		}
-		if (this.backgroundColor) {
-			classes.push(this.backgroundColor);
-		}
-		if (this.backgroundColorHover) {
-			classes.push(this.backgroundColorHover);
-		}
-		if (this.backgroundColor || this.backgroundColorHover) {
-			classes.push('px-4', 'py-3');
-		}
-		if (this.isUnderlined) {
-			classes.push('underline', 'decoration-1');
-		}
-		if (this.isDisabled) {
-			classes.push('opacity-50', 'cursor-not-allowed');
-		}
+		if (this.textColor) classes.push(this.textColor);
+		if (this.textColorHover) classes.push(this.textColorHover);
+		if (this.backgroundColor) classes.push(this.backgroundColor);
+		if (this.backgroundColorHover) classes.push(this.backgroundColorHover);
+		if (this.backgroundColor || this.backgroundColorHover) classes.push('px-4', 'py-3');
+		if (this.isUnderlined) classes.push('underline', 'decoration-1');
+		if (this.isDisabled) classes.push('opacity-50', 'cursor-not-allowed');
 
-		console.log(classes.join(' '));
 		return classes.join(' ');
 	}
 }

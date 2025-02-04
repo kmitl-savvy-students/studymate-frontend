@@ -5,30 +5,31 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SDMBaseButton } from '@components/buttons/base-button.component';
 import { SDMBaseModal } from '@components/modals/base-modal.component';
-import { CurriculumType } from '@models/CurriculumType.model';
 import { Department } from '@models/Department';
+import { Program } from '@models/Program.model';
+import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 
 @Component({
-	selector: 'sdm-page-curriculum-type',
+	selector: 'sdm-page-program',
 	standalone: true,
 	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule],
-	templateUrl: './curriculum-type.page.html',
+	templateUrl: 'program.page.html',
 })
-export class SDMPageCurriculumType implements OnInit {
+export class SDMPageProgram implements OnInit {
 	departmentId: number | null = null;
 	department: Department | null = null;
 
-	curriculumTypes: CurriculumType[] = [];
+	programs: Program[] = [];
 	isLoading = false;
-	selectedCurriculumType: CurriculumType | null = null;
-	curriculumTypeCreateForm: FormGroup;
-	curriculumTypeEditForm: FormGroup;
+	selectedProgram: Program | null = null;
+	programCreateForm: FormGroup;
+	programEditForm: FormGroup;
 
-	@ViewChild('createCurriculumTypeModal') createCurriculumTypeModal!: SDMBaseModal;
-	@ViewChild('editCurriculumTypeModal') editCurriculumTypeModal!: SDMBaseModal;
+	@ViewChild('createProgramModal') createProgramModal!: SDMBaseModal;
+	@ViewChild('editProgramModal') editProgramModal!: SDMBaseModal;
 
 	constructor(
 		private http: HttpClient,
@@ -37,12 +38,13 @@ export class SDMPageCurriculumType implements OnInit {
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
 		private loadingService: LoadingService,
+		private alertService: AlertService,
 	) {
-		this.curriculumTypeCreateForm = this.fb.group({
+		this.programCreateForm = this.fb.group({
 			nameTh: [''],
 			nameEn: [''],
 		});
-		this.curriculumTypeEditForm = this.fb.group({
+		this.programEditForm = this.fb.group({
 			nameTh: [''],
 			nameEn: [''],
 		});
@@ -53,20 +55,20 @@ export class SDMPageCurriculumType implements OnInit {
 			const id = params.get('departmentId');
 			if (id) {
 				this.departmentId = +id;
-				this.fetchCurriculumTypes();
+				this.fetchPrograms();
 			}
 		});
 	}
 
 	// #region Fetchings
-	fetchCurriculumTypes(): void {
+	fetchPrograms(): void {
 		if (!this.departmentId) return;
 		this.isLoading = true;
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-type/get-by-department/${this.departmentId}`;
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/program/get-by-department/${this.departmentId}`;
 
 		this.loadingService.show(() => {
 			this.http
-				.get<CurriculumType[]>(apiUrl)
+				.get<Program[]>(apiUrl)
 				.pipe(
 					finalize(() => {
 						this.loadingService.hide();
@@ -74,17 +76,17 @@ export class SDMPageCurriculumType implements OnInit {
 				)
 				.subscribe({
 					next: (data) => {
-						this.curriculumTypes = data;
+						this.programs = data;
 						this.isLoading = false;
 
-						if (this.curriculumTypes.length != 0) {
-							this.department = this.curriculumTypes[0].department;
+						if (this.programs.length != 0) {
+							this.department = this.programs[0].department;
 						} else {
 							this.fetchDepartment();
 						}
 					},
 					error: (error) => {
-						console.error('Error fetching curriculum types:', error);
+						console.error('Error fetching program:', error);
 						this.isLoading = false;
 					},
 				});
@@ -127,28 +129,34 @@ export class SDMPageCurriculumType implements OnInit {
 	}
 	// #endregion
 	// #region Create
-	onCreateCurriculumType(): void {
-		this.curriculumTypeCreateForm.patchValue({
+	onCreateProgram(): void {
+		this.programCreateForm.patchValue({
 			nameTh: '',
 			nameEn: '',
 		});
-		this.createCurriculumTypeModal.show();
+		this.createProgramModal.show();
 	}
 	onConfirmCreate(): void {
-		const createdCurriculumType = {
+		if (this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อแผนการเรียน');
+			return;
+		}
+		this.createProgramModal.hide();
+
+		const createdProgram = {
 			id: -1,
 			department: this.department,
-			name_th: this.curriculumTypeCreateForm.value.nameTh,
-			name_en: this.curriculumTypeCreateForm.value.nameEn,
+			name_th: this.programCreateForm.value.nameTh,
+			name_en: this.programCreateForm.value.nameEn,
 		};
-		this.createCurriculumType(createdCurriculumType);
+		this.createProgram(createdProgram);
 	}
-	createCurriculumType(curriculumType: CurriculumType): void {
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-type/create`;
+	createProgram(program: Program): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/program/create`;
 
 		this.loadingService.show(() => {
 			this.http
-				.post(apiUrl, curriculumType)
+				.post(apiUrl, program)
 				.pipe(
 					finalize(() => {
 						this.loadingService.hide();
@@ -156,40 +164,46 @@ export class SDMPageCurriculumType implements OnInit {
 				)
 				.subscribe({
 					next: () => {
-						this.fetchCurriculumTypes();
+						this.fetchPrograms();
 					},
 					error: (error) => {
-						console.error('Error creating curriculum type:', error);
+						console.error('Error creating program:', error);
 					},
 				});
 		});
 	}
 	// #endregion
 	// #region Edit
-	onEditCurriculumType(curriculumType: CurriculumType): void {
-		this.selectedCurriculumType = curriculumType;
-		this.curriculumTypeEditForm.patchValue({
-			nameTh: curriculumType.name_th,
-			nameEn: curriculumType.name_en,
+	onEditProgram(program: Program): void {
+		this.selectedProgram = program;
+		this.programEditForm.patchValue({
+			nameTh: program.name_th,
+			nameEn: program.name_en,
 		});
-		this.editCurriculumTypeModal.show();
+		this.editProgramModal.show();
 	}
 	onConfirmEdit(): void {
-		if (this.selectedCurriculumType) {
-			const updatedCurriculumType = {
-				...this.selectedCurriculumType,
-				name_th: this.curriculumTypeEditForm.value.nameTh,
-				name_en: this.curriculumTypeEditForm.value.nameEn,
+		if (this.programEditForm.value.nameTh.trim().length == 0 || this.programEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อแผนการเรียน');
+			return;
+		}
+		this.editProgramModal.hide();
+
+		if (this.selectedProgram) {
+			const updatedProgram = {
+				...this.selectedProgram,
+				name_th: this.programEditForm.value.nameTh,
+				name_en: this.programEditForm.value.nameEn,
 			};
-			this.updateCurriculumType(updatedCurriculumType);
+			this.updateProgram(updatedProgram);
 		}
 	}
-	updateCurriculumType(curriculumType: CurriculumType): void {
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-type/update`;
+	updateProgram(program: Program): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/program/update`;
 
 		this.loadingService.show(() => {
 			this.http
-				.put(apiUrl, curriculumType)
+				.put(apiUrl, program)
 				.pipe(
 					finalize(() => {
 						this.loadingService.hide();
@@ -197,10 +211,10 @@ export class SDMPageCurriculumType implements OnInit {
 				)
 				.subscribe({
 					next: () => {
-						this.fetchCurriculumTypes();
+						this.fetchPrograms();
 					},
 					error: (error) => {
-						console.error('Error updating curriculum type:', error);
+						console.error('Error updating program:', error);
 					},
 				});
 		});

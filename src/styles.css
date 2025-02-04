@@ -9,6 +9,8 @@ If not necessary, do not add anything in this file please.
 html,
 body {
 	height: 100%;
+	overflow: auto !important;
+	position: relative !important;
 }
 body {
 	font-family: 'IBM Plex Sans Thai', 'Helvetica Neue', sans-serif;
@@ -19,20 +21,20 @@ html {
 
 @layer components {
 	body {
-		@apply bg-light;
+		@apply bg-light text-dark;
+	}
+
+	hr {
+		@apply my-8 h-px border-0 bg-gray-200;
 	}
 
 	.input-primary > label {
-		@apply mb-2 block text-sm font-medium text-gray-900;
+		@apply mb-3 block text-sm font-medium text-gray-900;
 	}
 
-	.input-primary > input {
-		@apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500;
-	}
-	.input-primary > select {
-		@apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500;
-	}
+	.input-primary > input,
+	.input-primary > select,
 	.input-primary > textarea {
-		@apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500;
+		@apply block w-full rounded-lg border border-primary-300 bg-primary-100 p-2.5 text-sm text-dark transition-shadow focus:ring-4 focus:ring-primary-200;
 	}
 }

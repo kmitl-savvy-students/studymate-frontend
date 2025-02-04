@@ -33,6 +33,7 @@
 	"editor.renderFinalNewline": "off",
 	"editor.insertSpaces": false,
 	"editor.wordWrap": "off",
+	"editor.foldingImportsByDefault": true,
 	"editor.foldingStrategy": "auto",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.codeActionsOnSave": {

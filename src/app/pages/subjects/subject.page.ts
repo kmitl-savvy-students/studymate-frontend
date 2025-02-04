@@ -1,22 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnChanges, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SDMilterBarComponent } from '@components/filter-bar/filter-bar.component';
+import { SDMPaginationComponent } from '@components/pagination/pagination.component';
+import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
+import { SDMSelectComponent } from '@components/select/select.component';
+import { SDMSubjectComponent } from '@components/subject/subject.component';
+import { Curriculum } from '@models/Curriculum.model';
+import { DropdownList, SelectedData } from '@models/SdmAppService.model';
+import { SubjectCardData } from '@models/SubjectCardData.model';
+import { User } from '@models/User.model';
+import { APIManagementService } from '@services/api-management.service';
 import { initFlowbite } from 'flowbite';
-import { SDMilterBarComponent } from '../../components/filter-bar/filter-bar.component';
-import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
-import { SDMSearchBarComponent } from '../../components/search-bar/search-bar.component';
-import { SDMSelectComponent } from '../../components/select/select.component';
-import { SDMSubjectComponent } from '../../components/subject/subject.component';
-import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
-import { APIManagementService } from '../../shared/services/api-management.service.js';
-import { DropdownList, SelectedData } from './../../shared/models/SdmAppService.model.js';
-import { classYearList, departmentList, engineerDeList, engineerFacList, facultyList, genedDeList, genedFacList, semesterList, subjects_added, yearsList } from './subject-page-data';
-
-import { User } from '../../shared/models/User.model';
-
-import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { Curriculum } from '../../shared/models/Curriculum.model.js';
+import { classYearList, departmentList, engineerDeList, engineerFacList, facultyList, genedDeList, genedFacList, semesterList, subjects_added, yearsList } from './subject-page-data';
 
 @Component({
 	selector: 'sdm-page-subject',

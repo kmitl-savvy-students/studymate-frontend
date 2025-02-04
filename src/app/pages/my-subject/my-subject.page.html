@@ -1,17 +1,24 @@
-<!-- my-subject.page.html -->
-<div class="mt-4 flex justify-between">
-	<p class="text-xl font-medium text-dark-100">{{ curriculumName }}</p>
-	<div class="flex gap-x-2">
-		<button data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal" class="rounded-lg border border-red-400 bg-white px-3 py-1.5 text-base font-medium text-dark-100 hover:bg-red-400 hover:text-white focus:bg-red-400 focus:text-white">ลบข้อมูล Transcript</button>
-		<button data-modal-target="import-transcript-modal" data-modal-toggle="import-transcript-modal" class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120">อัปโหลด Transcript</button>
-	</div>
+<h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h2>
+<h1 class="text-3xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h1>
+<h2 class="text-xl opacity-50">{{ currentUser?.curriculum?.name_en }}</h2>
+
+<hr />
+
+<div class="flex flex-col gap-2">
+	<sdm-base-button icon="file-import" text="อัปโหลดไฟล์ Transcript ใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onUploadTranscript()"></sdm-base-button>
+	<sdm-base-button icon="trash-can" text="ลบข้อมูล Transcript ทั้งหมดออกจากระบบ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteTranscript()"></sdm-base-button>
 </div>
 
-<sdm-import-transcript-modal modalID="import-transcript-modal" headerModal="อัปโหลดไฟล์ Transcript ของคุณ"></sdm-import-transcript-modal>
-
-<div *ngIf="!isDataLoaded && !errorMessage" class="mt-9 text-center text-dark-100">
-	<p>กำลังโหลดข้อมูล...</p>
-</div>
-<div *ngIf="errorMessage" class="mt-9 text-center text-red-500">
-	<p>{{ errorMessage }}</p>
-</div>
+<sdm-base-modal #uploadTranscriptModal modalId="uploadTranscript" header="อัปโหลดไฟล์ Transcript ใหม่" (confirmEvent)="onConfirmUploadTranscript()">
+	<label for="transcript" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
+		<div class="flex flex-col items-center justify-center pb-6 pt-5">
+			<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-primary-300"></sdm-icon>
+			<p class="mb-2 text-base">
+				<span class="font-semibold">เลือก</span>
+				หรือวางไฟล์ Transcript ที่นี่
+			</p>
+			<p class="text-sm opacity-50">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
+		</div>
+		<input id="transcript" type="file" class="hidden" (change)="onTranscriptUploadInput($event)" />
+	</label>
+</sdm-base-modal>

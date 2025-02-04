@@ -15,10 +15,10 @@ import { SDMButtonNav } from './navbar-button.component';
 	styleUrl: 'navbar.component.css',
 })
 export class NavbarComponent implements OnInit {
+	constructor(private authService: AuthenticationService) {}
+
 	signedIn: boolean = false;
 	currentUser: User | null = null;
-
-	constructor(private authService: AuthenticationService) {}
 
 	ngOnInit(): void {
 		this.authService.signedIn$.subscribe((signedIn) => {

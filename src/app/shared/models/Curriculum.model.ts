@@ -1,10 +1,11 @@
 import { CurriculumGroup } from './CurriculumGroup.model';
-import { CurriculumType } from './CurriculumType.model';
+import { Program } from './Program.model';
 
 export class Curriculum {
 	constructor(
 		public id: number,
-		public curriculum_type: CurriculumType | null,
+		public kmitl_id: string,
+		public program: Program | null,
 		public year: number,
 		public name_th: string,
 		public name_en: string,

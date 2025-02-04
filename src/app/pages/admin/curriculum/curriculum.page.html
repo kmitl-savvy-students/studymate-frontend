@@ -1,14 +1,18 @@
 <div class="mb-3 flex">
-	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-white" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" (clickEvent)="navigateToCurriculumType()"></sdm-base-button>
+	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="navigateToProgram()"></sdm-base-button>
 </div>
 
-<h1 class="mt-5 text-3xl font-semibold">{{ curriculumType?.name_th }}</h1>
-<h2 class="text-xl opacity-50">{{ curriculumType?.name_en }}</h2>
+<h1 class="mt-5 text-3xl font-semibold">{{ program?.name_th }}</h1>
+<h2 class="text-xl opacity-50">{{ program?.name_en }}</h2>
 
 <hr class="my-4" />
 
 <sdm-base-modal #createCurriculumModal modalId="createCurriculum" header="สร้างหลักสูตรใหม่" (confirmEvent)="onConfirmCreate()">
 	<form [formGroup]="curriculumCreateForm">
+		<div class="input-primary mb-5">
+			<label for="kmitlId">รหัสอ้างอิงหลักสูตรจากสำนักทะเบียน KMITL</label>
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสหลักสูตร (ไม่จำเป็น)" required />
+		</div>
 		<div class="input-primary mb-5">
 			<label for="year">ปีหลักสูตร</label>
 			<input type="number" id="year" formControlName="year" placeholder="ปีหลักสูตร" required />
@@ -26,6 +30,10 @@
 
 <sdm-base-modal #editCurriculumModal modalId="editCurriculum" header="แก้ไขหลักสูตร" (confirmEvent)="onConfirmEdit()">
 	<form [formGroup]="curriculumEditForm">
+		<div class="input-primary mb-5">
+			<label for="kmitlId">รหัสอ้างอิงหลักสูตรจากสำนักทะเบียน KMITL</label>
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสหลักสูตร (ไม่จำเป็น)" required />
+		</div>
 		<div class="input-primary mb-5">
 			<label for="year">ปีหลักสูตร</label>
 			<input type="number" id="year" formControlName="year" placeholder="ปีหลักสูตร" required />
@@ -54,15 +62,15 @@
 		<div *ngIf="curriculums.length > 0" class="my-2 border p-5">
 			<ul class="flex flex-col gap-2">
 				<li *ngFor="let curriculum of curriculums" class="flex items-center justify-between">
-					<div (click)="navigateToCurriculumGroup(curriculum.id)" class="cursor-pointer text-lg hover:text-main-100">
+					<div (click)="navigateToCurriculumGroup(curriculum.id)" class="cursor-pointer text-lg hover:text-primary-300">
 						<div class="text-base font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ curriculum.year }}</div>
-						<div class="font-semibold">{{ curriculum.name_th }}</div>
+						<div class="font-semibold">({{ curriculum.kmitl_id }}) {{ curriculum.name_th }}</div>
 						<div class="text-sm opacity-50">{{ curriculum.name_en }}</div>
 					</div>
-					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-white" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" (clickEvent)="onEditCurriculum(curriculum)"></sdm-base-button>
+					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditCurriculum(curriculum)"></sdm-base-button>
 				</li>
 			</ul>
 		</div>
 	</div>
-	<sdm-base-button icon="plus" text="สร้างหลักสูตรใหม่" textColor="text-white" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" (clickEvent)="onCreateCurriculum()"></sdm-base-button>
+	<sdm-base-button icon="plus" text="สร้างหลักสูตรใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onCreateCurriculum()"></sdm-base-button>
 </div>

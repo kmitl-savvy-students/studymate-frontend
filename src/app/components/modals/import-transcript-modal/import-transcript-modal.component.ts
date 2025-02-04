@@ -1,17 +1,11 @@
-import {
-	AfterViewInit,
-	Component,
-	ElementRef,
-	Input,
-	ViewChild,
-} from '@angular/core';
-import { IconComponent } from '../../icon/icon.component';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpEventType } from '@angular/common/http';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { initFlowbite } from 'flowbite';
 import { AlertService } from '../../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../../shared/services/authentication/authentication.service';
 import { BackendService } from '../../../shared/services/backend.service';
-import { initFlowbite } from 'flowbite';
+import { IconComponent } from '../../icon/icon.component';
 
 @Component({
 	selector: 'sdm-import-transcript-modal',
@@ -74,10 +68,7 @@ export class ImportTranscriptComponent implements AfterViewInit {
 
 			this.authService.user$.subscribe((user) => {
 				if (!user) {
-					this.alertService.showAlert(
-						'error',
-						'ไม่พบผู้ใช้งาน กรุณาเข้าสู่ระบบอีกครั้ง',
-					);
+					this.alertService.showAlert('error', 'ไม่พบผู้ใช้งาน กรุณาเข้าสู่ระบบอีกครั้ง');
 					this.isUploading = false;
 					return;
 				}
@@ -107,8 +98,7 @@ export class ImportTranscriptComponent implements AfterViewInit {
 						},
 						error: (error) => {
 							console.error('Upload failed', error);
-							this.errorMessage =
-								'การอัปโหลดล้มเหลว กรุณาลองใหม่อีกครั้ง';
+							this.errorMessage = 'การอัปโหลดล้มเหลว กรุณาลองใหม่อีกครั้ง';
 							this.isUploading = false;
 							this.isSubmitDisabled = false;
 						},

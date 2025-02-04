@@ -1,6 +1,6 @@
 import { Department } from './Department';
 
-export class CurriculumType {
+export class Program {
 	constructor(
 		public id: number,
 		public department: Department | null,

@@ -1,8 +1,4 @@
-import {
-	CirriculumnList,
-	DropdownList,
-} from '../../shared/models/SdmAppService.model.js';
-import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+import { DropdownList } from '../../shared/models/SdmAppService.model.js';
 
 // export const yearsList: DropdownList[] = [
 // 	{ label: 'ปีการศึกษา 2567', value: 2567 },
@@ -40,21 +36,13 @@ export const departmentList: DropdownList[] = [
 	{ label: 'ศึกษาทั่วไป', value: '90' },
 ];
 
-export const engineerDeList: DropdownList[] = [
-	{ label: 'วิศวกรรมคอมพิวเตอร์', value: '05' },
-];
+export const engineerDeList: DropdownList[] = [{ label: 'วิศวกรรมคอมพิวเตอร์', value: '05' }];
 
-export const genedDeList: DropdownList[] = [
-	{ label: 'ศึกษาทั่วไป', value: '90' },
-];
+export const genedDeList: DropdownList[] = [{ label: 'ศึกษาทั่วไป', value: '90' }];
 
-export const engineerFacList: DropdownList[] = [
-	{ label: 'คณะวิศวกรรมศาสตร์', value: '01' },
-];
+export const engineerFacList: DropdownList[] = [{ label: 'คณะวิศวกรรมศาสตร์', value: '01' }];
 
-export const genedFacList: DropdownList[] = [
-	{ label: 'สำนักวิชาศึกษาทั่วไป', value: '90' },
-];
+export const genedFacList: DropdownList[] = [{ label: 'สำนักวิชาศึกษาทั่วไป', value: '90' }];
 
 // export const cirriculumList: CirliculumnDropdownList[] = [
 //     {label: 'วิศวกรรมคอมพิวเตอร์ พ.ศ. 2564', value: '06', uniqueId: 0o132, cirriculumYear: 2564},
