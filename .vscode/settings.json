@@ -33,6 +33,12 @@
 	"editor.renderFinalNewline": "off",
 	"editor.insertSpaces": false,
 	"editor.wordWrap": "off",
+	"editor.foldingStrategy": "auto",
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always",
+		"source.fixAll.eslint": "always"
+	},
 
 	"workbench.cloudChanges.autoResume": "off",
 	"workbench.cloudChanges.continueOn": "off",
@@ -59,8 +65,6 @@
 		"*.css": "tailwindcss"
 	},
 	"typescript.updateImportsOnFileMove.enabled": "always",
-
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
 
 	"files.autoSave": "off"
 }

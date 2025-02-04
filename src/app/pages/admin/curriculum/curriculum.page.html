@@ -1,0 +1,68 @@
+<div class="mb-3 flex">
+	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-white" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" (clickEvent)="navigateToCurriculumType()"></sdm-base-button>
+</div>
+
+<h1 class="mt-5 text-3xl font-semibold">{{ curriculumType?.name_th }}</h1>
+<h2 class="text-xl opacity-50">{{ curriculumType?.name_en }}</h2>
+
+<hr class="my-4" />
+
+<sdm-base-modal #createCurriculumModal modalId="createCurriculum" header="สร้างหลักสูตรใหม่" (confirmEvent)="onConfirmCreate()">
+	<form [formGroup]="curriculumCreateForm">
+		<div class="input-primary mb-5">
+			<label for="year">ปีหลักสูตร</label>
+			<input type="number" id="year" formControlName="year" placeholder="ปีหลักสูตร" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="nameTh">ชื่อหลักสูตรภาษาไทย</label>
+			<input type="text" id="nameTh" formControlName="nameTh" placeholder="ชื่อหลักสูตรภาษาไทย" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="nameEn">ชื่อหลักสูตรภาษาอังกฤษ</label>
+			<input type="text" id="nameEn" formControlName="nameEn" placeholder="ชื่อหลักสูตรภาษาอังกฤษ" required />
+		</div>
+	</form>
+</sdm-base-modal>
+
+<sdm-base-modal #editCurriculumModal modalId="editCurriculum" header="แก้ไขหลักสูตร" (confirmEvent)="onConfirmEdit()">
+	<form [formGroup]="curriculumEditForm">
+		<div class="input-primary mb-5">
+			<label for="year">ปีหลักสูตร</label>
+			<input type="number" id="year" formControlName="year" placeholder="ปีหลักสูตร" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="editNameTh">ชื่อหลักสูตรภาษาไทย</label>
+			<input type="text" id="editNameTh" formControlName="nameTh" placeholder="ชื่อหลักสูตรภาษาไทย" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="editNameEn">ชื่อหลักสูตรภาษาอังกฤษ</label>
+			<input type="text" id="editNameEn" formControlName="nameEn" placeholder="ชื่อหลักสูตรภาษาอังกฤษ" required />
+		</div>
+	</form>
+</sdm-base-modal>
+
+<div>
+	<h1 class="text-2xl font-semibold">เลือกหลักสูตร</h1>
+	<h2>หลักสูตรทั้งหมด</h2>
+	<div *ngIf="isLoading" class="my-2 text-center">
+		<div class="spinner-border animate-spin"></div>
+	</div>
+	<div *ngIf="!isLoading">
+		<div *ngIf="curriculums.length === 0" class="my-2 border p-5">
+			<div class="text-center">ไม่มีผลลัพธ์</div>
+		</div>
+		<div *ngIf="curriculums.length > 0" class="my-2 border p-5">
+			<ul class="flex flex-col gap-2">
+				<li *ngFor="let curriculum of curriculums" class="flex items-center justify-between">
+					<div (click)="navigateToCurriculumGroup(curriculum.id)" class="cursor-pointer text-lg hover:text-main-100">
+						<div class="text-base font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ curriculum.year }}</div>
+						<div class="font-semibold">{{ curriculum.name_th }}</div>
+						<div class="text-sm opacity-50">{{ curriculum.name_en }}</div>
+					</div>
+					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-white" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" (clickEvent)="onEditCurriculum(curriculum)"></sdm-base-button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<sdm-base-button icon="plus" text="สร้างหลักสูตรใหม่" textColor="text-white" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" (clickEvent)="onCreateCurriculum()"></sdm-base-button>
+</div>

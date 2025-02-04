@@ -1,160 +1,72 @@
 <div class="flex w-full gap-x-5">
 	<div class="flex-none">
 		<div class="grid grid-cols-2 gap-5">
-			<div
-				class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12"
-			>
+			<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
 				<div *ngIf="currentUser?.profile" class="h-32 w-32">
-					<sdm-icon
-						[src]="currentUser?.profile || null"
-						class="h-full w-full"
-					></sdm-icon>
+					<sdm-icon [src]="currentUser?.profile || null" class="h-full w-full"></sdm-icon>
 				</div>
 				<div *ngIf="!currentUser?.profile" class="h-32 w-32">
-					<sdm-icon
-						[src]="'images/default-user-avatar.png'"
-					></sdm-icon>
+					<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
 				</div>
 				<div class="text-center">
-					<div class="text-xl font-semibold text-dark-100">
-						{{ currentUser?.name_first }}
-					</div>
-					<div class="text-xl font-semibold text-dark-100">
-						{{ currentUser?.name_last }}
-					</div>
+					<div class="text-xl font-semibold text-dark-100">{{ currentUser?.name_first }}</div>
+					<div class="text-xl font-semibold text-dark-100">{{ currentUser?.name_last }}</div>
 				</div>
 			</div>
 			<div class="col-span-1 rounded-[20px] border border-main-25 p-5">
-				<div
-					class="grid grid-flow-col grid-rows-2 items-center text-center"
-				>
+				<div class="grid grid-flow-col grid-rows-2 items-center text-center">
 					<div class="row-span-1 text-sm">ลงแล้ว</div>
 					<div class="row-span-1 text-sm">หน่วยกิต</div>
-					<div class="row-span-2 text-lg font-medium text-teal-500">
-						118
-					</div>
+					<div class="row-span-2 text-lg font-medium text-teal-500">118</div>
 				</div>
 			</div>
 			<div class="col-span-1 rounded-[20px] border border-main-25 p-5">
-				<div
-					class="grid grid-flow-col grid-rows-2 items-center text-center"
-				>
+				<div class="grid grid-flow-col grid-rows-2 items-center text-center">
 					<div class="row-span-1 text-sm">ขาดอีก</div>
 					<div class="row-span-1 text-sm">หน่วยกิต</div>
-					<div class="row-span-2 text-lg font-medium text-red-400">
-						18
-					</div>
+					<div class="row-span-2 text-lg font-medium text-red-400">18</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div
-		class="grid w-full flex-1 grid-cols-1 rounded-[20px] border border-main-25 p-12"
-	>
+	<div class="grid w-full flex-1 grid-cols-1 rounded-[20px] border border-main-25 p-12">
 		<div class="grid w-full grid-cols-5 gap-y-7 pb-10">
-			<div class="col-span-4 text-xl font-medium text-dark-100">
-				โปรไฟล์
-			</div>
-			<button
-				(click)="editProfile()"
-				class="col-span-1 text-end text-base font-bold text-main-100 hover:text-main-120"
-			>
-				แก้ไขข้อมูล
-			</button>
-			<div class="col-span-1 mt-4 text-sm font-medium text-dark-75">
-				รูปโปรไฟล์
-			</div>
+			<div class="col-span-4 text-xl font-medium text-dark-100">โปรไฟล์</div>
+			<button (click)="editProfile()" class="col-span-1 text-end text-base font-bold text-main-100 hover:text-main-120">แก้ไขข้อมูล</button>
+			<div class="col-span-1 mt-4 text-sm font-medium text-dark-75">รูปโปรไฟล์</div>
 			<div *ngIf="currentUser?.profile" class="col-span-4 h-12 w-12">
-				<sdm-icon
-					[src]="currentUser?.profile || null"
-					class="h-full w-full text-main-25"
-				></sdm-icon>
+				<sdm-icon [src]="currentUser?.profile || null" class="h-full w-full text-main-25"></sdm-icon>
 			</div>
 			<div *ngIf="!currentUser?.profile" class="col-span-4 h-12 w-12">
 				<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
 			</div>
 			<div class="col-span-1 text-sm font-medium text-dark-75">ชื่อ</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				{{ currentUser?.name_first }}
-			</div>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				นามสกุล
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				{{ currentUser?.name_last }}
-			</div>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				รหัสนักศึกษา
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				{{ currentUser?.id }}
-			</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">{{ currentUser?.name_first }}</div>
+			<div class="col-span-1 text-sm font-medium text-dark-75">นามสกุล</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">{{ currentUser?.name_last }}</div>
+			<div class="col-span-1 text-sm font-medium text-dark-75">รหัสนักศึกษา</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">{{ currentUser?.id }}</div>
 			<div class="col-span-1 text-sm font-medium text-dark-75">คณะ</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				{{ currentUser?.curriculum?.degree_name_th }}
-			</div>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				สาขาวิชา
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				วิศวกรรมคอมพิวเตอร์
-			</div>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				ปีที่เข้าศึกษา
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				พ.ศ. 2564
-			</div>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				หลักสูตร
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				{{ currentUser?.curriculum?.name_th }} ({{
-				currentUser?.curriculum?.year }})
-			</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">{{ currentUser?.curriculum?.curriculum_type?.department?.faculty?.name_th }}</div>
+			<div class="col-span-1 text-sm font-medium text-dark-75">สาขาวิชา</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">{{ currentUser?.curriculum?.curriculum_type?.department?.name_th }}</div>
+			<div class="col-span-1 text-sm font-medium text-dark-75">หลักสูตร</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">พ.ศ. {{ currentUser?.curriculum?.year }} {{ currentUser?.curriculum?.name_th }}</div>
 		</div>
-		<div
-			class="grid w-full grid-cols-5 gap-y-7 border-t border-t-main-25 py-10"
-		>
-			<div class="col-span-4 text-xl font-medium text-dark-100">
-				บัญชีที่เข้าสู่ระบบ
-			</div>
-			<button
-				(click)="editAccount()"
-				class="col-span-1 text-end text-base font-bold text-main-100 hover:text-main-120"
-			>
-				เปลี่ยนรหัสผ่าน
-			</button>
+		<div class="grid w-full grid-cols-5 gap-y-7 border-t border-t-main-25 py-10">
+			<div class="col-span-4 text-xl font-medium text-dark-100">บัญชีที่เข้าสู่ระบบ</div>
+			<button (click)="editAccount()" class="col-span-1 text-end text-base font-bold text-main-100 hover:text-main-120">เปลี่ยนรหัสผ่าน</button>
 			<div class="col-span-1 text-sm font-medium text-dark-75">Email</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				64010359&#64;kmitl.ac.th
-			</div>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				Password
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				*******************
-			</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">64010359&#64;kmitl.ac.th</div>
+			<div class="col-span-1 text-sm font-medium text-dark-75">Password</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">*******************</div>
 		</div>
-		<div
-			class="grid w-full grid-cols-5 gap-y-7 border-t border-t-main-25 pt-10"
-		>
-			<div class="col-span-4 text-xl font-medium text-dark-100">
-				ทรานสคริปต์ของฉัน
-			</div>
-			<button
-				(click)="editTranscript()"
-				class="col-span-1 text-end text-base font-bold text-main-100 hover:text-main-120"
-			>
-				แก้ไข Transcript
-			</button>
-			<div class="col-span-1 text-sm font-medium text-dark-75">
-				Transcript File
-			</div>
-			<div class="col-span-4 text-base font-normal text-dark-100">
-				Transcript - Tanchanok Charungpattananon.pdf
-			</div>
+		<div class="grid w-full grid-cols-5 gap-y-7 border-t border-t-main-25 pt-10">
+			<div class="col-span-4 text-xl font-medium text-dark-100">ทรานสคริปต์ของฉัน</div>
+			<button (click)="editTranscript()" class="col-span-1 text-end text-base font-bold text-main-100 hover:text-main-120">แก้ไข Transcript</button>
+			<div class="col-span-1 text-sm font-medium text-dark-75">Transcript File</div>
+			<div class="col-span-4 text-base font-normal text-dark-100">Transcript - Tanchanok Charungpattananon.pdf</div>
 		</div>
 	</div>
 </div>

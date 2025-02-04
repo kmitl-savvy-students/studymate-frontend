@@ -77,16 +77,14 @@
 						"dev": {
 							"optimization": false,
 							"extractLicenses": false,
-							"sourceMap": true
+							"sourceMap": true,
+							"watch": true
 						}
 					},
 					"defaultConfiguration": "prod"
 				},
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
-					"options": {
-						"allowedHosts": ["preprod.savvystudymate.com"]
-					},
 					"configurations": {
 						"prod": {
 							"buildTarget": "studymate-frontend:build:prod"
@@ -107,6 +105,6 @@
 		}
 	},
 	"cli": {
-		"analytics": "a60f2b34-5891-4f61-99ef-8e06c684ba27"
+		"analytics": false
 	}
 }
