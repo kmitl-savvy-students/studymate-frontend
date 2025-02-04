@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"start": "ng serve --no-hmr",
-		"build-perprod": "ng build --configuration=preprod"
+		"build-preprod": "ng build --configuration=preprod"
 	},
 	"dependencies": {
 		"@angular/animations": "^19.0.0",
