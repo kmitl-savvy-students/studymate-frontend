@@ -40,7 +40,7 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
 
-            - name: Stop and Remove Container
+            - name: Stop and Remove Old Container
               run: |
                   docker compose -f docker-compose.preprod.yml down -v || true
 
@@ -60,10 +60,6 @@ jobs:
             labels: ['self-hosted', 'Linux', 'X64', 'front-runner']
 
         steps:
-            # - name: Stop and Remove Container
-            #   run: |
-            #       docker compose -f docker-compose.preprod.yml down -v || true
-
             - name: build container without cache
               run: |
                   docker compose -f docker-compose.preprod.yml build --no-cache

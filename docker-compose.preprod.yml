@@ -1,12 +1,4 @@
 services:
-    # frontend:
-    #     container_name: sdm-frontend-container
-    #     image: front-img
-    #     restart: always
-    #     networks:
-    #         - frontend-network
-        # volumes:
-        #     - ./dist:/app/dist/studymate-frontend
     frontend-nginx:
         container_name: sdm-frontend-nginx-container
         image: front-img
@@ -15,8 +7,6 @@ services:
             - frontend-network
         volumes:
             - ./nginx.preprod.conf:/etc/nginx/conf.d/default.conf
-        # depends_on:
-        #     - frontend
         labels:
             traefik.enable: 'true'
             traefik.http.services.sdm-frontend.loadbalancer.server.port: '80'
