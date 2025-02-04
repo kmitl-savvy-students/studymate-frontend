@@ -10,6 +10,7 @@ services:
         labels:
             traefik.enable: 'true'
             traefik.http.services.sdm-frontend.loadbalancer.server.port: '80'
+            traefik.http.services.sdm-frontend.loadbalancer.server.scheme: 'https'
             traefik.http.routers.sdm-frontend-https.entrypoints: 'websecure'
             traefik.http.routers.sdm-frontend-https.rule: 'Host(`preprod.savvystudymate.com`) || Host(`test.savvystudymate.com`)'
             traefik.http.routers.sdm-frontend-https.tls: 'true'

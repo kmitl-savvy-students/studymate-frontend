@@ -67,5 +67,6 @@ jobs:
             - name: Deploy application using Docker Compose
               run: |
                   docker compose -f docker-compose.preprod.yml up -d --force-recreate --remove-orphans
+                  
             - name: ✅✅ Finish ✅✅
               run: echo "All Passed => Fisnish !!"
