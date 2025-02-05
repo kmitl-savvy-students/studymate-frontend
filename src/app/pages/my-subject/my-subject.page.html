@@ -36,7 +36,11 @@
 			<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
 		</div>
 		<div *ngFor="let transcriptDetails of groupedTranscriptDetails">
-			<div class="mb-5">
+			<div *ngIf="transcriptDetails.year === 0" class="mb-5">
+				<div class="text-2xl font-semibold">หน่วยกิตเทียบโอน</div>
+				<div class="text-base opacity-50">Transfer Credit</div>
+			</div>
+			<div *ngIf="transcriptDetails.year !== 0" class="mb-5">
 				<div class="text-2xl font-semibold">ผลการเรียน ปีการศึกษา พ.ศ. {{ transcriptDetails.year + 543 }}</div>
 				<div class="text-base opacity-50">ภาคเรียนที่ {{ transcriptDetails.term }}</div>
 			</div>

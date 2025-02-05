@@ -85,7 +85,7 @@ export class SDMPageMySubject implements OnInit {
 		});
 		this.groupedTranscriptDetails = [];
 		this.transcript.details.forEach((transcriptDetails) => {
-			let group = this.groupedTranscriptDetails.find((g) => g.year === transcriptDetails.teachtable?.year && g.term === transcriptDetails.teachtable.term);
+			let group = this.groupedTranscriptDetails.find((g) => g.year === (transcriptDetails.teachtable?.year ?? 0) && g.term === (transcriptDetails.teachtable?.term ?? 0));
 			if (!group) {
 				group = { year: transcriptDetails.teachtable?.year ?? 0, term: transcriptDetails.teachtable?.term ?? 0, details: [] };
 				this.groupedTranscriptDetails.push(group);

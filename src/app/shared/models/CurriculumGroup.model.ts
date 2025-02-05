@@ -1,3 +1,5 @@
+import { CurriculumGroupSubject } from './CurriculumGroupSubject';
+
 export class CurriculumGroup {
 	constructor(
 		public id: number,
@@ -6,6 +8,6 @@ export class CurriculumGroup {
 		public name: string,
 		public credit: number,
 		public children: CurriculumGroup[],
-		public subjects_allowed: string[],
+		public subjects: CurriculumGroupSubject[],
 	) {}
 }
