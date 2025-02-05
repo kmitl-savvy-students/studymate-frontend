@@ -1,0 +1,59 @@
+<h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h2>
+<h1 class="text-3xl font-semibold">ความคืบหน้าของการลงเรียนวิชาต่างๆ ตามโครงสร้างหลักสูตร</h1>
+<h2 class="text-xl opacity-50">{{ currentUser?.curriculum?.name_en }}</h2>
+
+<hr />
+
+<div *ngIf="curriculum?.curriculum_group">
+	<div data-accordion="collapse">
+		<div id="curriculum-group-accordion-root">
+			<!-- Button to toggle the root accordion -->
+			<button class="mt-2 flex items-center gap-2" [attr.data-accordion-target]="'#curriculum-group-accordion-' + curriculum?.curriculum_group?.id" (click)="toggleAccordion(curriculum?.curriculum_group?.id ?? -1)">
+				<span [class.rotate-90]="isAccordionOpen(curriculum?.curriculum_group?.id ?? -1)">▶</span>
+				<div class="flex gap-5 px-5 py-2">
+					<div class="flex items-center gap-4 text-lg">
+						<div>
+							<div class="text-start font-semibold">โครงสร้างหลักสูตร</div>
+							<div class="-mt-1 text-sm opacity-75">
+								เงื่อนไข :
+								<span class="font-semibold text-red-700"> {{ curriculum?.curriculum_group?.type }} ({{ curriculum?.curriculum_group?.credit }}) </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</button>
+		</div>
+
+		<!-- Root group container -->
+		<div [id]="'curriculum-group-accordion-' + curriculum?.curriculum_group?.id" [class.hidden]="!isAccordionOpen(curriculum?.curriculum_group?.id ?? -1)">
+			<ng-container *ngTemplateOutlet="renderNode; context: { $implicit: curriculum?.curriculum_group?.children, level: 1 }"></ng-container>
+		</div>
+
+		<!-- Recursive template for child groups -->
+		<ng-template #renderNode let-node let-level="level">
+			<ul>
+				<li *ngFor="let child of node" class="mb-1" [style.padding-left.px]="level * 20">
+					<button class="mt-2 flex items-center gap-2" [attr.data-accordion-target]="'#curriculum-group-accordion-' + child.id" (click)="toggleAccordion(child.id)">
+						<span [class.rotate-90]="isAccordionOpen(child.id)">▶</span>
+						<div class="flex gap-5 px-5 py-2">
+							<div class="flex items-center gap-4 text-lg">
+								<div>
+									<div class="text-start font-semibold">{{ child.name }}</div>
+									<div class="-mt-1 text-sm opacity-75">
+										เงื่อนไข :
+										<span class="font-semibold text-red-700">{{ child.type }} ({{ child.credit }})</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</button>
+
+					<!-- Child group container -->
+					<div [id]="'curriculum-group-accordion-' + child.id" [class.hidden]="!isAccordionOpen(child.id)">
+						<ng-container *ngTemplateOutlet="renderNode; context: { $implicit: child.children, level: level + 1 }"></ng-container>
+					</div>
+				</li>
+			</ul>
+		</ng-template>
+	</div>
+</div>

@@ -4,6 +4,7 @@ import { SDMPageCurriculum } from '@pages/admin/curriculum/curriculum.page';
 import { SDMPageDepartment } from '@pages/admin/department/department.page';
 import { SDMPageFaculty } from '@pages/admin/faculty/faculty.page';
 import { SDMPageProgram } from '@pages/admin/program/program.page';
+import { SDMPageCurriculumProgressTracker } from '@pages/curriculum-progress-tracker/curriculum-progress-tracker.page';
 import { SDMPageHome } from '@pages/home/home.page';
 import { SDMPageMySubject } from '@pages/my-subject/my-subject.page';
 import { SDMPageNotFound } from '@pages/page-not-found/page-not-found.page';
@@ -47,6 +48,7 @@ export const routes: Routes = [
 	// #region Others
 	{ path: 'review', component: SDMPageReview },
 	{ path: 'my-subject', component: SDMPageMySubject, canActivate: [AuthenticationGuard] },
+	{ path: 'curriculum-progress-tracker', component: SDMPageCurriculumProgressTracker, canActivate: [AuthenticationGuard] },
 	{ path: 'profile', component: SDMPageProfile, canActivate: [AuthenticationGuard] },
 	// #endregion
 

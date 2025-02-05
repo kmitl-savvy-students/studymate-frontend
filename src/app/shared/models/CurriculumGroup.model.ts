@@ -6,5 +6,6 @@ export class CurriculumGroup {
 		public name: string,
 		public credit: number,
 		public children: CurriculumGroup[],
+		public subjects_allowed: string[],
 	) {}
 }

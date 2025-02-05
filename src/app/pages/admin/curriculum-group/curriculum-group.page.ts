@@ -141,6 +141,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			type: 'REQUIRED_ALL',
 			credit: 0,
 			children: [],
+			subjects_allowed: [],
 		};
 
 		this.loadingService.show(() => {
@@ -199,6 +200,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			type: this.addNodeForm.value.type,
 			credit: 0,
 			children: [],
+			subjects_allowed: [],
 		};
 		this.loadingService.show(() => {
 			this.http
@@ -237,6 +239,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			type: this.editNodeForm.value.type,
 			credit: this.editNodeForm.value.credit,
 			children: [],
+			subjects_allowed: [],
 		};
 		this.loadingService.show(() => {
 			this.http
