@@ -52,6 +52,7 @@ import { EMPTY } from 'rxjs';
 		SDMPaginationComponent,
 		CommonModule,
 		SDMSubjectComponent,
+		SDMilterBarComponent,
 	],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
