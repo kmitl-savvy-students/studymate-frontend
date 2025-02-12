@@ -7,6 +7,7 @@ export class CurriculumGroup {
 		public type: string,
 		public name: string,
 		public credit: number,
+		public color: string,
 		public children: CurriculumGroup[],
 		public subjects: CurriculumGroupSubject[],
 	) {}

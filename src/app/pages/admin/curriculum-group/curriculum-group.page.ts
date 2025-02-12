@@ -52,11 +52,13 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: [''],
 			type: ['REQUIRED_ALL'],
 			credit: 0,
+			color: ['#FFFFFF'],
 		});
 		this.editNodeForm = this.fb.group({
 			name: [''],
 			type: ['REQUIRED_ALL'],
 			credit: 0,
+			color: ['#FFFFFF'],
 		});
 		this.addSubjectForm = this.fb.group({
 			subjects: [''],
@@ -140,6 +142,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: 'Root',
 			type: 'REQUIRED_ALL',
 			credit: 0,
+			color: '#FFFFFF',
 			children: [],
 			subjects: [],
 		};
@@ -199,6 +202,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: this.addNodeForm.value.name,
 			type: this.addNodeForm.value.type,
 			credit: 0,
+			color: this.addNodeForm.value.color,
 			children: [],
 			subjects: [],
 		};
@@ -221,7 +225,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #region Edit Node
 	onEditNode(node: CurriculumGroup): void {
 		this.currentParentNode = { ...node };
-		this.editNodeForm.patchValue({ name: node.name, type: node.type, credit: node.credit });
+		this.editNodeForm.patchValue({ name: node.name, type: node.type, credit: node.credit, color: node.color });
 		this.editNodeModal.show();
 	}
 	onUpdateNodeType(event: any): void {
@@ -238,6 +242,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: this.editNodeForm.value.name,
 			type: this.editNodeForm.value.type,
 			credit: this.editNodeForm.value.credit,
+			color: this.editNodeForm.value.color,
 			children: [],
 			subjects: [],
 		};

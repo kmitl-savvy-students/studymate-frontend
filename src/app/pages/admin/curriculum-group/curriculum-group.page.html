@@ -32,7 +32,7 @@
 		</ul>
 		<ng-template #renderNode let-node>
 			<li *ngFor="let child of node" class="mb-1">
-				<div class="flex gap-5 border-b border-l px-5 py-2">
+				<div class="flex gap-5 border-b border-l px-5 py-2" [style.backgroundColor]="child.color">
 					<div class="flex items-center gap-4 text-lg">
 						<sdm-icon *ngIf="child.children?.length" icon="folder-open" />
 						<sdm-icon *ngIf="!child.children?.length" icon="table-list" />
@@ -62,6 +62,10 @@
 			<input type="text" id="name" formControlName="name" placeholder="ชื่อกลุ่ม" required />
 		</div>
 		<div class="input-primary mb-5">
+			<label for="color">สีกลุ่ม</label>
+			<input type="color" class="h-20" id="color" formControlName="color" placeholder="สีกลุ่ม" required />
+		</div>
+		<div class="input-primary mb-5">
 			<label for="type">เงื่อนไขที่กลุ่มนี้จะสมบูรณ์</label>
 			<select id="type" formControlName="type" required>
 				<option value="REQUIRED_ALL">ต้องลงทุกวิชาที่กำหนดให้ครบหรือกลุ่มย่อยในกลุ่มต้องสมบูรณ์ทุกกลุ่ม (REQUIRED_ALL)</option>
@@ -77,6 +81,10 @@
 		<div class="input-primary mb-5">
 			<label for="name">ชื่อกลุ่ม</label>
 			<input type="text" id="name" formControlName="name" placeholder="ชื่อกลุ่ม" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="color">สีกลุ่ม</label>
+			<input type="color" class="h-20" id="color" formControlName="color" placeholder="สีกลุ่ม" required />
 		</div>
 		<div class="input-primary mb-5">
 			<label for="type">เงื่อนไขที่กลุ่มนี้จะสมบูรณ์</label>
