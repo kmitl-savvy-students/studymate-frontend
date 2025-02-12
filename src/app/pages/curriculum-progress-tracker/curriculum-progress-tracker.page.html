@@ -1,0 +1,67 @@
+<h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h2>
+<h1 class="text-3xl font-semibold">ความคืบหน้าของการลงเรียนวิชาต่างๆ ตามโครงสร้างหลักสูตร</h1>
+<h2 class="text-xl opacity-50">{{ currentUser?.curriculum?.name_en }}</h2>
+
+<hr />
+
+<div *ngIf="currentUser?.curriculum?.curriculum_group" class="mt-5">
+	<div data-accordion="collapse">
+		<div class="mb-2 flex flex-wrap items-center gap-3">
+			<input type="checkbox" class="h-5 w-5 accent-green-600" [checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)" disabled />
+			<button class="flex items-center gap-2 rounded border px-4 py-2 font-medium hover:bg-gray-100" [attr.data-accordion-target]="'#group-' + currentUser?.curriculum?.curriculum_group?.id" (click)="toggleAccordion(currentUser?.curriculum?.curriculum_group?.id ?? -1)">
+				<span
+					class="transition-transform duration-200"
+					[ngClass]="{
+						'rotate-90': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1)
+					}">
+					▶
+				</span>
+				<div class="text-left">
+					<div class="font-semibold">โครงสร้างหลักสูตร</div>
+					<div class="text-sm opacity-75">ประเภท: {{ currentUser?.curriculum?.curriculum_group?.type }}</div>
+				</div>
+			</button>
+			<div class="text-sm text-gray-600">หน่วยกิตที่ได้รับ: {{ groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }} / {{ groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
+		</div>
+
+		<div [id]="'group-' + currentUser?.curriculum?.curriculum_group?.id" [class.hidden]="!isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1)" class="ml-4">
+			<ng-container *ngTemplateOutlet="renderGroup; context: { $implicit: currentUser?.curriculum?.curriculum_group?.children, level: 1 }"></ng-container>
+		</div>
+	</div>
+</div>
+
+<ng-template #renderGroup let-node let-level="level">
+	<ul>
+		<li *ngFor="let child of node" class="mb-3" [style.padding-left.px]="level * 20">
+			<div class="flex flex-wrap items-center gap-3">
+				<input type="checkbox" class="h-5 w-5 accent-green-600" [checked]="groupComplete.get(child.id)" disabled />
+				<button class="flex items-center gap-2 rounded border px-4 py-2 font-medium hover:bg-gray-100" [attr.data-accordion-target]="'#group-' + child.id" (click)="toggleAccordion(child.id)">
+					<span class="transition-transform duration-200" [ngClass]="{ 'rotate-90': isAccordionOpen(child.id) }"> ▶ </span>
+					<div class="text-left">
+						<div class="font-semibold">{{ child.name }}</div>
+						<div class="text-sm opacity-75">ประเภท: {{ child.type }}</div>
+					</div>
+				</button>
+				<div class="text-sm text-gray-600">หน่วยกิตที่ได้รับ: {{ groupCreditUsed.get(child.id) || 0 }} / {{ groupCreditRequired.get(child.id) || 0 }}</div>
+			</div>
+
+			<div [id]="'group-' + child.id" class="ml-4 mt-2" [class.hidden]="!isAccordionOpen(child.id)">
+				<div *ngIf="groupMatches.get(child.id)?.length" class="mb-2 rounded bg-blue-50 p-3">
+					<p class="mb-1 font-semibold text-blue-800">รายวิชาที่จับคู่กับกลุ่มนี้:</p>
+					<ul class="list-disc pl-5">
+						<li *ngFor="let md of groupMatches.get(child.id)">{{ md.subject?.name_en }} ({{ md.subject?.credit }} หน่วยกิต) - เกรด {{ md.grade }}</li>
+					</ul>
+				</div>
+				<ng-container *ngTemplateOutlet="renderGroup; context: { $implicit: child.children, level: level + 1 }"></ng-container>
+			</div>
+		</li>
+	</ul>
+</ng-template>
+
+<div *ngIf="notFittedSubjects.length > 0" class="mt-5">
+	<hr />
+	<h3 class="mt-3 font-bold text-red-600">รายวิชาที่ยังไม่อยู่ในกลุ่มใด:</h3>
+	<ul class="ml-5 list-disc">
+		<li *ngFor="let nf of notFittedSubjects">{{ nf.subject?.name_en }} ({{ nf.subject?.credit }} หน่วยกิต) - เกรด {{ nf.grade }}</li>
+	</ul>
+</div>

@@ -1,34 +1,18 @@
 import { CommonModule } from '@angular/common';
-import {
-	Component,
-	EventEmitter,
-	Input,
-	Output,
-	ViewChild,
-} from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
-import { SDMSelectComponent } from '../select/select.component';
-import {
-	semesterList,
-	yearsList,
-} from '../../pages/subject/subject-page-data.js';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { semesterList, yearsList } from '../../pages/subjects/subject-page-data.js';
 import { SelectedData } from '../../shared/models/SdmAppService.model.js';
+import { User } from '../../shared/models/User.model.js';
+import { SDMButtonLink } from '../buttons/button-link.component';
+import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
 import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
-import { SDMButtonLink } from '../buttons/button-link.component';
-import { User } from '../../shared/models/User.model.js';
+import { SDMSelectComponent } from '../select/select.component';
 
 @Component({
 	selector: 'sdm-write-review-box',
 	standalone: true,
-	imports: [
-		CommonModule,
-		IconComponent,
-		SDMSelectComponent,
-		SDMRatingComponent,
-		SDMRichTextEditor,
-		SDMButtonLink,
-	],
+	imports: [CommonModule, IconComponent, SDMSelectComponent, SDMRatingComponent, SDMRichTextEditor, SDMButtonLink],
 	templateUrl: './write-review-box.component.html',
 	styleUrl: './write-review-box.component.css',
 })

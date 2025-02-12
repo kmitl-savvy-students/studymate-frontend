@@ -7,7 +7,6 @@ import { APIManagementService } from './api-management.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 	constructor(private apiManagementService: APIManagementService) {
-		// Automatically attempt to load the token when the service is instantiated
 		this.getToken().subscribe();
 	}
 

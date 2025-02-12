@@ -1,0 +1,59 @@
+<div class="mb-3 flex">
+	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="navigateToDepartment()"></sdm-base-button>
+</div>
+
+<h1 class="mt-5 text-3xl font-semibold">{{ department?.name_th }}</h1>
+<h2 class="text-xl opacity-50">{{ department?.name_en }}</h2>
+
+<hr class="my-4" />
+
+<sdm-base-modal #createProgramModal modalId="createProgram" header="สร้างแผนการเรียนใหม่" (confirmEvent)="onConfirmCreate()">
+	<form [formGroup]="programCreateForm">
+		<div class="input-primary mb-5">
+			<label for="nameTh">ชื่อแผนการเรียนภาษาไทย</label>
+			<input type="text" id="nameTh" formControlName="nameTh" placeholder="ชื่อแผนการเรียนภาษาไทย" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="nameEn">ชื่อแผนการเรียนภาษาอังกฤษ</label>
+			<input type="text" id="nameEn" formControlName="nameEn" placeholder="ชื่อแผนการเรียนภาษาอังกฤษ" required />
+		</div>
+	</form>
+</sdm-base-modal>
+
+<sdm-base-modal #editProgramModal modalId="editProgram" header="แก้ไขแผนการเรียน" (confirmEvent)="onConfirmEdit()">
+	<form [formGroup]="programEditForm">
+		<div class="input-primary mb-5">
+			<label for="editNameTh">ชื่อแผนการเรียนภาษาไทย</label>
+			<input type="text" id="editNameTh" formControlName="nameTh" placeholder="ชื่อแผนการเรียนภาษาไทย" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="editNameEn">ชื่อแผนการเรียนภาษาอังกฤษ</label>
+			<input type="text" id="editNameEn" formControlName="nameEn" placeholder="ชื่อแผนการเรียนภาษาอังกฤษ" required />
+		</div>
+	</form>
+</sdm-base-modal>
+
+<div>
+	<h1 class="text-2xl font-semibold">เลือกแผนการเรียน</h1>
+	<h2>แผนการเรียนทั้งหมด</h2>
+	<div *ngIf="isLoading" class="my-2 text-center">
+		<div class="spinner-border animate-spin"></div>
+	</div>
+	<div *ngIf="!isLoading">
+		<div *ngIf="programs.length === 0" class="my-2 border p-5">
+			<div class="text-center">ไม่มีผลลัพธ์</div>
+		</div>
+		<div *ngIf="programs.length > 0" class="my-2 border p-5">
+			<ul class="flex flex-col gap-2">
+				<li *ngFor="let program of programs" class="flex items-center justify-between">
+					<div (click)="navigateToCurriculum(program.id)" class="cursor-pointer text-lg hover:text-primary-300">
+						<div class="font-semibold">{{ program.name_th }}</div>
+						<div class="text-sm opacity-50">{{ program.name_en }}</div>
+					</div>
+					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditProgram(program)"></sdm-base-button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<sdm-base-button icon="plus" text="สร้างแผนการเรียนใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onCreateProgram()"></sdm-base-button>
+</div>

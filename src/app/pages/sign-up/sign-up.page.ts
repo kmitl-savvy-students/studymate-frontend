@@ -1,88 +1,31 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { SDMAuthForm } from '../../components/authentication/auth-form.component';
-import { SDMGoogleButton } from '../../components/buttons/google/google-button.component';
 import { SDMBaseButton } from '../../components/buttons/base-button.component';
 import { SDMButtonLink } from '../../components/buttons/button-link.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { SDMGoogleButton } from '../../components/buttons/google/google-button.component';
 import { AlertService } from '../../shared/services/alert/alert.service';
-import { LoadingService } from '../../shared/services/loading/loading.service';
-import { finalize } from 'rxjs';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
+import { LoadingService } from '../../shared/services/loading/loading.service';
 
 @Component({
 	selector: 'sdm-page-sign-up',
 	standalone: true,
-	imports: [
-		SDMAuthForm,
-		SDMGoogleButton,
-		SDMBaseButton,
-		SDMButtonLink,
-		ReactiveFormsModule,
-	],
+	imports: [SDMAuthForm, SDMGoogleButton, SDMBaseButton, SDMButtonLink, ReactiveFormsModule],
 	template: `
-		<sdm-auth-form
-			authHeader="สมัครสมาชิก"
-			[formGroup]="signUpFormGroup"
-			[onSubmit]="onSubmit"
-		>
+		<sdm-auth-form authHeader="สมัครสมาชิก" [formGroup]="signUpFormGroup" [onSubmit]="onSubmit">
 			<div class="flex flex-col gap-2">
-				<input
-					formControlName="name_first"
-					type="text"
-					required
-					placeholder="ชื่อจริง"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<input
-					formControlName="name_last"
-					type="text"
-					required
-					placeholder="นามสกุล"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<input
-					formControlName="name_nick"
-					type="text"
-					required
-					placeholder="ชื่อเล่น"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<input
-					formControlName="id"
-					type="text"
-					autocomplete="username"
-					required
-					placeholder="รหัสนักศึกษา"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<input
-					formControlName="password"
-					type="password"
-					autocomplete="new-password"
-					required
-					placeholder="รหัสผ่าน"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<input
-					formControlName="password_confirm"
-					type="password"
-					autocomplete="new-password"
-					required
-					placeholder="ยืนยันรหัสผ่าน"
-					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100"
-				/>
-				<sdm-base-button
-					[isSubmit]="true"
-					text="สมัครสมาชิก"
-					icon="user-plus"
-					textColor="text-white"
-					textColorHover="text-white"
-					backgroundColor="bg-main-100"
-					backgroundColorHover="bg-main-120"
-				/>
+				<input formControlName="name_first" type="text" required placeholder="ชื่อจริง" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<input formControlName="name_last" type="text" required placeholder="นามสกุล" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<input formControlName="name_nick" type="text" required placeholder="ชื่อเล่น" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<input formControlName="id" type="text" autocomplete="username" required placeholder="รหัสนักศึกษา" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<input formControlName="password" type="password" autocomplete="new-password" required placeholder="รหัสผ่าน" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<input formControlName="password_confirm" type="password" autocomplete="new-password" required placeholder="ยืนยันรหัสผ่าน" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<sdm-base-button [isSubmit]="true" text="สมัครสมาชิก" icon="user-plus" textColor="text-light" textColorHover="text-light" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" />
 				<div class="my-2 flex items-center gap-5">
 					<hr class="w-full text-main-25" />
 					<span class="text-dark-100">หรือ</span>
@@ -91,15 +34,8 @@ import { AuthenticationService } from '../../shared/services/authentication/auth
 				<sdm-google-button [isSignUp]="true" />
 			</div>
 			<div class="mt-4 flex items-center justify-center gap-3.5">
-				<span class="text-center text-dark-50">
-					เป็นสมาชิกอยู่แล้ว?
-				</span>
-				<sdm-button-link
-					link="/sign-in"
-					text="เข้าสู่ระบบ"
-					textColorHover="text-main-100"
-					[isUnderlined]="true"
-				/>
+				<span class="text-dark-50 text-center"> เป็นสมาชิกอยู่แล้ว? </span>
+				<sdm-button-link link="/sign-in" text="เข้าสู่ระบบ" textColorHover="text-primary-300" [isUnderlined]="true" />
 			</div>
 		</sdm-auth-form>
 	`,
@@ -135,10 +71,7 @@ export class SDMPageSignUp {
 				this.handleGoogleCallback(authCode);
 			} else if (error) {
 				console.error('Google Sign-Up Callback error:', error);
-				this.alertService.showAlert(
-					'error',
-					'ไม่สามารถสมัครสมาชิกด้วย Google ได้ กรุณาลองอีกครั้ง',
-				);
+				this.alertService.showAlert('error', 'ไม่สามารถสมัครสมาชิกด้วย Google ได้ กรุณาลองอีกครั้ง');
 				this.router.navigate(['/sign-up']);
 			}
 		});
@@ -150,18 +83,12 @@ export class SDMPageSignUp {
 			.then(
 				(response) => {
 					this.authService.signIn(response.id);
-					this.alertService.showAlert(
-						'success',
-						'สมัครสมาชิกด้วย Google สำเร็จ!',
-					);
+					this.alertService.showAlert('success', 'สมัครสมาชิกด้วย Google สำเร็จ!');
 					this.router.navigate(['/']);
 				},
 				(error) => {
 					console.error('Google Sign-Up Callback error:', error);
-					this.alertService.showAlert(
-						'error',
-						'ไม่สามารถสมัครสมาชิกด้วย Google ได้ กรุณาลองอีกครั้ง',
-					);
+					this.alertService.showAlert('error', 'ไม่สามารถสมัครสมาชิกด้วย Google ได้ กรุณาลองอีกครั้ง');
 					this.router.navigate(['/sign-up']);
 				},
 			)
@@ -185,26 +112,17 @@ export class SDMPageSignUp {
 					)
 					.subscribe({
 						next: (_) => {
-							this.alertService.showAlert(
-								'success',
-								'สมัครสมาชิกสำเร็จ!',
-							);
+							this.alertService.showAlert('success', 'สมัครสมาชิกสำเร็จ!');
 							this.router.navigate(['/sign-in']);
 						},
 						error: (error) => {
 							console.error('Sign-up failed:', error);
-							this.alertService.showAlert(
-								'error',
-								'ไม่สามารถสมัครสมาชิกได้ กรุณาลองอีกครั้ง',
-							);
+							this.alertService.showAlert('error', 'ไม่สามารถสมัครสมาชิกได้ กรุณาลองอีกครั้ง');
 						},
 					});
 			});
 		} else {
-			this.alertService.showAlert(
-				'error',
-				'กรุณากรอกข้อมูลในฟอร์มให้ถูกต้อง',
-			);
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลในฟอร์มให้ถูกต้อง');
 		}
 	}
 }

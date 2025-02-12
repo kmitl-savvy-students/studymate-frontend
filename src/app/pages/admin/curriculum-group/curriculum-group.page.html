@@ -1,0 +1,142 @@
+<div class="mb-3 flex">
+	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="navigateToCurriculum()"></sdm-base-button>
+</div>
+
+<h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ curriculum?.year }}</h2>
+<h1 class="text-3xl font-semibold">{{ curriculum?.name_th }}</h1>
+<h2 class="text-xl opacity-50">{{ curriculum?.name_en }}</h2>
+
+<hr class="my-4" />
+
+<div>
+	<h1 class="text-2xl font-semibold">จัดการโครงสร้างหลักสูตร</h1>
+	<div>
+		<ul *ngIf="rootNode" class="tree mt-2">
+			<li>
+				<div class="flex gap-5 border-b border-l px-5 py-2">
+					<div class="flex items-center gap-4 text-lg">
+						<sdm-icon icon="star-of-life" />
+						<div>
+							<div class="font-semibold">โครงสร้างหลักสูตร</div>
+							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ rootNode.type }} ({{ rootNode.credit }})</span></div>
+						</div>
+					</div>
+					<div class="flex">
+						<sdm-base-button icon="plus" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onAddChildNode(rootNode)" />
+					</div>
+				</div>
+				<ul *ngIf="rootNode.children?.length" class="child-list">
+					<ng-container *ngTemplateOutlet="renderNode; context: { $implicit: rootNode.children }"></ng-container>
+				</ul>
+			</li>
+		</ul>
+		<ng-template #renderNode let-node>
+			<li *ngFor="let child of node" class="mb-1">
+				<div class="flex gap-5 border-b border-l px-5 py-2" [style.backgroundColor]="child.color">
+					<div class="flex items-center gap-4 text-lg">
+						<sdm-icon *ngIf="child.children?.length" icon="folder-open" />
+						<sdm-icon *ngIf="!child.children?.length" icon="table-list" />
+						<div>
+							<div class="font-semibold">{{ child.name }}</div>
+							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ child.type }} ({{ child.credit }})</span></div>
+						</div>
+					</div>
+					<div class="flex gap-2">
+						<sdm-base-button icon="plus" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onAddChildNode(child)" />
+						<sdm-base-button icon="pen" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditNode(child)" />
+						<sdm-base-button *ngIf="!child.children?.length" icon="trash" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteNode(child)" />
+					</div>
+				</div>
+				<ul *ngIf="child.children?.length" class="child-list">
+					<ng-container *ngTemplateOutlet="renderNode; context: { $implicit: child.children }"></ng-container>
+				</ul>
+			</li>
+		</ng-template>
+	</div>
+</div>
+
+<sdm-base-modal #addNodeModal modalId="addNode" header="เพิ่มกลุ่มใหม่" (confirmEvent)="onConfirmAddNode()">
+	<form [formGroup]="addNodeForm">
+		<div class="input-primary mb-5">
+			<label for="name">ชื่อกลุ่ม</label>
+			<input type="text" id="name" formControlName="name" placeholder="ชื่อกลุ่ม" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="color">สีกลุ่ม</label>
+			<input type="color" class="h-20" id="color" formControlName="color" placeholder="สีกลุ่ม" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="type">เงื่อนไขที่กลุ่มนี้จะสมบูรณ์</label>
+			<select id="type" formControlName="type" required>
+				<option value="REQUIRED_ALL">ต้องลงทุกวิชาที่กำหนดให้ครบหรือกลุ่มย่อยในกลุ่มต้องสมบูรณ์ทุกกลุ่ม (REQUIRED_ALL)</option>
+				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
+				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
+				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
+			</select>
+		</div>
+	</form>
+</sdm-base-modal>
+<sdm-base-modal #editNodeModal modalId="editNode" header="แก้ไขกลุ่ม" (confirmEvent)="onConfirmEditNode()">
+	<form [formGroup]="editNodeForm">
+		<div class="input-primary mb-5">
+			<label for="name">ชื่อกลุ่ม</label>
+			<input type="text" id="name" formControlName="name" placeholder="ชื่อกลุ่ม" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="color">สีกลุ่ม</label>
+			<input type="color" class="h-20" id="color" formControlName="color" placeholder="สีกลุ่ม" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="type">เงื่อนไขที่กลุ่มนี้จะสมบูรณ์</label>
+			<select id="type" formControlName="type" required (input)="onUpdateNodeType($event)">
+				<option value="REQUIRED_ALL">ต้องลงทุกวิชาที่กำหนดให้ครบหรือกลุ่มย่อยในกลุ่มต้องสมบูรณ์ทุกกลุ่ม (REQUIRED_ALL)</option>
+				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
+				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
+				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
+			</select>
+		</div>
+		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL'" class="input-primary mb-5">
+			<label for="credit">จำนวนหน่วยกิตที่จะทำให้กลุ่มสมบูรณ์</label>
+			<input type="number" id="credit" formControlName="credit" placeholder="จำนวนหน่วยกิต" required />
+		</div>
+		<div *ngIf="!currentParentNode?.children?.length && currentParentNode?.type != 'FREE'" class="input-primary mb-5">
+			<label>จัดการรายวิชาที่สามารถลงได้ในกลุ่มนี้</label>
+			<sdm-base-button icon="table-list" text="จัดการรายวิชาในกลุ่ม" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-success-300" backgroundColorHover="hover:bg-success-400" (clickEvent)="onEditSubjects()" />
+		</div>
+	</form>
+</sdm-base-modal>
+<sdm-base-modal #editSubjectsModal modalId="editSubjects" header="จัดการรายวิชา">
+	<div class="mb-3 max-h-[500px] overflow-y-scroll">
+		<div>
+			<div *ngIf="isFetchingCurriculumGroupSubjects" class="flex animate-pulse items-center justify-center text-lg">
+				<sdm-icon icon="ellipsis" />
+			</div>
+			<div *ngIf="!isFetchingCurriculumGroupSubjects" class="flex flex-col gap-2 px-3 text-lg">
+				<div *ngIf="curriculumGroupSubjects.length == 0" class="= my-2 text-center">
+					<div class="font-semibold">ไม่พบรายวิชา</div>
+					<div class="-mt-1 text-sm opacity-75">กรุณาเพิ่มรายวิชา</div>
+				</div>
+				<div *ngFor="let curriculumGroupSubject of curriculumGroupSubjects" class="flex justify-between">
+					<div class="flex w-full justify-between">
+						<div class="truncate">
+							<div class="font-semibold">{{ curriculumGroupSubject.subject?.id }} {{ curriculumGroupSubject.subject?.name_th }}</div>
+							<div class="-mt-1 text-xs opacity-75">{{ curriculumGroupSubject.subject?.name_en }}</div>
+						</div>
+						<div><sdm-base-button icon="trash" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteSubject(curriculumGroupSubject.id)" /></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mb-5">
+		<sdm-base-button icon="plus" text="เพิ่มรายวิชา" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-success-300" backgroundColorHover="hover:bg-success-400" (clickEvent)="onAddSubject()" />
+	</div>
+</sdm-base-modal>
+<sdm-base-modal #addSubjectModal modalId="addSubject" header="เพิ่มรายวิชาในกลุ่ม" (confirmEvent)="onConfirmAddSubject()">
+	<form [formGroup]="addSubjectForm">
+		<div class="input-primary mb-5">
+			<label for="subjects">รหัสวิชา (สามารถใส่หลายๆ รหัสวิชาได้)</label>
+			<textarea id="subjects" formControlName="subjects" placeholder="12345678,12345678,12345678,12345678" required></textarea>
+		</div>
+	</form>
+</sdm-base-modal>

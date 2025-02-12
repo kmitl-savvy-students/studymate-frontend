@@ -1,6 +1,4 @@
-<nav
-	class="border-b-main-20 fixed left-0 right-0 top-0 z-40 border-b bg-white text-dark-100"
->
+<nav>
 	<div class="container mx-auto">
 		<div class="flex h-20 content-center justify-between">
 			<div class="flex items-center">
@@ -19,20 +17,8 @@
 				</ng-container>
 				<ng-template #guestOptions>
 					<div class="flex items-center gap-8">
-						<sdm-button-link
-							link="/sign-in"
-							text="เข้าสู่ระบบ"
-							textColorHover="text-main-100"
-							[isUnderlined]="true"
-						/>
-						<sdm-button-link
-							icon="user-plus"
-							link="/sign-up"
-							text="สมัครสมาชิก"
-							textColor="text-white"
-							backgroundColor="bg-main-100"
-							backgroundColorHover="bg-main-120"
-						/>
+						<sdm-button-link link="/sign-in" text="เข้าสู่ระบบ" [isUnderlined]="true" />
+						<sdm-button-link icon="user-plus" link="/sign-up" text="สมัครสมาชิก" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" />
 					</div>
 				</ng-template>
 			</div>

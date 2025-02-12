@@ -1,75 +1,23 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { AlertService, Alert } from './alert.service';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import {
-	trigger,
-	transition,
-	style,
-	animate,
-	keyframes,
-	state,
-} from '@angular/animations';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Alert, AlertService } from './alert.service';
 
 @Component({
 	selector: 'app-alert',
 	standalone: true,
 	imports: [CommonModule],
 	template: `
-		<div
-			*ngIf="alert"
-			@fadeInOut
-			class="fixed bottom-4 right-4 z-[9999] max-w-xs transform rounded-lg border p-4"
-			[ngClass]="alertClass"
-		>
-			<div
-				class="flex items-start gap-3"
-				[@bounce]="bounceState"
-				(@bounce.done)="onBounceDone()"
-			>
+		<div *ngIf="alert" @fadeInOut class="fixed bottom-4 right-4 z-[9999] max-w-xs transform rounded-lg p-4" [ngClass]="alertClass">
+			<div class="flex items-start gap-3" [@bounce]="bounceState" (@bounce.done)="onBounceDone()">
 				<div>
 					<p class="text-sm font-medium">{{ alert.message }}</p>
 				</div>
-				<button
-					class="ml-auto text-gray-400 hover:text-gray-600 focus:outline-none"
-					(click)="clearAlert()"
-				>
-					✕
-				</button>
+				<button class="ml-auto text-secondary-200 hover:text-secondary-300 focus:outline-none" (click)="clearAlert()">✕</button>
 			</div>
 		</div>
 	`,
-	animations: [
-		trigger('fadeInOut', [
-			transition(':enter', [
-				style({ opacity: 0, transform: 'translateY(20px)' }),
-				animate(
-					'200ms ease-out',
-					style({ opacity: 1, transform: 'translateY(0)' }),
-				),
-			]),
-			transition(':leave', [
-				animate(
-					'200ms ease-in',
-					style({ opacity: 0, transform: 'translateY(20px)' }),
-				),
-			]),
-		]),
-		trigger('bounce', [
-			state('inactive', style({ transform: 'translateY(0)' })),
-			state('active', style({ transform: 'translateY(0)' })),
-			transition('inactive => active', [
-				animate(
-					'400ms ease-in-out',
-					keyframes([
-						style({ transform: 'translateY(0)', offset: 0 }),
-						style({ transform: 'translateY(-10px)', offset: 0.3 }),
-						style({ transform: 'translateY(5px)', offset: 0.5 }),
-						style({ transform: 'translateY(0)', offset: 1 }),
-					]),
-				),
-			]),
-		]),
-	],
+	animations: [trigger('fadeInOut', [transition(':enter', [style({ opacity: 0, transform: 'translateY(20px)' }), animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))]), transition(':leave', [animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(20px)' }))])]), trigger('bounce', [state('inactive', style({ transform: 'translateY(0)' })), state('active', style({ transform: 'translateY(0)' })), transition('inactive => active', [animate('400ms ease-in-out', keyframes([style({ transform: 'translateY(0)', offset: 0 }), style({ transform: 'translateY(-10px)', offset: 0.3 }), style({ transform: 'translateY(5px)', offset: 0.5 }), style({ transform: 'translateY(0)', offset: 1 })]))])])],
 })
 export class AlertComponent implements OnInit {
 	alert: Alert | null = null;
@@ -103,15 +51,15 @@ export class AlertComponent implements OnInit {
 	get alertClass(): string {
 		switch (this.alert?.type) {
 			case 'success':
-				return 'bg-green-100 text-green-700 border-green-200';
+				return 'bg-success-100 text-success-300';
 			case 'error':
-				return 'bg-red-100 text-red-700 border-red-200';
+				return 'bg-danger-100 text-danger-300';
 			case 'info':
-				return 'bg-blue-100 text-blue-700 border-blue-200';
+				return 'bg-info-100 text-info-300';
 			case 'warning':
-				return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+				return 'bg-warning-100 text-warning-300';
 			default:
-				return 'bg-gray-100 text-gray-700 border-gray-200';
+				return 'bg-primary-100 text-primary-300';
 		}
 	}
 

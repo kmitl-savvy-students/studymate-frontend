@@ -32,10 +32,17 @@ jobs:
         runs-on:
             labels: ['self-hosted', 'Linux', 'X64', 'front-runner']
         steps:
+            - name: Fix Permissions (Prevent EACCES)
+              run: | 
+                sudo chown -R admin-preprod:admin-preprod /home/admin-preprod/actions-runner/_work/studymate-frontend/studymate-frontend
             - name: Checkout code
               uses: actions/checkout@v4
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v2
+
+            - name: Stop and Remove Old Container
+              run: |
+                  docker compose -f docker-compose.preprod.yml down -v || true
 
             - name: Remove Old Docker Image
               run: |
@@ -53,12 +60,13 @@ jobs:
             labels: ['self-hosted', 'Linux', 'X64', 'front-runner']
 
         steps:
-            - name: Stop and Remove Container
+            - name: build container without cache
               run: |
-                  docker compose -f docker-compose.preprod.yml down -v || true
+                  docker compose -f docker-compose.preprod.yml build --no-cache
 
             - name: Deploy application using Docker Compose
               run: |
-                  docker compose -f docker-compose.preprod.yml up -d --build
+                  docker compose -f docker-compose.preprod.yml up -d --force-recreate --remove-orphans
+                  
             - name: ✅✅ Finish ✅✅
               run: echo "All Passed => Fisnish !!"

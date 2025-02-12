@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { IconComponent } from '../../components/icon/icon.component';
 import { User } from '../../shared/models/User.model.js';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
 	selector: 'sdm-page-profile',
@@ -30,7 +30,6 @@ export class SDMPageProfile implements AfterViewInit {
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
 		});
-		console.log('profile : ', this.currentUser?.profile);
 	}
 
 	ngAfterViewInit(): void {
@@ -39,16 +38,13 @@ export class SDMPageProfile implements AfterViewInit {
 
 	public editProfile() {
 		this.isEditProfile = !this.isEditProfile;
-		console.log('isEditProfile : ', this.isEditProfile);
 	}
 
 	public editAccount() {
 		this.isEditAccount = !this.isEditAccount;
-		console.log('isEditAccount : ', this.isEditAccount);
 	}
 
 	public editTranscript() {
 		this.isEditTranscript = !this.isEditTranscript;
-		console.log('isEditTranscript : ', this.isEditTranscript);
 	}
 }
