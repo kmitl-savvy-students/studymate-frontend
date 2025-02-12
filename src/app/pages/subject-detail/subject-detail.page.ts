@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../shared/services/authentication/auth
 import { User } from '../../shared/models/User.model';
 import { paginationType } from '../../shared/models/SdmAppService.model';
 import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-open/show-subjects-open.component';
+import { SDMRatingComponent } from '../../components/rating/rating.component';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
@@ -22,6 +23,7 @@ import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-ope
 		SDMReviewFilterComponent,
 		SDMWriteReviewBoxComponent,
 		SDMShowSubjectsOpenComponent,
+		SDMRatingComponent,
 	],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
@@ -48,6 +50,9 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public section: number = 0;
 
 	public subjectIdFromParams: string = '';
+
+	public avgReviewRating: number = 4;
+	public reviewCount: number = 30;
 
 	constructor(
 		private route: ActivatedRoute,

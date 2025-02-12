@@ -1,8 +1,9 @@
 <div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn
 		[subjectDetailData]="eachSubjectData"
-		[subjectDetail]="subjectDetail"
+		[subjectDetailDescription]="subjectDetail"
 	></sdm-subject-detail-cpn>
+
 	<sdm-show-subjects-open
 		*ngIf="eachSubjectData"
 		[selectedFaculty]="selectedFaculty"
@@ -14,6 +15,33 @@
 		[subjectId]="subjectId"
 		[section]="section"
 	></sdm-show-subjects-open>
+
+	<!-- warning label -->
+	<div
+		class="flex h-24 w-full flex-col items-center justify-center gap-2 rounded-[15px] bg-yellow-50 py-4 text-yellow-400"
+	>
+		*จะสามารถรีวิวได้เฉพาะรายวิชาที่เรียนไปแล้วเท่านั้น
+		โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ
+	</div>
+
+	<!-- show review summary -->
+	<div
+		class="flex h-28 w-full flex-col items-center justify-center gap-2 text-dark-100"
+	>
+		<div class="font-semibold">คะแนนรีวิวและรีวิว</div>
+		<div class="flex items-center gap-x-1">
+			<sdm-rating
+				mode="display"
+				[rating]="4.0"
+				customClass="text-base text-dark-100"
+			></sdm-rating>
+		</div>
+		<div>
+			<span>{{ avgReviewRating | number:'1.1-1' }}</span><span> | </span
+			><span>{{reviewCount}}</span><span> รีวิว</span>
+		</div>
+	</div>
+
 	<sdm-write-review-box
 		[isEdit]="false"
 		[signedIn]="signedIn"
@@ -22,6 +50,7 @@
 		(reviewSuccess)="getSubjectReviews()"
 	>
 	</sdm-write-review-box>
+
 	<div class="grid w-full grid-cols-1 items-center gap-3">
 		<sdm-review-filter
 			[subjectReviewData]="subjectReviewData"
