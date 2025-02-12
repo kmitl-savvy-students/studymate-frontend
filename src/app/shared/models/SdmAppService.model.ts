@@ -47,3 +47,10 @@ export enum semesters {
 	summer = 3,
 	length,
 }
+
+export enum loadingSkeletonType {
+	lines = 101,
+	description = 102,
+	data = 103,
+	review = 104,
+}

@@ -58,8 +58,8 @@ export class SDMRichTextEditor
 	public toolbar: Toolbar = [
 		['bold', 'italic'],
 		['underline', 'strike'],
-		['ordered_list', 'bullet_list'],
-		['align_left', 'align_center', 'align_right', 'align_justify'],
+		// ['ordered_list', 'bullet_list'],
+		// ['align_left', 'align_center', 'align_right', 'align_justify'],
 		['link'],
 	];
 
