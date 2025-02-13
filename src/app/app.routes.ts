@@ -14,22 +14,27 @@ import { SDMPageSignIn } from '@pages/sign-in/sign-in.page';
 import { SDMPageSignOut } from '@pages/sign-out/sign-out.page';
 import { SDMPageSignUp } from '@pages/sign-up/sign-up.page';
 import { SDMPageSubjectDetail } from '@pages/subject-detail/subject-detail.page';
-import { SDMPageSubjects } from '@pages/subjects/subject.page';
+import { SDMPageSubject } from '@pages/subjects/subject.page';
+import { SDMPageSubjects } from '@pages/subjects/subjects.page';
 import { AuthenticationGuard } from '@services/authentication/authentication.guard';
 
 export const routes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: SDMPageHome },
 
-	// #region Subject Detail
+	// #region Old Subject Detail
 	{ path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail },
 	{ path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId', component: SDMPageSubjectDetail },
 	{ path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId', component: SDMPageSubjectDetail },
 	// #endregion
-	// #region Subjects
-	{ path: 'subject', component: SDMPageSubjects },
-	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear', component: SDMPageSubjects },
-	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:curriculumIndex/:uniqueId', component: SDMPageSubjects },
+	// #region Old Subjects
+	{ path: 'subject', component: SDMPageSubject },
+	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear', component: SDMPageSubject },
+	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:curriculumIndex/:uniqueId', component: SDMPageSubject },
+	// #endregion
+
+	// #region New Subjects
+	{ path: 'subjects', component: SDMPageSubjects },
 	// #endregion
 
 	// #region Edit Curriculum Structure

@@ -22,7 +22,7 @@ import { classYearList, departmentList, engineerDeList, engineerFacList, faculty
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
-export class SDMPageSubjects implements AfterViewInit, OnInit, OnChanges {
+export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	@ViewChildren(SDMSelectComponent) dropdowns!: QueryList<SDMSelectComponent>;
 	@ViewChild(SDMSearchBarComponent) sdmSearchBar!: SDMSearchBarComponent;
 

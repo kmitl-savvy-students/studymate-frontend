@@ -190,7 +190,12 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #region Add Node
 	onAddChildNode(node: CurriculumGroup): void {
 		this.currentParentNode = node;
-		this.addNodeForm.reset({ name: '', type: 'REQUIRED_ALL', credit: 0 });
+		this.addNodeForm.reset({
+			name: '',
+			type: 'REQUIRED_ALL',
+			credit: 0,
+			color: '#FFFFFF',
+		});
 		this.addNodeModal.show();
 	}
 	onConfirmAddNode(): void {
@@ -201,7 +206,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			parent_id: this.currentParentNode.id,
 			name: this.addNodeForm.value.name,
 			type: this.addNodeForm.value.type,
-			credit: 0,
+			credit: this.addNodeForm.value.credit,
 			color: this.addNodeForm.value.color,
 			children: [],
 			subjects: [],
@@ -225,7 +230,16 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #region Edit Node
 	onEditNode(node: CurriculumGroup): void {
 		this.currentParentNode = { ...node };
-		this.editNodeForm.patchValue({ name: node.name, type: node.type, credit: node.credit, color: node.color });
+		this.editNodeForm.patchValue({
+			name: node.name,
+			type: node.type,
+			credit: node.credit,
+			color: node.color,
+		});
+		if (this.editNodeForm.value.color.length === 0) {
+			this.editNodeForm.patchValue({ color: '#FFFFFF' });
+		}
+
 		this.editNodeModal.show();
 	}
 	onUpdateNodeType(event: any): void {
