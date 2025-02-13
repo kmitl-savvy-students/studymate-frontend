@@ -1,5 +1,6 @@
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Otp } from '@models/OtpData.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
 import { CurriculumGroup } from '../models/CurriculumGroup.model';
@@ -239,5 +240,10 @@ export class APIManagementService {
 		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;
 		const headers = this.GetAuthHeader(userTokenId);
 		return this.http.post<UserToken>(apiUrl, { user_token_id: userTokenId }, { headers });
+	}
+
+	GetOtpData(userId?: string): Observable<Otp[]> {
+		const apiUrl = `${environment.backendUrl}/api/otp/request/${userId}}`;
+		return this.http.get<Otp[]>(apiUrl);
 	}
 }

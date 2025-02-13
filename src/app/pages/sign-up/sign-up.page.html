@@ -1,0 +1,58 @@
+<!-- <sdm-auth-form authHeader="สมัครสมาชิก" [formGroup]="signUpFormGroup" [onSubmit]="onSubmit">
+    <div class="flex flex-col gap-2">
+        <input formControlName="name_first" type="text" required placeholder="ชื่อจริง" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+        <input formControlName="name_last" type="text" required placeholder="นามสกุล" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+        <input formControlName="name_nick" type="text" required placeholder="ชื่อเล่น" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+        <input formControlName="id" type="text" autocomplete="username" required placeholder="รหัสนักศึกษา" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+        <input formControlName="password" type="password" autocomplete="new-password" required placeholder="รหัสผ่าน" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+        <input formControlName="password_confirm" type="password" autocomplete="new-password" required placeholder="ยืนยันรหัสผ่าน" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+        <sdm-base-button [isSubmit]="true" text="สมัครสมาชิก" icon="user-plus" textColor="text-light" textColorHover="text-light" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" />
+        <div class="my-2 flex items-center gap-5">
+            <hr class="w-full text-main-25" />
+            <span class="text-dark-100">หรือ</span>
+            <hr class="w-full text-main-25" />
+        </div>
+        <sdm-google-button [isSignUp]="true" />
+    </div>
+    <div class="mt-4 flex items-center justify-center gap-3.5">
+        <span class="text-dark-50 text-center"> เป็นสมาชิกอยู่แล้ว? </span>
+        <sdm-button-link link="/sign-in" text="เข้าสู่ระบบ" textColorHover="text-primary-300" [isUnderlined]="true" />
+    </div>
+</sdm-auth-form> -->
+
+<sdm-auth-form authHeader="สมัครสมาชิก" [formGroup]="signUpFormGroup" [onSubmit]="onSubmit">
+	<div class="flex flex-col gap-2">
+		<div class="grid grid-cols-2 gap-x-3 gap-y-2">
+			<input formControlName="name_first" type="text" required placeholder="ชื่อจริง" class="col-span-1 rounded-xl px-4 py-3 text-sm outline-none ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+			<input formControlName="name_last" type="text" required placeholder="นามสกุล" class="col-span-1 rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+
+			<input formControlName="name_nick" type="text" required placeholder="ชื่อเล่น" class="col-span-2 rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+
+			<input formControlName="password" type="password" autocomplete="new-password" required placeholder="รหัสผ่าน" class="col-span-1 rounded-xl px-4 py-3 text-sm ring-1 hover:ring-2 focus:outline-none focus:ring-2" [ngClass]="{'ring-main-25 focus:ring-main-100 hover:ring-main-100':isStrongPassword, 'ring-red-400 focus:ring-red-400 hover:ring-red-400':!isStrongPassword}" />
+			<input formControlName="password_confirm" type="password" autocomplete="new-password" required placeholder="ยืนยันรหัสผ่าน" class="col-span-1 rounded-xl px-4 py-3 text-sm ring-1 hover:ring-2 focus:outline-none focus:ring-2" [ngClass]="{'ring-main-25 focus:ring-main-100 hover:ring-main-100':isStrongPassword, 'ring-red-400 focus:ring-red-400 hover:ring-red-400':!isStrongPassword}" />
+
+			<p *ngIf="!isStrongPassword" class="col-span-2 text-xs text-red-400">โปรดใช้รหัสผ่านที่มีความยาวอย่างน้อย 8 ตัวอักษร ประกอบด้วยตัวอักษร (A-Z หรือ a-z) อย่างน้อย 1 ตัว, ตัวเลข (0-9) อย่างน้อย 1 ตัว, และอักขระพิเศษ (&#64;$!%*?&#41;) อย่างน้อย 1 ตัว</p>
+
+			<input formControlName="id" type="text" autocomplete="username" required placeholder="รหัสนักศึกษา" class="col-span-1 rounded-xl px-4 py-3 text-sm" [ngClass]="{'bg-main-10': isVerifyOTP,'hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 ring-1 focus:ring-main-100 ring-main-25': !isVerifyOTP}" />
+			<sdm-base-button *ngIf="!isVerifyOTP" [isDisabled]="isOtpButtonDisabled" (clickEvent)="requestOTP()" class="col-span-1 cursor-default" [text]="isOtpButtonDisabled ? 'กรุณารอ ' + otpCountdown + ' วินาที' : 'ขอรหัส OTP'" textColor="text-dark-100" textColorHover="hover:text-dark-100" backgroundColor="bg-main-10" backgroundColorHover="hover:bg-main-25" />
+			<sdm-base-button *ngIf="isVerifyOTP" text="ยืนยันรหัส OTP สำเร็จ" icon="circle-check" textColor="text-dark-100" textColorHover="hover:text-dark-100" backgroundColor="bg-main-10" class="col-span-1" />
+
+			<input *ngIf="isRequestOTP && !isVerifyOTP" formControlName="otp_code" type="text" required placeholder="รหัส OTP ที่ได้รับ" class="col-span-1 rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+			<div *ngIf="isRequestOTP && !isVerifyOTP" class="flex items-center justify-center">รหัสอ้างอิง : {{ latestOtpReferer }}</div>
+
+			<sdm-base-button *ngIf="isRequestOTP && !isVerifyOTP" (clickEvent)="verifyOTP()" text="ยืนยันรหัส OTP" textColor="text-dark-100" textColorHover="hover:text-dark-100" backgroundColor="bg-main-10" backgroundColorHover="hover:bg-main-25" class="col-span-2" />
+
+			<sdm-base-button class="col-span-2 mt-2" [isSubmit]="true" text="สมัครสมาชิก" icon="user-plus" textColor="text-white" textColorHover="hover:text-white" backgroundColor="bg-main-100" backgroundColorHover="hover:bg-main-120" />
+		</div>
+	</div>
+	<div class="flex items-center gap-5">
+		<hr class="w-full text-main-25" />
+		<div class="text-dark-100">หรือ</div>
+		<hr class="w-full text-main-25" />
+	</div>
+	<sdm-google-button [isSignUp]="true" />
+	<div class="mt-4 flex items-center justify-center gap-3.5">
+		<span class="text-dark-50 text-center"> เป็นสมาชิกอยู่แล้ว? </span>
+		<sdm-button-link link="/sign-in" text="เข้าสู่ระบบ" textColorHover="text-primary-300" [isUnderlined]="true" />
+	</div>
+</sdm-auth-form>
