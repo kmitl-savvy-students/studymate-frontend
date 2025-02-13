@@ -13,10 +13,10 @@
 						<label for="academic_year">เลือกปีการศึกษา</label>
 						<select id="academic_year" formControlName="academic_year">
 							<option value="" disabled>กรุณาเลือกปีการศึกษา</option>
-							<option value="2567">2567</option>
-							<option value="2566">2566</option>
-							<option value="2565">2565</option>
-							<option value="2564">2564</option>
+							<option value="2024">2567</option>
+							<option value="2023">2566</option>
+							<option value="2022">2565</option>
+							<option value="2021">2564</option>
 						</select>
 					</div>
 					<div class="input-primary">
@@ -43,21 +43,23 @@
 						<label for="faculty">เลือกคณะ</label>
 						<select id="faculty" formControlName="faculty">
 							<option value="" disabled>กรุณาเลือกคณะ</option>
-							<option value="0">ทุกชั้นปี</option>
+							<option *ngFor="let faculty of faculties" [value]="faculty.id">{{ faculty.name_th }}</option>
 						</select>
 					</div>
 					<div class="input-primary">
 						<label for="department">เลือกภาควิชา</label>
 						<select id="department" formControlName="department">
 							<option value="" disabled>กรุณาเลือกภาควิชา</option>
-							<option value="0">ทุกชั้นปี</option>
+							<option *ngIf="departments.length === 0" value="" disabled>ไม่พบข้อมูล</option>
+							<option *ngFor="let department of departments" [value]="department.id">{{ department.name_th }}</option>
 						</select>
 					</div>
 					<div class="input-primary">
-						<label for="curriculum">เลือกหลักสูตร</label>
-						<select id="curriculum" formControlName="curriculum">
-							<option value="" disabled>กรุณาเลือกหลักสูตร</option>
-							<option value="0">ทุกชั้นปี</option>
+						<label for="program">เลือกแผนการเรียน</label>
+						<select id="program" formControlName="program">
+							<option value="" disabled>กรุณาเลือกแผนการเรียน</option>
+							<option *ngIf="programs.length === 0" value="" disabled>ไม่พบข้อมูล</option>
+							<option *ngFor="let program of programs" [value]="program.id">{{ program.name_th }}</option>
 						</select>
 					</div>
 				</div>

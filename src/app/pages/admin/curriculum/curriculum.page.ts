@@ -41,13 +41,11 @@ export class SDMPageCurriculum implements OnInit {
 		private alertService: AlertService,
 	) {
 		this.curriculumCreateForm = this.fb.group({
-			kmitlId: [''],
 			year: [0],
 			nameTh: [''],
 			nameEn: [''],
 		});
 		this.curriculumEditForm = this.fb.group({
-			kmitlId: [''],
 			year: [0],
 			nameTh: [''],
 			nameEn: [''],
@@ -136,7 +134,6 @@ export class SDMPageCurriculum implements OnInit {
 	// #region Create
 	onCreateCurriculum(): void {
 		this.curriculumCreateForm.patchValue({
-			kmitlId: '',
 			year: new Date().getFullYear() + 543,
 			nameTh: '',
 			nameEn: '',
@@ -152,7 +149,6 @@ export class SDMPageCurriculum implements OnInit {
 
 		const createdCurriculum = {
 			id: -1,
-			kmitl_id: this.curriculumCreateForm.value.kmitlId,
 			program: this.program,
 			year: this.curriculumCreateForm.value.year,
 			name_th: this.curriculumCreateForm.value.nameTh,
@@ -187,7 +183,6 @@ export class SDMPageCurriculum implements OnInit {
 	onEditCurriculum(curriculum: Curriculum): void {
 		this.selectedCurriculum = curriculum;
 		this.curriculumEditForm.patchValue({
-			kmitlId: curriculum.kmitl_id,
 			year: curriculum.year,
 			nameTh: curriculum.name_th,
 			nameEn: curriculum.name_en,
@@ -205,7 +200,6 @@ export class SDMPageCurriculum implements OnInit {
 
 		const updatedCurriculum = {
 			...this.selectedCurriculum,
-			kmitl_id: this.curriculumEditForm.value.kmitlId,
 			year: this.curriculumEditForm.value.year,
 			name_th: this.curriculumEditForm.value.nameTh,
 			name_en: this.curriculumEditForm.value.nameEn,
