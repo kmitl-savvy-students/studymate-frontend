@@ -105,13 +105,13 @@ export class SDMPageSignIn implements OnInit {
 							this.router.navigate(['/']);
 						},
 						error: (error) => {
-							console.error('Sign-in failed:', error);
-							this.alertService.showAlert('error', 'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองอีกครั้ง');
+							const errorMessage = error?.error?.message || 'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่อีกครั้ง';
+							this.alertService.showAlert('error', errorMessage);
 						},
 					});
 			});
 		} else {
-			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลในฟอร์มให้ถูกต้อง');
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลในฟอร์มให้ครบถ้วนและถูกต้อง');
 		}
 	}
 }

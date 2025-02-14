@@ -52,7 +52,7 @@ export class SDMBaseButton {
 		if (this.textColor) classes.push(this.textColor);
 		if (this.textColorHover) classes.push(this.textColorHover);
 		if (this.backgroundColor) classes.push(this.backgroundColor);
-		if (this.backgroundColorHover) classes.push(this.backgroundColorHover);
+		if (this.backgroundColorHover && !this.isDisabled) classes.push(this.backgroundColorHover);
 		if (this.backgroundColor || this.backgroundColorHover) classes.push('px-4', 'py-3');
 		if (this.isUnderlined) classes.push('underline', 'decoration-1');
 		if (this.isDisabled) classes.push('opacity-50', 'cursor-not-allowed');

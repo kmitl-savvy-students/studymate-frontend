@@ -41,10 +41,12 @@ export class SDMPageProgram implements OnInit {
 		private alertService: AlertService,
 	) {
 		this.programCreateForm = this.fb.group({
+			kmitlId: [''],
 			nameTh: [''],
 			nameEn: [''],
 		});
 		this.programEditForm = this.fb.group({
+			kmitlId: [''],
 			nameTh: [''],
 			nameEn: [''],
 		});
@@ -131,6 +133,7 @@ export class SDMPageProgram implements OnInit {
 	// #region Create
 	onCreateProgram(): void {
 		this.programCreateForm.patchValue({
+			kmitlId: [''],
 			nameTh: '',
 			nameEn: '',
 		});
@@ -145,6 +148,7 @@ export class SDMPageProgram implements OnInit {
 
 		const createdProgram = {
 			id: -1,
+			kmitl_id: this.programCreateForm.value.kmitlId,
 			department: this.department,
 			name_th: this.programCreateForm.value.nameTh,
 			name_en: this.programCreateForm.value.nameEn,
@@ -177,6 +181,7 @@ export class SDMPageProgram implements OnInit {
 	onEditProgram(program: Program): void {
 		this.selectedProgram = program;
 		this.programEditForm.patchValue({
+			kmitlId: program.kmitl_id,
 			nameTh: program.name_th,
 			nameEn: program.name_en,
 		});
@@ -192,6 +197,7 @@ export class SDMPageProgram implements OnInit {
 		if (this.selectedProgram) {
 			const updatedProgram = {
 				...this.selectedProgram,
+				kmitl_id: this.programEditForm.value.kmitlId,
 				name_th: this.programEditForm.value.nameTh,
 				name_en: this.programEditForm.value.nameEn,
 			};

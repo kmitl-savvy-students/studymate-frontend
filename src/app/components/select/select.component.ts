@@ -1,15 +1,7 @@
-import {
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnInit,
-	Output,
-} from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'sdm-select',
