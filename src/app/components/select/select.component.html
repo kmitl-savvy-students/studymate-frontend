@@ -14,21 +14,21 @@
 			{{ showSelectedOption || defaultLabel }}
 		</div>
 		<sdm-icon *ngIf="!isSelect" icon="chevron-down" class="text-dark-100 text-sm" [ngClass]="{ 'rotate-180': isDropdownOpen }"></sdm-icon>
-		<sdm-icon icon="xmark" *ngIf="isSelect" class="-mb-1 text-lg text-light" (click)="!disabled && onSelectedOption('')"></sdm-icon>
+		<sdm-icon icon="xmark" *ngIf="isSelect" class="-mb-1 text-lg text-light" (click)="!disabled && onSelectedOption(-1, '')"></sdm-icon>
 	</div>
 	<ul [attr.disabled]="disabled ? true : null" [class.show]="isDropdownOpen" class="dropdown-shadow absolute z-10 mt-1 hidden max-h-36 w-full overflow-y-auto rounded-[10px] bg-white py-1.5">
 		<li
 			*ngFor="let option of listOptions; let i = index"
-			(click)="onSelectedOption(option.label, i, option.value)"
+			(click)="onSelectedOption(option.value ?? option.id, option.label ?? option.name_th)"
 			(mouseenter)="hoveredOption = option"
 			(mouseleave)="hoveredOption = null"
 			[ngClass]="{
 				'hover': hoveredOption === option,
-				'rounded-[10px] bg-main-100 text-light': form.get('selectedOption')?.value === option.label,
+				'rounded-[10px] bg-main-100 text-light': form.get('selectedOption')?.value === (option.value ?? option.id),
 			}"
 			[class]="customDdlOptions"
 			class="text-dark-100 mx-1.5 px-3 py-1.5 text-center text-base font-normal hover:rounded-[10px] hover:bg-main-100 hover:text-light">
-			{{ option.label }}
+			{{ option.label ?? option.name_th }}
 		</li>
 	</ul>
 </div>

@@ -1,18 +1,8 @@
-import {
-	AfterViewInit,
-	Component,
-	ElementRef,
-	HostListener,
-	Input,
-	OnInit,
-	QueryList,
-	ViewChild,
-	ViewChildren,
-} from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
-import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
 @Component({
 	selector: 'sdm-subject-cpn',
@@ -26,8 +16,8 @@ export class SDMSubjectComponent {
 
 	@Input() selectedYear: number = 0;
 	@Input() selectedSemester: number = 0;
-	@Input() selectedFaculty: string = '';
-	@Input() selectedDepartment: string = '';
+	@Input() selectedFaculty: number = -1;
+	@Input() selectedDepartment: number = -1;
 	@Input() selectedCurriculum?: string = '';
 	@Input() selectedClassYear: number = -1;
 	@Input() selectedCurriculumYear?: string = '';
@@ -44,43 +34,14 @@ export class SDMSubjectComponent {
 	public getSubjectDetailUrl(): string | undefined {
 		let latestSubjectDetailUrl: string;
 
-		if (
-			this.selectedFaculty === '90' &&
-			this.selectedDepartment === '90' &&
-			this.selectedCurriculum === 'x'
-		) {
-			// ใช้ path สำหรับกรณี selectedFaculty === '90' && selectedDepartment === '90'
-			latestSubjectDetailUrl = this.router
-				.createUrlTree([
-					'/subject/subject-detail',
-					this.selectedYear,
-					this.selectedSemester,
-					this.selectedFaculty,
-					this.selectedDepartment,
-					this.selectedCurriculum,
-					this.selectedClassYear,
-					this.subjectCardData.section,
-					this.subjectCardData.subject_id,
-				])
-				.toString();
-			return latestSubjectDetailUrl;
-		} else if (this.selectedCurriculumYear && this.selectedUniqueId) {
+		// if (this.selectedFaculty === '90' && this.selectedDepartment === '90' && this.selectedCurriculum === 'x') {
+		// 	// ใช้ path สำหรับกรณี selectedFaculty === '90' && selectedDepartment === '90'
+		// 	latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.subjectCardData.section, this.subjectCardData.subject_id]).toString();
+		// 	return latestSubjectDetailUrl;
+		// }
+		if (this.selectedCurriculumYear && this.selectedUniqueId) {
 			// ใช้ path สำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
-			latestSubjectDetailUrl = this.router
-				.createUrlTree([
-					'/subject/subject-detail',
-					this.selectedYear,
-					this.selectedSemester,
-					this.selectedFaculty,
-					this.selectedDepartment,
-					this.selectedCurriculum,
-					this.selectedClassYear,
-					this.selectedCurriculumYear,
-					this.selectedUniqueId,
-					this.subjectCardData.section,
-					this.subjectCardData.subject_id,
-				])
-				.toString();
+			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId, this.subjectCardData.section, this.subjectCardData.subject_id]).toString();
 			return latestSubjectDetailUrl;
 		}
 
@@ -89,8 +50,6 @@ export class SDMSubjectComponent {
 	}
 
 	getTeacherListContent(): string {
-		return this.subjectCardData.teacher_list_th
-			.map((teacher: string) => `<div>${teacher}</div>`)
-			.join('');
+		return this.subjectCardData.teacher_list_th.map((teacher: string) => `<div>${teacher}</div>`).join('');
 	}
 }

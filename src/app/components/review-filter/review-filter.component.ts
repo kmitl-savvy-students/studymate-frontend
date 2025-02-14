@@ -1,38 +1,18 @@
-import {
-	AfterViewInit,
-	Component,
-	EventEmitter,
-	Input,
-	OnChanges,
-	OnInit,
-	Output,
-	SimpleChanges,
-	ViewChild,
-} from '@angular/core';
-import { SDMSelectComponent } from '../select/select.component';
-import { ratingList } from './review-filter-data';
-import {
-	paginationType,
-	SelectedData,
-} from '../../shared/models/SdmAppService.model';
 import { CommonModule } from '@angular/common';
-import { SDMSubjectReviewComponent } from '../subject-review/subject-review.component';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { paginationType, SelectedData } from '../../shared/models/SdmAppService.model';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
-import { SDMPaginationComponent } from '../pagination/pagination.component';
-import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
+import { SDMPaginationComponent } from '../pagination/pagination.component';
 import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
+import { SDMSelectComponent } from '../select/select.component';
+import { SDMSubjectReviewComponent } from '../subject-review/subject-review.component';
+import { ratingList } from './review-filter-data';
 
 @Component({
 	selector: 'sdm-review-filter',
 	standalone: true,
-	imports: [
-		SDMSelectComponent,
-		CommonModule,
-		SDMSubjectReviewComponent,
-		SDMPaginationComponent,
-		SDMSearchBarComponent,
-	],
+	imports: [SDMSelectComponent, CommonModule, SDMSubjectReviewComponent, SDMPaginationComponent, SDMSearchBarComponent],
 	templateUrl: './review-filter.component.html',
 	styleUrl: './review-filter.component.css',
 })
@@ -89,67 +69,30 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public checkSrcReviewData() {
-		if (
-			!this.selectedPopular &&
-			!this.selectedLatest &&
-			!this.selectedRating &&
-			!this.selectedCurrentYearTerm
-		) {
+		if (!this.selectedPopular && !this.selectedLatest && !this.selectedRating && !this.selectedCurrentYearTerm) {
 			this.srcReviewData = this.subjectReviewData;
-		} else if (
-			(this.selectedPopular ||
-				this.selectedLatest ||
-				this.selectedRating) &&
-			!this.selectedCurrentYearTerm
-		) {
+		} else if ((this.selectedPopular || this.selectedLatest || this.selectedRating) && !this.selectedCurrentYearTerm) {
 			this.srcReviewData = this.subjectReviewData;
-		} else if (
-			!this.selectedPopular &&
-			!this.selectedLatest &&
-			!this.selectedRating &&
-			this.selectedCurrentYearTerm
-		) {
+		} else if (!this.selectedPopular && !this.selectedLatest && !this.selectedRating && this.selectedCurrentYearTerm) {
 			this.srcReviewData = this.currentYearTermReviewData;
 		}
 	}
 
 	public filterData(): void {
 		this.checkSrcReviewData();
-		const dataToFilter = this.isSearched
-			? this.searchedReviewDataList
-			: this.srcReviewData;
+		const dataToFilter = this.isSearched ? this.searchedReviewDataList : this.srcReviewData;
 		let userReview = null;
 
-		if (
-			this.prioritizeUserReview &&
-			!this.selectedPopular &&
-			!this.selectedLatest &&
-			this.selectedStarRatingValue === undefined &&
-			this.signedIn &&
-			this.currentUser
-		) {
-			userReview = dataToFilter.find(
-				(item) => item.user_id === this.currentUser?.id,
-			);
+		if (this.prioritizeUserReview && !this.selectedPopular && !this.selectedLatest && this.selectedStarRatingValue === undefined && this.signedIn && this.currentUser) {
+			userReview = dataToFilter.find((item) => item.user_id === this.currentUser?.id);
 		}
 
 		if (this.selectedPopular) {
-			this.filterItems = [...dataToFilter].sort(
-				(a, b) => b.like - a.like,
-			);
+			this.filterItems = [...dataToFilter].sort((a, b) => b.like - a.like);
 		} else if (this.selectedLatest) {
-			this.filterItems = [...dataToFilter].sort(
-				(a, b) =>
-					new Date(b.created).getTime() -
-					new Date(a.created).getTime(),
-			);
-		} else if (
-			this.selectedRating &&
-			this.selectedStarRatingValue !== undefined
-		) {
-			this.filterItems = dataToFilter.filter(
-				(item) => item.rating === this.selectedStarRatingValue,
-			);
+			this.filterItems = [...dataToFilter].sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+		} else if (this.selectedRating && this.selectedStarRatingValue !== undefined) {
+			this.filterItems = dataToFilter.filter((item) => item.rating === this.selectedStarRatingValue);
 		} else if (this.selectedCurrentYearTerm) {
 			this.filterItems = dataToFilter;
 		} else {
@@ -157,12 +100,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		}
 
 		if (userReview) {
-			this.filterItems = [
-				userReview,
-				...this.filterItems.filter(
-					(item) => item.user_id !== this.currentUser?.id,
-				),
-			];
+			this.filterItems = [userReview, ...this.filterItems.filter((item) => item.user_id !== this.currentUser?.id)];
 		}
 		this.updatePaginatedItems();
 	}
@@ -216,7 +154,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	private clearSelect() {
 		if (this.sdmSelect) {
-			this.sdmSelect.onSelectedOption('');
+			this.sdmSelect.onSelectedOption(-1, '');
 		}
 	}
 
@@ -290,27 +228,14 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.deleteUserReview.emit();
 	}
 
-	public getSearchedReviewsDataList(
-		searchedReviewDataList: SubjectReviewData[],
-	) {
+	public getSearchedReviewsDataList(searchedReviewDataList: SubjectReviewData[]) {
 		this.searchedReviewDataList = searchedReviewDataList;
 		this.isSearched = true;
 		this.currentPage = 1;
 		this.filterData();
 	}
 
-	public searchFunction(
-		data: SubjectReviewData[],
-		searchValue: string,
-	): SubjectReviewData[] {
-		return data.filter(
-			(review) =>
-				review.teachtable_subject.subject_id
-					.toLowerCase()
-					.includes(searchValue.toLowerCase()) ||
-				review.subject_name_en
-					.toLowerCase()
-					.includes(searchValue.toLowerCase()),
-		);
+	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
+		return data.filter((review) => review.teachtable_subject.subject_id.toLowerCase().includes(searchValue.toLowerCase()) || review.subject_name_en.toLowerCase().includes(searchValue.toLowerCase()));
 	}
 }

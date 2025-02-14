@@ -30,7 +30,7 @@ export const routes: Routes = [
 	// #region Old Subjects
 	{ path: 'subject', component: SDMPageSubject },
 	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear', component: SDMPageSubject },
-	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:curriculumIndex/:uniqueId', component: SDMPageSubject },
+	{ path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId', component: SDMPageSubject },
 	// #endregion
 
 	// #region New Subjects

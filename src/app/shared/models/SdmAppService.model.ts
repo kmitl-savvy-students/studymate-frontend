@@ -1,13 +1,10 @@
 export class SelectedData {
-	public label!: string;
-	public index?: number;
-	public value?: any;
+	public value!: number;
+	public label!: any;
 }
-
 export class DropdownList {
+	public value!: number;
 	public label!: string;
-	public value?: string | number;
-	public index?: number;
 }
 
 export class CirriculumnList {

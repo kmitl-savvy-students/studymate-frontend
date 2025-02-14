@@ -1,6 +1,9 @@
 import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Department } from '@models/Department';
+import { Faculty } from '@models/Faculty';
 import { Otp } from '@models/OtpData.model';
+import { Program } from '@models/Program.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
 import { CurriculumGroup } from '../models/CurriculumGroup.model';
@@ -245,5 +248,25 @@ export class APIManagementService {
 	GetOtpData(userId?: string): Observable<Otp[]> {
 		const apiUrl = `${environment.backendUrl}/api/otp/request/${userId}}`;
 		return this.http.get<Otp[]>(apiUrl);
+	}
+
+	GetDropdownFaculties(): Observable<Faculty[]> {
+		const apiUrl = `${environment.backendUrl}/api/faculty/get`;
+		return this.http.get<Faculty[]>(apiUrl);
+	}
+
+	GetDropdownDepartments(facultyId: number): Observable<Department[]> {
+		const apiUrl = `${environment.backendUrl}/api/department/get-by-faculty/${facultyId}`;
+		return this.http.get<Department[]>(apiUrl);
+	}
+
+	GetDropdownPrograms(departmentId: number): Observable<Program[]> {
+		const apiUrl = `${environment.backendUrl}/api/program/get-by-department/${departmentId}`;
+		return this.http.get<Program[]>(apiUrl);
+	}
+
+	GetDropdownCurriculums(programId: number): Observable<Curriculum[]> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum/get-by-program/${programId}`;
+		return this.http.get<Curriculum[]>(apiUrl);
 	}
 }
