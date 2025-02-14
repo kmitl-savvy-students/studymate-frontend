@@ -133,7 +133,7 @@ export class SDMPageSignUp {
 		}
 		this.getOtpData();
 		if (this.isOtpButtonDisabled) {
-			this.otpCountdown = 10;
+			this.otpCountdown = 60;
 			this.countdownInterval = setInterval(() => {
 				this.otpCountdown--;
 				if (this.otpCountdown <= 0) {
