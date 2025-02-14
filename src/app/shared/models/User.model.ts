@@ -8,6 +8,7 @@ export class User {
 		public firstname: string,
 		public lastname: string,
 		public profile_picture: string,
+		public is_admin: string,
 		public curriculum: Curriculum,
 	) {}
 }
