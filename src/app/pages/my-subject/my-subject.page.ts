@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SDMBaseButton } from '@components/buttons/base-button.component';
+import { Tabs } from '@models/Tabs.model.js';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
 import { User } from '@models/User.model';
@@ -16,15 +17,33 @@ import { SDMButtonLink } from '../../components/buttons/button-link.component';
 import { SDMCreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMBaseModal } from '../../components/modals/base-modal.component';
+import { SDMTabsComponent } from '../../components/tabs/tabs.component';
 
 @Component({
 	selector: 'sdm-page-my-subject',
 	standalone: true,
-	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMAccordionComponent],
+	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMAccordionComponent, SDMTabsComponent],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
 export class SDMPageMySubject implements OnInit {
+	@ViewChild('uploadTranscriptModal') uploadTranscriptModal!: SDMBaseModal;
+	@ViewChild('deleteTranscriptModal') deleteTranscriptModal!: SDMBaseModal;
+
+	public currentUser: User | null = null;
+	public transcript: Transcript | null = null;
+	public groupedTranscriptDetails: { year: number; term: number; details: Array<TranscriptDetail> }[] = [];
+
+	public isFetchingTranscriptDetails: boolean = false;
+
+	public totalCompletedCredit: number = 0;
+
+	public tabs: Tabs[] = [
+		{ id: 'profile', icon: 'right-to-bracket', tab_name: 'Profile' },
+		{ id: 'setting', icon: 'gear', tab_name: 'Setting' },
+		{ id: 'tools', icon: 'gear', tab_name: 'Tools' },
+	];
+
 	constructor(
 		private authService: AuthenticationService,
 		private http: HttpClient,
@@ -32,15 +51,6 @@ export class SDMPageMySubject implements OnInit {
 		private alertService: AlertService,
 		private loadingService: LoadingService,
 	) {}
-
-	currentUser: User | null = null;
-	transcript: Transcript | null = null;
-	groupedTranscriptDetails: { year: number; term: number; details: Array<TranscriptDetail> }[] = [];
-
-	isFetchingTranscriptDetails: boolean = false;
-
-	@ViewChild('uploadTranscriptModal') uploadTranscriptModal!: SDMBaseModal;
-	@ViewChild('deleteTranscriptModal') deleteTranscriptModal!: SDMBaseModal;
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -76,7 +86,7 @@ export class SDMPageMySubject implements OnInit {
 	}
 	prepareAndSortTranscriptDetails(data: Array<TranscriptDetail>) {
 		if (!this.transcript) return;
-
+		console.log('data:', data);
 		this.transcript.details = data.sort((a, b) => {
 			if (b.teachtable?.year !== a.teachtable?.year) {
 				return (a.teachtable?.year ?? 0) - (b.teachtable?.year ?? 0);
@@ -95,7 +105,15 @@ export class SDMPageMySubject implements OnInit {
 			}
 			group.details.push(transcriptDetails);
 		});
+		console.log('groupedTranscriptDetails:', this.groupedTranscriptDetails);
 	}
+
+	calculateTotalCompletedCredit(groupedTranscriptDetails: Array<TranscriptDetail>): void {
+		this.totalCompletedCredit = groupedTranscriptDetails.reduce((sum, detail) => {
+			return sum + (detail.subject?.credit || 0);
+		}, 0);
+	}
+
 	// #endregion
 	// #region Delete Transcript
 	onDeleteTranscript() {
