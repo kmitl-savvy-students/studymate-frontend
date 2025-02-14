@@ -1,27 +1,27 @@
+import { Subject } from './Subject.model';
+
 export class SubjectCardData {
 	constructor(
-		public classLevel: string,
-		public subject_type_name_th: string,
-		public subject_type_name_en: string,
-		public subject_id: string,
-		public credit: number,
+		public subject: Subject,
+
+		public class_level: string,
+		public group_name: string[],
+
 		public section: number,
-		public credit_lps: string,
-		public subject_name_th: string,
-		public subject_name_en: string,
-		public subject_type_name: string | null,
-		public subject_subtype_name: string | null,
-		public classdatetime: string[],
-		public classbuilding: string | null,
-		public room_no: string | null,
-		public rule: string | null,
+		public building_name: string | null, // classbuilding
+		public room_number: string | null, // room_no
+
 		public teacher_list_th: string[],
 		public teacher_list_en: string[],
-		public lect_or_prac: string,
-		public midterm_date_time: string[],
-		public final_date_time: string[],
-		public interested: number,
+
+		public class_datetime: string[], // classdatetime
+		public midterm_datetime: string[], // midterm_date_time
+		public final_datetime: string[], // final_date_time
+
 		public rating: number,
+
+		public session_type: string, //lect_or_prac
+		public rule: string | null,
 		public remark: string,
 	) {}
 }
