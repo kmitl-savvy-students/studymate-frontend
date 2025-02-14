@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { SDMBaseButton } from '@components/buttons/base-button.component';
-import { SDMButtonLink } from '@components/buttons/button-link.component';
-import { IconComponent } from '@components/icon/icon.component';
-import { SDMBaseModal } from '@components/modals/base-modal.component';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
@@ -18,7 +14,7 @@ import { finalize } from 'rxjs';
 @Component({
 	selector: 'sdm-page-curriculum-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink],
+	imports: [CommonModule],
 	templateUrl: './curriculum-progress-tracker.page.html',
 })
 export class SDMPageCurriculumProgressTracker implements OnInit {
