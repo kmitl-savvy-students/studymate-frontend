@@ -10,14 +10,17 @@ import { AuthenticationService } from '@services/authentication/authentication.s
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { SDMAccordionComponent } from '../../components/accordion/accordion.component';
+import { SDMAdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
 import { SDMButtonLink } from '../../components/buttons/button-link.component';
+import { SDMCreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMBaseModal } from '../../components/modals/base-modal.component';
 
 @Component({
 	selector: 'sdm-page-my-subject',
 	standalone: true,
-	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink],
+	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMAccordionComponent],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })

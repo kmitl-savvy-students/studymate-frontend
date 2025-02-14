@@ -8,4 +8,4 @@ import { IconComponent } from '../icon/icon.component';
 	templateUrl: './advice-dashboard.component.html',
 	styleUrl: './advice-dashboard.component.css',
 })
-export class AdviceDashboardComponent {}
+export class SDMAdviceDashboardComponent {}
