@@ -31,16 +31,12 @@
 		</ng-container>
 		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !getSubjectDataIsNull && !isLoading">
 			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3">
-				<!-- Pagination -->
 				<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage" class="mt-4"></sdm-pagination>
-				<!-- Subject Component -->
 				<div class="grid w-full grid-cols-1 gap-4">
 					<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
-						<!-- <sdm-subject-cpn [subjectCardData]="data" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedFaculty]="selectedFaculty" [selectedDepartment]="selectedDepartment" [selectedCurriculum]="selectedCurriculum" [selectedClassYear]="selectedClassYear" [selectedCurriculumYear]="selectedCurriculumYear" [selectedUniqueId]="selectedUniqueId"></sdm-subject-cpn> -->
 						<sdm-subject-cpn [subjectCardData]="data" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedFaculty]="selectedFaculty" [selectedDepartment]="selectedDepartment" [selectedCurriculum]="selectedCurriculum" [selectedClassYear]="selectedClassYear"></sdm-subject-cpn>
 					</ng-container>
 				</div>
-				<!-- Pagination -->
 				<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"></sdm-pagination>
 			</div>
 		</ng-container>

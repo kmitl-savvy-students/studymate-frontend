@@ -31,6 +31,14 @@ export class SDMSubjectComponent {
 		return safeString;
 	}
 
+	// ngAfterViewInit(): void {
+	// 	if (this.subjectCardData) {
+	// 		console.log('subjectCardData: ', this.subjectCardData);
+	// 		console.log('subjectCardData.classLevel : ', this.subjectCardData.classLevel);
+	// 		console.log('subjectCardData.classLevel : ', this.subjectCardData.classLevel);
+	// 	}
+	// }
+
 	public getSubjectDetailUrl(): string | undefined {
 		let latestSubjectDetailUrl: string;
 
@@ -41,7 +49,7 @@ export class SDMSubjectComponent {
 		// }
 		if (this.selectedCurriculumYear && this.selectedUniqueId) {
 			// ใช้ path สำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
-			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId, this.subjectCardData.section, this.subjectCardData.subject_id]).toString();
+			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId, this.subjectCardData.section, this.subjectCardData.subject.id]).toString();
 			return latestSubjectDetailUrl;
 		}
 
