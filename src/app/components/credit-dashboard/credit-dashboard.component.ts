@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 	templateUrl: './credit-dashboard.component.html',
 	styleUrl: './credit-dashboard.component.css',
 })
-export class CreditDashboardComponent {
+export class SDMCreditDashboardComponent {
 	@Input() totalCompleted: number = 0;
 	@Input() totalRemaining: number = 0;
 	@Input() totalCredit: number = 0;
