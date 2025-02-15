@@ -18,6 +18,8 @@ export class SDMAccordionComponent implements AfterViewInit, OnInit {
 	}
 
 	ngAfterViewInit(): void {
-		initFlowbite();
+		setTimeout(() => {
+			initFlowbite();
+		}, 0);
 	}
 }

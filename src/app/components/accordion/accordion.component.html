@@ -1,6 +1,12 @@
 <div [id]="accordionId" data-accordion="collapse" data-active-classes="text-dark-100" data-inactive-classes="text-dark-100">
 	<h2 [id]="accordionId + '-heading'" class="border-main-50 p-4 hover:bg-main-10" [class.border-b]="!isExpanded">
-		<button type="button" class="flex w-full items-center justify-between gap-3" [attr.data-accordion-target]="'#' + accordionId + '-body'" [attr.aria-expanded]="accordionDefaultStatus" [attr.aria-controls]="accordionId + '-body'" (click)="isExpanded = !isExpanded">
+		<button
+			type="button"
+			class="flex w-full items-center justify-between gap-3"
+			[attr.data-accordion-target]="'#' + accordionId + '-body'"
+			[attr.aria-expanded]="accordionDefaultStatus"
+			[attr.aria-controls]="accordionId + '-body'"
+			(click)="isExpanded = !isExpanded">
 			<div class="flex flex-col items-start">
 				<div class="text-base font-semibold">{{ header }}</div>
 				<div class="text-sm opacity-50">{{ subHeader }}</div>
