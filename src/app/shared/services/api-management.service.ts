@@ -1,4 +1,4 @@
-import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
@@ -89,6 +89,7 @@ export class APIManagementService {
 		return this.http.get<CurriculumSubject>(apiUrl);
 	}
 
+	// get รายวิชาในหน้า subject เก่า
 	GetCurriculumSubjectsTeachtable(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData[]> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
 
@@ -102,6 +103,22 @@ export class APIManagementService {
 		return this.http.get<SubjectCardData[]>(apiUrl);
 	}
 
+	// get รายวิชาในหน้า subject ใหม่
+	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, program: number): Observable<SubjectCardData[]> {
+		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-class`;
+
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('program', program);
+
+		console.log(`${apiUrl}?${params.toString()}`);
+
+		return this.http.get<SubjectCardData[]>(apiUrl, { params });
+		// return new Observable<SubjectCardData[]>((observer) => {
+		// 	observer.next([]);
+		// 	observer.complete();
+		// });
+	}
+
+	// get รายวิชาในหน้า subject-detail เก่า
 	GetCurriculumnSubjectDataBySection(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, subjectId: string, section: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-section/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
 

@@ -37,14 +37,13 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 
 	public selectedYear: number = -1;
 	public selectedSemester: number = -1;
-	public selectedClassYear: number = -1;
+	public selectedClassYear: string = '';
 	public selectedFaculty: number = -1;
 	public selectedProgram: number = -1;
+	public selectedProgramKmitlId: number = -1;
 	public selectedDepartment: number = -1;
 	public selectedCurriculum?: string = '';
-	public selectedUniqueId?: string = '';
-	public selectedCurriculumYear?: string = '';
-	public selectedCurriculumIndex?: number = -1;
+
 	public selectedData?: SelectedData;
 
 	public currentRoute: string = '';
@@ -99,18 +98,34 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 					if (Object.keys(params).length > 0) {
 						this.selectedYear = +params['year'];
 						this.selectedSemester = +params['semester'];
+						this.selectedClassYear = params['classYear'];
 						this.selectedFaculty = +params['faculty'];
-						this.selectedDepartment = params['department'];
+						this.selectedDepartment = +params['department'];
+						this.selectedProgram = +params['program'];
 						this.selectedCurriculum = params['curriculum'];
-						this.selectedClassYear = +params['classYear'];
-						this.selectedCurriculumYear = params['curriculumYear'];
-						this.selectedCurriculumIndex = +params['curriculumIndex'];
-						this.selectedUniqueId = params['uniqueId'];
+						console.log('=========================================================');
+						console.log('selectedDepartment :', this.selectedDepartment);
+						console.log('selectedProgram :', this.selectedProgram);
+						console.log('selectedCurriculum :', this.selectedCurriculum);
+						console.log('=========================================================');
 					}
 					return this.getDropdownFaculties();
 				}),
 			)
 			.subscribe(() => {
+				if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {
+					this.getDropdownDepartments(this.selectedFaculty);
+					console.log('111111111111111111111111111111111111111111111111111111');
+				}
+				if (this.selectedDepartment !== -1 && this.selectedDepartment !== undefined) {
+					this.getDropdownPrograms(this.selectedDepartment);
+					console.log('22222222222222222222222222222222222222222222222222222222');
+				}
+				if (this.selectedProgram !== -1 && this.selectedProgram !== undefined) {
+					this.getDropdownCurriculums(this.selectedProgram);
+					console.log('333333333333333333333333333333333333333333333333333333333');
+				}
+
 				this.updateDropdownValues();
 
 				this.checkSelectAllDropdown();
@@ -146,7 +161,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 					break;
 				}
 				case 'selectedClassYear': {
-					const option = this.classYearList.find((option) => option.value === this.selectedClassYear);
+					const option = this.classYearList.find((option) => option.value.toString() === this.selectedClassYear);
 					if (option) {
 						dropdown.onSelectedOption(option.value, option.label);
 					}
@@ -161,7 +176,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				}
 				case 'selectedDepartment': {
 					const option = this.departmentList.find((option) => option.id === this.selectedDepartment);
+					console.log('this.selectedDepartment : ', this.selectedDepartment);
+					console.log('selectedDepartment testtttttt 1 : ', option);
 					if (option) {
+						console.log('selectedDepartment testtttttt 2 : ', option);
 						dropdown.onSelectedOption(option.id, option.name_th);
 					}
 					break;
@@ -169,6 +187,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				case 'selectedProgram': {
 					const option = this.programList.find((option) => option.id === this.selectedProgram);
 					if (option) {
+						this.selectedProgramKmitlId = Number(option.kmitl_id);
 						dropdown.onSelectedOption(option.id, option.name_th);
 					}
 					break;
@@ -199,38 +218,72 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 		this.updatePaginatedItems();
 	}
 
+	// public getSubjectData() {
+	// 	this.isLoading = true;
+	// 	this.isError = false;
+
+	// 	this.apiManagementService.GetCurriculumSubjectsTeachtable(this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum!, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId).subscribe({
+	// 		next: (res) => {
+	// 			if (res && res.length > 0) {
+	// 				this.subjectCardData = res;
+	// 				console.log('subjectCardData : ', this.subjectCardData);
+	// 				this.subjectCardTotal = this.subjectCardData.length;
+	// 				this.updatePaginatedItems();
+	// 			} else {
+	// 				console.log('No Subject Data Available.');
+	// 				this.subjectCardData = [];
+	// 				this.getSubjectDataIsNull = true;
+	// 			}
+	// 			this.isLoading = false;
+	// 			this.currentPage = 1;
+	// 		},
+	// 		error: (error) => {
+	// 			if (error.status === 404) {
+	// 				console.error('Not found');
+	// 			} else if (error.status === 500) {
+	// 				console.error('Internal Server Error');
+	// 			} else {
+	// 				console.error('An unexpected error occurred:', error.status);
+	// 			}
+
+	// 			this.isError = true;
+	// 			this.isLoading = false;
+	// 		},
+	// 	});
+	// }
+
 	public getSubjectData() {
 		this.isLoading = true;
 		this.isError = false;
 
-		// this.apiManagementService.GetCurriculumSubjectsTeachtable(this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum!, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId).subscribe({
-		// 	next: (res) => {
-		// 		if (res && res.length > 0) {
-		// 			this.subjectCardData = res;
-		// 			console.log('subjectCardData : ', this.subjectCardData);
-		// 			this.subjectCardTotal = this.subjectCardData.length;
-		// 			this.updatePaginatedItems();
-		// 		} else {
-		// 			console.log('No Subject Data Available.');
-		// 			this.subjectCardData = [];
-		// 			this.getSubjectDataIsNull = true;
-		// 		}
-		// 		this.isLoading = false;
-		// 		this.currentPage = 1;
-		// 	},
-		// 	error: (error) => {
-		// 		if (error.status === 404) {
-		// 			console.error('Not found');
-		// 		} else if (error.status === 500) {
-		// 			console.error('Internal Server Error');
-		// 		} else {
-		// 			console.error('An unexpected error occurred:', error.status);
-		// 		}
+		this.apiManagementService.GetSubjectsDataInSubjectPage(this.selectedYear - 543, this.selectedSemester, this.selectedClassYear, this.selectedProgramKmitlId).subscribe({
+			next: (res) => {
+				if (res && res.length > 0) {
+					this.subjectCardData = res;
+					console.log('subjectCardData : ', this.subjectCardData);
+					this.subjectCardTotal = this.subjectCardData.length;
+					this.updatePaginatedItems();
+				} else {
+					console.log('No Subject Data Available.');
+					this.subjectCardData = [];
+					this.getSubjectDataIsNull = true;
+				}
+				this.isLoading = false;
+				this.currentPage = 1;
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error('An unexpected error occurred:', error.status);
+				}
 
-		// 		this.isError = true;
-		// 		this.isLoading = false;
-		// 	},
-		// });
+				this.isError = true;
+				this.isLoading = false;
+			},
+		});
 	}
 
 	/* TODO: FIX THIS
@@ -362,7 +415,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				this.selectedSemester = selectedData.value;
 				break;
 			case 'selectedClassYear':
-				this.selectedClassYear = selectedData.value;
+				this.selectedClassYear = selectedData.value.toString();
 				break;
 			case 'selectedFaculty':
 				this.selectedFaculty = selectedData.value;
@@ -393,16 +446,9 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 					this.getDropdownCurriculums(this.selectedProgram);
 				}
 				console.log('selectedProgram', this.selectedProgram);
-				console.log('selectedCurriculum', this.selectedCurriculum);
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value.toString();
-				const selectedCurriculumOption = this.curriculumList.find((selectedCurriculumOption) => selectedCurriculumOption.id.toString() === this.selectedCurriculum);
-				if (selectedCurriculumOption) {
-					this.selectedCurriculumYear = selectedCurriculumOption.year.toString();
-				}
-				// this.selectedUniqueId = matchedCurriculum?.uniqueId;
-
 				console.log('selectedCurriculum', this.selectedCurriculum);
 				break;
 			default:
@@ -411,7 +457,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 		this.checkSelectAllDropdown();
 		console.log('isSelectAllDropdown : ', this.isSelectAllDropdown);
 		if (this.isSelectAllDropdown && !this.isNavigating) {
-			console.log('55555555555555555555555555555555555555555555');
+			// console.log('55555555555555555555555555555555555555555555');
 			this.navigateToSubject();
 		}
 	}
@@ -424,25 +470,22 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 
 	public checkSelectAllDropdown() {
 		if (this.selectedFaculty === 90 && this.selectedDepartment === 90) {
-			if (this.selectedYear !== 0 && this.selectedYear !== undefined && this.selectedSemester !== 0 && this.selectedSemester !== undefined && this.selectedClassYear !== -1 && this.selectedClassYear !== undefined && this.selectedFaculty === 90 && this.selectedDepartment === 90) {
+			if (this.selectedYear !== 0 && this.selectedYear !== undefined && this.selectedSemester !== 0 && this.selectedSemester !== undefined && this.selectedClassYear !== '' && this.selectedClassYear !== undefined && this.selectedFaculty === 90 && this.selectedDepartment === 90) {
 				this.selectedCurriculum = 'x';
-				this.selectedCurriculumYear = '';
-				this.selectedUniqueId = '';
 				this.isSelectAllDropdown = true;
-				console.log('111111111111111111111111111111111111111');
+				// console.log('111111111111111111111111111111111111111');
 			} else {
 				this.isSelectAllDropdown = false;
-				console.log('222222222222222222222222222222222222222');
+				// console.log('222222222222222222222222222222222222222');
 			}
 		} else {
 			this.isGened = false;
-			// ยังไม่ได้เช็คเงื่อนไขของ selectUniqeID นะ
-			if (this.selectedYear !== -1 && this.selectedYear !== undefined && this.selectedSemester !== -1 && this.selectedSemester !== undefined && this.selectedClassYear !== -1 && this.selectedClassYear !== undefined && this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== '-1' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined && this.selectedCurriculumYear !== '' && this.selectedCurriculumYear !== undefined) {
+			if (this.selectedYear !== -1 && this.selectedYear !== undefined && this.selectedSemester !== -1 && this.selectedSemester !== undefined && this.selectedClassYear !== '' && this.selectedClassYear !== undefined && this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== '-1' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined) {
 				this.isSelectAllDropdown = true;
-				console.log('3333333333333333333333333333333333333333');
+				// console.log('3333333333333333333333333333333333333333');
 			} else {
 				this.isSelectAllDropdown = false;
-				console.log('4444444444444444444444444444444444444444');
+				// console.log('4444444444444444444444444444444444444444');
 			}
 		}
 		this.checkDisableSelectDropdown();
@@ -489,19 +532,21 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	public navigateToSubject() {
 		let latestSubjectUrl: string;
 
-		if (this.selectedYear === -1 && this.selectedSemester === -1 && this.selectedClassYear === -1 && this.selectedFaculty === -1 && this.selectedDepartment === -1 && this.selectedCurriculum === '' && this.selectedUniqueId === '' && this.selectedCurriculumYear === '') {
+		if (this.selectedYear === -1 && this.selectedSemester === -1 && this.selectedClassYear === '' && this.selectedFaculty === -1 && this.selectedDepartment === -1 && this.selectedCurriculum === '') {
 			// ใช้ path เริ่มต้นแบบไม่เลือกอะไรเลย
 			latestSubjectUrl = this.router.createUrlTree(['/subject']).toString();
-			console.log('666666666666666666666666666666666666666');
-			console.log('latestSubjectUrl : ', latestSubjectUrl);
-		} else if (this.selectedFaculty === 90 && this.selectedDepartment === 90 && this.selectedCurriculum === 'x' && this.isSelectAllDropdown) {
-			// ใช้ path สำหรับกรณี GenEd รอ Api นิ่งก่อน เดี๋ยวมาแก้ต่อ
-			latestSubjectUrl = this.router.createUrlTree(['/subject', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear]).toString();
-		} else if (this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined && this.isSelectAllDropdown) {
+			// console.log('666666666666666666666666666666666666666');
+			// console.log('latestSubjectUrl : ', latestSubjectUrl);
+		}
+		// else if (this.selectedFaculty === 90 && this.selectedDepartment === 90 && this.selectedCurriculum === 'x' && this.isSelectAllDropdown) {
+		// 	// ใช้ path สำหรับกรณี GenEd รอ Api นิ่งก่อน เดี๋ยวมาแก้ต่อ
+		// 	latestSubjectUrl = this.router.createUrlTree(['/subject', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear]).toString();
+		// }
+		else if (this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined && this.isSelectAllDropdown) {
 			// ใช้ path สำหรับกรณี ไม่ใช่ GenEd รอ Api นิ่งก่อน เดี๋ยวมาแก้ต่อ
-			latestSubjectUrl = this.router.createUrlTree(['/subject', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId]).toString();
-			console.log('77777777777777777777777777777777777777777');
-			console.log('latestSubjectUrl : ', latestSubjectUrl);
+			latestSubjectUrl = this.router.createUrlTree(['/subject', this.selectedYear, this.selectedSemester, this.selectedClassYear, this.selectedFaculty, this.selectedDepartment, this.selectedProgram, this.selectedCurriculum]).toString();
+			// console.log('77777777777777777777777777777777777777777');
+			// console.log('latestSubjectUrl : ', latestSubjectUrl);
 		} else {
 			return;
 		}

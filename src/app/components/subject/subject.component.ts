@@ -19,7 +19,7 @@ export class SDMSubjectComponent {
 	@Input() selectedFaculty: number = -1;
 	@Input() selectedDepartment: number = -1;
 	@Input() selectedCurriculum?: string = '';
-	@Input() selectedClassYear: number = -1;
+	@Input() selectedClassYear: string = '';
 	@Input() selectedCurriculumYear?: string = '';
 	@Input() selectedUniqueId?: string = '';
 

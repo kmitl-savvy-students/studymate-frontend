@@ -36,14 +36,15 @@
 				<!-- Subject Component -->
 				<div class="grid w-full grid-cols-1 gap-4">
 					<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
-						<sdm-subject-cpn [subjectCardData]="data" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedFaculty]="selectedFaculty" [selectedDepartment]="selectedDepartment" [selectedCurriculum]="selectedCurriculum" [selectedClassYear]="selectedClassYear" [selectedCurriculumYear]="selectedCurriculumYear" [selectedUniqueId]="selectedUniqueId"></sdm-subject-cpn>
+						<!-- <sdm-subject-cpn [subjectCardData]="data" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedFaculty]="selectedFaculty" [selectedDepartment]="selectedDepartment" [selectedCurriculum]="selectedCurriculum" [selectedClassYear]="selectedClassYear" [selectedCurriculumYear]="selectedCurriculumYear" [selectedUniqueId]="selectedUniqueId"></sdm-subject-cpn> -->
+						<sdm-subject-cpn [subjectCardData]="data" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedFaculty]="selectedFaculty" [selectedDepartment]="selectedDepartment" [selectedCurriculum]="selectedCurriculum" [selectedClassYear]="selectedClassYear"></sdm-subject-cpn>
 					</ng-container>
 				</div>
 				<!-- Pagination -->
 				<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"></sdm-pagination>
 			</div>
 		</ng-container>
-		<ng-container *ngIf="(paginatedItems.length === 0) && !isLoading && searchSubjectDataIsNull">
+		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length === 0) && !isLoading && searchSubjectDataIsNull">
 			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center">ไม่พบข้อมูลรายวิชาที่ค้นหา</div>
 		</ng-container>
 		<ng-container *ngIf="isSelectAllDropdown && getSubjectDataIsNull">
@@ -51,11 +52,11 @@
 		</ng-container>
 		<!-- คำแนะนำการดูรายวิชา -->
 		<ng-container *ngIf="!isSelectAllDropdown">
-			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center">
-				<div class="flex flex-col gap-y-4">
+			<div class="text-dark-75 mt-20 flex w-full flex-col items-center justify-center gap-3 text-center">
+				<div class="flex flex-col gap-y-4 text-sm">
 					<div *ngIf="selectedYear === -1 || selectedYear === undefined">โปรดเลือกปีการศึกษา เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedSemester === -1 || selectedSemester === undefined">โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา</div>
-					<div *ngIf="selectedClassYear === -1 || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedClassYear === '' || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedFaculty === -1 || selectedFaculty === undefined">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedDepartment === -1 || selectedDepartment === undefined">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedProgram === -1 || selectedProgram === undefined">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
