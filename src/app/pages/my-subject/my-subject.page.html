@@ -1,61 +1,30 @@
-<h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h2>
-<h1 class="text-3xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h1>
-<h2 class="text-xl opacity-50">{{ currentUser?.curriculum?.name_en }}</h2>
-
-<hr />
-
-<div class="flex flex-col gap-2">
-	<sdm-base-button icon="file-import" text="อัปโหลดไฟล์ Transcript ใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onUploadTranscript()"></sdm-base-button>
-	<sdm-base-button icon="trash-can" text="ลบข้อมูล Transcript ทั้งหมดออกจากระบบ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteTranscript()"></sdm-base-button>
-</div>
-
-<hr />
-
-<h2 class="text-lg font-semibold opacity-75">รายวิชาของฉัน</h2>
-<h1 class="text-3xl font-semibold">ข้อมูลจาก Transcript ของท่าน</h1>
-<h2 class="text-xl opacity-50">คุณ {{ currentUser?.firstname }} {{ currentUser?.lastname }}</h2>
-
-<hr />
-
-<div *ngIf="!transcript && !isFetchingTranscriptDetails" class="text-semibold rounded-3xl border bg-warning-100 p-12 text-center text-lg text-warning-400">กรุณาอัปโหลดไฟล์ Transcript เพื่อดูข้อมูลส่วนนี้</div>
-<div *ngIf="transcript || isFetchingTranscriptDetails">
-	<div class="mb-5">
-		<div class="mb-4 flex gap-4">
-			<div class="flex flex-grow items-center justify-center gap-4 rounded-3xl border bg-primary-100 p-8"><span class="text-lg font-semibold text-primary-300">หน่วยกิตที่ได้รับทั้งหมด</span><span class="text-5xl">{{ 0 }}</span></div>
-			<div class="flex flex-grow items-center justify-center gap-4 rounded-3xl border bg-danger-100 p-8"><span class="text-lg font-semibold text-danger-300">หน่วยกิตที่เหลือทั้งหมด</span><span class="text-5xl">{{ 0 }}</span></div>
+<div class="flex flex-row gap-x-5 sm:flex-col lg:flex-row">
+	<div class="flex flex-col sm:w-full lg:w-3/4">
+		<div class="mb-4">
+			<h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h3>
+			<h2 class="text-2xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h2>
+			<h3 class="text-lg opacity-50">{{ currentUser?.curriculum?.name_en }}</h3>
 		</div>
-		<sdm-button-link icon="wand-magic-sparkles" link="/curriculum-progress-tracker" text="ดูรายละเอียดผลการเรียนของคุณตามโครงสร้างหลักสูตร" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-success-300" backgroundColorHover="hover:bg-success-400" />
+		<sdm-tabs [tabs]="tabs">
+			<ng-template #transcript>
+				<sdm-transcript-tracker [currentUser]="currentUser" [isFetchingTranscriptDetails]="isFetchingTranscriptDetails" [transcriptData]="transcriptData" [groupedTranscriptDetails]="groupedTranscriptDetails"></sdm-transcript-tracker>
+			</ng-template>
+			<ng-template #progress>
+				<sdm-progress-tracker></sdm-progress-tracker>
+			</ng-template>
+			<ng-template #grade>
+				<p>นี่คือเนื้อหาของแท็บ grade</p>
+			</ng-template>
+		</sdm-tabs>
 	</div>
-
-	<div class="space-y-6 rounded-xl border px-10 py-8">
-		<div *ngIf="isFetchingTranscriptDetails" class="animate-pulse">
-			<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-			<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-			<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-			<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-			<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-		</div>
-		<div *ngFor="let transcriptDetails of groupedTranscriptDetails">
-			<div *ngIf="transcriptDetails.year === 0" class="mb-5">
-				<div class="text-2xl font-semibold">หน่วยกิตเทียบโอน</div>
-				<div class="text-base opacity-50">Transfer Credit</div>
+	<div class="w-1/4">
+		<div class="flex flex-col gap-y-4">
+			<div class="flex flex-col gap-y-2">
+				<sdm-base-button icon="file-import" text="อัปโหลด Transcript" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-main-100" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onUploadTranscript()"></sdm-base-button>
+				<sdm-base-button icon="trash-can" text="ลบข้อมูล Transcript" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-red-400" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteTranscript()"></sdm-base-button>
 			</div>
-			<div *ngIf="transcriptDetails.year !== 0" class="mb-5">
-				<div class="text-2xl font-semibold">ผลการเรียน ปีการศึกษา พ.ศ. {{ transcriptDetails.year + 543 }}</div>
-				<div class="text-base opacity-50">ภาคเรียนที่ {{ transcriptDetails.term }}</div>
-			</div>
-			<div class="flex flex-col gap-3">
-				<div class="flex items-center justify-between rounded-xl border bg-light py-2 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-primary-100" *ngFor="let transcriptDetail of transcriptDetails.details">
-					<div>
-						<div class="font-semibold">{{ transcriptDetail.subject?.id }} {{ transcriptDetail.subject?.name_th }}</div>
-						<div class="text-xs opacity-50">{{ transcriptDetail.subject?.name_en }}</div>
-					</div>
-					<div class="flex gap-3">
-						<div class="flex w-[150px] items-center gap-4 p-4"><span class="text-xs opacity-50">หน่วยกิตที่ได้รับ</span><span class="text-2xl">{{ transcriptDetail.subject?.credit }}</span></div>
-						<div class="flex w-[150px] items-center gap-4 p-4"><span class="text-xs opacity-50">เกรดที่ได้รับ</span><span class="text-2xl">{{ transcriptDetail.grade }}</span></div>
-					</div>
-				</div>
-			</div>
+			<sdm-credit-dashboard [totalCompleted]="118" [totalRemaining]="18" [totalCredit]="136"></sdm-credit-dashboard>
+			<sdm-advice-dashboard></sdm-advice-dashboard>
 		</div>
 	</div>
 </div>
@@ -70,7 +39,7 @@
 			</p>
 			<p class="text-sm opacity-50">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
 		</div>
-		<input id="transcript" type="file" class="hidden" (change)="onTranscriptUploadInput($event)" />
+		<input id="transcript" type="file" (change)="onTranscriptUploadInput($event)" />
 	</label>
 </sdm-base-modal>
 <sdm-base-modal #deleteTranscriptModal modalId="deleteTranscript" header="ยืนยันลบข้อมูล Transcript ทั้งหมดออกจากระบบ" (confirmEvent)="onConfirmDeleteTranscript()">

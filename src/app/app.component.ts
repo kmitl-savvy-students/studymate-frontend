@@ -8,11 +8,12 @@ import { AuthenticationService } from '@services/authentication/authentication.s
 import { FontAwesomeIconsService } from '@services/font-awesome-icons.service';
 import { LoadingOverlayComponent } from '@services/loading/loading-overlay.component';
 import { initFlowbite } from 'flowbite';
+import { SelectCurriculumModalComponent } from './components/select-curriculum/select-curriculum-modal.component';
 
 @Component({
 	standalone: true,
 	selector: 'app-root',
-	imports: [RouterOutlet, NavbarComponent, FooterComponent, AlertComponent, CommonModule, LoadingOverlayComponent],
+	imports: [RouterOutlet, NavbarComponent, FooterComponent, AlertComponent, CommonModule, LoadingOverlayComponent, SelectCurriculumModalComponent],
 	templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {

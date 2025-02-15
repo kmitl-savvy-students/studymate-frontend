@@ -4,6 +4,6 @@
 	"tabWidth": 4,
 	"singleQuote": true,
 	"quoteProps": "consistent",
-	"printWidth": 999,
+	"printWidth": 240,
 	"bracketSameLine": true
 }

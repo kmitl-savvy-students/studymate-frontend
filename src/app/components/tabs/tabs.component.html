@@ -1,0 +1,36 @@
+<!-- app-tab.component.html -->
+<div class="mb-4 border-b border-main-50">
+	<ul class="-mb-px flex flex-wrap gap-x-2 text-center text-base font-semibold" role="tablist">
+		<li *ngFor="let tab of tabs" class="me-2" role="presentation">
+			<button
+				class="inline-block rounded-t-lg p-4"
+				(click)="selectTab(tab.id)"
+				[ngClass]="{
+					'border-b-2 border-main-100 text-main-100': selectedTab === tab.id,
+					'border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-600 dark:border-gray-700': selectedTab !== tab.id,
+				}"
+				[attr.id]="tab.id + '-tab'"
+				[attr.aria-controls]="tab.id"
+				[attr.aria-selected]="selectedTab === tab.id"
+				role="tab"
+				type="button">
+				<sdm-icon *ngIf="tab.icon" class="pr-2" [icon]="tab.icon"></sdm-icon>
+				{{ tab.tab_name }}
+			</button>
+		</li>
+	</ul>
+</div>
+<!-- <div>
+	<ng-container *ngFor="let tab of tabs">
+		<div *ngIf="selectedTab === tab.id" [attr.id]="tab.id" role="tabpanel" [attr.aria-labelledby]="tab.id + '-tab'" class="p-2">
+			<ng-container *ngTemplateOutlet="tabTemplates.get(tab.id) || null"></ng-container>
+		</div>
+	</ng-container>
+</div> -->
+<div>
+	<ng-container *ngFor="let tab of tabs">
+		<div *ngIf="selectedTab === tab.id" [attr.id]="tab.id" role="tabpanel" [attr.aria-labelledby]="tab.id + '-tab'" class="p-2">
+			<ng-container *ngTemplateOutlet="tab.templateRef || null"></ng-container>
+		</div>
+	</ng-container>
+</div>
