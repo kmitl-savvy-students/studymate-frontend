@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SDMBaseButton } from '@components/buttons/base-button.component';
 import { Tabs } from '@models/Tabs.model.js';
 import { Transcript } from '@models/Transcript.model';
@@ -17,12 +17,14 @@ import { SDMButtonLink } from '../../components/buttons/button-link.component';
 import { SDMCreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMBaseModal } from '../../components/modals/base-modal.component';
+import { SDMProgressTracker } from '../../components/progress-tracker/progress-tracker.component';
 import { SDMTabsComponent } from '../../components/tabs/tabs.component';
+import { SDMTranscriptTrackerComponent } from '../../components/transcript-tracker/transcript-tracker.component';
 
 @Component({
 	selector: 'sdm-page-my-subject',
 	standalone: true,
-	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMAccordionComponent, SDMTabsComponent],
+	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMAccordionComponent, SDMTabsComponent, SDMProgressTracker, SDMTranscriptTrackerComponent],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
@@ -30,8 +32,12 @@ export class SDMPageMySubject implements OnInit {
 	@ViewChild('uploadTranscriptModal') uploadTranscriptModal!: SDMBaseModal;
 	@ViewChild('deleteTranscriptModal') deleteTranscriptModal!: SDMBaseModal;
 
+	@ViewChild('transcript', { static: true }) transcriptTemplate!: TemplateRef<Tabs>;
+	@ViewChild('progress', { static: true }) progressTemplate!: TemplateRef<Tabs>;
+	@ViewChild('grade', { static: true }) gradeTemplate!: TemplateRef<Tabs>;
+
 	public currentUser: User | null = null;
-	public transcript: Transcript | null = null;
+	public transcriptData: Transcript | null = null;
 	public groupedTranscriptDetails: { year: number; term: number; details: Array<TranscriptDetail> }[] = [];
 
 	public isFetchingTranscriptDetails: boolean = false;
@@ -39,9 +45,9 @@ export class SDMPageMySubject implements OnInit {
 	public totalCompletedCredit: number = 0;
 
 	public tabs: Tabs[] = [
-		{ id: 'profile', icon: 'right-to-bracket', tab_name: 'Profile' },
-		{ id: 'setting', icon: 'gear', tab_name: 'Setting' },
-		{ id: 'tools', icon: 'gear', tab_name: 'Tools' },
+		{ id: 'transcript', icon: 'file', tab_name: 'ข้อมูลรายวิชาตามทรานสคริปต์' },
+		{ id: 'progress', icon: 'book-bookmark', tab_name: 'ข้อมูลรายวิชาตามโครงสร้างหลักสูตร' },
+		{ id: 'grade', icon: 'graduation-cap', tab_name: 'เกรด' },
 	];
 
 	constructor(
@@ -57,6 +63,8 @@ export class SDMPageMySubject implements OnInit {
 			this.currentUser = user;
 		});
 		this.fetchTranscripts();
+		console.log(this.transcriptData);
+		console.log(this.isFetchingTranscriptDetails);
 	}
 
 	// #region Fetchings Transcript
@@ -76,7 +84,7 @@ export class SDMPageMySubject implements OnInit {
 			)
 			.subscribe({
 				next: (data) => {
-					this.transcript = data;
+					this.transcriptData = data;
 					this.prepareAndSortTranscriptDetails(data.details);
 				},
 				error: (error) => {
@@ -84,10 +92,11 @@ export class SDMPageMySubject implements OnInit {
 				},
 			});
 	}
+
 	prepareAndSortTranscriptDetails(data: Array<TranscriptDetail>) {
-		if (!this.transcript) return;
+		if (!this.transcriptData) return;
 		console.log('data:', data);
-		this.transcript.details = data.sort((a, b) => {
+		this.transcriptData.details = data.sort((a, b) => {
 			if (b.teachtable?.year !== a.teachtable?.year) {
 				return (a.teachtable?.year ?? 0) - (b.teachtable?.year ?? 0);
 			}
@@ -97,7 +106,7 @@ export class SDMPageMySubject implements OnInit {
 			return a.subject?.id.localeCompare(b.subject?.id ?? '') ?? 0;
 		});
 		this.groupedTranscriptDetails = [];
-		this.transcript.details.forEach((transcriptDetails) => {
+		this.transcriptData.details.forEach((transcriptDetails) => {
 			let group = this.groupedTranscriptDetails.find((g) => g.year === (transcriptDetails.teachtable?.year ?? 0) && g.term === (transcriptDetails.teachtable?.term ?? 0));
 			if (!group) {
 				group = { year: transcriptDetails.teachtable?.year ?? 0, term: transcriptDetails.teachtable?.term ?? 0, details: [] };
@@ -119,6 +128,7 @@ export class SDMPageMySubject implements OnInit {
 	onDeleteTranscript() {
 		this.deleteTranscriptModal.show();
 	}
+
 	onConfirmDeleteTranscript() {
 		this.deleteTranscriptModal.hide();
 
@@ -145,14 +155,17 @@ export class SDMPageMySubject implements OnInit {
 				});
 		});
 	}
+
 	// #endregion
 	// #region Upload Transcript
 	onUploadTranscript() {
 		this.uploadTranscriptModal.show();
 	}
+
 	onConfirmUploadTranscript() {
 		this.alertService.showAlert('error', 'กรุณาเลือกไฟล์เพื่ออัปโหลด Transcript');
 	}
+
 	onTranscriptUploadInput(event: any) {
 		const file: File = event.target.files[0];
 		if (file) {
@@ -170,6 +183,7 @@ export class SDMPageMySubject implements OnInit {
 			event.target.value = '';
 		}
 	}
+
 	uploadTranscript(file: File) {
 		if (file) {
 			if (!this.currentUser) return;

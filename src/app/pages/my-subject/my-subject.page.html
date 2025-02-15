@@ -1,88 +1,21 @@
 <div class="flex flex-row gap-x-5">
 	<div class="flex w-3/4 flex-col">
-		<div>
+		<div class="mb-4">
 			<h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h3>
 			<h2 class="text-2xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h2>
 			<h3 class="text-lg opacity-50">{{ currentUser?.curriculum?.name_en }}</h3>
-			<hr />
 		</div>
-		<!-- <sdm-tabs></sdm-tabs> -->
-		<!-- app.component.html -->
 		<sdm-tabs [tabs]="tabs">
-			<!-- <ng-template #profile>
-				<p>นี่คือเนื้อหาของแท็บ Profile</p>
+			<ng-template #transcript>
+				<sdm-transcript-tracker [currentUser]="currentUser" [isFetchingTranscriptDetails]="isFetchingTranscriptDetails" [transcriptData]="transcriptData" [groupedTranscriptDetails]="groupedTranscriptDetails"></sdm-transcript-tracker>
 			</ng-template>
-			<ng-template #dashboard>
-				<p>นี่คือเนื้อหาของแท็บ Dashboard</p>
+			<ng-template #progress>
+				<sdm-progress-tracker></sdm-progress-tracker>
 			</ng-template>
-			<ng-template #setting>
-				<p>นี่คือเนื้อหาของแท็บ setting</p>
-			</ng-template> -->
-			<div id="profile">
-				<!-- เนื้อหาสำหรับแท็บโปรไฟล์ -->
-				<p>นี่คือเนื้อหาของโปรไฟล์</p>
-			</div>
-			<div id="dashboard">
-				<!-- เนื้อหาสำหรับแท็บแดชบอร์ด -->
-				<p>นี่คือเนื้อหาของแดชบอร์ด</p>
-			</div>
+			<ng-template #grade>
+				<p>นี่คือเนื้อหาของแท็บ grade</p>
+			</ng-template>
 		</sdm-tabs>
-
-		<div class="mb-8">
-			<sdm-button-link icon="wand-magic-sparkles" link="/curriculum-progress-tracker" text="ดูรายละเอียดผลการเรียนของคุณตามโครงสร้างหลักสูตร" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-main-100" backgroundColorHover="hover:bg-main-100" />
-		</div>
-		<div>
-			<div class="mb-8">
-				<h2 class="text-2xl font-semibold">ข้อมูลจาก Transcript ของท่าน</h2>
-				<h3 class="text-base opacity-50">คุณ {{ currentUser?.firstname }} {{ currentUser?.lastname }}</h3>
-			</div>
-			<div *ngIf="!transcript && !isFetchingTranscriptDetails" class="text-semibold rounded-3xl border bg-orange-50 p-12 text-center text-lg text-warning-400">กรุณาอัปโหลดไฟล์ Transcript เพื่อดูข้อมูลส่วนนี้</div>
-			<div *ngIf="transcript || isFetchingTranscriptDetails">
-				<div class="rounded-xl border border-main-50 p-6">
-					<div *ngIf="isFetchingTranscriptDetails" class="animate-pulse">
-						<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-						<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-						<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-						<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-						<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
-					</div>
-					<div *ngFor="let transcriptDetails of groupedTranscriptDetails">
-						<div *ngIf="transcriptDetails.year === 0" class="">
-							<sdm-accordion header="หน่วยกิตเทียบโอน" subHeader="Transfer Credit" accordionId="transfer-credit-acc" [accordionDefaultStatus]="true">
-								<div class="flex flex-col gap-3 px-4">
-									<div class="flex items-center justify-between rounded-xl border border-main-50 py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10" *ngFor="let transcriptDetail of transcriptDetails.details">
-										<div>
-											<div class="max-w-80 truncate text-lg font-semibold">{{ transcriptDetail.subject?.id }} {{ transcriptDetail.subject?.name_th }}</div>
-											<div class="text-xs opacity-50">{{ transcriptDetail.subject?.name_en }}</div>
-										</div>
-										<div class="flex gap-3">
-											<div class="flex w-[150px] items-center gap-4 p-4"><span class="text-xs opacity-50">หน่วยกิตที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.subject?.credit }}</span></div>
-											<div class="flex w-[150px] items-center gap-4 p-4"><span class="text-xs opacity-50">เกรดที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.grade }}</span></div>
-										</div>
-									</div>
-								</div>
-							</sdm-accordion>
-						</div>
-						<div *ngIf="transcriptDetails.year !== 0" class="">
-							<sdm-accordion header="ผลการเรียน ปีการศึกษา พ.ศ. {{ transcriptDetails.year + 543 }}" subHeader="ภาคเรียนที่ {{ transcriptDetails.term }}" accordionId="transfer-credit-acc-{{transcriptDetails.year + 543}}-{{ transcriptDetails.term }}" [accordionDefaultStatus]="false">
-								<div class="flex flex-col gap-3 px-4">
-									<div class="flex items-center justify-between rounded-xl border border-main-50 py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10" *ngFor="let transcriptDetail of transcriptDetails.details">
-										<div>
-											<div class="max-w-80 truncate font-semibold">{{ transcriptDetail.subject?.id }} {{ transcriptDetail.subject?.name_th }}</div>
-											<div class="text-xs opacity-50">{{ transcriptDetail.subject?.name_en }}</div>
-										</div>
-										<div class="flex gap-3">
-											<div class="flex w-[150px] items-center gap-4 p-4"><span class="text-xs opacity-50">หน่วยกิตที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.subject?.credit }}</span></div>
-											<div class="flex w-[150px] items-center gap-4 p-4"><span class="text-xs opacity-50">เกรดที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.grade }}</span></div>
-										</div>
-									</div>
-								</div>
-							</sdm-accordion>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</div>
 	<div class="w-1/4">
 		<div class="flex flex-col gap-y-4">
@@ -95,6 +28,7 @@
 		</div>
 	</div>
 </div>
+
 <sdm-base-modal #uploadTranscriptModal modalId="uploadTranscript" header="อัปโหลดไฟล์ Transcript ใหม่" (confirmEvent)="onConfirmUploadTranscript()">
 	<label for="transcript" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
 		<div class="flex flex-col items-center justify-center pb-6 pt-5">
@@ -105,7 +39,7 @@
 			</p>
 			<p class="text-sm opacity-50">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
 		</div>
-		<input id="transcript" type="file" class="hidden" (change)="onTranscriptUploadInput($event)" />
+		<input id="transcript" type="file" (change)="onTranscriptUploadInput($event)" />
 	</label>
 </sdm-base-modal>
 <sdm-base-modal #deleteTranscriptModal modalId="deleteTranscript" header="ยืนยันลบข้อมูล Transcript ทั้งหมดออกจากระบบ" (confirmEvent)="onConfirmDeleteTranscript()">
