@@ -15,6 +15,7 @@ import { APIManagementService } from '@services/api-management.service';
 import { initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
+import { SDMAccordionComponent } from '../../components/accordion/accordion.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { classYearList, semesterList, subjects_added, yearsList } from './subject-page-data';
@@ -22,7 +23,7 @@ import { classYearList, semesterList, subjects_added, yearsList } from './subjec
 @Component({
 	selector: 'sdm-page-subject',
 	standalone: true,
-	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMilterBarComponent, SDMPaginationComponent, SDMSubjectComponent],
+	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMAccordionComponent],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
@@ -426,7 +427,16 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 
 	public checkSelectAllDropdown() {
 		if (this.selectedFaculty === 90 && this.selectedDepartment === 90) {
-			if (this.selectedYear !== 0 && this.selectedYear !== undefined && this.selectedSemester !== 0 && this.selectedSemester !== undefined && this.selectedClassYear !== '' && this.selectedClassYear !== undefined && this.selectedFaculty === 90 && this.selectedDepartment === 90) {
+			if (
+				this.selectedYear !== 0 &&
+				this.selectedYear !== undefined &&
+				this.selectedSemester !== 0 &&
+				this.selectedSemester !== undefined &&
+				this.selectedClassYear !== '' &&
+				this.selectedClassYear !== undefined &&
+				this.selectedFaculty === 90 &&
+				this.selectedDepartment === 90
+			) {
 				this.selectedCurriculum = 'x';
 				this.isSelectAllDropdown = true;
 			} else {
@@ -434,7 +444,24 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			}
 		} else {
 			this.isGened = false;
-			if (this.selectedYear !== -1 && this.selectedYear !== undefined && this.selectedSemester !== -1 && this.selectedSemester !== undefined && this.selectedClassYear !== '' && this.selectedClassYear !== undefined && this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== '-1' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined) {
+			if (
+				this.selectedYear !== -1 &&
+				this.selectedYear !== undefined &&
+				this.selectedSemester !== -1 &&
+				this.selectedSemester !== undefined &&
+				this.selectedClassYear !== '' &&
+				this.selectedClassYear !== undefined &&
+				this.selectedFaculty !== -1 &&
+				this.selectedFaculty !== 90 &&
+				this.selectedFaculty !== undefined &&
+				this.selectedDepartment !== -1 &&
+				this.selectedDepartment !== 90 &&
+				this.selectedDepartment !== undefined &&
+				this.selectedCurriculum !== '' &&
+				this.selectedCurriculum !== '-1' &&
+				this.selectedCurriculum !== 'x' &&
+				this.selectedCurriculum !== undefined
+			) {
 				this.isSelectAllDropdown = true;
 			} else {
 				this.isSelectAllDropdown = false;
@@ -484,7 +511,18 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	public navigateToSubject() {
 		let latestSubjectUrl: string;
 
-		if (this.isSelectAllDropdown && this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined) {
+		if (
+			this.isSelectAllDropdown &&
+			this.selectedFaculty !== -1 &&
+			this.selectedFaculty !== 90 &&
+			this.selectedFaculty !== undefined &&
+			this.selectedDepartment !== -1 &&
+			this.selectedDepartment !== 90 &&
+			this.selectedDepartment !== undefined &&
+			this.selectedCurriculum !== '' &&
+			this.selectedCurriculum !== 'x' &&
+			this.selectedCurriculum !== undefined
+		) {
 			const urlSegments = ['/subject', this.selectedYear, this.selectedSemester, this.selectedClassYear, this.selectedFaculty, this.selectedDepartment, this.selectedProgram, this.selectedCurriculum];
 
 			// สร้าง URL tree แยกจาก string
