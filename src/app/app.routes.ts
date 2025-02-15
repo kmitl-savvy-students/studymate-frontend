@@ -23,10 +23,17 @@ export const routes: Routes = [
 	{ path: 'home', component: SDMPageHome },
 
 	// #region Old Subject Detail
-	{ path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail },
-	{ path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId', component: SDMPageSubjectDetail },
-	{ path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId', component: SDMPageSubjectDetail },
+	// { path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail },
+	// { path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId', component: SDMPageSubjectDetail },
+	// { path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId', component: SDMPageSubjectDetail },
 	// #endregion
+
+	// #region New Subject Detail
+	{ path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail },
+	// { path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId', component: SDMPageSubjectDetail },
+	{ path: 'subject/subject-detail/:year/:semester/:classYear/:faculty/:department/:program/:curriculum/:section/:subjectId', component: SDMPageSubjectDetail },
+	// #endregion
+
 	// #region Old Subjects
 	{ path: 'subject', component: SDMPageSubject },
 	// { path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear', component: SDMPageSubject },

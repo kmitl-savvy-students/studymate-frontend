@@ -31,14 +31,6 @@ export class SDMSubjectComponent {
 		return safeString;
 	}
 
-	// ngAfterViewInit(): void {
-	// 	if (this.subjectCardData) {
-	// 		console.log('subjectCardData: ', this.subjectCardData);
-	// 		console.log('subjectCardData.classLevel : ', this.subjectCardData.classLevel);
-	// 		console.log('subjectCardData.classLevel : ', this.subjectCardData.classLevel);
-	// 	}
-	// }
-
 	public getSubjectDetailUrl(): string | undefined {
 		let latestSubjectDetailUrl: string;
 
