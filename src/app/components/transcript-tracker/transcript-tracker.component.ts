@@ -18,7 +18,7 @@ export class SDMTranscriptTrackerComponent implements OnInit {
 	@Input() groupedTranscriptDetails: { year: number; term: number; details: Array<TranscriptDetail> }[] = [];
 	public isFirtstSubject: boolean = false;
 	ngOnInit(): void {
-		console.log('group', this.groupedTranscriptDetails);
+		// console.log('group', this.groupedTranscriptDetails);
 	}
 
 	getFirstNonZeroYearIndex(): number {

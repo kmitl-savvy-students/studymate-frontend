@@ -11,9 +11,7 @@ import { AuthenticationService } from '@services/authentication/authentication.s
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
-import { SDMAccordionComponent } from '../../components/accordion/accordion.component';
 import { SDMAdviceDashboardComponent } from '../../components/advice-dashboard/advice-dashboard.component';
-import { SDMButtonLink } from '../../components/buttons/button-link.component';
 import { SDMCreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMBaseModal } from '../../components/modals/base-modal.component';
@@ -24,7 +22,7 @@ import { SDMTranscriptTrackerComponent } from '../../components/transcript-track
 @Component({
 	selector: 'sdm-page-my-subject',
 	standalone: true,
-	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMButtonLink, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMAccordionComponent, SDMTabsComponent, SDMProgressTracker, SDMTranscriptTrackerComponent],
+	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMCreditDashboardComponent, SDMAdviceDashboardComponent, SDMTabsComponent, SDMProgressTracker, SDMTranscriptTrackerComponent],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })
@@ -85,7 +83,9 @@ export class SDMPageMySubject implements OnInit {
 			.subscribe({
 				next: (data) => {
 					this.transcriptData = data;
-					this.prepareAndSortTranscriptDetails(data.details);
+					if (data !== null) {
+						this.prepareAndSortTranscriptDetails(data.details);
+					}
 				},
 				error: (error) => {
 					console.error('Error fetching transcript:', error);
