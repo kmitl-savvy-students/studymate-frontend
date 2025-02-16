@@ -102,6 +102,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 						this.selectedProgram = +params['program'];
 						this.selectedCurriculum = params['curriculum'];
 						console.log('=========================================================');
+						console.log('selectedYear :', this.selectedYear);
+						console.log('selectedSemester :', this.selectedSemester);
+						console.log('selectedClassYear :', this.selectedClassYear);
+						console.log('selectedFaculty :', this.selectedFaculty);
 						console.log('selectedDepartment :', this.selectedDepartment);
 						console.log('selectedProgram :', this.selectedProgram);
 						console.log('selectedCurriculum :', this.selectedCurriculum);
@@ -144,10 +148,9 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			.subscribe(() => {
 				this.updateDropdownValues();
 				this.checkSelectAllDropdown();
-
 				this.filteredSubjectCardDataList = [];
 				this.isSearched = false;
-
+				console.log('isSelectAllDropdown : ', this.isSelectAllDropdown);
 				if (this.isSelectAllDropdown) {
 					this.getSubjectData();
 				}
@@ -215,6 +218,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 					break;
 			}
 		});
+		console.log('updateDropdownValues แล้วจ้า');
 	}
 
 	public updatePaginatedItems() {
@@ -238,6 +242,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			next: (res) => {
 				if (res && res.length > 0) {
 					this.subjectCardData = res;
+					console.log('ทำ getSubjectCardData จ้าาาาาาาาาาาาา');
 					console.log('subjectCardData : ', this.subjectCardData);
 					this.subjectCardTotal = this.subjectCardData.length;
 					this.updatePaginatedItems();
@@ -250,14 +255,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				this.currentPage = 1;
 			},
 			error: (error) => {
-				if (error.status === 404) {
+				if (error.status === 400) {
+					console.error('400');
+				} else if (error.status === 404) {
 					console.error('Not found');
 				} else if (error.status === 500) {
 					console.error('Internal Server Error');
 				} else {
 					console.error('An unexpected error occurred:', error.status);
 				}
-
 				this.isError = true;
 				this.isLoading = false;
 			},
@@ -468,6 +474,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			}
 		}
 		this.checkDisableSelectDropdown();
+		console.log('checkSelectAllDropdown แล้วจ้า');
 	}
 
 	public resetDropdowns(selectName?: string) {
@@ -504,10 +511,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 		}
 	}
 
-	private isCurrentUrl(url: string): boolean {
-		return this.router.url === url;
-	}
-
 	public navigateToSubject() {
 		let latestSubjectUrl: string;
 
@@ -519,6 +522,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			this.selectedDepartment !== -1 &&
 			this.selectedDepartment !== 90 &&
 			this.selectedDepartment !== undefined &&
+			this.selectedProgram !== -1 &&
+			this.selectedProgram !== undefined &&
 			this.selectedCurriculum !== '' &&
 			this.selectedCurriculum !== 'x' &&
 			this.selectedCurriculum !== undefined
@@ -540,9 +545,14 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				.navigate([latestSubjectUrl], navigationExtras)
 				.then((success) => {
 					if (success) {
+						const option = this.programList.find((option) => option.id === this.selectedProgram);
+						if (option) {
+							this.selectedProgramKmitlId = Number(option.kmitl_id);
+						}
 						console.log('Navigation successful!');
-						// เรียก API เพื่อโหลดข้อมูลใหม่
-						this.getSubjectData();
+						if (this.isSelectAllDropdown) {
+							this.getSubjectData();
+						}
 					} else {
 						console.error('Navigation failed.');
 					}
@@ -564,195 +574,4 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	public searchFunction(data: SubjectCardData[], searchValue: string): SubjectCardData[] {
 		return data.filter((subject) => subject.subject.id.toLowerCase().includes(searchValue.toLowerCase()) || subject.subject.name_en.toLowerCase().includes(searchValue.toLowerCase()));
 	}
-
-	/* OLD COMMENT CODE
-	ngOnInit(): void {
-		this.route.params
-			.pipe(
-				switchMap((params) => {
-					if (Object.keys(params).length > 0) {
-						this.selectedYear = +params['year'];
-						this.selectedSemester = +params['semester'];
-						this.selectedClassYear = params['classYear'];
-						this.selectedFaculty = +params['faculty'];
-						this.selectedDepartment = +params['department'];
-						this.selectedProgram = +params['program'];
-						this.selectedCurriculum = params['curriculum'];
-					}
-					return this.getDropdownFaculties();
-				}),
-				concatMap(() => (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined ? this.getDropdownDepartmentsAsObservable(this.selectedFaculty) : of(null))),
-				concatMap(() => (this.selectedDepartment !== -1 && this.selectedDepartment !== undefined ? this.getDropdownProgramsAsObservable(this.selectedDepartment) : of(null))),
-				concatMap(() => (this.selectedProgram !== -1 && this.selectedProgram !== undefined ? this.getDropdownCurriculumsAsObservable(this.selectedProgram) : of(null))),
-			)
-			.subscribe(() => {
-				this.updateDropdownValues(); // เรียกหลังจาก API ทั้งหมดเสร็จสิ้น
-				this.checkSelectAllDropdown();
-
-				this.filteredSubjectCardDataList = [];
-				this.isSearched = false;
-
-				if (this.isSelectAllDropdown) {
-					this.getSubjectData();
-				}
-			});
-	}
-			
-	public getCurriculumsData() {
-		return this.apiManagementService.GetCurriculum().pipe(
-			tap((res) => {
-				this.curriculumsData = res.filter(
-					(s) => s.pid === '06' || s.pid === '101',
-				);
-				this.curriculumList = this.curriculumsData.map(
-					(curriculum, index) => {
-						const dropdown = new DropdownList();
-						dropdown.label = `${curriculum.name_th} (${curriculum.year})`;
-						dropdown.value = curriculum.pid;
-						dropdown.index = index;
-						return dropdown;
-					},
-				);
-				this.curriculumOptions = this.curriculumsData.map(
-					(curriculum, index) => {
-						const curriculumOptions = new CirriculumnList();
-						curriculumOptions.value = curriculum.pid;
-						curriculumOptions.uniqueId = curriculum.unique_id;
-						curriculumOptions.curriculumYear = curriculum.year;
-						curriculumOptions.index = index;
-						return curriculumOptions;
-					},
-				);
-			}),
-			catchError((error) => {
-				console.error('Error fetching curriculum:', error);
-				return EMPTY;
-			}),
-		);
-	}
-	
-
-	public getDropdownDepartments(selectedFaculty: number) {
-		this.apiManagementService.GetDropdownDepartments(selectedFaculty).subscribe({
-			next: (res) => {
-				if (res) {
-					this.departmentList = res;
-					console.log('get departmentList : ', this.departmentList);
-				}
-			},
-			error: (error) => {
-				console.error('Error fetching departmentList:', error);
-			},
-		});
-	}
-
-	public getDropdownPrograms(selectedDepartment: number) {
-		this.apiManagementService.GetDropdownPrograms(selectedDepartment).subscribe({
-			next: (res) => {
-				if (res) {
-					this.programList = res;
-					console.log('get programtList : ', this.programList);
-				}
-			},
-			error: (error) => {
-				console.error('Error fetching departmentList:', error);
-			},
-		});
-	}
-
-	public getDropdownCurriculums(selectedProgram: number) {
-		this.apiManagementService.GetDropdownCurriculums(selectedProgram).subscribe({
-			next: (res) => {
-				if (res) {
-					this.curriculumList = res.map((curriculum) => {
-						return {
-							...curriculum,
-							name_th: `${curriculum.name_th} (${curriculum.year})`,
-							name_en: `${curriculum.name_en} (${curriculum.year})`,
-						};
-					});
-					console.log('get curriculumList : ', this.curriculumList);
-				}
-			},
-			error: (error) => {
-				console.error('Error fetching curriculumList:', error);
-			},
-		});
-	}
-
-	public handleChooseFaculty(list: DropdownList[]) {
-		if (this.selectedFaculty === '90') {
-			this.isGened = true;
-			return genedDeList;
-		} else if (this.selectedFaculty === '01') {
-			return engineerDeList;
-		}
-		return list;
-	}
-
-	public handleChooseDepartment(list: DropdownList[]) {
-		if (this.selectedDepartment === '90') {
-			this.isGened = true;
-			return genedFacList;
-		} else if (this.selectedDepartment === '05') {
-			return engineerFacList;
-		}
-		return list;
-	}
-
-	public navigateToSubject() {
-		let latestSubjectUrl: string;
-
-		// if (this.selectedYear === -1 && this.selectedSemester === -1 && this.selectedClassYear === '' && this.selectedFaculty === -1 && this.selectedDepartment === -1 && this.selectedCurriculum === '') {
-		// 	// ใช้ path เริ่มต้นแบบไม่เลือกอะไรเลย
-		// 	latestSubjectUrl = this.router.createUrlTree(['/subject']).toString();
-		// }
-		// if (this.selectedFaculty === 90 && this.selectedDepartment === 90 && this.selectedCurriculum === 'x' && this.isSelectAllDropdown) {
-		// 	// ใช้ path สำหรับกรณี GenEd รอ Api นิ่งก่อน เดี๋ยวมาแก้ต่อ
-		// 	latestSubjectUrl = this.router.createUrlTree(['/subject', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear]).toString();
-		// }
-		if (this.isSelectAllDropdown && this.selectedFaculty !== -1 && this.selectedFaculty !== 90 && this.selectedFaculty !== undefined && this.selectedDepartment !== -1 && this.selectedDepartment !== 90 && this.selectedDepartment !== undefined && this.selectedCurriculum !== '' && this.selectedCurriculum !== 'x' && this.selectedCurriculum !== undefined) {
-			latestSubjectUrl = this.router.createUrlTree(['/subject', this.selectedYear, this.selectedSemester, this.selectedClassYear, this.selectedFaculty, this.selectedDepartment, this.selectedProgram, this.selectedCurriculum]).toString();
-			console.log('555555555555555555555555555555555555555');
-		} else {
-			return;
-		}
-
-		console.log('latestSubjectUrl : ', latestSubjectUrl);
-
-		// if (!this.isCurrentUrl(latestSubjectUrl)) {
-		// 	// this.isNavigating = true;
-		// 	this.clearSearch();
-		// 	this.router
-		// 		.navigateByUrl(latestSubjectUrl)
-		// 		.then((success) => {
-		// 			if (success) {
-		// 				console.log('Navigation successful!');
-		// 			} else {
-		// 				console.error('Navigation failed.');
-		// 			}
-		// 			// this.isNavigating = false;
-		// 		})
-		// 		.catch((error) => {
-		// 			console.error('Navigation error:', error);
-		// 			// this.isNavigating = false;
-		// 		});
-		// }
-
-		this.clearSearch();
-		this.router
-			.navigateByUrl(latestSubjectUrl)
-			.then((success) => {
-				if (success) {
-					console.log('Navigation successful!');
-				} else {
-					console.error('Navigation failed.');
-				}
-			})
-			.catch((error) => {
-				console.error('Navigation error:', error);
-			});
-	}
-
-	*/
 }

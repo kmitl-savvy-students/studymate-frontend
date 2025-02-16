@@ -17,6 +17,7 @@ import { SDMPageSubjectDetail } from '@pages/subject-detail/subject-detail.page'
 import { SDMPageSubject } from '@pages/subjects/subject.page';
 import { SDMPageSubjects } from '@pages/subjects/subjects.page';
 import { AuthenticationGuard } from '@services/authentication/authentication.guard';
+import { SubjectValidationGuard } from '@services/guard/subject.guard';
 
 export const routes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -37,7 +38,7 @@ export const routes: Routes = [
 	// #region Old Subjects
 	{ path: 'subject', component: SDMPageSubject },
 	// { path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear', component: SDMPageSubject },
-	{ path: 'subject/:year/:semester/:classYear/:faculty/:department/:program/:curriculum', component: SDMPageSubject },
+	{ path: 'subject/:year/:semester/:classYear/:faculty/:department/:program/:curriculum', component: SDMPageSubject, canActivate: [SubjectValidationGuard] },
 	// #endregion
 
 	// #region New Subjects
