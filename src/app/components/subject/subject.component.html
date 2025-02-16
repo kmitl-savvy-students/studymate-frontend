@@ -16,17 +16,19 @@
 				</div>
 			</div>
 			<div class="flex flex-col">
-				<!-- <div class="text-sm text-red-500">
-					{{ subjectCardData.subject_type_name_th }}
-				</div> -->
 				<div class="flex flex-row flex-wrap items-center gap-x-3">
-					<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
-						{{ subjectCardData.group_name.length !== 0 ? subjectCardData.group_name : 'ไม่ระบุหมวดหมู่' }}
-					</div>
 					<div *ngIf="subjectCardData.class_level === '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ทุกชั้นปี</div>
 					<div *ngIf="subjectCardData.class_level != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ปี {{ subjectCardData.class_level }}</div>
 
 					<div class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">Sec {{ subjectCardData.section }}</div>
+					<div *ngIf="subjectCardData.group_name.length > 0; else noGroup">
+						<div *ngFor="let group of subjectCardData.group_name" class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
+							{{ group }}
+						</div>
+					</div>
+					<ng-template #noGroup>
+						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่ระบุหมวดหมู่</div>
+					</ng-template>
 				</div>
 			</div>
 		</div>
