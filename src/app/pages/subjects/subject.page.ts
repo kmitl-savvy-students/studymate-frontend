@@ -150,7 +150,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				this.checkSelectAllDropdown();
 				this.filteredSubjectCardDataList = [];
 				this.isSearched = false;
-				console.log('isSelectAllDropdown : ', this.isSelectAllDropdown);
 				if (this.isSelectAllDropdown) {
 					this.getSubjectData();
 				}
@@ -218,7 +217,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 					break;
 			}
 		});
-		console.log('updateDropdownValues แล้วจ้า');
 	}
 
 	public updatePaginatedItems() {
@@ -242,8 +240,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			next: (res) => {
 				if (res && res.length > 0) {
 					this.subjectCardData = res;
-					console.log('ทำ getSubjectCardData จ้าาาาาาาาาาาาา');
-					console.log('subjectCardData : ', this.subjectCardData);
 					this.subjectCardTotal = this.subjectCardData.length;
 					this.updatePaginatedItems();
 				} else {
@@ -374,7 +370,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				} else {
 					this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
 				}
-				console.log('selectedFaculty', this.selectedFaculty);
 				break;
 			case 'selectedDepartment':
 				const oldSelectedDepartment = this.selectedDepartment;
@@ -390,7 +385,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				} else {
 					this.getDropdownProgramsAsObservable(this.selectedDepartment).subscribe();
 				}
-				console.log('selectedDepartment', this.selectedDepartment);
 				break;
 			case 'selectedProgram':
 				const oldSelectedProgram = this.selectedProgram;
@@ -404,24 +398,20 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				} else {
 					this.getDropdownCurriculumsAsObservable(this.selectedProgram).subscribe();
 				}
-				console.log('selectedProgram', this.selectedProgram);
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value.toString();
-				console.log('selectedCurriculum', this.selectedCurriculum);
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
 		}
 		this.checkSelectAllDropdown();
-		console.log('isSelectAllDropdown : ', this.isSelectAllDropdown);
-		if (!this.isSelectAllDropdown) {
-			this.clearSearch();
-		}
 		if (this.isSelectAllDropdown) {
 			setTimeout(() => {
 				this.navigateToSubject();
 			});
+		} else {
+			this.clearSearch();
 		}
 	}
 
@@ -474,7 +464,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			}
 		}
 		this.checkDisableSelectDropdown();
-		console.log('checkSelectAllDropdown แล้วจ้า');
 	}
 
 	public resetDropdowns(selectName?: string) {
