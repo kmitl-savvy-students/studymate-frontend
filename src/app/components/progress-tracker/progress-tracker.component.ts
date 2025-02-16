@@ -10,11 +10,13 @@ import { AuthenticationService } from '@services/authentication/authentication.s
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { SDMButtonLink } from '../buttons/button-link.component';
+import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMButtonLink],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTracker implements OnInit {
