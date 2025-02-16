@@ -10,13 +10,14 @@ import { AuthenticationService } from '@services/authentication/authentication.s
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { SDMBaseButton } from '../buttons/base-button.component';
 import { SDMButtonLink } from '../buttons/button-link.component';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMButtonLink],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMButtonLink, SDMBaseButton],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTracker implements OnInit {
@@ -60,6 +61,77 @@ export class SDMProgressTracker implements OnInit {
 
 	isAccordionOpen(groupId: number): boolean {
 		return this.openAccordions.has(groupId);
+	}
+
+	// findParentNode(currentNode: CurriculumGroup, rootNode: CurriculumGroup): CurriculumGroup | null {
+	// 	// ถ้าโหนดรากมีโหนดลูก
+	// 	if (rootNode.children && rootNode.children.length > 0) {
+	// 		for (const child of rootNode.children) {
+	// 			// ถ้าเจอโหนดลูกที่ตรงกับโหนดปัจจุบัน
+	// 			if (child.id === currentNode.id) {
+	// 				return rootNode; // คืนค่าโหนดพาเรนต์
+	// 			}
+	// 			// ค้นหาในโหนดลูกถัดไป
+	// 			const parent = this.findParentNode(currentNode, child);
+	// 			if (parent) {
+	// 				return parent;
+	// 			}
+	// 		}
+	// 	}
+	// 	return null; // ถ้าไม่พบโหนดพาเรนต์
+	// }
+
+	// findParentNodeColor(currentNode: CurriculumGroup, rootNode: CurriculumGroup): string {
+	// 	// ถ้าโหนดปัจจุบันมีค่าสีที่ไม่ใช่ค่าว่างหรือ #FFFFFF
+	// 	if (currentNode.color && currentNode.color !== '#FFFFFF') {
+	// 		return currentNode.color;
+	// 	}
+	// 	// ค้นหาโหนดพาเรนต์
+	// 	const parentNode = this.findParentNode(currentNode, rootNode);
+	// 	if (parentNode) {
+	// 		// เรียกฟังก์ชันซ้ำกับโหนดพาเรนต์
+	// 		return this.findParentNodeColor(parentNode, rootNode);
+	// 	}
+	// 	return '#FFFFFF'; // หรือค่าสีเริ่มต้นที่คุณต้องการ
+	// }
+
+	// findParentNodeColor(node: CurriculumGroup) {
+	// 	if (node.color !== '#FFFFFF') {
+	// 		return node.color;
+	// 	}
+	// 	return this.findParentNodeColor(node.parent);
+	// }
+
+	findParentNodeColor(currentNode: CurriculumGroup, rootNode: CurriculumGroup): string {
+		if (currentNode.color && currentNode.color !== '#FFFFFF') {
+			return currentNode.color;
+		}
+		const parentNode = this.findParentNode(currentNode, rootNode);
+		if (parentNode) {
+			return this.findParentNodeColor(parentNode, rootNode);
+		}
+		return '#e7e5e4'; // หรือค่าสีเริ่มต้นที่คุณต้องการ
+	}
+
+	findNodeById(rootNode: CurriculumGroup, id: number): CurriculumGroup | null {
+		if (rootNode.id === id) {
+			return rootNode;
+		}
+		for (const child of rootNode.children) {
+			const result = this.findNodeById(child, id);
+			if (result) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	findParentNode(currentNode: CurriculumGroup, rootNode: CurriculumGroup): CurriculumGroup | null {
+		if (currentNode.children.length === 0) {
+			// ถ้า parent_id เป็น 0 แสดงว่าเป็นโหนดราก ไม่มีพาเรนต์
+			return null;
+		}
+		return this.findNodeById(rootNode, currentNode.parent_id);
 	}
 
 	fetchTranscripts() {

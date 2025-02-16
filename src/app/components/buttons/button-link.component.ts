@@ -7,7 +7,22 @@ import { SDMBaseButton } from './base-button.component';
 	selector: 'sdm-button-link',
 	standalone: true,
 	imports: [SDMBaseButton],
-	template: ` <sdm-base-button [isUnderlined]="isUnderlined" [icon]="icon" [iconCustom]="iconCustom" [iconEnd]="iconEnd" [iconEndCustom]="iconEndCustom" [text]="text" [textColor]="textColor" [textColorHover]="textColorHover" [backgroundColor]="backgroundColor" [backgroundColorHover]="backgroundColorHover" (clickEvent)="handleClick()"> </sdm-base-button> `,
+	template: `
+		<sdm-base-button
+			[isUnderlined]="isUnderlined"
+			[icon]="icon"
+			[iconCustom]="iconCustom"
+			[iconEnd]="iconEnd"
+			[iconEndCustom]="iconEndCustom"
+			[text]="text"
+			[textColor]="textColor"
+			[textColorHover]="textColorHover"
+			[backgroundColor]="backgroundColor"
+			[backgroundColorHover]="backgroundColorHover"
+			[backgroundColorCustom]="backgroundColorCustom"
+			(clickEvent)="handleClick()">
+		</sdm-base-button>
+	`,
 })
 export class SDMButtonLink {
 	constructor(
@@ -30,6 +45,7 @@ export class SDMButtonLink {
 
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorHover: string = '';
+	@Input() backgroundColorCustom: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 

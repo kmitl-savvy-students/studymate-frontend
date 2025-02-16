@@ -6,7 +6,15 @@ import { IconComponent } from '../icon/icon.component';
 	selector: 'sdm-base-button',
 	standalone: true,
 	template: `
-		<button [id]="buttonId" [type]="isSubmit ? 'submit' : 'button'" [disabled]="isDisabled" (click)="handleClick()" [ngClass]="getButtonClasses()" [attr.data-dropdown-toggle]="dropdownToggle ? dropdownToggle : null" [attr.data-dropdown-offset-distance]="dropdownToggle ? '15' : null">
+		<button
+			[id]="buttonId"
+			[type]="isSubmit ? 'submit' : 'button'"
+			[disabled]="isDisabled"
+			(click)="handleClick()"
+			[ngClass]="getButtonClasses()"
+			[attr.data-dropdown-toggle]="dropdownToggle ? dropdownToggle : null"
+			[attr.data-dropdown-offset-distance]="dropdownToggle ? '15' : null"
+			[ngStyle]="{ 'background-color': backgroundColorCustom }">
 			<ng-container *ngIf="icon || iconCustom">
 				<sdm-icon *ngIf="icon" [icon]="icon"></sdm-icon>
 				<ng-container *ngIf="iconCustom">
@@ -38,7 +46,9 @@ export class SDMBaseButton {
 	@Input() textColor: string = 'text-dark';
 	@Input() textColorHover: string = 'hover:text-primary-300';
 	@Input() backgroundColor: string = '';
+	@Input() backgroundColorCustom: string = '';
 	@Input() backgroundColorHover: string = '';
+	@Input() backgroundColorHoverCustom: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 
