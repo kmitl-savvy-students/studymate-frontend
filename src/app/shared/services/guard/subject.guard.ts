@@ -25,7 +25,7 @@ export class SubjectValidationGuard implements CanActivate {
 
 		// ตรวจสอบค่าพื้นฐานก่อน
 		if (!this.validateBasicParams(year, semester, classYear)) {
-			this.router.navigate(['/**']);
+			this.router.navigate(['/subject']);
 			return of(false);
 		}
 
@@ -69,7 +69,7 @@ export class SubjectValidationGuard implements CanActivate {
 			}),
 			catchError((error) => {
 				console.error('Validation error:', error);
-				this.router.navigate(['/**']);
+				this.router.navigate(['/subject']);
 				return of(false);
 			}),
 		);
