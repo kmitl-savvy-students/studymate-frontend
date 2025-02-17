@@ -6,7 +6,13 @@
 				<!-- <div class="text-xl font-semibold">รายวิชาเรียน</div> -->
 				<sdm-base-accordion header="ค้นหารายวิชาเรียน" accordionId="selectDropdown-acc" [accordionDefaultStatus]="true">
 					<div class="grid grid-cols-4 gap-x-3 gap-y-2 px-3 pt-3">
-						<sdm-select defaultLabel="ปีการศึกษา" SelectName="selectedYear" [listOptions]="yearsList" (selectedValue)="handleSelectChange('selectedYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="ปีการศึกษา"
+							SelectName="selectedYear"
+							[listOptions]="yearsList"
+							(selectedValue)="handleSelectChange('selectedYear',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
 						<sdm-select
 							defaultLabel="ภาคการศึกษา"
 							SelectName="selectedSemester"
@@ -14,8 +20,20 @@
 							(selectedValue)="handleSelectChange('selectedSemester',$event)"
 							class="col-span-1"
 							[disabled]="isLoading"></sdm-select>
-						<sdm-select defaultLabel="ชั้นปี" SelectName="selectedClassYear" [listOptions]="classYearList" (selectedValue)="handleSelectChange('selectedClassYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
-						<sdm-select defaultLabel="คณะ" SelectName="selectedFaculty" [listOptions]="facultyList" (selectedValue)="handleSelectChange('selectedFaculty',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="ชั้นปี"
+							SelectName="selectedClassYear"
+							[listOptions]="classYearList"
+							(selectedValue)="handleSelectChange('selectedClassYear',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="คณะ"
+							SelectName="selectedFaculty"
+							[listOptions]="facultyList"
+							(selectedValue)="handleSelectChange('selectedFaculty',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
 						<sdm-select
 							defaultLabel="ภาควิชา"
 							SelectName="selectedDepartment"
@@ -47,7 +65,12 @@
 			<div class="flex w-full flex-1 flex-col items-center justify-center p-20">
 				<!-- loading website -->
 				<div role="status">
-					<svg aria-hidden="true" class="inline h-16 w-16 animate-spin fill-main-100 text-gray-200 dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<svg
+						aria-hidden="true"
+						class="inline h-16 w-16 animate-spin fill-main-100 text-gray-200 dark:text-gray-600"
+						viewBox="0 0 100 101"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
 							fill="currentColor" />
@@ -62,17 +85,21 @@
 		</ng-container>
 		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !getSubjectDataIsNull && !isLoading">
 			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3">
-				<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage" class="mt-4"></sdm-pagination>
+				<sdm-pagination
+					(pageChange)="changePage($event)"
+					[totalItems]="subjectCardTotal"
+					[itemsPerPage]="itemsPerPage"
+					[currentPage]="currentPage"
+					class="mt-4"></sdm-pagination>
 				<div class="grid w-full grid-cols-1 gap-4">
 					<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
 						<sdm-subject-cpn
 							[subjectCardData]="data"
-							[selectedYear]="selectedYear"
+							[selectedYear]="selectedYear-543"
 							[selectedSemester]="selectedSemester"
-							[selectedFaculty]="selectedFaculty"
-							[selectedDepartment]="selectedDepartment"
-							[selectedCurriculum]="selectedCurriculum"
-							[selectedClassYear]="selectedClassYear"></sdm-subject-cpn>
+							[selectedProgram]="selectedProgram"
+							[subjectId]="data.subject.id"
+							[section]="data.section"></sdm-subject-cpn>
 					</ng-container>
 				</div>
 				<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"></sdm-pagination>

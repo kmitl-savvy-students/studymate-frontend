@@ -17,27 +17,20 @@ import { SDMPageSubjectDetail } from '@pages/subject-detail/subject-detail.page'
 import { SDMPageSubject } from '@pages/subjects/subject.page';
 import { SDMPageSubjects } from '@pages/subjects/subjects.page';
 import { AuthenticationGuard } from '@services/authentication/authentication.guard';
+import { SubjectDetailValidationGuard } from '@services/guard/subject-detail.guard';
 import { SubjectValidationGuard } from '@services/guard/subject.guard';
 
 export const routes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: SDMPageHome },
 
-	// #region Old Subject Detail
-	// { path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail },
-	// { path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId', component: SDMPageSubjectDetail },
-	// { path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:curriculumYear/:uniqueId/:section/:subjectId', component: SDMPageSubjectDetail },
-	// #endregion
-
 	// #region New Subject Detail
-	{ path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail },
-	// { path: 'subject/subject-detail/:year/:semester/:faculty/:department/:curriculum/:classYear/:section/:subjectId', component: SDMPageSubjectDetail },
-	{ path: 'subject/subject-detail/:year/:semester/:classYear/:faculty/:department/:program/:curriculum/:section/:subjectId', component: SDMPageSubjectDetail },
+	{ path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail, canActivate: [SubjectDetailValidationGuard] },
+	{ path: 'subject/subject-detail/:year/:semester/:program/:section/:subjectId', component: SDMPageSubjectDetail, canActivate: [SubjectDetailValidationGuard] },
 	// #endregion
 
 	// #region Old Subjects
 	{ path: 'subject', component: SDMPageSubject },
-	// { path: 'subject/:year/:semester/:faculty/:department/:curriculum/:classYear', component: SDMPageSubject },
 	{ path: 'subject/:year/:semester/:classYear/:faculty/:department/:program/:curriculum', component: SDMPageSubject, canActivate: [SubjectValidationGuard] },
 	// #endregion
 

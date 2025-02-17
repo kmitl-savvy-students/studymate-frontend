@@ -2,10 +2,15 @@
 	<!-- Header Section -->
 
 	<div class="flex w-full items-center gap-x-2 rounded-t-[19px] bg-main-25 p-5 text-base font-semibold">
-		<div *ngIf="subjectDetailDescription" class="flex items-center gap-x-2">
-			<div>{{ subjectDetailDescription.subject_id }}</div>
-			<div>{{ subjectDetailDescription.subject_name_en }}</div>
-			<div>{{ subjectDetailDescription.subject_name_th }}</div>
+		<div *ngIf="subjectDetailData" class="flex items-center gap-x-2">
+			<div>{{ subjectDetailData.subject.id }}</div>
+			<div>{{ subjectDetailData.subject.name_en }}</div>
+			<div>{{ subjectDetailData.subject.name_th }}</div>
+		</div>
+		<div *ngIf="!subjectDetailData && subjectData" class="flex items-center gap-x-2">
+			<div>{{ subjectData.id }}</div>
+			<div>{{ subjectData.name_en }}</div>
+			<div>{{ subjectData.name_th }}</div>
 		</div>
 		<div *ngIf="subjectDetailData" class="flex items-center gap-x-2">
 			<div class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-white" *ngIf="subjectDetailData?.session_type === 'ทฤษฎี'">
@@ -15,7 +20,9 @@
 				{{ subjectDetailData.session_type }}
 			</div>
 			<div *ngIf="subjectDetailData?.class_level === '0'" class="border-1 border-dark-100 rounded-[15px] border px-3 py-1.5 text-xs font-semibold">ทุกชั้นปี</div>
-			<div *ngIf="subjectDetailData?.class_level != '0'" class="border-1 border-dark-100 rounded-[15px] border px-3 py-1.5 text-xs font-semibold">ปี {{ subjectDetailData.class_level }}</div>
+			<div *ngIf="subjectDetailData?.class_level != '0'" class="border-1 border-dark-100 rounded-[15px] border px-3 py-1.5 text-xs font-semibold">
+				ปี {{ subjectDetailData.class_level }}
+			</div>
 			<div class="border-1 border-dark-100 rounded-[15px] border px-3 py-1.5 text-xs font-semibold">Sec {{ subjectDetailData.section }}</div>
 		</div>
 	</div>
@@ -23,28 +30,24 @@
 	<!-- Course Description -->
 	<div class="flex w-full flex-col gap-y-2 px-5 text-sm">
 		<div class="font-semibold">คำอธิบายรายวิชา</div>
-		<ng-container *ngIf="isLoadingDescription; else showData">
-			<sdm-loading-skeleton [loadingType]="102"></sdm-loading-skeleton>
-		</ng-container>
-		<ng-template #showData>
-			<div *ngIf="subjectDetailDescription">
-				<div class="indent-8">
-					{{ subjectDetailDescription.detail_th }}
-				</div>
-				<div class="indent-8">
-					{{ subjectDetailDescription.detail_en }}
-				</div>
-			</div>
-		</ng-template>
+		<div *ngIf="subjectData && !subjectDetailData">
+			<ng-container *ngIf="isLoadingDescription; else showData">
+				<sdm-loading-skeleton [loadingType]="102"></sdm-loading-skeleton>
+			</ng-container>
+			<ng-template #showData>
+				<div class="indent-8" [innerHTML]="subjectData.detail"></div>
+			</ng-template>
+		</div>
+		<div *ngIf="subjectDetailData" class="indent-8" [innerHTML]="subjectDetailData.subject.detail"></div>
 	</div>
 
 	<!-- Course Details Section -->
-	<div class="flex w-full flex-col gap-y-2 text-sm">
+	<div class="flex w-full flex-col gap-y-2 text-sm" *ngIf="subjectDetailData">
 		<ng-container *ngIf="isLoadingData; else showSubjectData">
 			<sdm-loading-skeleton [loadingType]="103"></sdm-loading-skeleton>
 		</ng-container>
 		<ng-template #showSubjectData>
-			<div class="grid w-full grid-cols-9 gap-y-5 px-5 text-sm" *ngIf="subjectDetailData">
+			<div class="grid w-full grid-cols-9 gap-y-5 px-5 text-sm">
 				<!-- Class Schedule -->
 				<div class="col-span-3 flex flex-col gap-y-2 pe-4">
 					<div class="font-semibold">วัน-เวลาเรียน</div>
@@ -80,7 +83,8 @@
 						</div>
 						<div class="tooltip" *ngIf="subjectDetailData.teacher_list_th.length > 1">
 							<sdm-icon icon="ellipsis" class="text-dark-100 rounded-[15px] bg-orange-50 px-3 py-1.5 hover:cursor-pointer hover:bg-orange-100"></sdm-icon>
-							<div class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center">
+							<div
+								class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center">
 								<div *ngFor="let teacher of subjectDetailData.teacher_list_th">
 									{{ teacher }}
 								</div>
@@ -107,13 +111,14 @@
 				<div class="col-span-2 flex flex-col gap-y-2">
 					<div class="font-semibold">หมวดหมู่วิชา</div>
 					<div class="flex">
-						<span
-							[ngClass]="{
-								'detail-data': subjectDetailData.group_name !== 'ไม่ระบุ',
-								'date-box-disabled': subjectDetailData.group_name === 'ไม่ระบุ',
-							}">
-							{{ subjectDetailData.group_name }}
-						</span>
+						<div *ngIf="subjectDetailData.group_name.length > 0; else noGroup">
+							<div *ngFor="let group of subjectDetailData.group_name" class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
+								{{ group }}
+							</div>
+						</div>
+						<ng-template #noGroup>
+							<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่ระบุหมวดหมู่</div>
+						</ng-template>
 					</div>
 				</div>
 
@@ -181,12 +186,16 @@
 					<div class="font-semibold">เงื่อนไข</div>
 					<div class="tooltip relative" *ngIf="subjectDetailData.rule !== ''">
 						<sdm-icon icon="circle-exclamation" class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"> </sdm-icon>
-						<div [innerHTML]="subjectDetailData.rule" class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm"></div>
+						<div
+							[innerHTML]="subjectDetailData.rule"
+							class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm"></div>
 					</div>
 					<div class="flex" *ngIf="subjectDetailData.rule === ''">
 						<div class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:bg-gray-200" *ngIf="subjectDetailData.rule === ''">
 							-
-							<div class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center">ไม่มีเงื่อนไข</div>
+							<div class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center">
+								ไม่มีเงื่อนไข
+							</div>
 						</div>
 					</div>
 				</div>
@@ -196,7 +205,9 @@
 					<div class="font-semibold">หมายเหตุ</div>
 					<div class="tooltip relative" *ngIf="subjectDetailData.remark !== ''">
 						<sdm-icon icon="circle-exclamation" class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"> </sdm-icon>
-						<div [innerHTML]="subjectDetailData.remark" class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 max-h-[450px] w-[240px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm"></div>
+						<div
+							[innerHTML]="subjectDetailData.remark"
+							class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 max-h-[450px] w-[240px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm"></div>
 					</div>
 					<div class="flex" *ngIf="subjectDetailData.remark === ''">
 						<div class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:bg-gray-200" *ngIf="subjectDetailData.remark === ''">
