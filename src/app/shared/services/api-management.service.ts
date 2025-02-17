@@ -1,6 +1,9 @@
-import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Department } from '@models/Department';
+import { Faculty } from '@models/Faculty';
 import { Otp } from '@models/OtpData.model';
+import { Program } from '@models/Program.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
 import { CurriculumGroup } from '../models/CurriculumGroup.model';
@@ -86,6 +89,7 @@ export class APIManagementService {
 		return this.http.get<CurriculumSubject>(apiUrl);
 	}
 
+	// get รายวิชาในหน้า subject เก่า
 	GetCurriculumSubjectsTeachtable(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData[]> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
 
@@ -99,7 +103,30 @@ export class APIManagementService {
 		return this.http.get<SubjectCardData[]>(apiUrl);
 	}
 
-	GetCurriculumnSubjectDataBySection(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, subjectId: string, section: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData> {
+	// get รายวิชาในหน้า subject ใหม่
+	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, program: number): Observable<SubjectCardData[]> {
+		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-class`;
+
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('program', program);
+
+		// console.log(`${apiUrl}?${params.toString()}`);
+
+		return this.http.get<SubjectCardData[]>(apiUrl, { params });
+	}
+
+	// get รายวิชาในหน้า subject-detail เก่า
+	GetCurriculumnSubjectDataBySection(
+		year: number,
+		semester: number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number,
+		subjectId: string,
+		section: number,
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<SubjectCardData> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-section/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
 
 		if (curriculumYear) {
@@ -245,5 +272,25 @@ export class APIManagementService {
 	GetOtpData(userId?: string): Observable<Otp[]> {
 		const apiUrl = `${environment.backendUrl}/api/otp/request/${userId}}`;
 		return this.http.get<Otp[]>(apiUrl);
+	}
+
+	GetDropdownFaculties(): Observable<Faculty[]> {
+		const apiUrl = `${environment.backendUrl}/api/faculty/get`;
+		return this.http.get<Faculty[]>(apiUrl);
+	}
+
+	GetDropdownDepartments(facultyId: number): Observable<Department[]> {
+		const apiUrl = `${environment.backendUrl}/api/department/get-by-faculty/${facultyId}`;
+		return this.http.get<Department[]>(apiUrl);
+	}
+
+	GetDropdownPrograms(departmentId: number): Observable<Program[]> {
+		const apiUrl = `${environment.backendUrl}/api/program/get-by-department/${departmentId}`;
+		return this.http.get<Program[]>(apiUrl);
+	}
+
+	GetDropdownCurriculums(programId: number): Observable<Curriculum[]> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum/get-by-program/${programId}`;
+		return this.http.get<Curriculum[]>(apiUrl);
 	}
 }

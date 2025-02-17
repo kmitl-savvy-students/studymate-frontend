@@ -10,6 +10,10 @@
 <sdm-base-modal #createProgramModal modalId="createProgram" header="สร้างแผนการเรียนใหม่" (confirmEvent)="onConfirmCreate()">
 	<form [formGroup]="programCreateForm">
 		<div class="input-primary mb-5">
+			<label for="kmitlId">รหัสอ้างอิงภาควิชาจากสำนักทะเบียน KMITL</label>
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา (ไม่จำเป็น)" required />
+		</div>
+		<div class="input-primary mb-5">
 			<label for="nameTh">ชื่อแผนการเรียนภาษาไทย</label>
 			<input type="text" id="nameTh" formControlName="nameTh" placeholder="ชื่อแผนการเรียนภาษาไทย" required />
 		</div>
@@ -22,6 +26,10 @@
 
 <sdm-base-modal #editProgramModal modalId="editProgram" header="แก้ไขแผนการเรียน" (confirmEvent)="onConfirmEdit()">
 	<form [formGroup]="programEditForm">
+		<div class="input-primary mb-5">
+			<label for="kmitlId">รหัสอ้างอิงภาควิชาจากสำนักทะเบียน KMITL</label>
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา (ไม่จำเป็น)" required />
+		</div>
 		<div class="input-primary mb-5">
 			<label for="editNameTh">ชื่อแผนการเรียนภาษาไทย</label>
 			<input type="text" id="editNameTh" formControlName="nameTh" placeholder="ชื่อแผนการเรียนภาษาไทย" required />
@@ -47,7 +55,7 @@
 			<ul class="flex flex-col gap-2">
 				<li *ngFor="let program of programs" class="flex items-center justify-between">
 					<div (click)="navigateToCurriculum(program.id)" class="cursor-pointer text-lg hover:text-primary-300">
-						<div class="font-semibold">{{ program.name_th }}</div>
+						<div class="font-semibold">({{program.kmitl_id}}) {{ program.name_th }}</div>
 						<div class="text-sm opacity-50">{{ program.name_en }}</div>
 					</div>
 					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditProgram(program)"></sdm-base-button>

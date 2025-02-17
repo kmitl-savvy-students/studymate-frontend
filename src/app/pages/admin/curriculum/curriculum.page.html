@@ -10,10 +10,6 @@
 <sdm-base-modal #createCurriculumModal modalId="createCurriculum" header="สร้างหลักสูตรใหม่" (confirmEvent)="onConfirmCreate()">
 	<form [formGroup]="curriculumCreateForm">
 		<div class="input-primary mb-5">
-			<label for="kmitlId">รหัสอ้างอิงหลักสูตรจากสำนักทะเบียน KMITL</label>
-			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสหลักสูตร (ไม่จำเป็น)" required />
-		</div>
-		<div class="input-primary mb-5">
 			<label for="year">ปีหลักสูตร</label>
 			<input type="number" id="year" formControlName="year" placeholder="ปีหลักสูตร" required />
 		</div>
@@ -30,10 +26,6 @@
 
 <sdm-base-modal #editCurriculumModal modalId="editCurriculum" header="แก้ไขหลักสูตร" (confirmEvent)="onConfirmEdit()">
 	<form [formGroup]="curriculumEditForm">
-		<div class="input-primary mb-5">
-			<label for="kmitlId">รหัสอ้างอิงหลักสูตรจากสำนักทะเบียน KMITL</label>
-			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสหลักสูตร (ไม่จำเป็น)" required />
-		</div>
 		<div class="input-primary mb-5">
 			<label for="year">ปีหลักสูตร</label>
 			<input type="number" id="year" formControlName="year" placeholder="ปีหลักสูตร" required />
@@ -64,7 +56,7 @@
 				<li *ngFor="let curriculum of curriculums" class="flex items-center justify-between">
 					<div (click)="navigateToCurriculumGroup(curriculum.id)" class="cursor-pointer text-lg hover:text-primary-300">
 						<div class="text-base font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ curriculum.year }}</div>
-						<div class="font-semibold">({{ curriculum.kmitl_id }}) {{ curriculum.name_th }}</div>
+						<div class="font-semibold">{{ curriculum.name_th }}</div>
 						<div class="text-sm opacity-50">{{ curriculum.name_en }}</div>
 					</div>
 					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditCurriculum(curriculum)"></sdm-base-button>

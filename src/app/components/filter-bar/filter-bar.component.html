@@ -1,18 +1,9 @@
-<div
-	class="flex w-64 flex-col rounded-[20px] border border-main-25 px-5 text-dark-100"
->
+<div class="text-dark-100 flex w-64 flex-col rounded-[20px] border border-main-25 px-5">
 	<!-- Filter  คะแนน -->
 	<div class="flex flex-col gap-y-2 border-b border-b-main-25 py-4">
-		<div
-			class="flex justify-between hover:cursor-pointer"
-			(click)="togglePointFilter()"
-		>
+		<div class="flex justify-between hover:cursor-pointer" (click)="togglePointFilter()">
 			<div class="text-lg font-medium">คะแนน</div>
-			<sdm-icon
-				icon="chevron-up"
-				class="icon-filter"
-				[ngClass]="{ 'rotate-180': isPointFilterOpen }"
-			></sdm-icon>
+			<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isPointFilterOpen }"></sdm-icon>
 		</div>
 
 		<div class="flex flex-col gap-y-2.5" *ngIf="isPointFilterOpen">
@@ -41,32 +32,19 @@
 
 	<!-- Filter หมวดวิชา -->
 	<div class="flex flex-col gap-y-2 border-b border-b-main-25 pb-4 pt-3">
-		<div
-			class="flex justify-between hover:cursor-pointer"
-			(click)="toggleSubCateFilter()"
-		>
+		<div class="flex justify-between hover:cursor-pointer" (click)="toggleSubCateFilter()">
 			<div class="text-lg font-medium">หมวดวิชา</div>
-			<sdm-icon
-				icon="chevron-up"
-				class="icon-filter"
-				[ngClass]="{ 'rotate-180': isSubCateFilterOpen }"
-			></sdm-icon>
+			<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isSubCateFilterOpen }"></sdm-icon>
 		</div>
 		<div *ngIf="isSubCateFilterOpen">
-			<div
-				class="flex flex-col gap-y-2.5 pb-2"
-				*ngFor="let category of subjects; let categoryIndex = index"
-			>
+			<div class="flex flex-col gap-y-2.5 pb-2" *ngFor="let category of subjects; let categoryIndex = index">
 				<div class="flex gap-x-3.5">
 					<input id="checkbox" type="checkbox" class="check-box" />
 					<div class="col-span-2 -mb-1 text-sm">
 						{{ category.category }}
 					</div>
 				</div>
-				<div
-					class="ms-4 flex gap-x-3.5"
-					*ngFor="let subCate of category.subCategories"
-				>
+				<div class="ms-4 flex gap-x-3.5" *ngFor="let subCate of category.subCategories">
 					<input id="checkbox" type="checkbox" class="check-box" />
 					<div class="col-span-2 -mb-1 text-sm">
 						{{ subCate.name }}
@@ -77,17 +55,10 @@
 	</div>
 
 	<!-- Filter วัน -->
-	<div class="flex flex-col gap-y-2 border-b border-b-main-25 pb-4 pt-3">
-		<div
-			class="flex justify-between hover:cursor-pointer"
-			(click)="toggleDayFilter()"
-		>
+	<div class="flex flex-col gap-y-2 pb-4 pt-3">
+		<div class="flex justify-between hover:cursor-pointer" (click)="toggleDayFilter()">
 			<div class="text-lg font-medium">วัน</div>
-			<sdm-icon
-				icon="chevron-up"
-				class="icon-filter"
-				[ngClass]="{ 'rotate-180': isDayFilterOpen }"
-			></sdm-icon>
+			<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isDayFilterOpen }"></sdm-icon>
 		</div>
 
 		<div class="flex flex-col gap-y-2.5" *ngIf="isDayFilterOpen">
@@ -118,30 +89,6 @@
 			<div class="flex gap-x-3.5">
 				<input id="checkbox" type="checkbox" class="check-box" />
 				<div class="col-span-2 -mb-1 text-sm">อาทิตย์</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Filter เวลา-->
-	<div class="flex flex-col gap-y-2 pb-4 pt-3">
-		<div
-			class="flex justify-between hover:cursor-pointer"
-			(click)="toggleTimeFilter()"
-		>
-			<div class="text-lg font-medium">เวลา</div>
-			<sdm-icon
-				icon="chevron-up"
-				class="icon-filter"
-				[ngClass]="{ 'rotate-180': isTimeFilterOpen }"
-			></sdm-icon>
-		</div>
-
-		<div class="flex flex-col gap-y-2" *ngIf="isTimeFilterOpen">
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">
-					ยังไม่ได้ทำ จะใช้ของ Flowbite Test 2
-				</div>
 			</div>
 		</div>
 	</div>

@@ -1,31 +1,34 @@
 <div class="border-1 text-dark-100 rounded-[20px] border border-main-25 bg-white p-6">
 	<div class="flex flex-col gap-y-6">
-		<div class="flex flex-col border-b border-main-25 pb-5">
+		<div class="flex flex-col gap-y-2 border-b border-main-25 pb-5">
 			<div class="flex flex-row flex-wrap items-center gap-x-3">
 				<!-- Header Section -->
-				<a class="text-lg font-semibold hover:cursor-pointer" [href]="getSubjectDetailUrl()">
-					{{ subjectCardData.subject_id }}
-					{{ subjectCardData.subject_name_en }} [{{ subjectCardData.credit }}
+				<a class="text-lg font-semibold hover:cursor-pointer hover:text-main-100" [href]="getSubjectDetailUrl()">
+					{{ subjectCardData.subject.id }}
+					{{ subjectCardData.subject.name_en }} [{{ subjectCardData.subject.credit }}
 					หน่วยกิต]
 				</a>
-				<div class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData.lect_or_prac === 'ทฤษฎี'">
-					{{ subjectCardData.lect_or_prac }}
+				<div class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData.session_type === 'ทฤษฎี'">
+					{{ subjectCardData.session_type }}
 				</div>
-				<div class="border-1 rounded-[15px] bg-orange-400 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData.lect_or_prac === 'ปฏิบัติ'">
-					{{ subjectCardData.lect_or_prac }}
+				<div class="border-1 rounded-[15px] bg-orange-400 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData.session_type === 'ปฏิบัติ'">
+					{{ subjectCardData.session_type }}
 				</div>
 			</div>
-			<div class="flex flex-col gap-y-2">
-				<div class="text-sm text-red-500">
-					{{ subjectCardData.subject_type_name_th }}
-				</div>
+			<div class="flex flex-col">
 				<div class="flex flex-row flex-wrap items-center gap-x-3">
-					<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
-						{{ subjectCardData.subject_type_name }}
-					</div>
-					<div *ngIf="subjectCardData.classLevel === '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ทุกชั้นปี</div>
-					<div *ngIf="subjectCardData.classLevel != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ปี {{ subjectCardData.classLevel }}</div>
+					<div *ngIf="subjectCardData.class_level === '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ทุกชั้นปี</div>
+					<div *ngIf="subjectCardData.class_level != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ปี {{ subjectCardData.class_level }}</div>
+
 					<div class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">Sec {{ subjectCardData.section }}</div>
+					<div *ngIf="subjectCardData.group_name.length > 0; else noGroup">
+						<div *ngFor="let group of subjectCardData.group_name" class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
+							{{ group }}
+						</div>
+					</div>
+					<ng-template #noGroup>
+						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่ระบุหมวดหมู่</div>
+					</ng-template>
 				</div>
 			</div>
 		</div>
@@ -35,23 +38,23 @@
 			<!-- Class Schedule -->
 			<div class="col-span-3 flex flex-col gap-y-2 pe-4">
 				<div class="font-normal">วัน-เวลาเรียน</div>
-				<div *ngIf="subjectCardData.classdatetime.length > 1; else noSchedule">
+				<div *ngIf="subjectCardData.class_datetime.length > 1; else noSchedule">
 					<div class="flex flex-wrap gap-x-2 gap-y-2">
 						<div class="detail-data w-[77px] text-center">
-							{{ subjectCardData.classdatetime[0] }}
+							{{ subjectCardData.class_datetime[0] }}
 						</div>
 						<div class="detail-data">
-							{{ subjectCardData.classdatetime[1] }}
+							{{ subjectCardData.class_datetime[1] }}
 						</div>
 
-						<div *ngIf="checkString(subjectCardData.classdatetime[2]) !== ''" class="detail-data">+ {{ subjectCardData.classdatetime[2] }}</div>
+						<div *ngIf="checkString(subjectCardData.class_datetime[2]) !== ''" class="detail-data">+ {{ subjectCardData.class_datetime[2] }}</div>
 					</div>
 				</div>
 				<!-- No Schedule Template -->
 				<ng-template #noSchedule>
 					<div class="flex">
 						<div class="date-box-disabled">
-							{{ subjectCardData.classdatetime }}
+							{{ subjectCardData.class_datetime }}
 						</div>
 					</div>
 				</ng-template>
@@ -81,10 +84,10 @@
 				<div class="flex">
 					<div
 						[ngClass]="{
-							'detail-data': subjectCardData.room_no !== null,
-							'date-box-disabled': subjectCardData.room_no === null,
+							'detail-data': subjectCardData.room_number !== null,
+							'date-box-disabled': subjectCardData.room_number === null,
 						}">
-						{{ subjectCardData.room_no !== null ? subjectCardData.room_no : 'ไม่ระบุ' }}
+						{{ subjectCardData.room_number !== null ? subjectCardData.room_number : 'ไม่ระบุ' }}
 					</div>
 				</div>
 			</div>
@@ -92,12 +95,12 @@
 			<!-- Building Details -->
 			<div class="col-span-1 -ms-12 flex flex-col gap-y-2">
 				<div class="font-normal">ตึกเรียน</div>
-				<div class="flex flex-row" *ngIf="subjectCardData.classbuilding != null">
+				<div class="flex flex-row" *ngIf="subjectCardData.building_name != null">
 					<div class="detail-data text-center text-sm">
-						{{ subjectCardData.classbuilding }}
+						{{ subjectCardData.building_name }}
 					</div>
 				</div>
-				<div class="flex flex-row" *ngIf="subjectCardData.classbuilding === null">
+				<div class="flex flex-row" *ngIf="subjectCardData.building_name === null">
 					<div class="date-box-disabled">ไม่ระบุ</div>
 				</div>
 			</div>
@@ -143,21 +146,21 @@
 			</div>
 
 			<!-- Interesed Subject -->
-			<div class="col-span-3 flex flex-col gap-y-1">
+			<!-- <div class="col-span-3 flex flex-col gap-y-1">
 				<div class="font-normal">นักศึกษาที่ขอเปิดรายวิชา</div>
 				<div class="flex flex-row items-center gap-x-2 text-sm">
 					<sdm-icon icon="hand-holding-heart" class="text-lg text-primary-300"></sdm-icon>
 					<div>{{ subjectCardData.interested }} คน</div>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Add Button -->
-			<div class="col-span-1 flex flex-row items-end justify-end">
+			<!-- <div class="col-span-1 flex flex-row items-end justify-end">
 				<button class="col-end-16 flex h-min w-min flex-row items-center justify-end gap-x-2 rounded-[15px] bg-main-100 px-3 py-1.5 font-medium hover:bg-main-120">
 					<sdm-icon icon="plus" class="text-sm text-light"></sdm-icon>
 					<p class="text-sm text-light">เพิ่ม</p>
 				</button>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>

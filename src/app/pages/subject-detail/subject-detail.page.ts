@@ -1,28 +1,23 @@
-import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
-import { initFlowbite } from 'flowbite';
-import { SDMSubjectDetailCpnComponent } from '../../components/subject-detail-cpn/subject-detail-cpn.component';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
+import { SDMRatingComponent } from '../../components/rating/rating.component';
+import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
+import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-open/show-subjects-open.component';
+import { SDMSubjectDetailCpnComponent } from '../../components/subject-detail-cpn/subject-detail-cpn.component';
+import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
+import { paginationType } from '../../shared/models/SdmAppService.model';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model';
-import { APIManagementService } from '../../shared/services/api-management.service';
 import { subjectDetailData } from '../../shared/models/SubjectDetailData.model';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
-import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
-import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
-import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
-import { paginationType } from '../../shared/models/SdmAppService.model';
-import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-open/show-subjects-open.component';
+import { APIManagementService } from '../../shared/services/api-management.service';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
-	imports: [
-		SDMSubjectDetailCpnComponent,
-		CommonModule,
-		SDMReviewFilterComponent,
-		SDMWriteReviewBoxComponent,
-		SDMShowSubjectsOpenComponent,
-	],
+	imports: [SDMSubjectDetailCpnComponent, CommonModule, SDMReviewFilterComponent, SDMWriteReviewBoxComponent, SDMShowSubjectsOpenComponent, SDMRatingComponent],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
 })
@@ -49,6 +44,9 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public subjectIdFromParams: string = '';
 
+	public avgReviewRating: number = 4;
+	public reviewCount: number = 30;
+
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
@@ -58,7 +56,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['isLoadingReview']) {
-			console.log('Loading:', changes['isLoading'].currentValue);
 		}
 	}
 
@@ -95,61 +92,12 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				section = ${this.section},
 				subjectId = ${this.subjectId}
 			`);
-			console.log(
-				this.selectedYear &&
-					this.selectedSemester !== undefined &&
-					this.selectedFaculty !== undefined &&
-					this.selectedDepartment !== undefined &&
-					this.selectedCurriculum !== undefined &&
-					this.selectedClassYear !== undefined &&
-					this.section !== undefined &&
-					this.subjectId !== undefined &&
-					this.selectedYear !== 0 &&
-					this.selectedSemester !== 0 &&
-					this.selectedFaculty !== '' &&
-					this.selectedDepartment !== '' &&
-					this.selectedCurriculum !== '' &&
-					this.selectedClassYear !== -1 &&
-					this.section !== 0,
-			);
+			console.log(this.selectedYear && this.selectedSemester !== undefined && this.selectedFaculty !== undefined && this.selectedDepartment !== undefined && this.selectedCurriculum !== undefined && this.selectedClassYear !== undefined && this.section !== undefined && this.subjectId !== undefined && this.selectedYear !== 0 && this.selectedSemester !== 0 && this.selectedFaculty !== '' && this.selectedDepartment !== '' && this.selectedCurriculum !== '' && this.selectedClassYear !== -1 && this.section !== 0);
 
-			if (
-				this.selectedYear &&
-				this.selectedSemester !== undefined &&
-				this.selectedFaculty !== undefined &&
-				this.selectedDepartment !== undefined &&
-				this.selectedCurriculum !== undefined &&
-				this.selectedClassYear !== undefined &&
-				this.section !== undefined &&
-				this.subjectId !== undefined &&
-				this.selectedYear !== 0 &&
-				this.selectedSemester !== 0 &&
-				this.selectedFaculty !== '' &&
-				this.selectedDepartment !== '' &&
-				this.selectedCurriculum !== '' &&
-				this.selectedClassYear !== -1 &&
-				this.section !== 0
-			) {
+			if (this.selectedYear && this.selectedSemester !== undefined && this.selectedFaculty !== undefined && this.selectedDepartment !== undefined && this.selectedCurriculum !== undefined && this.selectedClassYear !== undefined && this.section !== undefined && this.subjectId !== undefined && this.selectedYear !== 0 && this.selectedSemester !== 0 && this.selectedFaculty !== '' && this.selectedDepartment !== '' && this.selectedCurriculum !== '' && this.selectedClassYear !== -1 && this.section !== 0) {
 				this.getEachSubjectData();
 			}
-			console.log(
-				'test if condition : ',
-				this.selectedYear &&
-					this.selectedSemester !== undefined &&
-					this.selectedFaculty !== undefined &&
-					this.selectedDepartment !== undefined &&
-					this.selectedCurriculum !== undefined &&
-					this.selectedClassYear !== undefined &&
-					this.section !== undefined &&
-					this.subjectId !== undefined &&
-					this.selectedYear !== 0 &&
-					this.selectedSemester !== 0 &&
-					this.selectedFaculty !== '' &&
-					this.selectedDepartment !== '' &&
-					this.selectedCurriculum !== '' &&
-					this.selectedClassYear !== -1 &&
-					this.section !== 0,
-			);
+			console.log('test if condition : ', this.selectedYear && this.selectedSemester !== undefined && this.selectedFaculty !== undefined && this.selectedDepartment !== undefined && this.selectedCurriculum !== undefined && this.selectedClassYear !== undefined && this.section !== undefined && this.subjectId !== undefined && this.selectedYear !== 0 && this.selectedSemester !== 0 && this.selectedFaculty !== '' && this.selectedDepartment !== '' && this.selectedCurriculum !== '' && this.selectedClassYear !== -1 && this.section !== 0);
 			this.getSubjectDetail();
 			this.getSubjectReviews();
 		});
@@ -164,110 +112,81 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	}
 
 	public getEachSubjectData() {
-		this.apiManagementService
-			.GetCurriculumnSubjectDataBySection(
-				this.selectedYear,
-				this.selectedSemester,
-				this.selectedFaculty,
-				this.selectedDepartment,
-				this.selectedCurriculum!,
-				this.selectedClassYear,
-				this.subjectId,
-				this.section,
-				this.selectedCurriculumYear,
-				this.selectedUniqueId,
-			)
-			.subscribe({
-				next: (res) => {
-					if (res) {
-						this.eachSubjectData = res;
-						console.log(
-							'eachSubjectData in subject-detail.page : ',
-							this.eachSubjectData,
-						);
+		this.apiManagementService.GetCurriculumnSubjectDataBySection(this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum!, this.selectedClassYear, this.subjectId, this.section, this.selectedCurriculumYear, this.selectedUniqueId).subscribe({
+			next: (res) => {
+				if (res) {
+					this.eachSubjectData = res;
+					console.log('eachSubjectData in subject-detail.page : ', this.eachSubjectData);
 
-						console.log('getEachSubjectData เสร็จแล้วจ้า');
-					} else {
-						console.log('navigate to /subject');
-						// this.router.navigate(['/subject']);
-						console.log('No Subject Data Available.');
-					}
-				},
-				error: (error) => {
-					if (error.status === 404) {
-						console.error('Not found');
-					} else if (error.status === 500) {
-						console.error('Internal Server Error');
-					} else {
-						console.error(
-							'An unexpected error occurred:',
-							error.status,
-						);
-					}
-				},
-			});
+					console.log('getEachSubjectData เสร็จแล้วจ้า');
+				} else {
+					console.log('navigate to /subject');
+					// this.router.navigate(['/subject']);
+					console.log('No Subject Data Available.');
+				}
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error('An unexpected error occurred:', error.status);
+				}
+			},
+		});
 	}
 
 	public getSubjectDetail() {
-		this.apiManagementService
-			.GetCurriculumTeachtableSubject(this.subjectId)
-			.subscribe({
-				next: (res) => {
-					if (res) {
-						this.subjectDetail = res;
-						console.log('subjectDetail : ', this.subjectDetail);
-						console.log('getSubjectDetail เสร็จแล้วจ้า');
-					} else {
-						console.log(' navigate to /subject');
-						// this.router.navigate(['/subject']);
-						console.log('No Subject Data Available.');
-					}
-				},
-				error: (error) => {
-					if (error.status === 400) {
-						console.log('navigate to /subject');
-						// this.router.navigate(['/subject']);
-					} else if (error.status === 404) {
-						console.error('Not found');
-					} else if (error.status === 500) {
-						console.error('Internal Server Error');
-					} else {
-						console.error(
-							'An unexpected error occurred:',
-							error.status,
-						);
-					}
-				},
-			});
+		this.apiManagementService.GetCurriculumTeachtableSubject(this.subjectId).subscribe({
+			next: (res) => {
+				if (res) {
+					this.subjectDetail = res;
+					console.log('subjectDetail : ', this.subjectDetail);
+					console.log('getSubjectDetail เสร็จแล้วจ้า');
+				} else {
+					console.log(' navigate to /subject');
+					// this.router.navigate(['/subject']);
+					console.log('No Subject Data Available.');
+				}
+			},
+			error: (error) => {
+				if (error.status === 400) {
+					console.log('navigate to /subject');
+					// this.router.navigate(['/subject']);
+				} else if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error('An unexpected error occurred:', error.status);
+				}
+			},
+		});
 	}
 
 	public getSubjectReviews() {
 		this.isLoadingReview = true;
 		console.log('Loading:', this.isLoadingReview);
-		this.apiManagementService
-			.GetSubjectReviewsBySubjectID(this.subjectId)
-			.subscribe({
-				next: (res) => {
-					if (res) {
-						this.subjectReviewData = res;
-					} else {
-						console.log('No Subject Reviews Data Available.');
-					}
-					this.isLoadingReview = false;
-				},
-				error: (error) => {
-					if (error.status === 404) {
-						console.error('Not found!!!!!!!');
-					} else if (error.status === 500) {
-						console.error('Internal Server Error');
-					} else {
-						console.error(
-							'An unexpected error occurred:',
-							error.status,
-						);
-					}
-					this.isLoadingReview = false;
-				},
-			});
+		this.apiManagementService.GetSubjectReviewsBySubjectID(this.subjectId).subscribe({
+			next: (res) => {
+				if (res) {
+					this.subjectReviewData = res;
+				} else {
+					console.log('No Subject Reviews Data Available.');
+				}
+				this.isLoadingReview = false;
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					console.error('Not found!!!!!!!');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error('An unexpected error occurred:', error.status);
+				}
+				this.isLoadingReview = false;
+			},
+		});
 	}
 }

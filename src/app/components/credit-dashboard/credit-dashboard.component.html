@@ -6,16 +6,24 @@
 		</div>
 		<div class="text-dark-100 text-center text-base font-normal">หน่วยกิต</div>
 	</div>
-	<div class="grid grid-cols-2 justify-items-center gap-y-2">
-		<div>หน่วยกิตทั้งหมด</div>
-		<div>ขาดอีก</div>
+	<div class="grid grid-cols-1 justify-items-center gap-y-2">
 		<div>
-			<span class="me-2 font-semibold text-primary-300">{{ totalCredit }}</span
-			><span>หน่วยกิต</span>
+			หน่วยกิตทั้งหมด <span class="ms-2 font-semibold text-primary-300">{{ totalCredit }}</span>
 		</div>
 		<div>
-			<span class="me-2 font-semibold text-red-400">{{ totalRemaining }}</span
-			><span>หน่วยกิต</span>
+			หน่วยกิตที่ขาด <span class="ms-2 font-semibold text-red-400">{{ totalRemaining }}</span>
 		</div>
 	</div>
+	<!-- <div class="flex justify-center">
+		<table class="mx-2">
+			<tr>
+				<td class="">หน่วยกิตทั้งหมด</td>
+				<td class="flex justify-center font-semibold text-primary-300">{{ totalCredit }}</td>
+			</tr>
+			<tr>
+				<td class="">หน่วยกิตที่ขาด</td>
+				<td class="flex justify-center font-semibold text-red-400">{{ totalRemaining }}</td>
+			</tr>
+		</table>
+	</div> -->
 </div>
