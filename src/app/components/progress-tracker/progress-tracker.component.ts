@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { SDMBaseModal } from '@components/modals/base-modal.component.js';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject.js';
+import { Subject } from '@models/Subject.model.js';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
 import { User } from '@models/User.model';
@@ -27,6 +29,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		private http: HttpClient,
 		private backendService: BackendService,
 		private loadingService: LoadingService,
+		private router: Router,
 	) {}
 
 	@ViewChild('showSubjectGroupModal') showSubjectGroupModal!: SDMBaseModal;
@@ -44,10 +47,13 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	notFittedSubjects: TranscriptDetail[] = [];
 
+	public subjectData!: Subject;
+
 	public currentSubjects: CurriculumGroupSubject[] = [];
 	public currentSubjectsGroupColor: string = '';
 
 	accordionLevelExpands: number = 2; // min: 1, if < 0 infinite expand
+
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
@@ -60,6 +66,12 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 		this.fetchTranscripts();
 		console.log(this.currentUser?.curriculum.curriculum_group?.children);
+	}
+
+	public getSubjectDetailUrl(subjectData: string): string {
+		const path = this.router.serializeUrl(this.router.createUrlTree(['/subject/subject-detail', subjectData]));
+		console.log(path);
+		return path;
 	}
 
 	expandAccordions(group: CurriculumGroup, levelLeft: number): void {

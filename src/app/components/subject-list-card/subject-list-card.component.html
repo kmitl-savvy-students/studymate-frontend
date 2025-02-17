@@ -1,23 +1,23 @@
 <div class="flex flex-col gap-3 px-4">
-	<div
-		class="border-dark-10 flex items-center justify-between rounded-xl border py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10"
-		*ngFor="let transcriptDetail of transcriptDetails">
-		<div class="flex flex-row p-2">
-			<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="subjectLabelColor"></div>
-			<div class="flex flex-col">
-				<div class="text-base font-semibold" ngClass="truncate {{ maxTextLength }}">{{ transcriptDetail.subject?.id }} {{ transcriptDetail.subject?.name_th }}</div>
-				<div class="text-xs opacity-50" ngClass="truncate {{ maxTextLength }}">{{ transcriptDetail.subject?.name_en }}</div>
-			</div>
-		</div>
-		<ng-container *ngIf="!showSubjectOnly">
-			<div class="flex gap-3">
-				<div class="flex w-[150px] items-center gap-4 p-4">
-					<span class="text-xs opacity-50">หน่วยกิตที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.subject?.credit }}</span>
-				</div>
-				<div class="flex w-[150px] items-center gap-4 p-4">
-					<span class="text-xs opacity-50">เกรดที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.grade }}</span>
+	<ng-container *ngFor="let transcriptDetail of transcriptDetails">
+		<a [href]="getSubjectDetailUrl(transcriptDetail.subject!)" class="border-dark-10 flex items-center justify-between rounded-xl border py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10">
+			<div class="flex flex-row p-2">
+				<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="subjectLabelColor"></div>
+				<div class="flex flex-col">
+					<div class="text-base font-semibold" ngClass="truncate {{ maxTextLength }}">{{ transcriptDetail.subject?.id }} {{ transcriptDetail.subject?.name_th }}</div>
+					<div class="text-xs opacity-50" ngClass="truncate {{ maxTextLength }}">{{ transcriptDetail.subject?.name_en }}</div>
 				</div>
 			</div>
-		</ng-container>
-	</div>
+			<ng-container *ngIf="!showSubjectOnly">
+				<div class="flex gap-3">
+					<div class="flex w-[150px] items-center gap-4 p-4">
+						<span class="text-xs opacity-50">หน่วยกิตที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.subject?.credit }}</span>
+					</div>
+					<div class="flex w-[150px] items-center gap-4 p-4">
+						<span class="text-xs opacity-50">เกรดที่ได้รับ</span><span class="text-lg font-semibold text-main-100">{{ transcriptDetail.grade }}</span>
+					</div>
+				</div>
+			</ng-container>
+		</a>
+	</ng-container>
 </div>
