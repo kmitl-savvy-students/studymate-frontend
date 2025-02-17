@@ -12,4 +12,5 @@ export class SDMSubjectListCardComponent {
 	@Input() transcriptDetails?: Array<TranscriptDetail> = [];
 	@Input() subjectLabelColor?: string = '#4D74CBBF';
 	@Input() maxTextLength?: string = 'max-w-64';
+	@Input() showSubjectOnly: boolean = false;
 }
