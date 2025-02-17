@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-3 px-4">
 	<ng-container *ngFor="let transcriptDetail of transcriptDetails">
-		<a [href]="getSubjectDetailUrl(transcriptDetail.subject!)" class="border-dark-10 flex items-center justify-between rounded-xl border py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10">
+		<a [href]="getSubjectDetailUrl(transcriptDetail.subject!)" target="_blank" class="border-dark-10 flex items-center justify-between rounded-xl border py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10">
 			<div class="flex flex-row p-2">
 				<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="subjectLabelColor"></div>
 				<div class="flex flex-col">
