@@ -28,6 +28,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	currentUser: User | null = null;
 	transcript: Transcript | null = null;
+	rootNode: CurriculumGroup | null = null;
 
 	openAccordions: Set<number> = new Set<number>();
 
@@ -72,35 +73,30 @@ export class SDMProgressTrackerComponent implements OnInit {
 		return this.openAccordions.has(groupId);
 	}
 
-	findParentNodeColor(currentNode: CurriculumGroup, rootNode: CurriculumGroup): string {
-		if (currentNode.color && currentNode.color !== '#FFFFFF') {
+	findParentNodeColor(currentNode: CurriculumGroup): string {
+		const GRAY = '#e7e5e4';
+		if (currentNode.color.toUpperCase() !== '#FFFFFF' && currentNode.color.length !== 0) {
 			return currentNode.color;
 		}
-		const parentNode = this.findParentNode(currentNode, rootNode);
-		if (parentNode) {
-			return this.findParentNodeColor(parentNode, rootNode);
-		}
-		return '#e7e5e4'; // default show color
+		const parentNode = this.findNodeById(currentNode.parent_id, this.rootNode);
+		if (!parentNode) return GRAY;
+
+		return this.findParentNodeColor(parentNode);
 	}
 
-	findNodeById(rootNode: CurriculumGroup, id: number): CurriculumGroup | null {
-		if (rootNode.id === id) {
-			return rootNode;
+	findNodeById(id: number, currentNode: CurriculumGroup | null): CurriculumGroup | null {
+		if (!currentNode) return null;
+
+		if (currentNode.id === id) {
+			return currentNode;
 		}
-		for (const child of rootNode.children) {
-			const result = this.findNodeById(child, id);
+		for (let child of currentNode.children) {
+			const result = this.findNodeById(id, child);
 			if (result) {
 				return result;
 			}
 		}
 		return null;
-	}
-
-	findParentNode(currentNode: CurriculumGroup, rootNode: CurriculumGroup): CurriculumGroup | null {
-		if (currentNode.children.length === 0) {
-			return null;
-		}
-		return this.findNodeById(rootNode, currentNode.parent_id);
 	}
 
 	fetchTranscripts() {
@@ -112,6 +108,9 @@ export class SDMProgressTrackerComponent implements OnInit {
 			.subscribe({
 				next: (data) => {
 					this.transcript = data;
+					if (data.user?.curriculum?.curriculum_group) {
+						this.rootNode = data.user?.curriculum.curriculum_group;
+					}
 					this.assignSubjectsToGroups();
 				},
 				error: (error) => {
