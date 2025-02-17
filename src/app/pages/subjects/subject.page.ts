@@ -41,7 +41,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	public selectedClassYear: string = '';
 	public selectedFaculty: number = -1;
 	public selectedProgram: number = -1;
-	public selectedProgramKmitlId: number = -1;
 	public selectedDepartment: number = -1;
 	public selectedCurriculum?: string = '';
 
@@ -201,7 +200,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				case 'selectedProgram': {
 					const option = this.programList.find((option) => option.id === this.selectedProgram);
 					if (option) {
-						this.selectedProgramKmitlId = Number(option.kmitl_id);
 						dropdown.onSelectedOption(option.id, option.name_th);
 					}
 					break;
@@ -236,7 +234,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 		this.isLoading = true;
 		this.isError = false;
 
-		this.apiManagementService.GetSubjectsDataInSubjectPage(this.selectedYear - 543, this.selectedSemester, this.selectedClassYear, this.selectedProgramKmitlId).subscribe({
+		this.apiManagementService.GetSubjectsDataInSubjectPage(this.selectedYear - 543, this.selectedSemester, this.selectedClassYear, this.selectedProgram).subscribe({
 			next: (res) => {
 				if (res && res.length > 0) {
 					this.subjectCardData = res;
@@ -378,7 +376,12 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				if (this.selectedDepartment === undefined || this.selectedDepartment === -1) {
 					this.resetDropdowns('selectedProgram');
 					this.resetDropdowns('selectedCurriculum');
-				} else if (oldSelectedDepartment !== this.selectedDepartment && oldSelectedDepartment !== -1 && this.selectedDepartment !== undefined && this.selectedDepartment !== -1) {
+				} else if (
+					oldSelectedDepartment !== this.selectedDepartment &&
+					oldSelectedDepartment !== -1 &&
+					this.selectedDepartment !== undefined &&
+					this.selectedDepartment !== -1
+				) {
 					this.resetDropdowns('selectedProgram');
 					this.resetDropdowns('selectedCurriculum');
 					this.getDropdownProgramsAsObservable(this.selectedDepartment).subscribe();
@@ -475,7 +478,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	}
 
 	public checkDisableSelectDropdown() {
-		if (this.selectedFaculty === 90 || this.selectedDepartment === 90 || this.isGened || this.selectedFaculty === -1 || this.selectedFaculty === undefined || this.selectedDepartment === -1 || this.selectedDepartment === undefined) {
+		if (
+			this.selectedFaculty === 90 ||
+			this.selectedDepartment === 90 ||
+			this.isGened ||
+			this.selectedFaculty === -1 ||
+			this.selectedFaculty === undefined ||
+			this.selectedDepartment === -1 ||
+			this.selectedDepartment === undefined
+		) {
 			this.disableCurriculumSelectDropdown = true;
 		} else {
 			this.disableCurriculumSelectDropdown = false;
@@ -517,7 +528,16 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			this.selectedCurriculum !== 'x' &&
 			this.selectedCurriculum !== undefined
 		) {
-			const urlSegments = ['/subject', this.selectedYear, this.selectedSemester, this.selectedClassYear, this.selectedFaculty, this.selectedDepartment, this.selectedProgram, this.selectedCurriculum];
+			const urlSegments = [
+				'/subject',
+				this.selectedYear,
+				this.selectedSemester,
+				this.selectedClassYear,
+				this.selectedFaculty,
+				this.selectedDepartment,
+				this.selectedProgram,
+				this.selectedCurriculum,
+			];
 
 			// สร้าง URL tree แยกจาก string
 			const urlTree = this.router.createUrlTree(urlSegments);
@@ -534,10 +554,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				.navigate([latestSubjectUrl], navigationExtras)
 				.then((success) => {
 					if (success) {
-						const option = this.programList.find((option) => option.id === this.selectedProgram);
-						if (option) {
-							this.selectedProgramKmitlId = Number(option.kmitl_id);
-						}
 						console.log('Navigation successful!');
 						if (this.isSelectAllDropdown) {
 							this.getSubjectData();
@@ -561,6 +577,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	}
 
 	public searchFunction(data: SubjectCardData[], searchValue: string): SubjectCardData[] {
-		return data.filter((subject) => subject.subject.id.toLowerCase().includes(searchValue.toLowerCase()) || subject.subject.name_en.toLowerCase().includes(searchValue.toLowerCase()));
+		return data.filter(
+			(subject) => subject.subject.id.toLowerCase().includes(searchValue.toLowerCase()) || subject.subject.name_en.toLowerCase().includes(searchValue.toLowerCase()),
+		);
 	}
 }

@@ -12,7 +12,7 @@ import { SDMRatingComponent } from '../rating/rating.component';
 	styleUrl: './subject.component.css',
 })
 export class SDMSubjectComponent {
-	@Input() subjectCardData!: SubjectCardData;
+	@Input() subjectCardData?: SubjectCardData;
 
 	@Input() selectedYear: number = 0;
 	@Input() selectedSemester: number = 0;
@@ -41,7 +41,21 @@ export class SDMSubjectComponent {
 		// }
 		if (this.selectedCurriculumYear && this.selectedUniqueId) {
 			// ใช้ path สำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
-			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId, this.subjectCardData.section, this.subjectCardData.subject.id]).toString();
+			latestSubjectDetailUrl = this.router
+				.createUrlTree([
+					'/subject/subject-detail',
+					this.selectedYear,
+					this.selectedSemester,
+					this.selectedFaculty,
+					this.selectedDepartment,
+					this.selectedCurriculum,
+					this.selectedClassYear,
+					this.selectedCurriculumYear,
+					this.selectedUniqueId,
+					this.subjectCardData?.section,
+					this.subjectCardData?.subject?.id,
+				])
+				.toString();
 			return latestSubjectDetailUrl;
 		}
 
@@ -50,6 +64,6 @@ export class SDMSubjectComponent {
 	}
 
 	getTeacherListContent(): string {
-		return this.subjectCardData.teacher_list_th.map((teacher: string) => `<div>${teacher}</div>`).join('');
+		return this.subjectCardData?.teacher_list_th?.map((teacher: string) => `<div>${teacher}</div>`).join('') || '';
 	}
 }
