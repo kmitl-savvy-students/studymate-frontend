@@ -45,10 +45,33 @@ export class SDMProgressTracker implements OnInit {
 	notFittedSubjects: TranscriptDetail[] = [];
 
 	ngOnInit(): void {
+		// สมัครสมาชิกเพื่อรับข้อมูลผู้ใช้
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
+
+			// ตรวจสอบว่ามีข้อมูลหลักสูตรและกลุ่มหลักสูตรหรือไม่
+			if (this.currentUser?.curriculum?.curriculum_group) {
+				// กำหนดให้ Accordion ของกลุ่มหลักสูตรเปิดเมื่อเริ่มต้น
+				this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
+
+				// หากต้องการเปิด Accordion ย่อยทั้งหมดภายในกลุ่มหลักสูตร
+				this.expandAllChildGroups(this.currentUser.curriculum.curriculum_group);
+			}
 		});
+
+		// เรียกข้อมูล Transcript
 		this.fetchTranscripts();
+	}
+
+	// ฟังก์ชันเพื่อเปิด Accordion ย่อยทั้งหมดภายในกลุ่มหลักสูตร
+	expandAllChildGroups(group: CurriculumGroup): void {
+		if (group.children && group.children.length > 0) {
+			group.children.forEach((child) => {
+				this.openAccordions.add(child.id);
+				// เรียกใช้ฟังก์ชันนี้ซ้ำสำหรับกลุ่มย่อย
+				this.expandAllChildGroups(child);
+			});
+		}
 	}
 
 	toggleAccordion(groupId: number) {
@@ -63,45 +86,6 @@ export class SDMProgressTracker implements OnInit {
 		return this.openAccordions.has(groupId);
 	}
 
-	// findParentNode(currentNode: CurriculumGroup, rootNode: CurriculumGroup): CurriculumGroup | null {
-	// 	// ถ้าโหนดรากมีโหนดลูก
-	// 	if (rootNode.children && rootNode.children.length > 0) {
-	// 		for (const child of rootNode.children) {
-	// 			// ถ้าเจอโหนดลูกที่ตรงกับโหนดปัจจุบัน
-	// 			if (child.id === currentNode.id) {
-	// 				return rootNode; // คืนค่าโหนดพาเรนต์
-	// 			}
-	// 			// ค้นหาในโหนดลูกถัดไป
-	// 			const parent = this.findParentNode(currentNode, child);
-	// 			if (parent) {
-	// 				return parent;
-	// 			}
-	// 		}
-	// 	}
-	// 	return null; // ถ้าไม่พบโหนดพาเรนต์
-	// }
-
-	// findParentNodeColor(currentNode: CurriculumGroup, rootNode: CurriculumGroup): string {
-	// 	// ถ้าโหนดปัจจุบันมีค่าสีที่ไม่ใช่ค่าว่างหรือ #FFFFFF
-	// 	if (currentNode.color && currentNode.color !== '#FFFFFF') {
-	// 		return currentNode.color;
-	// 	}
-	// 	// ค้นหาโหนดพาเรนต์
-	// 	const parentNode = this.findParentNode(currentNode, rootNode);
-	// 	if (parentNode) {
-	// 		// เรียกฟังก์ชันซ้ำกับโหนดพาเรนต์
-	// 		return this.findParentNodeColor(parentNode, rootNode);
-	// 	}
-	// 	return '#FFFFFF'; // หรือค่าสีเริ่มต้นที่คุณต้องการ
-	// }
-
-	// findParentNodeColor(node: CurriculumGroup) {
-	// 	if (node.color !== '#FFFFFF') {
-	// 		return node.color;
-	// 	}
-	// 	return this.findParentNodeColor(node.parent);
-	// }
-
 	findParentNodeColor(currentNode: CurriculumGroup, rootNode: CurriculumGroup): string {
 		if (currentNode.color && currentNode.color !== '#FFFFFF') {
 			return currentNode.color;
@@ -110,7 +94,7 @@ export class SDMProgressTracker implements OnInit {
 		if (parentNode) {
 			return this.findParentNodeColor(parentNode, rootNode);
 		}
-		return '#e7e5e4'; // หรือค่าสีเริ่มต้นที่คุณต้องการ
+		return '#e7e5e4'; // default show color
 	}
 
 	findNodeById(rootNode: CurriculumGroup, id: number): CurriculumGroup | null {
@@ -128,7 +112,6 @@ export class SDMProgressTracker implements OnInit {
 
 	findParentNode(currentNode: CurriculumGroup, rootNode: CurriculumGroup): CurriculumGroup | null {
 		if (currentNode.children.length === 0) {
-			// ถ้า parent_id เป็น 0 แสดงว่าเป็นโหนดราก ไม่มีพาเรนต์
 			return null;
 		}
 		return this.findNodeById(rootNode, currentNode.parent_id);

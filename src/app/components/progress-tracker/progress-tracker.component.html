@@ -28,15 +28,8 @@
 								หน่วยกิตที่ได้รับ: {{ groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }} /
 								{{ groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}
 							</div>
-							<!-- <div
-								class="transition-transform duration-200"
-								[ngClass]="{
-									'rotate-90': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
-								}">
-								▶
-							</div> -->
 							<div
-								class="text-gray-400 transition-transform duration-200"
+								class="transition-transform duration-200"
 								[ngClass]="{
 									'rotate-90': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
 									'text-black': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
@@ -74,9 +67,8 @@
 									หน่วยกิตที่ได้รับ: {{ groupCreditUsed.get(child.id) || 0 }} /
 									{{ groupCreditRequired.get(child.id) || 0 }}
 								</div>
-								<!-- <span class="text-right transition-transform" [ngClass]="{ 'rotate-90': isAccordionOpen(child.id) }"> ▶ </span> -->
 								<div
-									class="text-gray-400 transition-transform duration-200"
+									class="text-gray-500 transition-transform duration-200"
 									[ngClass]="{
 										'rotate-90': isAccordionOpen(child.id),
 										'text-black': isAccordionOpen(child.id),
