@@ -9,11 +9,14 @@ import { AuthenticationService } from '@services/authentication/authentication.s
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { SDMBaseButton } from '../buttons/base-button.component';
+import { SDMButtonLink } from '../buttons/button-link.component';
+import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMButtonLink, SDMBaseButton],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
@@ -37,10 +40,33 @@ export class SDMProgressTrackerComponent implements OnInit {
 	notFittedSubjects: TranscriptDetail[] = [];
 
 	ngOnInit(): void {
+		// สมัครสมาชิกเพื่อรับข้อมูลผู้ใช้
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
+
+			// ตรวจสอบว่ามีข้อมูลหลักสูตรและกลุ่มหลักสูตรหรือไม่
+			if (this.currentUser?.curriculum?.curriculum_group) {
+				// กำหนดให้ Accordion ของกลุ่มหลักสูตรเปิดเมื่อเริ่มต้น
+				this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
+
+				// หากต้องการเปิด Accordion ย่อยทั้งหมดภายในกลุ่มหลักสูตร
+				this.expandAllChildGroups(this.currentUser.curriculum.curriculum_group);
+			}
 		});
+
+		// เรียกข้อมูล Transcript
 		this.fetchTranscripts();
+	}
+
+	// ฟังก์ชันเพื่อเปิด Accordion ย่อยทั้งหมดภายในกลุ่มหลักสูตร
+	expandAllChildGroups(group: CurriculumGroup): void {
+		if (group.children && group.children.length > 0) {
+			group.children.forEach((child) => {
+				this.openAccordions.add(child.id);
+				// เรียกใช้ฟังก์ชันนี้ซ้ำสำหรับกลุ่มย่อย
+				this.expandAllChildGroups(child);
+			});
+		}
 	}
 
 	toggleAccordion(groupId: number) {
@@ -53,6 +79,37 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	isAccordionOpen(groupId: number): boolean {
 		return this.openAccordions.has(groupId);
+	}
+
+	findParentNodeColor(currentNode: CurriculumGroup, rootNode: CurriculumGroup): string {
+		if (currentNode.color && currentNode.color !== '#FFFFFF') {
+			return currentNode.color;
+		}
+		const parentNode = this.findParentNode(currentNode, rootNode);
+		if (parentNode) {
+			return this.findParentNodeColor(parentNode, rootNode);
+		}
+		return '#e7e5e4'; // default show color
+	}
+
+	findNodeById(rootNode: CurriculumGroup, id: number): CurriculumGroup | null {
+		if (rootNode.id === id) {
+			return rootNode;
+		}
+		for (const child of rootNode.children) {
+			const result = this.findNodeById(child, id);
+			if (result) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	findParentNode(currentNode: CurriculumGroup, rootNode: CurriculumGroup): CurriculumGroup | null {
+		if (currentNode.children.length === 0) {
+			return null;
+		}
+		return this.findNodeById(rootNode, currentNode.parent_id);
 	}
 
 	fetchTranscripts() {

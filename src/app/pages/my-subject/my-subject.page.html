@@ -1,5 +1,5 @@
-<div class="flex flex-row gap-x-5 sm:flex-col lg:flex-row">
-	<div class="flex flex-col sm:w-full lg:w-3/4">
+<div class="grid grid-cols-4 gap-x-5">
+	<div class="col-span-3 flex flex-col">
 		<div class="mb-4">
 			<h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h3>
 			<h2 class="text-2xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h2>
@@ -17,7 +17,7 @@
 			</ng-template>
 		</sdm-tabs>
 	</div>
-	<div class="w-1/4">
+	<div class="col-span-1">
 		<div class="flex flex-col gap-y-4">
 			<div class="flex flex-col gap-y-2">
 				<sdm-base-button

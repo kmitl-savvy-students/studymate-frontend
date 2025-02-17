@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { SDMBaseAccordion } from '@components/accordion/base-accordion.component.js';
 import { Transcript } from '@models/Transcript.model.js';
 import { TranscriptDetail } from '@models/TranscriptDetail.model.js';
 import { User } from '@models/User.model.js';
-import { AuthenticationService } from '@services/authentication/authentication.service';
-import { BackendService } from '@services/backend.service';
-import { LoadingService } from '@services/loading/loading.service';
-import { finalize } from 'rxjs';
-import { SDMBaseAccordion } from '../accordion/base-accordion.component';
+import { AuthenticationService } from '@services/authentication/authentication.service.js';
+import { BackendService } from '@services/backend.service.js';
+import { LoadingService } from '@services/loading/loading.service.js';
+import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-transcript-tracker',
-	imports: [CommonModule, SDMBaseAccordion],
+	imports: [CommonModule, SDMBaseAccordion, SDMSubjectListCardComponent],
 	templateUrl: './transcript-tracker.component.html',
 	styleUrl: './transcript-tracker.component.css',
 })
@@ -93,6 +93,14 @@ export class SDMTranscriptTrackerComponent {
 			}
 			group.details.push(transcriptDetails);
 		});
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['groupedTranscriptDetails'] && changes['groupedTranscriptDetails'].currentValue) {
+			console.log('group', changes['groupedTranscriptDetails'].currentValue);
+			this.groupedTranscriptDetails = changes['groupedTranscriptDetails'].currentValue;
+			this.isFetchingTranscriptDetails = changes['isFetchingTranscriptDetails'].currentValue;
+		}
 	}
 
 	getFirstNonZeroYearIndex(): number {
