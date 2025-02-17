@@ -49,6 +49,7 @@ export class SDMBaseButton {
 	@Input() backgroundColorCustom: string = '';
 	@Input() backgroundColorHover: string = '';
 	@Input() backgroundColorHoverCustom: string = '';
+	@Input() cursor: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 
@@ -65,7 +66,9 @@ export class SDMBaseButton {
 		if (this.backgroundColorHover && !this.isDisabled) classes.push(this.backgroundColorHover);
 		if (this.backgroundColor || this.backgroundColorHover) classes.push('px-4', 'py-3');
 		if (this.isUnderlined) classes.push('underline', 'decoration-1');
+
 		if (this.isDisabled) classes.push('opacity-50', 'cursor-not-allowed');
+		if (this.cursor) classes.push(this.cursor);
 
 		return classes.join(' ');
 	}
