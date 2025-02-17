@@ -75,6 +75,32 @@ export class SDMPageCurriculumGroup implements OnInit {
 		});
 	}
 
+	findParentNodeColor(currentNode: CurriculumGroup): string {
+		const GRAY = '#e7e5e4';
+		if (currentNode.color.toUpperCase() !== '#FFFFFF' && currentNode.color.length !== 0) {
+			return currentNode.color;
+		}
+		const parentNode = this.findNodeById(currentNode.parent_id, this.rootNode);
+		if (!parentNode) return GRAY;
+
+		return this.findParentNodeColor(parentNode);
+	}
+
+	findNodeById(id: number, currentNode: CurriculumGroup | null): CurriculumGroup | null {
+		if (!currentNode) return null;
+
+		if (currentNode.id === id) {
+			return currentNode;
+		}
+		for (let child of currentNode.children) {
+			const result = this.findNodeById(id, child);
+			if (result) {
+				return result;
+			}
+		}
+		return null;
+	}
+
 	// #region Fetchings
 	fetchCurriculumAndNode(): void {
 		if (!this.curriculumId) return;
@@ -229,6 +255,8 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #endregion
 	// #region Edit Node
 	onEditNode(node: CurriculumGroup): void {
+		this.editSubjectsModal.hide();
+		this.editNodeModal.show();
 		this.currentParentNode = { ...node };
 		this.editNodeForm.patchValue({
 			name: node.name,
@@ -239,8 +267,6 @@ export class SDMPageCurriculumGroup implements OnInit {
 		if (this.editNodeForm.value.color.length === 0) {
 			this.editNodeForm.patchValue({ color: '#FFFFFF' });
 		}
-
-		this.editNodeModal.show();
 	}
 	onUpdateNodeType(event: any): void {
 		if (!this.currentParentNode) return;

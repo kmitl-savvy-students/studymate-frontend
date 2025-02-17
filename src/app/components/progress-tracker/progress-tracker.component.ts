@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SDMBaseModal } from '@components/modals/base-modal.component.js';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
+import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject.js';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
 import { User } from '@models/User.model';
@@ -16,7 +18,7 @@ import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-e
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
@@ -26,6 +28,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 		private backendService: BackendService,
 		private loadingService: LoadingService,
 	) {}
+
+	@ViewChild('showSubjectGroupModal') showSubjectGroupModal!: SDMBaseModal;
 
 	currentUser: User | null = null;
 	transcript: Transcript | null = null;
@@ -40,6 +44,9 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	notFittedSubjects: TranscriptDetail[] = [];
 
+	public currentSubjects: CurriculumGroupSubject[] = [];
+	public currentSubjectsGroupColor: string = '';
+
 	accordionLevelExpands: number = 2; // min: 1, if < 0 infinite expand
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -52,6 +59,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		});
 
 		this.fetchTranscripts();
+		console.log(this.currentUser?.curriculum.curriculum_group?.children);
 	}
 
 	expandAccordions(group: CurriculumGroup, levelLeft: number): void {
@@ -103,6 +111,14 @@ export class SDMProgressTrackerComponent implements OnInit {
 			}
 		}
 		return null;
+	}
+
+	onClickShowSubjectGroup(subjects: Array<CurriculumGroupSubject>, color: string) {
+		this.currentSubjectsGroupColor = color;
+		this.currentSubjects = subjects;
+		console.log(this.currentSubjects);
+		console.log(this.currentSubjectsGroupColor);
+		this.showSubjectGroupModal.show();
 	}
 
 	fetchTranscripts() {
