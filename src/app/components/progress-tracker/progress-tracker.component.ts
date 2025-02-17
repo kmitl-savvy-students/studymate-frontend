@@ -11,11 +11,12 @@ import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 import { SDMBaseButton } from '../buttons/base-button.component';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
+import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-earn.component';
 
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
