@@ -8,6 +8,7 @@ import { User } from '@models/User.model.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { BackendService } from '@services/backend.service.js';
 import { LoadingService } from '@services/loading/loading.service.js';
+import { finalize } from 'rxjs';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({

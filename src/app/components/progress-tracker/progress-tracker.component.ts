@@ -10,13 +10,12 @@ import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 import { SDMBaseButton } from '../buttons/base-button.component';
-import { SDMButtonLink } from '../buttons/button-link.component';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMButtonLink, SDMBaseButton],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
@@ -40,30 +39,22 @@ export class SDMProgressTrackerComponent implements OnInit {
 	notFittedSubjects: TranscriptDetail[] = [];
 
 	ngOnInit(): void {
-		// สมัครสมาชิกเพื่อรับข้อมูลผู้ใช้
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
 
-			// ตรวจสอบว่ามีข้อมูลหลักสูตรและกลุ่มหลักสูตรหรือไม่
 			if (this.currentUser?.curriculum?.curriculum_group) {
-				// กำหนดให้ Accordion ของกลุ่มหลักสูตรเปิดเมื่อเริ่มต้น
 				this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
-
-				// หากต้องการเปิด Accordion ย่อยทั้งหมดภายในกลุ่มหลักสูตร
 				this.expandAllChildGroups(this.currentUser.curriculum.curriculum_group);
 			}
 		});
 
-		// เรียกข้อมูล Transcript
 		this.fetchTranscripts();
 	}
 
-	// ฟังก์ชันเพื่อเปิด Accordion ย่อยทั้งหมดภายในกลุ่มหลักสูตร
 	expandAllChildGroups(group: CurriculumGroup): void {
 		if (group.children && group.children.length > 0) {
 			group.children.forEach((child) => {
 				this.openAccordions.add(child.id);
-				// เรียกใช้ฟังก์ชันนี้ซ้ำสำหรับกลุ่มย่อย
 				this.expandAllChildGroups(child);
 			});
 		}
