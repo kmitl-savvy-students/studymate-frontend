@@ -7,10 +7,10 @@
 		</div>
 		<sdm-tabs [tabs]="tabs">
 			<ng-template #transcript>
-				<sdm-transcript-tracker [currentUser]="currentUser" [isFetchingTranscriptDetails]="isFetchingTranscriptDetails" [transcriptData]="transcriptData" [groupedTranscriptDetails]="groupedTranscriptDetails"></sdm-transcript-tracker>
+				<sdm-transcript-tracker #transcriptTracker />
 			</ng-template>
 			<ng-template #progress>
-				<sdm-progress-tracker></sdm-progress-tracker>
+				<sdm-progress-tracker #progressTracker />
 			</ng-template>
 			<ng-template #grade>
 				<p>นี่คือเนื้อหาของแท็บ grade</p>
@@ -20,8 +20,22 @@
 	<div class="w-1/4">
 		<div class="flex flex-col gap-y-4">
 			<div class="flex flex-col gap-y-2">
-				<sdm-base-button icon="file-import" text="อัปโหลด Transcript" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-main-100" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onUploadTranscript()"></sdm-base-button>
-				<sdm-base-button icon="trash-can" text="ลบข้อมูล Transcript" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-red-400" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteTranscript()"></sdm-base-button>
+				<sdm-base-button
+					icon="file-import"
+					text="อัปโหลด Transcript"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-main-100"
+					backgroundColorHover="hover:bg-primary-400"
+					(clickEvent)="onUploadTranscript()"></sdm-base-button>
+				<sdm-base-button
+					icon="trash-can"
+					text="ลบข้อมูล Transcript"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-red-400"
+					backgroundColorHover="hover:bg-danger-400"
+					(clickEvent)="onDeleteTranscript()"></sdm-base-button>
 			</div>
 			<sdm-credit-dashboard [totalCompleted]="118" [totalRemaining]="18" [totalCredit]="136"></sdm-credit-dashboard>
 			<sdm-advice-dashboard></sdm-advice-dashboard>
@@ -30,7 +44,7 @@
 </div>
 
 <sdm-base-modal #uploadTranscriptModal modalId="uploadTranscript" header="อัปโหลดไฟล์ Transcript ใหม่" (confirmEvent)="onConfirmUploadTranscript()">
-	<label for="transcript" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
+	<label for="uploadTranscriptInput" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
 		<div class="flex flex-col items-center justify-center pb-6 pt-5">
 			<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-primary-300"></sdm-icon>
 			<p class="mb-2 text-base">
@@ -39,7 +53,7 @@
 			</p>
 			<p class="text-sm opacity-50">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
 		</div>
-		<input id="transcript" type="file" (change)="onTranscriptUploadInput($event)" />
+		<input id="uploadTranscriptInput" class="hidden" type="file" (change)="onTranscriptUploadInput($event)" />
 	</label>
 </sdm-base-modal>
 <sdm-base-modal #deleteTranscriptModal modalId="deleteTranscript" header="ยืนยันลบข้อมูล Transcript ทั้งหมดออกจากระบบ" (confirmEvent)="onConfirmDeleteTranscript()">

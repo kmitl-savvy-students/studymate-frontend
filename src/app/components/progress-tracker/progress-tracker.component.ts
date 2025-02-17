@@ -5,7 +5,6 @@ import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
 import { User } from '@models/User.model';
-import { AlertService } from '@services/alert/alert.service';
 import { AuthenticationService } from '@services/authentication/authentication.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
@@ -17,12 +16,11 @@ import { finalize } from 'rxjs';
 	imports: [CommonModule],
 	templateUrl: './progress-tracker.component.html',
 })
-export class SDMProgressTracker implements OnInit {
+export class SDMProgressTrackerComponent implements OnInit {
 	constructor(
 		private authService: AuthenticationService,
 		private http: HttpClient,
 		private backendService: BackendService,
-		private alertService: AlertService,
 		private loadingService: LoadingService,
 	) {}
 
@@ -32,11 +30,8 @@ export class SDMProgressTracker implements OnInit {
 	openAccordions: Set<number> = new Set<number>();
 
 	groupMatches = new Map<number, TranscriptDetail[]>();
-
 	groupCreditUsed = new Map<number, number>();
-
 	groupCreditRequired = new Map<number, number>();
-
 	groupComplete = new Map<number, boolean>();
 
 	notFittedSubjects: TranscriptDetail[] = [];
