@@ -109,17 +109,24 @@ export class APIManagementService {
 
 		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('program', program);
 
-		console.log(`${apiUrl}?${params.toString()}`);
+		// console.log(`${apiUrl}?${params.toString()}`);
 
 		return this.http.get<SubjectCardData[]>(apiUrl, { params });
-		// return new Observable<SubjectCardData[]>((observer) => {
-		// 	observer.next([]);
-		// 	observer.complete();
-		// });
 	}
 
 	// get รายวิชาในหน้า subject-detail เก่า
-	GetCurriculumnSubjectDataBySection(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, subjectId: string, section: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData> {
+	GetCurriculumnSubjectDataBySection(
+		year: number,
+		semester: number,
+		faculty: string,
+		department: string,
+		curriculum: string,
+		classYear: number,
+		subjectId: string,
+		section: number,
+		curriculumYear?: string,
+		uniqueId?: string,
+	): Observable<SubjectCardData> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-section/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
 
 		if (curriculumYear) {
