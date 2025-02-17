@@ -17,11 +17,7 @@ export class SDMSelectComponent implements OnInit {
 	@Input() customDdlHeader: string = '';
 	@Input() customDdlOptions: string = '';
 	@Input() disabled: boolean = false;
-	@Output() selectedValue = new EventEmitter<{
-		label: string;
-		index?: number;
-		value?: any;
-	}>();
+	@Output() selectedValue = new EventEmitter<{ value: number; label: string }>();
 	form: FormGroup;
 
 	public isDropdownOpen: boolean = false;
@@ -58,16 +54,16 @@ export class SDMSelectComponent implements OnInit {
 		return this.form.get('selectedOption')?.value || '';
 	}
 
-	onSelectedOption(option: string, i?: number, value?: any) {
-		this.form.get('selectedOption')?.setValue(option);
-		this.isSelect = option === '' ? false : true;
+	onSelectedOption(value: number, label: string) {
+		this.form.get('selectedOption')?.setValue(label);
+		this.isSelect = label === '' ? false : true;
 		this.isDropdownOpen = false;
 		const data = {
-			label: option,
-			index: i ?? -1,
 			value: value,
+			label: label,
 		};
 		this.selectedValue.emit(data);
+		console.log('selectedValue form select', data);
 	}
 
 	@HostListener('document:click', ['$event'])
