@@ -79,7 +79,7 @@
 						</div>
 					</button>
 				</div>
-				<div [id]="'group-' + child.id" class="ml-4 mt-2 min-w-fit" [class.hidden]="!isAccordionOpen(child.id)" [style.padding-left.px]="level * 8">
+				<div [id]="'group-' + child.id" class="ml-4 mt-2 min-w-fit overflow-hidden transition-all" [class.hidden]="!isAccordionOpen(child.id)" [style.padding-left.px]="level * 8">
 					<ng-container *ngIf="groupMatches.get(child.id)?.length">
 						<div class="border-dark-50 rounded-xl border px-2 py-6">
 							<sdm-subject-list-card maxTextLength="max-w-52" [transcriptDetails]="groupMatches.get(child.id)" subjectLabelColor="{{ findParentNodeColor(child) }}"></sdm-subject-list-card>

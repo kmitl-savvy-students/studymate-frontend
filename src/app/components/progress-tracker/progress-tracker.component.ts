@@ -39,26 +39,31 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	notFittedSubjects: TranscriptDetail[] = [];
 
+	accordionLevelExpands: number = 2; // min: 1, if < 0 infinite expand
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
 
 			if (this.currentUser?.curriculum?.curriculum_group) {
 				this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
-				this.expandAllChildGroups(this.currentUser.curriculum.curriculum_group);
+				this.expandAccordions(this.currentUser.curriculum.curriculum_group, this.accordionLevelExpands - 1);
 			}
 		});
 
 		this.fetchTranscripts();
 	}
 
-	expandAllChildGroups(group: CurriculumGroup): void {
+	expandAccordions(group: CurriculumGroup, levelLeft: number): void {
+		if (levelLeft == 0) return;
 		if (group.children && group.children.length > 0) {
 			group.children.forEach((child) => {
 				this.openAccordions.add(child.id);
-				this.expandAllChildGroups(child);
+				this.expandAccordions(child, levelLeft - 1);
 			});
 		}
+	}
+	collapseAllAccordions(): void {
+		this.openAccordions.clear();
 	}
 
 	toggleAccordion(groupId: number) {
@@ -120,7 +125,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 	}
 
 	private collectAllGroupIds(group: CurriculumGroup): void {
-		this.openAccordions.add(group.id);
 		for (const child of group.children || []) {
 			this.collectAllGroupIds(child);
 		}
