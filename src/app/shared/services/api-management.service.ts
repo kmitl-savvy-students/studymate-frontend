@@ -2,7 +2,7 @@ import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/
 import { Injectable } from '@angular/core';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
-import { Otp } from '@models/OtpData.model';
+import { OtpRequest, OtpVerify } from '@models/OtpData.model';
 import { Program } from '@models/Program.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
@@ -90,18 +90,18 @@ export class APIManagementService {
 	}
 
 	// get รายวิชาในหน้า subject เก่า
-	GetCurriculumSubjectsTeachtable(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData[]> {
-		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+	// GetCurriculumSubjectsTeachtable(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData[]> {
+	// 	let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
 
-		if (curriculumYear) {
-			apiUrl += `/${curriculumYear}`;
-		}
-		if (uniqueId) {
-			apiUrl += `/${uniqueId}`;
-		}
+	// 	if (curriculumYear) {
+	// 		apiUrl += `/${curriculumYear}`;
+	// 	}
+	// 	if (uniqueId) {
+	// 		apiUrl += `/${uniqueId}`;
+	// 	}
 
-		return this.http.get<SubjectCardData[]>(apiUrl);
-	}
+	// 	return this.http.get<SubjectCardData[]>(apiUrl);
+	// }
 
 	// get รายวิชาในหน้า subject ใหม่
 	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, program: number): Observable<SubjectCardData[]> {
@@ -269,9 +269,17 @@ export class APIManagementService {
 		return this.http.post<UserToken>(apiUrl, { user_token_id: userTokenId }, { headers });
 	}
 
-	GetOtpData(userId?: string): Observable<Otp[]> {
-		const apiUrl = `${environment.backendUrl}/api/otp/request/${userId}}`;
-		return this.http.get<Otp[]>(apiUrl);
+	GetOtpData(userId?: string): Observable<OtpRequest> {
+		const apiUrl = `${environment.backendUrl}/api/otp/request/${userId}`;
+		return this.http.get<OtpRequest>(apiUrl);
+	}
+
+	GetOtpVerify(otpa_id: string, otpa_code: string) {
+		const apiUrl = `${environment.backendUrl}/api/otp/verify`;
+		return this.http.post<OtpVerify>(apiUrl, {
+			otpa_id: otpa_id,
+			otpa_code: otpa_code,
+		});
 	}
 
 	GetDropdownFaculties(): Observable<Faculty[]> {
