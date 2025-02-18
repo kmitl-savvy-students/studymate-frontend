@@ -113,7 +113,7 @@ export class APIManagementService {
 
 		return this.http.get<Subject>(apiUrl);
 	}
-
+  
 	// get Open Subject Data ในหน้า subject-detail ใหม่
 	GetOpenSubjectData(year: number, semester: number, program: number, subjectId: string): Observable<boolean> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-subject-availability`;

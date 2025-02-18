@@ -1,5 +1,12 @@
 <div class="mb-3 flex">
-	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="navigateToCurriculum()"></sdm-base-button>
+	<sdm-base-button
+		icon="right-to-bracket"
+		text="ย้อนกลับ"
+		textColor="text-light"
+		textColorHover="hover:text-light"
+		backgroundColor="bg-primary-300"
+		backgroundColorHover="hover:bg-primary-400"
+		(clickEvent)="navigateToCurriculum()"></sdm-base-button>
 </div>
 
 <h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ curriculum?.year }}</h2>
@@ -13,12 +20,12 @@
 	<div>
 		<ul *ngIf="rootNode" class="tree mt-2">
 			<li>
-				<div class="flex gap-5 border-b border-l px-5 py-2">
+				<div class="flex gap-5 rounded-xl border-b border-l px-5 py-2">
 					<div class="flex items-center gap-4 text-lg">
 						<sdm-icon icon="star-of-life" />
 						<div>
 							<div class="font-semibold">โครงสร้างหลักสูตร</div>
-							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ rootNode.type }} ({{ rootNode.credit }})</span></div>
+							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ rootNode.type }}</span></div>
 						</div>
 					</div>
 					<div class="flex">
@@ -32,19 +39,33 @@
 		</ul>
 		<ng-template #renderNode let-node>
 			<li *ngFor="let child of node" class="mb-1">
-				<div class="flex gap-5 border-b border-l px-5 py-2" [style.backgroundColor]="child.color">
+				<div class="flex gap-5 rounded-xl border-b border-l px-5 py-2">
 					<div class="flex items-center gap-4 text-lg">
+						<div class="h-5 w-5 rounded-3xl align-middle" [style.background-color]="findParentNodeColor(child)"></div>
 						<sdm-icon *ngIf="child.children?.length" icon="folder-open" />
 						<sdm-icon *ngIf="!child.children?.length" icon="table-list" />
 						<div>
 							<div class="font-semibold">{{ child.name }}</div>
-							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ child.type }} ({{ child.credit }})</span></div>
+							<div class="-mt-1 text-sm opacity-75">
+								เงื่อนไข :
+								<span class="font-semibold text-red-700">
+									{{ child.type }}
+									<span *ngIf="child?.type != 'REQUIRED_ALL' && child?.type != 'COLLECTIVE'">({{ child.credit }})</span>
+								</span>
+							</div>
 						</div>
 					</div>
 					<div class="flex gap-2">
 						<sdm-base-button icon="plus" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onAddChildNode(child)" />
 						<sdm-base-button icon="pen" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditNode(child)" />
-						<sdm-base-button *ngIf="!child.children?.length" icon="trash" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteNode(child)" />
+						<sdm-base-button
+							*ngIf="!child.children?.length"
+							icon="trash"
+							textColor="text-light"
+							textColorHover="hover:text-light"
+							backgroundColor="bg-danger-300"
+							backgroundColorHover="hover:bg-danger-400"
+							(clickEvent)="onDeleteNode(child)" />
 					</div>
 				</div>
 				<ul *ngIf="child.children?.length" class="child-list">
@@ -72,6 +93,7 @@
 				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
 				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
 				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
+				<option value="COLLECTIVE">ไม่มีข้อกำหนด (COLLECTIVE)</option>
 			</select>
 		</div>
 	</form>
@@ -93,19 +115,27 @@
 				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
 				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
 				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
+				<option value="COLLECTIVE">ไม่มีข้อกำหนด (COLLECTIVE)</option>
 			</select>
 		</div>
-		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL'" class="input-primary mb-5">
+		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL' && currentParentNode?.type != 'COLLECTIVE'" class="input-primary mb-5">
 			<label for="credit">จำนวนหน่วยกิตที่จะทำให้กลุ่มสมบูรณ์</label>
 			<input type="number" id="credit" formControlName="credit" placeholder="จำนวนหน่วยกิต" required />
 		</div>
 		<div *ngIf="!currentParentNode?.children?.length && currentParentNode?.type != 'FREE'" class="input-primary mb-5">
 			<label>จัดการรายวิชาที่สามารถลงได้ในกลุ่มนี้</label>
-			<sdm-base-button icon="table-list" text="จัดการรายวิชาในกลุ่ม" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-success-300" backgroundColorHover="hover:bg-success-400" (clickEvent)="onEditSubjects()" />
+			<sdm-base-button
+				icon="table-list"
+				text="จัดการรายวิชาในกลุ่ม"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-success-300"
+				backgroundColorHover="hover:bg-success-400"
+				(clickEvent)="onEditSubjects()" />
 		</div>
 	</form>
 </sdm-base-modal>
-<sdm-base-modal #editSubjectsModal modalId="editSubjects" header="จัดการรายวิชา">
+<sdm-base-modal #editSubjectsModal modalId="editSubjects" header="จัดการรายวิชา" [turnbackModal]="true" (confirmEvent)="onEditNode(currentParentNode!)">
 	<div class="mb-3 max-h-[500px] overflow-y-scroll">
 		<div>
 			<div *ngIf="isFetchingCurriculumGroupSubjects" class="flex animate-pulse items-center justify-center text-lg">
@@ -118,11 +148,22 @@
 				</div>
 				<div *ngFor="let curriculumGroupSubject of curriculumGroupSubjects" class="flex justify-between">
 					<div class="flex w-full justify-between">
-						<div class="truncate">
-							<div class="font-semibold">{{ curriculumGroupSubject.subject?.id }} {{ curriculumGroupSubject.subject?.name_th }}</div>
-							<div class="-mt-1 text-xs opacity-75">{{ curriculumGroupSubject.subject?.name_en }}</div>
+						<div class="flex flex-row p-2">
+							<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="findParentNodeColor(currentParentNode!)"></div>
+							<div class="flex flex-col">
+								<div class="max-w-64 truncate text-base font-semibold">{{ curriculumGroupSubject.subject?.id }} {{ curriculumGroupSubject.subject?.name_th }}</div>
+								<div class="text-xs opacity-50">{{ curriculumGroupSubject.subject?.name_en }}</div>
+							</div>
 						</div>
-						<div><sdm-base-button icon="trash" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="onDeleteSubject(curriculumGroupSubject.id)" /></div>
+						<div>
+							<sdm-base-button
+								icon="trash"
+								textColor="text-light"
+								textColorHover="hover:text-light"
+								backgroundColor="bg-danger-300"
+								backgroundColorHover="hover:bg-danger-400"
+								(clickEvent)="onDeleteSubject(curriculumGroupSubject.id)" />
+						</div>
 					</div>
 				</div>
 			</div>

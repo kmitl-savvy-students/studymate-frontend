@@ -11,16 +11,10 @@ export class BackendService {
 		this.backendUrl = environment.backendUrl;
 
 		if (!this.backendUrl) {
-			console.error(
-				'ERROR: Backend URL is not specified in the environment.',
-			);
-			throw new Error(
-				'ERROR: Backend URL is not defined in the environment.',
-			);
+			console.error('ERROR: Backend URL is not specified in the environment.');
+			throw new Error('ERROR: Backend URL is not defined in the environment.');
 		}
-		console.log(
-			`DEBUG: [BACKEND] Initialized with URL: ${this.backendUrl}`,
-		);
+		console.log(`DEBUG: [BACKEND] Initialized with URL: ${this.backendUrl}`);
 	}
 	getBackendUrl(): string {
 		return this.backendUrl;

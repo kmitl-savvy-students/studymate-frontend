@@ -1,29 +1,29 @@
-<div class="flex flex-col gap-y-4 rounded-[20px] border border-main-50 px-5 py-4">
-	<div>ลงไปแล้ว</div>
-	<div class="flex h-44 w-44 flex-col space-y-2 self-center rounded-full bg-main-15 p-12">
-		<div class="mt-1 text-center text-5xl font-medium text-[#14b8a6]">
-			{{ totalCompleted }}
+<div class="flex flex-col gap-y-4">
+	<div class="flex flex-col gap-y-4 rounded-[20px] border border-main-50 px-5 py-4">
+		<div class="self-center border-b border-main-50">หน่วยกิตที่ได้รับ</div>
+		<div class="flex h-44 w-44 flex-col space-y-2 self-center rounded-full bg-main-15 p-12">
+			<div class="mt-1 text-center text-5xl font-medium text-[#14b8a6]">
+				{{ totalCompleted }}
+			</div>
+			<div class="text-dark-100 text-center text-base font-normal">หน่วยกิต</div>
 		</div>
-		<div class="text-dark-100 text-center text-base font-normal">หน่วยกิต</div>
+		<div class="text-center text-main-75">รวมรายวิชาที่ลงเทอมในเทอมปัจจุบัน</div>
 	</div>
-	<div class="grid grid-cols-1 justify-items-center gap-y-2">
-		<div>
-			หน่วยกิตทั้งหมด <span class="ms-2 font-semibold text-primary-300">{{ totalCredit }}</span>
-		</div>
-		<div>
-			หน่วยกิตที่ขาด <span class="ms-2 font-semibold text-red-400">{{ totalRemaining }}</span>
+	<div class="flex flex-col gap-y-4 rounded-[20px] border border-main-50 px-5 py-4">
+		<div class="grid grid-cols-1 justify-items-center gap-y-2">
+			<div class="text-dark-100 flex flex-row items-center text-center text-base font-normal">
+				<span class="pr-1">สถานะ : </span>
+				<ng-container *ngIf="totalCompleted < totalCredit; else done"> <div class="rounded-xl bg-gray-100 p-1">ขาด</div></ng-container>
+				<ng-template #done>
+					<div class="rounded-xl bg-emerald-200 p-1 px-3">ครบ</div>
+				</ng-template>
+			</div>
+			<div>
+				หน่วยกิตทั้งหมด <span class="ms-2 font-semibold text-primary-300">{{ totalCredit }}</span>
+			</div>
+			<div>
+				หน่วยกิตที่ขาด <span class="ms-2 font-semibold text-red-400">{{ totalRemaining }}</span>
+			</div>
 		</div>
 	</div>
-	<!-- <div class="flex justify-center">
-		<table class="mx-2">
-			<tr>
-				<td class="">หน่วยกิตทั้งหมด</td>
-				<td class="flex justify-center font-semibold text-primary-300">{{ totalCredit }}</td>
-			</tr>
-			<tr>
-				<td class="">หน่วยกิตที่ขาด</td>
-				<td class="flex justify-center font-semibold text-red-400">{{ totalRemaining }}</td>
-			</tr>
-		</table>
-	</div> -->
 </div>
