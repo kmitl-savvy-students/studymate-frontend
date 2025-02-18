@@ -100,45 +100,33 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 						this.selectedDepartment = +params['department'];
 						this.selectedProgram = +params['program'];
 						this.selectedCurriculum = params['curriculum'];
-						console.log('=========================================================');
-						console.log('selectedYear :', this.selectedYear);
-						console.log('selectedSemester :', this.selectedSemester);
-						console.log('selectedClassYear :', this.selectedClassYear);
-						console.log('selectedFaculty :', this.selectedFaculty);
-						console.log('selectedDepartment :', this.selectedDepartment);
-						console.log('selectedProgram :', this.selectedProgram);
-						console.log('selectedCurriculum :', this.selectedCurriculum);
-						console.log('=========================================================');
+						// console.log('=========================================================');
+						// console.log('selectedYear :', this.selectedYear);
+						// console.log('selectedSemester :', this.selectedSemester);
+						// console.log('selectedClassYear :', this.selectedClassYear);
+						// console.log('selectedFaculty :', this.selectedFaculty);
+						// console.log('selectedDepartment :', this.selectedDepartment);
+						// console.log('selectedProgram :', this.selectedProgram);
+						// console.log('selectedCurriculum :', this.selectedCurriculum);
+						// console.log('=========================================================');
 					}
-
-					// โหลด dropdown ตามลำดับ (Faculty → Department → Program → Curriculum)
-
-					// Start with getting faculties
 					return this.getDropdownFacultyAsObservable().pipe(
-						// ใช้ concatMap() เพื่อให้ API แต่ละตัวทำงานทีละตัว (ไม่โหลดซ้อนกัน)
-
-						// Chain department loading if faculty is selected
 						concatMap(() => {
 							if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {
 								return this.getDropdownDepartmentsAsObservable(this.selectedFaculty);
 							}
-							// ถ้าไม่มีค่าที่เลือก จะ return of(null); เพื่อข้ามไปอันถัดไป
 							return of(null);
 						}),
-						// Chain program loading if department is selected
 						concatMap(() => {
 							if (this.selectedDepartment !== -1 && this.selectedDepartment !== undefined) {
 								return this.getDropdownProgramsAsObservable(this.selectedDepartment);
 							}
-							// ถ้าไม่มีค่าที่เลือก จะ return of(null); เพื่อข้ามไปอันถัดไป
 							return of(null);
 						}),
-						// Chain curriculum loading if program is selected
 						concatMap(() => {
 							if (this.selectedProgram !== -1 && this.selectedProgram !== undefined) {
 								return this.getDropdownCurriculumsAsObservable(this.selectedProgram);
 							}
-							// ถ้าไม่มีค่าที่เลือก จะ return of(null); เพื่อข้ามไปอันถัดไป
 							return of(null);
 						}),
 					);
@@ -269,7 +257,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			tap((res) => {
 				if (res) {
 					this.facultyList = res;
-					console.log('get facultyList:', this.facultyList);
+					// console.log('get facultyList:', this.facultyList);
 				}
 			}),
 			catchError((error) => {
@@ -284,10 +272,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			tap((res) => {
 				if (res && res.length > 0) {
 					this.departmentList = res;
-					console.log('departmentList:', this.departmentList);
+					// console.log('departmentList:', this.departmentList);
 				} else {
 					this.departmentList = [{ id: -1, kmitl_id: '-1', faculty: null, name_th: 'ไม่พบข้อมูลภาควิชา', name_en: 'No Department Data' }];
-					console.log('departmentList:', this.departmentList);
+					// console.log('departmentList:', this.departmentList);
 				}
 			}),
 			catchError((error) => {
@@ -302,10 +290,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			tap((res) => {
 				if (res && res.length > 0) {
 					this.programList = res;
-					console.log('programList:', this.programList);
+					// console.log('programList:', this.programList);
 				} else {
 					this.programList = [{ id: -1, kmitl_id: '-1', department: null, name_th: 'ไม่พบข้อมูลแผนการเรียน', name_en: 'No Program Data' }];
-					console.log('programList:', this.programList);
+					// console.log('programList:', this.programList);
 				}
 			}),
 			catchError((error) => {
@@ -324,10 +312,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 						name_th: `${curriculum.name_th} (${curriculum.year})`,
 						name_en: `${curriculum.name_en} (${curriculum.year})`,
 					}));
-					console.log('curriculumList:', this.curriculumList);
+					// console.log('curriculumList:', this.curriculumList);
 				} else {
 					this.curriculumList = [{ id: -1, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
-					console.log('programList:', this.programList);
+					// console.log('programList:', this.programList);
 				}
 			}),
 			catchError((error) => {
@@ -408,19 +396,19 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
 		}
+		this.clearSearch();
 		this.checkSelectAllDropdown();
 		if (this.isSelectAllDropdown) {
 			setTimeout(() => {
 				this.navigateToSubject();
 			});
-		} else {
-			this.clearSearch();
 		}
 	}
 
 	private clearSearch() {
 		if (this.sdmSearchBar) {
 			this.sdmSearchBar.clearSearch();
+			this.isSearched = false;
 		}
 	}
 
@@ -578,7 +566,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 
 	public searchFunction(data: SubjectCardData[], searchValue: string): SubjectCardData[] {
 		return data.filter(
-			(subject) => subject.subject.id.toLowerCase().includes(searchValue.toLowerCase()) || subject.subject.name_en.toLowerCase().includes(searchValue.toLowerCase()),
+			(subject) => subject?.subject?.id?.toLowerCase().includes(searchValue.toLowerCase()) || subject?.subject?.name_en?.toLowerCase().includes(searchValue.toLowerCase()),
 		);
 	}
 }

@@ -43,7 +43,8 @@ export class SDMBaseButton {
 	@Input() isDisabled: boolean = false;
 	@Input() isUnderlined: boolean = false;
 	@Input() isSubmit: boolean = false;
-	@Input() textColor: string = 'text-dark';
+	// @Input() textColor: string = 'text-dark';
+	@Input() textColor: string = 'text-dark-100';
 	@Input() textColorHover: string = 'hover:text-primary-300';
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorCustom: string = '';

@@ -5,6 +5,7 @@ import { Subject } from '@models/Subject.model';
 import { initFlowbite } from 'flowbite';
 import { SDMRatingComponent } from '../../components/rating/rating.component';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
+import { SDMShowSubjectsOpenComponent } from '../../components/show-subjects-open/show-subjects-open.component';
 import { SDMSubjectDetailCpnComponent } from '../../components/subject-detail-cpn/subject-detail-cpn.component';
 import { SDMWriteReviewBoxComponent } from '../../components/write-review-box/write-review-box.component';
 import { paginationType } from '../../shared/models/SdmAppService.model';
@@ -16,13 +17,12 @@ import { AuthenticationService } from '../../shared/services/authentication/auth
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
-	imports: [SDMSubjectDetailCpnComponent, CommonModule, SDMReviewFilterComponent, SDMWriteReviewBoxComponent, SDMRatingComponent],
+	imports: [SDMSubjectDetailCpnComponent, CommonModule, SDMReviewFilterComponent, SDMWriteReviewBoxComponent, SDMRatingComponent, SDMShowSubjectsOpenComponent],
 	templateUrl: './subject-detail.page.html',
 	styleUrl: './subject-detail.page.css',
 })
 export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public eachSubjectData?: SubjectCardData;
-	// public subjectDetail!: subjectDetailData;
 	public subjectData?: Subject;
 	public subjectReviewData: SubjectReviewData[] = [];
 
@@ -84,12 +84,10 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				(this.subjectId !== '' || this.subjectId !== undefined)
 			) {
 				this.getSubjectsDataBySubjectId();
-				console.log('getSubjectsDataBySubjectId ================');
 			} else if (!isNaN(this.selectedYear) && !isNaN(this.selectedSemester) && !isNaN(this.selectedProgram) && this.subjectId !== '' && !isNaN(this.section)) {
 				this.getEachSubjectData();
-				console.log('getEachSubjectData ========================');
 			}
-			// this.getSubjectReviews();
+			this.getSubjectReviews();
 		});
 	}
 
@@ -154,6 +152,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			next: (res) => {
 				if (res) {
 					this.subjectReviewData = res;
+					console.log('subjectReviewData  : ', this.subjectReviewData);
 				} else {
 					console.log('No Subject Reviews Data Available.');
 				}
@@ -171,32 +170,4 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			},
 		});
 	}
-
-	// public getSubjectDetail() {
-	// 	this.apiManagementService.GetCurriculumTeachtableSubject(this.subjectId).subscribe({
-	// 		next: (res) => {
-	// 			if (res) {
-	// 				this.subjectDetail = res;
-	// 				console.log('subjectDetail : ', this.subjectDetail);
-	// 				console.log('getSubjectDetail เสร็จแล้วจ้า');
-	// 			} else {
-	// 				console.log(' navigate to /subject');
-	// 				// this.router.navigate(['/subject']);
-	// 				console.log('No Subject Data Available.');
-	// 			}
-	// 		},
-	// 		error: (error) => {
-	// 			if (error.status === 400) {
-	// 				console.log('navigate to /subject');
-	// 				// this.router.navigate(['/subject']);
-	// 			} else if (error.status === 404) {
-	// 				console.error('Not found');
-	// 			} else if (error.status === 500) {
-	// 				console.error('Internal Server Error');
-	// 			} else {
-	// 				console.error('An unexpected error occurred:', error.status);
-	// 			}
-	// 		},
-	// 	});
-	// }
 }
