@@ -1,20 +1,14 @@
 <div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn [subjectDetailData]="eachSubjectData" [subjectData]="subjectData"></sdm-subject-detail-cpn>
 
-	<!-- <sdm-show-subjects-open
+	<sdm-show-subjects-open
 		*ngIf="eachSubjectData"
-		[selectedFaculty]="selectedFaculty"
-		[selectedDepartment]="selectedDepartment"
-		[selectedCurriculum]="selectedCurriculum"
-		[selectedClassYear]="selectedClassYear"
-		[selectedCurriculumYear]="selectedCurriculumYear"
-		[selectedUniqueId]="selectedUniqueId"
-		[subjectId]="subjectId"
-		[section]="section"
-	></sdm-show-subjects-open> -->
+		[selectedYear]="selectedYear"
+		[selectedSemester]="selectedSemester"
+		[selectedProgram]="selectedProgram"
+		[subjectId]="subjectId"></sdm-show-subjects-open>
 
-	<!-- warning label -->
-	<div class="flex h-24 w-full flex-col items-center justify-center gap-2 rounded-[15px] bg-yellow-50 py-4 text-yellow-400">
+	<div class="flex h-24 w-full flex-col items-center justify-center gap-2 rounded-[15px] bg-orange-50 py-4 text-yellow-600">
 		*จะสามารถรีวิวได้เฉพาะรายวิชาที่เรียนไปแล้วเท่านั้น โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ
 	</div>
 

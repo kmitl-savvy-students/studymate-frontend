@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { APIManagementService } from '../../shared/services/api-management.service.js';
-import { semesters } from '../../shared/models/SdmAppService.model.js';
 import { SDMLoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
 
 @Component({
@@ -12,19 +11,13 @@ import { SDMLoadingSkeletonComponent } from '../loading-skeleton/loading-skeleto
 	styleUrl: './show-subjects-open.component.css',
 })
 export class SDMShowSubjectsOpenComponent implements OnInit {
-	@Input() selectedFaculty: string = '';
-	@Input() selectedDepartment: string = '';
-	@Input() selectedCurriculum?: string = '';
-	@Input() selectedClassYear?: number;
-	@Input() selectedCurriculumYear?: string = '';
-	@Input() selectedUniqueId?: string = '';
+	@Input() selectedYear: number = -1;
+	@Input() selectedSemester: number = -1;
+	@Input() selectedProgram: number = -1;
 	@Input() subjectId: string = '';
-	@Input() section: number = 0;
+
 	public currentYear: number = new Date().getFullYear() + 543;
-	public classYear: number[] = Array.from(
-		{ length: 4 },
-		(_, i) => this.currentYear - 1 - i,
-	);
+	public classYear: number[] = Array.from({ length: 4 }, (_, i) => this.currentYear - 1 - i);
 	public currentSemesters: number[] = [1, 2, 3];
 	public firstYear: boolean[] = [false, false, false];
 	public secondYear: boolean[] = [false, false, false];
@@ -49,39 +42,23 @@ export class SDMShowSubjectsOpenComponent implements OnInit {
 	}
 
 	async initOpenSubjects(year: number) {
-		const results = await Promise.all(
-			this.currentSemesters.map((semester) =>
-				this.checkSubjectOpen(year, semester),
-			),
-		);
+		const results = await Promise.all(this.currentSemesters.map((semester) => this.checkSubjectOpen(year, semester)));
 
 		return results.map((res) => (res ? true : false));
 	}
 
 	public checkSubjectOpen(year: number, semester: number): Promise<any> {
 		return new Promise((resolve) => {
-			this.apiManagementService
-				.GetOpenSubjectData(
-					year,
-					semester,
-					this.selectedFaculty,
-					this.selectedDepartment,
-					this.selectedCurriculum!,
-					0,
-					this.subjectId,
-					this.selectedCurriculumYear,
-					this.selectedUniqueId,
-				)
-				.subscribe({
-					next: (res) => {
-						console.log(res);
-						resolve(res ? res : null);
-					},
-					error: (error) => {
-						console.error('Error:', error.status);
-						resolve(null);
-					},
-				});
+			this.apiManagementService.GetOpenSubjectData(year - 543, semester, this.selectedProgram, this.subjectId).subscribe({
+				next: (res) => {
+					console.log(res);
+					resolve(res ? res : null);
+				},
+				error: (error) => {
+					console.error('Error:', error.status);
+					resolve(null);
+				},
+			});
 		});
 	}
 }

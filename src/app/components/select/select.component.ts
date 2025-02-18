@@ -63,7 +63,7 @@ export class SDMSelectComponent implements OnInit {
 			label: label,
 		};
 		this.selectedValue.emit(data);
-		console.log('selectedValue form select', data);
+		// console.log('selectedValue form select', data);
 	}
 
 	@HostListener('document:click', ['$event'])

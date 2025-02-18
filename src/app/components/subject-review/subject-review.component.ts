@@ -1,34 +1,20 @@
-import {
-	AfterViewInit,
-	Component,
-	EventEmitter,
-	Input,
-	OnInit,
-	Output,
-	ViewChild,
-} from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
-import { SDMRatingComponent } from '../rating/rating.component';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { initFlowbite } from 'flowbite';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
-import { SDMWriteReviewBoxComponent } from '../write-review-box/write-review-box.component';
-import { APIManagementService } from '../../shared/services/api-management.service';
 import { User } from '../../shared/models/User.model';
 import { AlertService } from '../../shared/services/alert/alert.service';
-import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
+import { APIManagementService } from '../../shared/services/api-management.service';
+import { IconComponent } from '../icon/icon.component';
 import { SDMConfirmDeleteModalComponent } from '../modals/delete-modal/confirm-delete-modal.component';
-import { initFlowbite } from 'flowbite';
-import { Router } from '@angular/router';
+import { SDMRatingComponent } from '../rating/rating.component';
+import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
 
 @Component({
 	selector: 'sdm-subject-review',
 	standalone: true,
-	imports: [
-		IconComponent,
-		SDMRatingComponent,
-		CommonModule,
-		SDMConfirmDeleteModalComponent,
-	],
+	imports: [IconComponent, SDMRatingComponent, CommonModule, SDMConfirmDeleteModalComponent],
 	templateUrl: './subject-review.component.html',
 	styleUrl: './subject-review.component.css',
 })
@@ -101,29 +87,19 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 
 	public deleteReviewData() {
 		if (this.currentUser) {
-			this.apiManagementService
-				.DeleteUserReviewData(
-					this.subjectReviewData.teachtable_subject.subject_id,
-					this.currentUser.id,
-				)
-				.subscribe({
-					next: () => {
-						this.deleteUserReview.emit();
-						this.alertService.showAlert('success', 'ลบรีวิวสำเร็จ');
-					},
-					error: (err) => {
-						console.error('Error deleting review:', err);
-					},
-				});
+			this.apiManagementService.DeleteUserReviewData(this.subjectReviewData.teachtable_subject.subject_id, this.currentUser.id).subscribe({
+				next: () => {
+					this.deleteUserReview.emit();
+					this.alertService.showAlert('success', 'ลบรีวิวสำเร็จ');
+				},
+				error: (err) => {
+					console.error('Error deleting review:', err);
+				},
+			});
 		}
 	}
 
 	public getSubjectDetailUrl(): string {
-		return this.router.serializeUrl(
-			this.router.createUrlTree([
-				'/subject/subject-detail',
-				this.subjectReviewData.teachtable_subject.subject_id,
-			]),
-		);
+		return this.router.serializeUrl(this.router.createUrlTree(['/subject/subject-detail', this.subjectReviewData.teachtable_subject.subject_id]));
 	}
 }

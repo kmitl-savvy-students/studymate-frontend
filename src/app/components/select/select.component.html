@@ -3,7 +3,7 @@
 		class="selected flex h-full items-center justify-between gap-x-3 rounded-[10px] border-none px-4 py-1 font-medium focus:ring-0"
 		(click)="!disabled && toggleDropdown()"
 		[ngClass]="{
-			'bg-main-10 text-dark': !isSelect,
+			'text-dark-100 bg-main-10': !isSelect,
 			'bg-main-100 text-light': isSelect,
 			'hover:bg-main-120': isSelect && !disabled,
 			'cursor-not-allowed': disabled,
@@ -16,7 +16,10 @@
 		<sdm-icon *ngIf="!isSelect" icon="chevron-down" class="text-dark-100 text-sm" [ngClass]="{ 'rotate-180': isDropdownOpen }"></sdm-icon>
 		<sdm-icon icon="xmark" *ngIf="isSelect" class="-mb-1 text-lg text-light" (click)="!disabled && onSelectedOption(-1, '')"></sdm-icon>
 	</div>
-	<ul [attr.disabled]="disabled ? true : null" [class.show]="isDropdownOpen" class="dropdown-shadow absolute z-10 mt-1 hidden max-h-36 w-full overflow-y-auto rounded-[10px] bg-white py-1.5">
+	<ul
+		[attr.disabled]="disabled ? true : null"
+		[class.show]="isDropdownOpen"
+		class="dropdown-shadow absolute z-10 mt-1 hidden max-h-36 w-full overflow-y-auto rounded-[10px] bg-white py-1.5">
 		<li
 			*ngFor="let option of listOptions; let i = index"
 			(click)="option.id !== -1 && onSelectedOption(option.value ?? option.id, option.label ?? option.name_th)"

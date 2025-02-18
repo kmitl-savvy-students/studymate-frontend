@@ -1,15 +1,7 @@
-import {
-	Component,
-	EventEmitter,
-	Input,
-	OnChanges,
-	Output,
-	SimpleChanges,
-} from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'sdm-search-bar',
@@ -40,10 +32,7 @@ export class SDMSearchBarComponent {
 		this.checkSearchValue(this.searchValue);
 
 		if (this.filterFunction) {
-			this.filteredDataList = this.filterFunction(
-				this.data,
-				this.searchValue,
-			);
+			this.filteredDataList = this.filterFunction(this.data, this.searchValue);
 		} else {
 			throw new Error('filterFunction is required');
 		}
