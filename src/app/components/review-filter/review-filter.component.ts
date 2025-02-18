@@ -120,7 +120,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	public isReviewOwner(reviewUserId: string): boolean {
 		if (this.signedIn && this.currentUser) {
-			return reviewUserId === this.currentUser.id;
+			return Number(reviewUserId) === Number(this.currentUser.id);
 		}
 		return false;
 	}
@@ -236,6 +236,9 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
-		return data.filter((review) => review.teachtable_subject.subject_id.toLowerCase().includes(searchValue.toLowerCase()) || review.subject_name_en.toLowerCase().includes(searchValue.toLowerCase()));
+		return data.filter(
+			(review) =>
+				review.teachtable_subject.subject_id.toLowerCase().includes(searchValue.toLowerCase()) || review.subject_name_en.toLowerCase().includes(searchValue.toLowerCase()),
+		);
 	}
 }
