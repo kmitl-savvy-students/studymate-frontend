@@ -12,16 +12,13 @@ import { SDMRatingComponent } from '../rating/rating.component';
 	styleUrl: './subject.component.css',
 })
 export class SDMSubjectComponent {
-	@Input() subjectCardData!: SubjectCardData;
+	@Input() subjectCardData?: SubjectCardData;
 
-	@Input() selectedYear: number = 0;
-	@Input() selectedSemester: number = 0;
-	@Input() selectedFaculty: number = -1;
-	@Input() selectedDepartment: number = -1;
-	@Input() selectedCurriculum?: string = '';
-	@Input() selectedClassYear: string = '';
-	@Input() selectedCurriculumYear?: string = '';
-	@Input() selectedUniqueId?: string = '';
+	@Input() selectedYear: number = -1;
+	@Input() selectedSemester: number = -1;
+	@Input() selectedProgram: number = -1;
+	@Input() subjectId: string = '';
+	@Input() section: number = -1;
 
 	constructor(private router: Router) {}
 
@@ -34,22 +31,27 @@ export class SDMSubjectComponent {
 	public getSubjectDetailUrl(): string | undefined {
 		let latestSubjectDetailUrl: string;
 
-		// if (this.selectedFaculty === '90' && this.selectedDepartment === '90' && this.selectedCurriculum === 'x') {
-		// 	// ใช้ path สำหรับกรณี selectedFaculty === '90' && selectedDepartment === '90'
-		// 	latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.subjectCardData.section, this.subjectCardData.subject_id]).toString();
-		// 	return latestSubjectDetailUrl;
-		// }
-		if (this.selectedCurriculumYear && this.selectedUniqueId) {
-			// ใช้ path สำหรับกรณี selectedFaculty === '01' && selectedDepartment === '05'
-			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear, this.selectedSemester, this.selectedFaculty, this.selectedDepartment, this.selectedCurriculum, this.selectedClassYear, this.selectedCurriculumYear, this.selectedUniqueId, this.subjectCardData.section, this.subjectCardData.subject.id]).toString();
+		if (
+			this.selectedYear !== -1 &&
+			this.selectedYear !== undefined &&
+			this.selectedSemester !== -1 &&
+			this.selectedSemester !== undefined &&
+			this.selectedProgram !== -1 &&
+			this.selectedProgram !== undefined &&
+			this.subjectId !== '' &&
+			this.subjectId !== undefined &&
+			this.section !== -1 &&
+			this.section !== undefined
+		) {
+			latestSubjectDetailUrl = this.router
+				.createUrlTree(['/subject/subject-detail', this.selectedYear + 543, this.selectedSemester, this.selectedProgram, this.section, this.subjectId])
+				.toString();
 			return latestSubjectDetailUrl;
 		}
-
-		// เพิ่มการคืนค่า undefined ในกรณีที่ไม่มีเงื่อนไขใดตรงกัน
 		return undefined;
 	}
 
 	getTeacherListContent(): string {
-		return this.subjectCardData.teacher_list_th.map((teacher: string) => `<div>${teacher}</div>`).join('');
+		return this.subjectCardData?.teacher_list_th?.map((teacher: string) => `<div>${teacher}</div>`).join('') || '';
 	}
 }

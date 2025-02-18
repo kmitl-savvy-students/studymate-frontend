@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Otp } from '@models/OtpData.model';
+import { OtpRequest } from '@models/OtpData.model';
 import { APIManagementService } from '@services/api-management.service';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -14,7 +14,6 @@ import { SDMGoogleButton } from '../../components/buttons/google/google-button.c
 import { AlertService } from '../../shared/services/alert/alert.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { LoadingService } from '../../shared/services/loading/loading.service';
-import { OtpDataMockUp } from './sign-up-data';
 
 @Component({
 	selector: 'sdm-page-sign-up',
@@ -23,15 +22,17 @@ import { OtpDataMockUp } from './sign-up-data';
 	templateUrl: './sign-up.page.html',
 })
 export class SDMPageSignUp {
-	public otpData?: Otp;
-	public otpDataMockUp = OtpDataMockUp;
+	public otpData!: OtpRequest;
+	public isLoading = false;
 	public isRequestOTP: boolean = false;
 	public isVerifyOTP: boolean = false;
 	public otpCountdown: number = 0;
 	public isOtpButtonDisabled: boolean = false;
 	public latestOtpReferer: string = '';
 	public isStrongPassword: boolean = true;
+	public isDisabledOtpZone: boolean = false;
 	private countdownInterval: any;
+
 	signUpFormGroup: FormGroup;
 
 	constructor(
@@ -45,12 +46,12 @@ export class SDMPageSignUp {
 		private apiManagementService: APIManagementService,
 	) {
 		this.signUpFormGroup = this.fb.group({
-			id: [''],
-			name_first: [''],
-			name_last: [''],
-			name_nick: [''],
-			password: [''],
-			password_confirm: [''],
+			id: ['', [Validators.required, Validators.minLength(8), Validators.minLength(8)]],
+			name_first: ['', Validators.required],
+			name_last: ['', Validators.required],
+			name_nick: ['', Validators.required],
+			password: ['', Validators.required],
+			password_confirm: ['', Validators.required],
 			otp_code: [''],
 		});
 		this.onSubmit = this.onSubmit.bind(this);
@@ -68,7 +69,10 @@ export class SDMPageSignUp {
 				this.router.navigate(['/sign-up']);
 			}
 		});
-		console.log('test', this.signUpFormGroup.get('id')?.invalid);
+		this.signUpFormGroup.valueChanges.subscribe(() => {
+			this.isDisabledOtp();
+		});
+		this.isDisabledOtp();
 	}
 
 	handleGoogleCallback(authCode: string): void {
@@ -97,9 +101,18 @@ export class SDMPageSignUp {
 			const backendUrl = `${environment.backendUrl}/api/auth/sign-up`;
 			const formData = this.signUpFormGroup.value;
 
+			const dataToSubmit = {
+				id: formData.id,
+				password: formData.password,
+				password_confirm: formData.password_confirm,
+				name_nick: formData.name_nick,
+				name_first: formData.name_first,
+				name_last: formData.name_last,
+				otp_id: this.otpData.id,
+			};
 			this.loadingService.show(() => {
 				this.http
-					.post(backendUrl, formData)
+					.post(backendUrl, dataToSubmit)
 					.pipe(
 						finalize(() => {
 							this.loadingService.hide();
@@ -111,7 +124,7 @@ export class SDMPageSignUp {
 							this.router.navigate(['/sign-in']);
 						},
 						error: (error) => {
-							const errorMessage = error?.error?.message || 'ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่อีกครั้ง';
+							const errorMessage = error?.error?.message ?? 'ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่อีกครั้ง';
 							this.alertService.showAlert('error', errorMessage);
 							if (errorMessage) {
 								if (errorMessage === 'รหัสผ่านไม่แข็งแรงพอ') {
@@ -126,23 +139,28 @@ export class SDMPageSignUp {
 		}
 	}
 
+	public isDisabledOtp() {
+		if (
+			this.signUpFormGroup.get('name_first')?.valid &&
+			this.signUpFormGroup.get('name_last')?.valid &&
+			this.signUpFormGroup.get('name_nick')?.valid &&
+			this.signUpFormGroup.get('password')?.valid &&
+			this.signUpFormGroup.get('password_confirm')?.valid
+		) {
+			this.isDisabledOtpZone = false;
+			this.signUpFormGroup.get('id')?.enable({ onlySelf: true });
+		} else {
+			this.isDisabledOtpZone = true;
+			this.signUpFormGroup.get('id')?.disable({ onlySelf: true });
+		}
+	}
+
 	public requestOTP() {
 		if ((this.signUpFormGroup.get('id')?.invalid ?? false) || this.signUpFormGroup.get('id')?.value?.length !== 8) {
 			this.alertService.showAlert('error', 'กรุณากรอกรหัสนักศึกษาให้ถูกต้อง');
 			return;
 		}
 		this.getOtpData();
-		if (this.isOtpButtonDisabled) {
-			this.otpCountdown = 60;
-			this.countdownInterval = setInterval(() => {
-				this.otpCountdown--;
-				if (this.otpCountdown <= 0) {
-					clearInterval(this.countdownInterval);
-					this.isOtpButtonDisabled = false;
-				}
-			}, 1000);
-			this.isRequestOTP = true;
-		}
 	}
 
 	public verifyOTP() {
@@ -150,33 +168,62 @@ export class SDMPageSignUp {
 			this.alertService.showAlert('error', 'กรุณากรอกรหัส OTP');
 			return;
 		}
-		this.isVerifyOTP = true;
-		this.signUpFormGroup.get('id')?.disable({ onlySelf: true }); //disabled แค่ UI แต่ยังส่งค่าของ input นี้ไปด้วยเหมือนเดิม
-		this.alertService.showAlert('success', 'ยืนยันรหัส OTP สำเร็จ!');
-		clearInterval(this.countdownInterval);
+		this.getOtpVerify();
 	}
 
 	public getOtpData() {
-		console.log('getOtpData');
-		this.isOtpButtonDisabled = true;
-		this.latestOtpReferer = this.otpDataMockUp[this.otpDataMockUp.length - 1].referer;
+		this.isLoading = true;
 
-		// ถ้ามี API GetOtpData จะใช้โค้ดด้านล่างนี้
+		this.apiManagementService.GetOtpData(this.signUpFormGroup.value.id).subscribe({
+			next: (res) => {
+				if (res) {
+					this.otpData = res;
+					this.alertService.showAlert('success', 'ระบบได้ส่งรหัส OTP ไปยังอีเมลของคุณเรียบร้อยแล้ว กรุณาตรวจสอบอีเมลของคุณ');
+					this.isOtpButtonDisabled = true;
+					if (this.otpData) {
+						this.latestOtpReferer = this.otpData.referer;
+					}
+					this.isLoading = false;
+					if (this.isOtpButtonDisabled) {
+						this.otpCountdown = 60;
+						this.countdownInterval = setInterval(() => {
+							this.otpCountdown--;
+							if (this.otpCountdown <= 0) {
+								clearInterval(this.countdownInterval);
+								this.isOtpButtonDisabled = false;
+							}
+						}, 1000);
+						this.isRequestOTP = true;
+					}
+				}
+			},
+			error: (error) => {
+				const errorMessage = error?.error?.message ?? 'ไม่สามารถส่ง OTP ได้ กรุณาลองใหม่อีกครั้ง';
+				this.alertService.showAlert('error', errorMessage);
 
-		// this.apiManagementService.GetOtpData(this.signUpFormGroup.value.id).subscribe({
-		// 	next: (res) => {
-		// 		if (res) {
-		// 			this.otpData = res;
-		// 			this.alertService.showAlert('success', 'OTP ได้ถูกส่งไปยังอีเมลของคุณแล้ว');
-		// 			this.isOtpButtonDisabled = true;
-		// 		}
-		// 	},
-		// 	error: (error) => {
-		// 		console.error('An unexpected error occurred:', error.status);
-		// 		this.alertService.showAlert('error', 'ไม่สามารถส่ง OTP ได้ กรุณาลองใหม่');
-		// 		clearInterval(this.countdownInterval);
-		// 		this.isOtpButtonDisabled = false;
-		// 	},
-		// });
+				clearInterval(this.countdownInterval);
+				this.isOtpButtonDisabled = false;
+				this.isLoading = false;
+			},
+		});
+	}
+
+	public getOtpVerify() {
+		this.apiManagementService.GetOtpVerify(this.otpData.id, this.signUpFormGroup.value.otp_code).subscribe({
+			next: (res) => {
+				if (res) {
+					this.isVerifyOTP = true;
+					this.signUpFormGroup.get('id')?.disable({ onlySelf: true });
+					this.alertService.showAlert('success', 'ยืนยันรหัส OTP สำเร็จ!');
+					clearInterval(this.countdownInterval);
+				}
+			},
+			error: (error) => {
+				const errorMessage = error?.error?.message ?? 'ไม่สามารถยืนยัน OTP ได้ กรุณาลองใหม่อีกครั้ง';
+				this.alertService.showAlert('error', errorMessage);
+				clearInterval(this.countdownInterval);
+				this.isOtpButtonDisabled = false;
+			},
+		});
 	}
 }

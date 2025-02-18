@@ -25,7 +25,7 @@
 						<sdm-icon icon="star-of-life" />
 						<div>
 							<div class="font-semibold">โครงสร้างหลักสูตร</div>
-							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ rootNode.type }} ({{ rootNode.credit }})</span></div>
+							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ rootNode.type }}</span></div>
 						</div>
 					</div>
 					<div class="flex">
@@ -46,7 +46,13 @@
 						<sdm-icon *ngIf="!child.children?.length" icon="table-list" />
 						<div>
 							<div class="font-semibold">{{ child.name }}</div>
-							<div class="-mt-1 text-sm opacity-75">เงื่อนไข : <span class="font-semibold text-red-700">{{ child.type }} ({{ child.credit }})</span></div>
+							<div class="-mt-1 text-sm opacity-75">
+								เงื่อนไข :
+								<span class="font-semibold text-red-700">
+									{{ child.type }}
+									<span *ngIf="child?.type != 'REQUIRED_ALL' && child?.type != 'COLLECTIVE'">({{ child.credit }})</span>
+								</span>
+							</div>
 						</div>
 					</div>
 					<div class="flex gap-2">
@@ -87,6 +93,7 @@
 				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
 				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
 				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
+				<option value="COLLECTIVE">ไม่มีข้อกำหนด (COLLECTIVE)</option>
 			</select>
 		</div>
 	</form>
@@ -108,9 +115,10 @@
 				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
 				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
 				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
+				<option value="COLLECTIVE">ไม่มีข้อกำหนด (COLLECTIVE)</option>
 			</select>
 		</div>
-		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL'" class="input-primary mb-5">
+		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL' && currentParentNode?.type != 'COLLECTIVE'" class="input-primary mb-5">
 			<label for="credit">จำนวนหน่วยกิตที่จะทำให้กลุ่มสมบูรณ์</label>
 			<input type="number" id="credit" formControlName="credit" placeholder="จำนวนหน่วยกิต" required />
 		</div>
@@ -140,10 +148,6 @@
 				</div>
 				<div *ngFor="let curriculumGroupSubject of curriculumGroupSubjects" class="flex justify-between">
 					<div class="flex w-full justify-between">
-						<!-- <div class="truncate">
-							<div class="font-semibold">{{ curriculumGroupSubject.subject?.id }} {{ curriculumGroupSubject.subject?.name_th }}</div>
-							<div class="-mt-1 text-xs opacity-75">{{ curriculumGroupSubject.subject?.name_en }}</div>
-						</div> -->
 						<div class="flex flex-row p-2">
 							<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="findParentNodeColor(currentParentNode!)"></div>
 							<div class="flex flex-col">
