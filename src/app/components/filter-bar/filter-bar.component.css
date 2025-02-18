@@ -4,7 +4,7 @@
 
 @layer components {
 	.check-box {
-		@apply col-span-1 mt-[1px] h-3.5 w-3.5 justify-self-end rounded border-main-25 bg-white text-main-100 hover:cursor-pointer focus:ring-2 focus:ring-main-100;
+		@apply col-span-1 mt-[1px] h-3.5 w-3.5 justify-self-end rounded border-main-25 bg-white text-primary-300 hover:cursor-pointer focus:ring-2 focus:ring-main-100;
 	}
 
 	.icon-filter {

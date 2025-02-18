@@ -1,64 +1,30 @@
-<div
-	[id]="modalID"
-	tabindex="-1"
-	aria-hidden="true"
-	class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center"
->
+<div [id]="modalID" tabindex="-1" aria-hidden="true" class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center">
 	<div class="relative w-full max-w-2xl p-4">
-		<div
-			class="relative flex h-[518px] flex-col overflow-hidden rounded-[40px] bg-white py-6"
-		>
-			<div
-				class="sticky top-0 z-10 flex-none border-b border-b-main-25 bg-white pb-6 ps-11"
-			>
-				<p class="text-xl font-medium text-dark-100">
+		<div class="relative flex h-[518px] flex-col overflow-hidden rounded-[40px] bg-white py-6">
+			<div class="sticky top-0 z-10 flex-none border-b border-b-main-25 bg-white pb-6 ps-11">
+				<p class="text-dark-100 text-xl font-medium">
 					{{ headerModal }}
 				</p>
 			</div>
 
 			<div class="grow overflow-y-auto">
-				<div
-					class="space-y-6 px-11 pt-6 text-base font-normal text-dark-100"
-				>
+				<div class="text-dark-100 space-y-6 px-11 pt-6 text-base font-normal">
 					<div class="flex items-start gap-x-3.5">
-						<input
-							id="select-all-checkbox"
-							type="checkbox"
-							[(ngModel)]="masterSelected"
-							(change)="checkUncheckAll()"
-							class="mt-[2px] h-4 w-4 rounded border-main-25 bg-white text-main-100 focus:ring-2 focus:ring-main-100"
-						/>
-						<label
-							for="select-all-checkbox"
-							class="-mb-1 text-dark-100"
-							>เลือกทั้งหมด</label
-						>
+						<input id="select-all-checkbox" type="checkbox" [(ngModel)]="masterSelected" (change)="checkUncheckAll()" class="mt-[2px] h-4 w-4 rounded border-main-25 bg-white text-primary-300 focus:ring-2 focus:ring-main-100" />
+						<label for="select-all-checkbox" class="text-dark-100 -mb-1">เลือกทั้งหมด</label>
 					</div>
 					<div>
-						<div
-							*ngFor="let subject of subjects_added"
-							class="mb-3 grid grid-cols-12 items-start gap-x-3"
-						>
-							<input
-								id="checkbox{{ subject.code }}"
-								type="checkbox"
-								[(ngModel)]="subject.isSelected"
-								(change)="isAllSelected()"
-								class="col-span-1 mt-[2px] h-4 w-4 justify-self-end rounded border-main-25 bg-white text-main-100 focus:ring-2 focus:ring-main-100"
-							/>
+						<div *ngFor="let subject of subjects_added" class="mb-3 grid grid-cols-12 items-start gap-x-3">
+							<input id="checkbox{{ subject.code }}" type="checkbox" [(ngModel)]="subject.isSelected" (change)="isAllSelected()" class="col-span-1 mt-[2px] h-4 w-4 justify-self-end rounded border-main-25 bg-white text-primary-300 focus:ring-2 focus:ring-main-100" />
 							<div class="col-span-2 -mb-1">
 								{{ subject.code }}
 							</div>
 							<div class="col-span-7">{{ subject.name }}</div>
-							<div class="col-span-2 justify-self-end">
-								{{ subject.credits }} หน่วยกิต
-							</div>
+							<div class="col-span-2 justify-self-end">{{ subject.credits }} หน่วยกิต</div>
 						</div>
 					</div>
 				</div>
-				<div
-					class="mb-6 me-11 mt-6 flex justify-end gap-x-4 font-semibold"
-				>
+				<div class="mb-6 me-11 mt-6 flex justify-end gap-x-4 font-semibold">
 					<div>เลือกทั้งหมด {{ totalCredits }} หน่วยกิต</div>
 					<div>รวมทั้งหมด {{ totalCreditsAll }} หน่วยกิต</div>
 				</div>
@@ -67,22 +33,11 @@
 			<div class="sticky bottom-0 z-10 flex-none bg-white">
 				<div class="me-11 flex justify-end pt-6">
 					<div class="flex space-x-5 text-base font-medium">
-						<button
-							type="button"
-							class="flex gap-x-2 rounded-[10px] border border-red-400 bg-white px-4 py-2 text-center text-dark-100 hover:bg-red-200"
-						>
-							<sdm-icon
-								icon="trash-can"
-								class="text-red-400"
-							></sdm-icon>
+						<button type="button" class="text-dark-100 flex gap-x-2 rounded-[10px] border border-red-400 bg-white px-4 py-2 text-center hover:bg-red-200">
+							<sdm-icon icon="trash-can" class="text-red-400"></sdm-icon>
 							ลบ
 						</button>
-						<button
-							type="submit"
-							class="rounded-[10px] bg-main-100 px-4 py-2 text-center text-white hover:bg-main-120"
-						>
-							จัดตารางเรียน
-						</button>
+						<button type="submit" class="rounded-[10px] bg-main-100 px-4 py-2 text-center text-light hover:bg-main-120">จัดตารางเรียน</button>
 					</div>
 				</div>
 			</div>

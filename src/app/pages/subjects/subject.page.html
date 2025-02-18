@@ -1,0 +1,135 @@
+<div class="flex w-full gap-x-5">
+	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
+	<div class="flex w-full flex-col">
+		<div class="flex w-full flex-col">
+			<div class="grid w-full flex-none grid-cols-1 gap-3">
+				<!-- <div class="text-xl font-semibold">รายวิชาเรียน</div> -->
+				<sdm-base-accordion header="ค้นหารายวิชาเรียน" accordionId="selectDropdown-acc" [accordionDefaultStatus]="true">
+					<div class="grid grid-cols-4 gap-x-3 gap-y-2 px-3 pt-3">
+						<sdm-select
+							defaultLabel="ปีการศึกษา"
+							SelectName="selectedYear"
+							[listOptions]="yearsList"
+							(selectedValue)="handleSelectChange('selectedYear',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="ภาคการศึกษา"
+							SelectName="selectedSemester"
+							[listOptions]="semesterList"
+							(selectedValue)="handleSelectChange('selectedSemester',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="ชั้นปี"
+							SelectName="selectedClassYear"
+							[listOptions]="classYearList"
+							(selectedValue)="handleSelectChange('selectedClassYear',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="คณะ"
+							SelectName="selectedFaculty"
+							[listOptions]="facultyList"
+							(selectedValue)="handleSelectChange('selectedFaculty',$event)"
+							class="col-span-1"
+							[disabled]="isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="ภาควิชา"
+							SelectName="selectedDepartment"
+							[listOptions]="departmentList"
+							(selectedValue)="handleSelectChange('selectedDepartment',$event)"
+							class="col-span-2"
+							[disabled]="disableDepartmentSelectDropdown || isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="แผนการเรียน"
+							SelectName="selectedProgram"
+							[listOptions]="programList"
+							(selectedValue)="handleSelectChange('selectedProgram',$event)"
+							class="col-span-2"
+							[disabled]="disableProgramSelectDropdown || isLoading"></sdm-select>
+						<sdm-select
+							defaultLabel="หลักสูตร"
+							SelectName="selectedCurriculum"
+							[listOptions]="curriculumList"
+							(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
+							class="col-span-4"
+							[disabled]="disableCurriculumSelectDropdown || isLoading"></sdm-select>
+					</div>
+				</sdm-base-accordion>
+
+				<sdm-search-bar [data]="subjectCardData" [filterFunction]="searchFunction" (searchedDataList)="getSearchedSubjectCardDataList($event)"></sdm-search-bar>
+			</div>
+		</div>
+		<ng-container *ngIf="isSelectAllDropdown && isLoading">
+			<div class="flex w-full flex-1 flex-col items-center justify-center p-20">
+				<!-- loading website -->
+				<div role="status">
+					<svg
+						aria-hidden="true"
+						class="inline h-16 w-16 animate-spin fill-main-100 text-gray-200 dark:text-gray-600"
+						viewBox="0 0 100 101"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+							fill="currentColor" />
+						<path
+							d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+							fill="currentFill" />
+					</svg>
+					<span class="sr-only">Loading...</span>
+				</div>
+				<!-- loading website -->
+			</div>
+		</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !getSubjectDataIsNull && !isLoading">
+			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3">
+				<sdm-pagination
+					(pageChange)="changePage($event)"
+					[totalItems]="subjectCardTotal"
+					[itemsPerPage]="itemsPerPage"
+					[currentPage]="currentPage"
+					class="mt-4"></sdm-pagination>
+				<div class="grid w-full grid-cols-1 gap-4">
+					<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
+						<sdm-subject-cpn
+							[subjectCardData]="data"
+							[selectedYear]="selectedYear-543"
+							[selectedSemester]="selectedSemester"
+							[selectedProgram]="selectedProgram"
+							[subjectId]="data.subject.id"
+							[section]="data.section"></sdm-subject-cpn>
+					</ng-container>
+				</div>
+				<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"></sdm-pagination>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length === 0) && !isLoading && searchSubjectDataIsNull && !getSubjectDataIsNull">
+			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center">ไม่พบข้อมูลรายวิชาที่ค้นหา</div>
+		</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && getSubjectDataIsNull">
+			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center">ไม่พบข้อมูลรายวิชา</div>
+		</ng-container>
+		<!-- คำแนะนำการดูรายวิชา -->
+		<ng-container *ngIf="!isSelectAllDropdown">
+			<div class="text-dark-75 mt-20 flex w-full flex-col items-center justify-center gap-3 text-center">
+				<div class="flex flex-col gap-y-4 text-sm">
+					<div *ngIf="selectedYear === -1 || selectedYear === undefined">โปรดเลือกปีการศึกษา เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedSemester === -1 || selectedSemester === undefined">โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedClassYear === '' || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedFaculty === -1 || selectedFaculty === undefined">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedDepartment === -1 || selectedDepartment === undefined">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedProgram === -1 || selectedProgram === undefined">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedCurriculum === '-1' || selectedCurriculum === '' ||selectedCurriculum === undefined">โปรดเลือกหลักสูตร เพื่อดูรายวิชา</div>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+</div>
+<!-- <sdm-subject-added-modal
+	modalID="subject-added-modal"
+	headerModal="รายวิชาที่เพิ่ม"
+	[subjects_added]="subjects_added"
+>
+</sdm-subject-added-modal> -->

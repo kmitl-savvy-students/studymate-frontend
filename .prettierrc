@@ -1,8 +1,9 @@
 {
-	"plugins": ["prettier-plugin-tailwindcss"],
-
+	"plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"],
 	"useTabs": true,
 	"tabWidth": 4,
 	"singleQuote": true,
-	"quoteProps": "consistent"
+	"quoteProps": "consistent",
+	"printWidth": 240,
+	"bracketSameLine": true
 }

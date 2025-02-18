@@ -1,17 +1,13 @@
 import { Component, Input } from '@angular/core';
-import { SDMBaseButton } from '../buttons/base-button.component';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading/loading.service';
+import { SDMBaseButton } from '../buttons/base-button.component';
 
 @Component({
 	selector: 'sdm-button-nav',
 	standalone: true,
 	imports: [SDMBaseButton],
-	template: `
-		<button type="button" (click)="handleClick()">
-			<sdm-base-button [text]="text" textColorHover="text-main-100" />
-		</button>
-	`,
+	template: `<sdm-base-button [text]="text" (clickEvent)="handleClick()" />`,
 })
 export class SDMButtonNav {
 	constructor(

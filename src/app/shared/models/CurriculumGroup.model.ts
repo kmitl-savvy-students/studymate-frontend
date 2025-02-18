@@ -1,18 +1,14 @@
-import { CurriculumSubgroup } from './CurriculumSubgroup.model';
+import { CurriculumGroupSubject } from './CurriculumGroupSubject';
 
 export class CurriculumGroup {
 	constructor(
-		public category_id: number,
-		public group_id: number,
-		public curriculum_id: string,
-		public year: string,
-		public group_name: string,
-		public credit1: number,
-		public credit2: number,
-		public subgroup_flag: string,
-		public condition: string,
-		public link: string,
-		public curriculum_subgroup: CurriculumSubgroup[],
-		public isOpen: boolean,
+		public id: number,
+		public parent_id: number,
+		public type: string,
+		public name: string,
+		public credit: number,
+		public color: string,
+		public children: CurriculumGroup[],
+		public subjects: CurriculumGroupSubject[],
 	) {}
 }

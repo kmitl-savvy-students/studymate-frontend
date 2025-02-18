@@ -4,10 +4,11 @@ export class User {
 	constructor(
 		public id: string,
 		public password: string,
-		public name_nick: string,
-		public name_first: string,
-		public name_last: string,
-		public profile: string,
+		public nickname: string,
+		public firstname: string,
+		public lastname: string,
+		public profile_picture: string,
+		public is_admin: string,
 		public curriculum: Curriculum,
 	) {}
 }

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
-import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
 @Component({
 	selector: 'sdm-subject-cpn',
@@ -12,11 +12,13 @@ import { SDMRatingComponent } from '../rating/rating.component';
 	styleUrl: './subject.component.css',
 })
 export class SDMSubjectComponent {
-	@Input() subjectCardData!: SubjectCardData;
-	@Input() selectedYear: number = 0;
-	@Input() selectedSemester: number = 0;
+	@Input() subjectCardData?: SubjectCardData;
 
-	@Input() index: number = 0;
+	@Input() selectedYear: number = -1;
+	@Input() selectedSemester: number = -1;
+	@Input() selectedProgram: number = -1;
+	@Input() subjectId: string = '';
+	@Input() section: number = -1;
 
 	constructor(private router: Router) {}
 
@@ -26,13 +28,30 @@ export class SDMSubjectComponent {
 		return safeString;
 	}
 
-	public getSubjectDetailUrl(): string {
-		return this.router.serializeUrl(
-			this.router.createUrlTree(['/subject/subject-detail'], {
-				queryParams: {
-					subject: JSON.stringify(this.subjectCardData),
-				},
-			}),
-		);
+	public getSubjectDetailUrl(): string | undefined {
+		let latestSubjectDetailUrl: string;
+
+		if (
+			this.selectedYear !== -1 &&
+			this.selectedYear !== undefined &&
+			this.selectedSemester !== -1 &&
+			this.selectedSemester !== undefined &&
+			this.selectedProgram !== -1 &&
+			this.selectedProgram !== undefined &&
+			this.subjectId !== '' &&
+			this.subjectId !== undefined &&
+			this.section !== -1 &&
+			this.section !== undefined
+		) {
+			latestSubjectDetailUrl = this.router
+				.createUrlTree(['/subject/subject-detail', this.selectedYear + 543, this.selectedSemester, this.selectedProgram, this.section, this.subjectId])
+				.toString();
+			return latestSubjectDetailUrl;
+		}
+		return undefined;
+	}
+
+	getTeacherListContent(): string {
+		return this.subjectCardData?.teacher_list_th?.map((teacher: string) => `<div>${teacher}</div>`).join('') || '';
 	}
 }

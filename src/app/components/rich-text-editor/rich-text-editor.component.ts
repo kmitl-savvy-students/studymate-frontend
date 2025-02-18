@@ -58,8 +58,8 @@ export class SDMRichTextEditor
 	public toolbar: Toolbar = [
 		['bold', 'italic'],
 		['underline', 'strike'],
-		['ordered_list', 'bullet_list'],
-		['align_left', 'align_center', 'align_right', 'align_justify'],
+		// ['ordered_list', 'bullet_list'],
+		// ['align_left', 'align_center', 'align_right', 'align_justify'],
 		['link'],
 	];
 
@@ -119,6 +119,7 @@ export class SDMRichTextEditor
 								'success',
 								'รีวิวสำเร็จ',
 							);
+							this.resetComponent.emit();
 						},
 						error: (err) => {
 							switch (err.status) {
@@ -138,7 +139,6 @@ export class SDMRichTextEditor
 						},
 					});
 				//reset
-				this.resetComponent.emit();
 				this.rating = 0;
 				this.selectedSemester = 0;
 				this.selectedYear = 0;

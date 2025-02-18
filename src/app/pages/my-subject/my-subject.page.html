@@ -1,151 +1,66 @@
-<!-- my-subject.page.html -->
-<div class="mt-4 flex justify-between">
-	<p class="text-xl font-medium text-dark-100">{{ curriculumName }}</p>
-	<div class="flex gap-x-2">
-		<button
-			data-modal-target="confirm-delete-modal"
-			data-modal-toggle="confirm-delete-modal"
-			class="rounded-lg border border-red-400 bg-white px-3 py-1.5 text-base font-medium text-dark-100 hover:bg-red-400 hover:text-white focus:bg-red-400 focus:text-white"
-		>
-			ลบข้อมูล Transcript
-		</button>
-		<button
-			data-modal-target="import-transcript-modal"
-			data-modal-toggle="import-transcript-modal"
-			class="rounded-lg bg-main-100 px-3 py-1.5 text-base font-medium text-white hover:bg-main-120"
-		>
-			อัปโหลด Transcript
-		</button>
-	</div>
-</div>
-
-<sdm-confirm-delete-modal
-	modalID="confirm-delete-modal"
-	text="คุณต้องการลบข้อมูล Transcript ใช่หรือไม่?"
-	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องอัปโหลดใหม่เท่านั้น"
-	[deleteFunction]="deleteTranscriptData.bind(this)"
-></sdm-confirm-delete-modal>
-
-<sdm-import-transcript-modal
-	modalID="import-transcript-modal"
-	headerModal="อัปโหลดไฟล์ Transcript ของคุณ"
-></sdm-import-transcript-modal>
-
-<div
-	*ngIf="!isDataLoaded && !errorMessage"
-	class="mt-9 text-center text-dark-100"
->
-	<p>กำลังโหลดข้อมูล...</p>
-</div>
-<div *ngIf="errorMessage" class="mt-9 text-center text-red-500">
-	<p>{{ errorMessage }}</p>
-</div>
-
-<div *ngIf="isDataLoaded && !errorMessage" class="mt-10">
-	<div
-		*ngFor="let category of curriculumCategories"
-		class="mt-6 border-b pb-2"
-	>
-		<h2
-			class="flex cursor-pointer items-center justify-between text-lg font-semibold"
-			(click)="toggleCategory(category)"
-			[ngClass]="{
-		  'text-red-500': !isCategoryFulfilled(category),
-		  'text-green-500': isCategoryFulfilled(category)
-		}"
-		>
-			<span>
-				Category: {{ category.c_cat_id }} ({{
-				getCategoryCredits(category) }}/{{ category.credit1 || 0 }})
-			</span>
-			<span>{{ isCategoryFulfilled(category) ? '✔' : '✖' }}</span>
-		</h2>
-
-		<div *ngIf="category.isOpen" class="ml-4 mt-4">
-			<div
-				*ngFor="let group of category.curriculum_groups"
-				class="mt-4 border-b pb-2"
-			>
-				<h3
-					class="text-md flex cursor-pointer items-center justify-between font-medium"
-					(click)="toggleGroup(group)"
-					[ngClass]="{
-			  'text-red-500': !isGroupFulfilled(group),
-			  'text-green-500': isGroupFulfilled(group)
-			}"
-				>
-					<span>
-						Group: {{ group.group_name }} ({{ getGroupCredits(group)
-						}}/{{ group.credit1 || 0 }})
-					</span>
-					<span>{{ isGroupFulfilled(group) ? '✔' : '✖' }}</span>
-				</h3>
-
-				<div *ngIf="group.isOpen" class="ml-4 mt-2">
-					<div
-						*ngFor="let subgroup of group.curriculum_subgroup"
-						class="mt-3 border-b pb-2"
-					>
-						<h4
-							class="flex cursor-pointer items-center justify-between text-sm font-medium"
-							(click)="toggleSubgroup(subgroup)"
-							[ngClass]="{
-				  'text-red-500': !isSubgroupFulfilled(subgroup),
-				  'text-green-500': isSubgroupFulfilled(subgroup)
-				}"
-						>
-							<span>
-								Subgroup: {{ subgroup.subgroup_name }} ({{
-								getSubgroupCredits(subgroup) }}/{{
-								subgroup.credit1 || 0 }})
-							</span>
-							<span
-								>{{ isSubgroupFulfilled(subgroup) ? '✔' : '✖'
-								}}</span
-							>
-						</h4>
-
-						<div *ngIf="subgroup.isOpen" class="ml-4 mt-2">
-							<table
-								*ngIf="hasTranscriptSubjects(subgroup)"
-								class="mb-3 w-11/12 border text-left text-sm"
-							>
-								<thead class="border-b">
-									<tr>
-										<th class="px-2 py-1">Subject ID</th>
-										<th class="px-2 py-1">Subject Name</th>
-										<th class="px-2 py-1">Grade</th>
-										<th class="px-2 py-1">Credits</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr
-										*ngFor="let subject of subgroup.curriculum_subjects"
-										[hidden]="!hasSubjectInTranscript(subject.subject.id)"
-									>
-										<td class="px-2 py-1">
-											{{ subject.subject.id }}
-										</td>
-										<td class="px-2 py-1">
-											{{ subject.subject.subject_tname }}
-										</td>
-										<td class="px-2 py-1">
-											{{ getGrade(subject.subject.id) }}
-										</td>
-										<td class="px-2 py-1">
-											{{ subject.subject.credit }}
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
+<div class="grid grid-cols-4 gap-x-5">
+	<div class="col-span-3 flex flex-col">
+		<div class="mb-4">
+			<h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h3>
+			<h2 class="text-2xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h2>
+			<h3 class="text-lg opacity-50">{{ currentUser?.curriculum?.name_en }}</h3>
+		</div>
+		<sdm-tabs #subjectTab [tabs]="tabs">
+			<ng-template #transcript>
+				<sdm-transcript-tracker #transcriptTracker />
+			</ng-template>
+			<ng-template #progress>
+				<sdm-progress-tracker #progressTracker />
+			</ng-template>
+			<ng-template #grade>
+				<div class="flex h-60 items-center justify-center align-middle">
+					<p class="text-2xl font-semibold">tab grade is coming soon ...</p>
 				</div>
+			</ng-template>
+		</sdm-tabs>
+	</div>
+	<div class="col-span-1">
+		<div class="flex flex-col gap-y-4">
+			<div class="flex flex-col gap-y-2">
+				<sdm-base-button
+					icon="file-import"
+					text="อัปโหลด Transcript"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-main-100"
+					backgroundColorHover="hover:bg-primary-400"
+					(clickEvent)="onUploadTranscript()"></sdm-base-button>
+				<sdm-base-button
+					icon="trash-can"
+					text="ลบข้อมูล Transcript"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-red-400"
+					backgroundColorHover="hover:bg-danger-400"
+					(clickEvent)="onDeleteTranscript()"></sdm-base-button>
 			</div>
+			<sdm-credit-dashboard [totalCompleted]="calculateTotalCompleteCredit()"></sdm-credit-dashboard>
+			<sdm-advice-dashboard></sdm-advice-dashboard>
 		</div>
 	</div>
-
-	<div class="mt-6 font-medium text-dark-100">
-		Total Credits (Excluding Grade X): {{ calculateAccumulatedCredits() }}
-	</div>
 </div>
+
+<sdm-base-modal #uploadTranscriptModal modalId="uploadTranscript" header="อัปโหลดไฟล์ Transcript ใหม่" (confirmEvent)="onConfirmUploadTranscript()">
+	<label for="uploadTranscriptInput" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
+		<div class="flex flex-col items-center justify-center pb-6 pt-5">
+			<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-primary-300"></sdm-icon>
+			<p class="mb-2 text-base">
+				<span class="font-semibold">เลือก</span>
+				หรือวางไฟล์ Transcript ที่นี่
+			</p>
+			<p class="text-sm opacity-50">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
+		</div>
+		<input id="uploadTranscriptInput" class="hidden" type="file" (change)="onTranscriptUploadInput($event)" />
+	</label>
+</sdm-base-modal>
+<sdm-base-modal #deleteTranscriptModal modalId="deleteTranscript" header="ยืนยันลบข้อมูล Transcript ทั้งหมดออกจากระบบ" (confirmEvent)="onConfirmDeleteTranscript()">
+	<div class="mb-10 mt-5 text-center">
+		<div class="font-semibold text-danger-300">ท่านยืนยันที่จะลบข้อมูลหรือไม่?</div>
+		<div class="text-sm opacity-50">การกระทำนี้ไม่สามารถย้อนคืนกลับมาได้</div>
+	</div>
+</sdm-base-modal>

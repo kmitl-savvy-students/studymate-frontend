@@ -15,6 +15,7 @@ import { paginationType } from '../../shared/models/SdmAppService.model';
 })
 export class SDMPageReview {
 	public reviewData: SubjectReviewData[] = [];
+	public currentYearTermReviewData: SubjectReviewData[] = [];
 
 	public isLoadingReview: boolean = false;
 
@@ -40,6 +41,7 @@ export class SDMPageReview {
 			this.currentUser = user;
 		});
 		this.getSubjectReviews();
+		this.getCurrentYearTermReview();
 	}
 
 	ngAfterViewInit(): void {
@@ -57,7 +59,33 @@ export class SDMPageReview {
 				if (res) {
 					this.reviewData = res;
 				} else {
-					console.log('No Reviews Data Available.');
+					console.log('No allReview Data Available.');
+				}
+				this.isLoadingReview = false;
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					console.error('Not found!!!!!!!');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error(
+						'An unexpected error occurred:',
+						error.status,
+					);
+				}
+				this.isLoadingReview = false;
+			},
+		});
+	}
+
+	public getCurrentYearTermReview() {
+		this.apiManagementService.GetSubjectReviewsCurrentYearTerm().subscribe({
+			next: (res) => {
+				if (res) {
+					this.currentYearTermReviewData = res;
+				} else {
+					console.log('No currentReview Data Available.');
 				}
 				this.isLoadingReview = false;
 			},

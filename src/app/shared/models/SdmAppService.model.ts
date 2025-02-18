@@ -1,18 +1,17 @@
 export class SelectedData {
-	public label!: string;
-	public index?: number;
-	public value?: any;
+	public value!: number;
+	public label!: any;
 }
-
 export class DropdownList {
+	public value!: number;
 	public label!: string;
-	public value?: string | number;
 }
 
 export class CirriculumnList {
 	public value?: string | number;
 	public uniqueId?: string;
 	public curriculumYear?: string;
+	public index?: number;
 }
 
 export class SubjectData {
@@ -37,4 +36,18 @@ export class SubjectData {
 export enum paginationType {
 	single = 1,
 	double = 2,
+}
+
+export enum semesters {
+	first = 1,
+	second = 2,
+	summer = 3,
+	length,
+}
+
+export enum loadingSkeletonType {
+	lines = 101,
+	description = 102,
+	data = 103,
+	review = 104,
 }

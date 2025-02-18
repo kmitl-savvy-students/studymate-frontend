@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { SDMBaseButton } from './base-button.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading/loading.service';
+import { SDMBaseButton } from './base-button.component';
 
 @Component({
 	selector: 'sdm-button-link',
@@ -19,8 +19,8 @@ import { LoadingService } from '../../shared/services/loading/loading.service';
 			[textColorHover]="textColorHover"
 			[backgroundColor]="backgroundColor"
 			[backgroundColorHover]="backgroundColorHover"
-			(clickEvent)="handleClick()"
-		>
+			[backgroundColorCustom]="backgroundColorCustom"
+			(clickEvent)="handleClick()">
 		</sdm-base-button>
 	`,
 })
@@ -40,11 +40,12 @@ export class SDMButtonLink {
 	@Input() iconEnd: string = '';
 	@Input() iconEndCustom: any | null = null;
 
-	@Input() textColor: string = '';
-	@Input() textColorHover: string = '';
+	@Input() textColor: string = 'text-dark';
+	@Input() textColorHover: string = 'hover:text-primary-300';
 
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorHover: string = '';
+	@Input() backgroundColorCustom: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 

@@ -1,30 +1,30 @@
-import { SubjectCardData } from './../models/SubjectCardData.model';
-import { Curriculum } from './../models/Curriculum.model';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { GoogleLink } from '../models/GoogleLink.model';
-import { UserToken } from '../models/UserToken.model';
-import { TranscriptData } from '../models/TranscriptData.model';
+import { Department } from '@models/Department';
+import { Faculty } from '@models/Faculty';
+import { OtpRequest, OtpVerify } from '@models/OtpData.model';
+import { Program } from '@models/Program.model';
+import { Subject } from '@models/Subject.model';
 import { Observable } from 'rxjs/internal/Observable';
+import { environment } from '../../../environments/environment';
 import { CurriculumGroup } from '../models/CurriculumGroup.model';
 import { CurriculumSubgroup } from '../models/CurriculumSubgroup.model';
 import { CurriculumSubject } from '../models/CurriculumSubject.model';
 import { GenedGroup } from '../models/GenedGroup.model';
 import { GenedSubject } from '../models/GenedSubject.model';
+import { GoogleLink } from '../models/GoogleLink.model';
 import { subjectDetailData } from '../models/SubjectDetailData.model';
 import { SubjectReviewData } from '../models/SubjectReviewData.model';
-import { subjectReviewData } from '../../pages/subject-detail/subject-detail-page-data.js';
+import { UserToken } from '../models/UserToken.model';
+import { Curriculum } from './../models/Curriculum.model';
+import { SubjectCardData } from './../models/SubjectCardData.model';
 
 @Injectable({ providedIn: 'root' })
 export class APIManagementService {
 	constructor(private http: HttpClient) {}
 
 	GetAuthHeader(userTokenId: string) {
-		const headers = new HttpHeaders().set(
-			'Authorization',
-			`Bearer ${userTokenId}`,
-		);
+		const headers = new HttpHeaders().set('Authorization', `Bearer ${userTokenId}`);
 		return headers;
 	}
 
@@ -60,50 +60,27 @@ export class APIManagementService {
 		return this.http.get<Curriculum[]>(apiUrl);
 	}
 
-	GetCurriculumGroups(
-		uniqueId: string,
-		year: string,
-	): Observable<CurriculumGroup[]> {
+	GetCurriculumGroups(uniqueId: string, year: string): Observable<CurriculumGroup[]> {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-group/get/${uniqueId}/${year}`;
 		return this.http.get<CurriculumGroup[]>(apiUrl);
 	}
 
-	GetCurriculumGroup(
-		categoryId: number,
-		groupId: number,
-		uniqueId: string,
-		year: string,
-	): Observable<CurriculumGroup> {
+	GetCurriculumGroup(categoryId: number, groupId: number, uniqueId: string, year: string): Observable<CurriculumGroup> {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-group/get/${categoryId}/${groupId}/${uniqueId}/${year}`;
 		return this.http.get<CurriculumGroup>(apiUrl);
 	}
 
-	GetCurriculumSubgroups(
-		uniqueId: string,
-		year: string,
-	): Observable<CurriculumSubgroup[]> {
+	GetCurriculumSubgroups(uniqueId: string, year: string): Observable<CurriculumSubgroup[]> {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-subgroup/get/${uniqueId}/${year}`;
 		return this.http.get<CurriculumSubgroup[]>(apiUrl);
 	}
 
-	GetCurriculumSubgroup(
-		categoryId: number,
-		groupId: number,
-		subgroupId: number,
-		uniqueId: string,
-		year: string,
-	): Observable<CurriculumSubgroup> {
+	GetCurriculumSubgroup(categoryId: number, groupId: number, subgroupId: number, uniqueId: string, year: string): Observable<CurriculumSubgroup> {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-subgroup/get/${categoryId}/${groupId}/${subgroupId}/${uniqueId}/${year}`;
 		return this.http.get<CurriculumSubgroup>(apiUrl);
 	}
 
-	GetCurriculumSubjects(
-		categoryId: number,
-		groupId: number,
-		subgroupId: number,
-		uniqueId: string,
-		year: string,
-	): Observable<CurriculumSubject[]> {
+	GetCurriculumSubjects(categoryId: number, groupId: number, subgroupId: number, uniqueId: string, year: string): Observable<CurriculumSubject[]> {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-subject/get/${categoryId}/${groupId}/${subgroupId}/${uniqueId}/${year}`;
 		return this.http.get<CurriculumSubject[]>(apiUrl);
 	}
@@ -113,17 +90,81 @@ export class APIManagementService {
 		return this.http.get<CurriculumSubject>(apiUrl);
 	}
 
-	GetCurriculumSubjectsTeachtable(
+	// get รายวิชาในหน้า subject เก่า
+	// GetCurriculumSubjectsTeachtable(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData[]> {
+	// 	let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+
+	// 	if (curriculumYear) {
+	// 		apiUrl += `/${curriculumYear}`;
+	// 	}
+	// 	if (uniqueId) {
+	// 		apiUrl += `/${uniqueId}`;
+	// 	}
+
+	// 	return this.http.get<SubjectCardData[]>(apiUrl);
+	// }
+
+	// get รายวิชาในหน้า subject ใหม่
+	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, program: number): Observable<SubjectCardData[]> {
+		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-class`;
+
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('program', program);
+
+		return this.http.get<SubjectCardData[]>(apiUrl, { params });
+	}
+
+	// get รายวิชาในหน้า subject-detail ใหม่
+	GetSubjectsDataBySection(year: number, semester: number, program: number, subjectId: string, section: string): Observable<SubjectCardData> {
+		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-subject-id`;
+
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('program', program).set('subjectId', subjectId).set('section', section);
+
+		return this.http.get<SubjectCardData>(apiUrl, { params });
+	}
+
+	GetSubjectsDataBySubjectId(subjectId: string): Observable<Subject> {
+		let apiUrl = `${environment.backendUrl}/api/subject/get/${subjectId}`;
+
+		return this.http.get<Subject>(apiUrl);
+	}
+
+	// get รายวิชาในหน้า subject-detail เก่า
+	// GetCurriculumnSubjectDataBySection(
+	// 	year: number,
+	// 	semester: number,
+	// 	faculty: string,
+	// 	department: string,
+	// 	curriculum: string,
+	// 	classYear: number,
+	// 	subjectId: string,
+	// 	section: number,
+	// 	curriculumYear?: string,
+	// 	uniqueId?: string,
+	// ): Observable<SubjectCardData> {
+	// 	let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-section/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}/${section}`;
+
+	// 	if (curriculumYear) {
+	// 		apiUrl += `/${curriculumYear}`;
+	// 	}
+	// 	if (uniqueId) {
+	// 		apiUrl += `/${uniqueId}`;
+	// 	}
+
+	// 	return this.http.get<SubjectCardData>(apiUrl);
+	// }
+
+	GetOpenSubjectData(
 		year: number,
 		semester: number,
 		faculty: string,
 		department: string,
 		curriculum: string,
 		classYear: number,
+		subjectId: string,
 		curriculumYear?: string,
 		uniqueId?: string,
-	): Observable<SubjectCardData[]> {
-		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
+	): Observable<SubjectCardData> {
+		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}`;
 
 		if (curriculumYear) {
 			apiUrl += `/${curriculumYear}`;
@@ -132,12 +173,10 @@ export class APIManagementService {
 			apiUrl += `/${uniqueId}`;
 		}
 
-		return this.http.get<SubjectCardData[]>(apiUrl);
+		return this.http.get<SubjectCardData>(apiUrl);
 	}
 
-	GetCurriculumTeachtableSubject(
-		subjectId: string,
-	): Observable<subjectDetailData> {
+	GetCurriculumTeachtableSubject(subjectId: string): Observable<subjectDetailData> {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject-get/${subjectId}`;
 
 		return this.http.get<subjectDetailData>(apiUrl);
@@ -149,22 +188,19 @@ export class APIManagementService {
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
-	GetSubjectReviewsBySubjectID(
-		subjectId: string,
-	): Observable<SubjectReviewData[]> {
+	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
-	CreateSubjectReviewByUser(
-		student_id: string,
-		year: number,
-		term: number,
-		subject_id: string,
-		review: string,
-		rating: number,
-	) {
+	GetSubjectReviewsCurrentYearTerm(): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/current`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
+	}
+
+	CreateSubjectReviewByUser(student_id: string, year: number, term: number, subject_id: string, review: string, rating: number) {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review`;
 		return this.http.post(apiUrl, {
 			student_id: student_id,
@@ -176,54 +212,21 @@ export class APIManagementService {
 		});
 	}
 
-	UpdateSubjectReviewByUser(
-		student_id: string,
-		// year: number,
-		// term: number,
-		subject_id: string,
-		review: string,
-		// rating: number,
-	) {
+	UpdateSubjectReviewByUser(student_id: string, subject_id: string, review: string) {
 		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/update`;
 		return this.http.patch(apiUrl, {
 			student_id: student_id,
-			// year: year,
-			// term: term,
 			subject_id: subject_id,
 			review: review,
-			// rating: rating,
 		});
 	}
 
-	// GetCurriculumSubjectsTeachtable(
-	// 	year: number,
-	// 	semester: number,
-	// 	faculty : string,
-	// 	department: string,
-	// 	curriculum : string,
-	// 	classYear: number,
-	// ): Observable<CurriculumTeachtableSubject> {
-	// 	const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
-	// 	return this.http.get<CurriculumTeachtableSubject>(apiUrl);
-	// }
-
-	GetCurriculumSubjectByUniqueIdYear(
-		subjectId: string,
-		uniqueId: string,
-		year: string,
-	) {
+	GetCurriculumSubjectByUniqueIdYear(subjectId: string, uniqueId: string, year: string) {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-subject/get/${subjectId}/${uniqueId}/${year}`;
 		return this.http.get<CurriculumSubject>(apiUrl);
 	}
 
-	GetCurriculumTeachtable(
-		year: number,
-		semester: number,
-		faculty: string,
-		department: string,
-		curriculum: string,
-		classYear: number,
-	) {
+	GetCurriculumTeachtable(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number) {
 		const apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}`;
 		return this.http.get<CurriculumSubject>(apiUrl);
 	}
@@ -238,17 +241,7 @@ export class APIManagementService {
 		return this.http.get<GenedGroup>(apiUrl);
 	}
 
-	GetTranscriptData(userTokenId: string, userId?: string) {
-		const apiUrl = `${environment.backendUrl}/api/transcript/get/${userId}`;
-		const headers = this.GetAuthHeader(userTokenId);
-		return this.http.get<TranscriptData[]>(apiUrl, { headers });
-	}
-
-	UpdateUserTranscriptByUpload(
-		userId: string,
-		userTokenId: string,
-		file: File,
-	): Observable<HttpEvent<any>> {
+	UpdateUserTranscriptByUpload(userId: string, userTokenId: string, file: File): Observable<HttpEvent<any>> {
 		const apiUrl = `${environment.backendUrl}/api/transcript/upload`;
 		const headers = this.GetAuthHeader(userTokenId);
 		const formData: FormData = new FormData();
@@ -264,11 +257,7 @@ export class APIManagementService {
 	UpdateUserCurriculum(userTokenId: string, userId?: string, curId?: Number) {
 		const apiUrl = `${environment.backendUrl}/api/user/update`;
 		const headers = this.GetAuthHeader(userTokenId);
-		return this.http.patch(
-			apiUrl,
-			{ id: userId, curriculum_id: curId },
-			{ headers },
-		);
+		return this.http.patch(apiUrl, { id: userId, curriculum_id: curId }, { headers });
 	}
 
 	UpdateUserOauthSignupCallback(authCode: string) {
@@ -301,10 +290,39 @@ export class APIManagementService {
 	SignoutUserfromSystem(userTokenId: string) {
 		const apiUrl = `${environment.backendUrl}/api/auth/sign-out`;
 		const headers = this.GetAuthHeader(userTokenId);
-		return this.http.post<UserToken>(
-			apiUrl,
-			{ user_token_id: userTokenId },
-			{ headers },
-		);
+		return this.http.post<UserToken>(apiUrl, { user_token_id: userTokenId }, { headers });
+	}
+
+	GetOtpData(userId?: string): Observable<OtpRequest> {
+		const apiUrl = `${environment.backendUrl}/api/otp/request/${userId}`;
+		return this.http.get<OtpRequest>(apiUrl);
+	}
+
+	GetOtpVerify(otpa_id: string, otpa_code: string) {
+		const apiUrl = `${environment.backendUrl}/api/otp/verify`;
+		return this.http.post<OtpVerify>(apiUrl, {
+			otpa_id: otpa_id,
+			otpa_code: otpa_code,
+		});
+	}
+
+	GetDropdownFaculties(): Observable<Faculty[]> {
+		const apiUrl = `${environment.backendUrl}/api/faculty/get`;
+		return this.http.get<Faculty[]>(apiUrl);
+	}
+
+	GetDropdownDepartments(facultyId: number): Observable<Department[]> {
+		const apiUrl = `${environment.backendUrl}/api/department/get-by-faculty/${facultyId}`;
+		return this.http.get<Department[]>(apiUrl);
+	}
+
+	GetDropdownPrograms(departmentId: number): Observable<Program[]> {
+		const apiUrl = `${environment.backendUrl}/api/program/get-by-department/${departmentId}`;
+		return this.http.get<Program[]>(apiUrl);
+	}
+
+	GetDropdownCurriculums(programId: number): Observable<Curriculum[]> {
+		const apiUrl = `${environment.backendUrl}/api/curriculum/get-by-program/${programId}`;
+		return this.http.get<Curriculum[]>(apiUrl);
 	}
 }

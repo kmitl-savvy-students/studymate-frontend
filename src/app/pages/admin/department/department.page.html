@@ -1,0 +1,67 @@
+<div class="mb-3 flex">
+	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="bg-primary-400" (clickEvent)="navigateToFaculty()"></sdm-base-button>
+</div>
+
+<h1 class="mt-5 text-3xl font-semibold">{{ faculty?.name_th }}</h1>
+<h2 class="text-xl opacity-50">{{ faculty?.name_en }}</h2>
+
+<hr class="my-4" />
+
+<sdm-base-modal #createDepartmentModal modalId="createDepartment" header="สร้างภาควิชาใหม่" (confirmEvent)="onConfirmCreate()">
+	<form [formGroup]="departmentCreateForm">
+		<div class="input-primary mb-5">
+			<label for="kmitlId">รหัสอ้างอิงภาควิชาจากสำนักทะเบียน KMITL</label>
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา (ไม่จำเป็น)" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="nameTh">ชื่อภาควิชาภาษาไทย</label>
+			<input type="text" id="nameTh" formControlName="nameTh" placeholder="ชื่อภาควิชาภาษาไทย" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="nameEn">ชื่อภาควิชาภาษาอังกฤษ</label>
+			<input type="text" id="nameEn" formControlName="nameEn" placeholder="ชื่อภาควิชาภาษาอังกฤษ" required />
+		</div>
+	</form>
+</sdm-base-modal>
+
+<sdm-base-modal #editDepartmentModal modalId="editDepartment" header="แก้ไขภาควิชา" (confirmEvent)="onConfirmEdit()">
+	<form [formGroup]="departmentEditForm">
+		<div class="input-primary mb-5">
+			<label for="kmitlId">รหัสอ้างอิงภาควิชาจากสำนักทะเบียน KMITL</label>
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา (ไม่จำเป็น)" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="editNameTh">ชื่อภาควิชาภาษาไทย</label>
+			<input type="text" id="editNameTh" formControlName="nameTh" placeholder="ชื่อภาควิชาภาษาไทย" required />
+		</div>
+		<div class="input-primary mb-5">
+			<label for="editNameEn">ชื่อภาควิชาภาษาอังกฤษ</label>
+			<input type="text" id="editNameEn" formControlName="nameEn" placeholder="ชื่อภาควิชาภาษาอังกฤษ" required />
+		</div>
+	</form>
+</sdm-base-modal>
+
+<div>
+	<h1 class="text-2xl font-semibold">เลือกภาควิชา</h1>
+	<h2>ภาควิชาทั้งหมด</h2>
+	<div *ngIf="isLoading" class="my-2 text-center">
+		<div class="spinner-border animate-spin"></div>
+	</div>
+	<div *ngIf="!isLoading">
+		<div *ngIf="departments.length === 0" class="my-2 border p-5">
+			<div class="text-center">ไม่มีผลลัพธ์</div>
+		</div>
+		<div *ngIf="departments.length > 0" class="my-2 border p-5">
+			<ul class="flex flex-col gap-2">
+				<li *ngFor="let department of departments" class="flex items-center justify-between">
+					<div (click)="navigateToCurriculumType(department.id)" class="cursor-pointer text-lg hover:text-primary-300">
+						<div class="font-semibold">({{department.kmitl_id}}) {{ department.name_th }}</div>
+						<div class="text-sm opacity-50">{{ department.name_en }}</div>
+					</div>
+					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditDepartment(department)"></sdm-base-button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<sdm-base-button icon="plus" text="สร้างภาควิชาใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onCreateDepartment()"></sdm-base-button>
+</div>

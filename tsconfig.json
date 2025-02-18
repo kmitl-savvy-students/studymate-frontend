@@ -16,7 +16,14 @@
 		"importHelpers": true,
 		"target": "ES2022",
 		"module": "ES2022",
-		"lib": ["ES2022", "dom"]
+		"lib": ["ES2022", "dom"],
+		"baseUrl": "./src/app",
+		"paths": {
+			"@components/*": ["components/*"],
+			"@services/*": ["shared/services/*"],
+			"@models/*": ["shared/models/*"],
+			"@pages/*": ["pages/*"]
+		}
 	},
 	"angularCompilerOptions": {
 		"enableI18nLegacyMessageIdFormat": false,
