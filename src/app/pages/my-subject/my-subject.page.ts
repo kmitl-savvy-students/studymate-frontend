@@ -30,7 +30,7 @@ export class SDMPageMySubject implements OnInit {
 	@ViewChild('deleteTranscriptModal') deleteTranscriptModal!: SDMBaseModal;
 
 	@ViewChild('transcriptTracker') transcriptTracker!: SDMTranscriptTrackerComponent;
-	@ViewChild('progressTracker') progressTracker!: SDMProgressTrackerComponent;
+	@ViewChild('subjectTab') subjectTab!: SDMTabsComponent;
 
 	@ViewChild('transcript', { static: true }) transcriptTemplate!: TemplateRef<Tabs>;
 	@ViewChild('progress', { static: true }) progressTemplate!: TemplateRef<Tabs>;
@@ -109,6 +109,7 @@ export class SDMPageMySubject implements OnInit {
 						this.alertService.showAlert('success', 'ลบข้อมูล Transcript เสร็จสมบูรณ์');
 
 						this.fetchTranscripts();
+						this.subjectTab.selectTab('transcript');
 						this.transcriptTracker.fetchTranscripts();
 					},
 					error: (error) => {
@@ -169,6 +170,7 @@ export class SDMPageMySubject implements OnInit {
 							this.alertService.showAlert('success', 'อัปโหลดไฟล์เสร็จสมบูรณ์');
 
 							this.fetchTranscripts();
+							this.subjectTab.selectTab('transcript');
 							this.transcriptTracker.fetchTranscripts();
 						},
 						error: (error) => {
