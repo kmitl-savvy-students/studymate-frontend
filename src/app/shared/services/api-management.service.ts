@@ -153,17 +153,7 @@ export class APIManagementService {
 	// 	return this.http.get<SubjectCardData>(apiUrl);
 	// }
 
-	GetOpenSubjectData(
-		year: number,
-		semester: number,
-		faculty: string,
-		department: string,
-		curriculum: string,
-		classYear: number,
-		subjectId: string,
-		curriculumYear?: string,
-		uniqueId?: string,
-	): Observable<SubjectCardData> {
+	GetOpenSubjectData(year: number, semester: number, faculty: string, department: string, curriculum: string, classYear: number, subjectId: string, curriculumYear?: string, uniqueId?: string): Observable<SubjectCardData> {
 		let apiUrl = `${environment.backendUrl}/api/curriculum-teachtable-subject/status-subject/${year}/${semester}/${faculty}/${department}/${curriculum}/${classYear}/${subjectId}`;
 
 		if (curriculumYear) {
