@@ -39,7 +39,7 @@
 					backgroundColorHover="hover:bg-danger-400"
 					(clickEvent)="onDeleteTranscript()"></sdm-base-button>
 			</div>
-			<sdm-credit-dashboard [totalCompleted]="118" [totalRemaining]="18" [totalCredit]="136"></sdm-credit-dashboard>
+			<sdm-credit-dashboard [totalCompleted]="calculateTotalCompleteCredit()"></sdm-credit-dashboard>
 			<sdm-advice-dashboard></sdm-advice-dashboard>
 		</div>
 	</div>

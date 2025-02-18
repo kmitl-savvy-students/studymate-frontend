@@ -47,6 +47,14 @@ export class SDMPageMySubject implements OnInit {
 		{ id: 'grade', icon: 'graduation-cap', tab_name: 'เกรด' },
 	];
 
+	calculateTotalCompleteCredit() {
+		let credit = 0;
+		this.transcript?.details.forEach((transcriptDetail) => {
+			credit += transcriptDetail.subject?.credit ?? 0;
+		});
+		return credit;
+	}
+
 	constructor(
 		private authService: AuthenticationService,
 		private http: HttpClient,
