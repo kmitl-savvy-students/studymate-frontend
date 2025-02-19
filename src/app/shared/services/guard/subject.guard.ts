@@ -21,18 +21,13 @@ export class SubjectValidationGuard implements CanActivate {
 		const facultyId = +route.params['faculty'];
 		const departmentId = +route.params['department'];
 		const programId = +route.params['program'];
-		const curriculumId = route.params['curriculum'];
+		const curriculumId = +route.params['curriculum'];
 
 		// ตรวจสอบค่าพื้นฐานก่อน
 		if (!this.validateBasicParams(year, semester, classYear)) {
 			this.router.navigate(['/subject']);
 			return of(false);
 		}
-
-		// กรณี GenEd
-		// if (facultyId === 90 && departmentId === 90) {
-		// 	return of(true);
-		// }
 
 		// ตรวจสอบข้อมูลจาก API ตามลำดับ
 		return this.apiManagementService.GetDropdownFaculties().pipe(
@@ -61,7 +56,7 @@ export class SubjectValidationGuard implements CanActivate {
 				return this.apiManagementService.GetDropdownCurriculums(programId);
 			}),
 			map((curriculums) => {
-				const curriculumExists = curriculums.some((c) => c.id.toString() === curriculumId);
+				const curriculumExists = curriculums.some((c) => c.id === curriculumId);
 				if (!curriculumExists) {
 					throw new Error('Invalid curriculum');
 				}
