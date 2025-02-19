@@ -308,7 +308,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			alert('Please remove all child nodes first.');
 			return;
 		}
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group/delete/${node.group_id}`;
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group/delete/${node.id}`;
 		this.loadingService.show(() => {
 			this.http
 				.delete(apiUrl)

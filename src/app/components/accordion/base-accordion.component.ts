@@ -45,7 +45,7 @@ export class SDMBaseAccordion implements AfterViewInit {
 
 	ngAfterViewInit(): void {
 		this.initAccordion();
-		this.isExpanded = this.accordionDefaultStatus;
+		setTimeout(() => (this.isExpanded = this.accordionDefaultStatus));
 	}
 
 	initAccordion(): void {
