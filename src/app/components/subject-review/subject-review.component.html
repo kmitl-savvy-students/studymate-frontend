@@ -1,4 +1,4 @@
-<div class="flex w-full flex-col rounded-[15px] border border-main-25">
+<div *ngIf="subjectReviewData" class="flex w-full flex-col rounded-[15px] border border-main-25">
 	<!-- Header Section -->
 	<div class="flex w-full items-center justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold">
 		<a *ngIf="isShowSubjectIdAndName" class="flex items-center gap-4" [href]="getSubjectDetailUrl()" target="_blank">
@@ -10,11 +10,11 @@
 			</div>
 			<div>
 				ปีการศึกษา
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_year }}
+				{{ subjectReviewData.teachtable_subject.teachtable.year }}
 			</div>
 			<div>
 				ภาคการศึกษาที่
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_term }}
+				{{ subjectReviewData.teachtable_subject.teachtable.term }}
 			</div>
 			<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
 		</a>
@@ -22,11 +22,11 @@
 		<a class="flex items-center gap-4" *ngIf="!isShowSubjectIdAndName">
 			<div>
 				ปีการศึกษา
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_year }}
+				{{ subjectReviewData.teachtable_subject.teachtable.year }}
 			</div>
 			<div>
 				ภาคการศึกษาที่
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_term }}
+				{{ subjectReviewData.teachtable_subject.teachtable.term }}
 			</div>
 			<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
 		</a>
@@ -40,7 +40,7 @@
 	<ng-container *ngIf="!isEditing">
 		<!-- Subject Review -->
 		<div>
-			<div class="text-dark-100 px-5 pb-2 pt-3 text-sm font-normal" [innerHTML]="this.subjectReviewData.review"></div>
+			<div class="px-5 pb-2 pt-3 text-sm font-normal text-dark-100" [innerHTML]="this.subjectReviewData.review"></div>
 		</div>
 
 		<!-- Footer Section -->
@@ -49,7 +49,7 @@
 				<sdm-icon
 					icon="thumbs-up"
 					[iconStyle]="isLiked ? 'fas' : 'far'"
-					class="text-dark-100 text-base"
+					class="text-base text-dark-100"
 					[ngClass]="{
 						'default-cursor': !isSignIn,
 						'cursor-pointer': isSignIn,
@@ -58,7 +58,7 @@
 				<div>{{ this.subjectReviewData.like }}</div>
 			</div>
 			<div class="flex items-center gap-2.5">
-				<div class="text-dark-75 text-sm font-normal">
+				<div class="text-sm font-normal text-dark-75">
 					{{ this.subjectReviewData.created }}
 				</div>
 				<!-- <sdm-icon
@@ -87,4 +87,9 @@
 </div>
 
 <!-- Delete Review Modal -->
-<sdm-confirm-delete-modal *ngIf="canDelete" modalID="confirm-delete-modal" text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?" subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น" [deleteFunction]="deleteReviewData.bind(this)"></sdm-confirm-delete-modal>
+<sdm-confirm-delete-modal
+	*ngIf="canDelete"
+	modalID="confirm-delete-modal"
+	text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?"
+	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น"
+	[deleteFunction]="deleteReviewData.bind(this)"></sdm-confirm-delete-modal>

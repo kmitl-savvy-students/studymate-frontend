@@ -131,11 +131,13 @@ export class SDMReviewFilterComponent implements OnChanges {
 				this.selectedLatest = false;
 				this.clearSelect();
 				this.selectedCurrentYearTerm = false;
+
 				break;
 			case 'latest':
 				this.selectedPopular = false;
 				this.clearSelect();
 				this.selectedCurrentYearTerm = false;
+
 				break;
 			case 'starRating':
 				this.selectedPopular = false;
@@ -146,6 +148,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 				this.selectedLatest = false;
 				this.selectedPopular = false;
 				this.clearSelect();
+				this.selectedCurrentYearTerm = true;
 				break;
 			default:
 				break;
@@ -192,7 +195,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.isSearched = false;
 		}
 		this.selectedStarRatingValue = selectedRatingData.value;
-		if (this.selectedStarRatingValue) {
+		if (this.selectedStarRatingValue && this.selectedStarRatingValue !== -1) {
 			this.selectedRating = true;
 			this.resetOtherFilters('starRating');
 			this.currentPage = 1;
@@ -236,9 +239,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
-		return data.filter(
-			(review) =>
-				review.teachtable_subject.subject_id.toLowerCase().includes(searchValue.toLowerCase()) || review.subject_name_en.toLowerCase().includes(searchValue.toLowerCase()),
-		);
+		return data.filter((review) => review?.teachtable_subject?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
 	}
 }
