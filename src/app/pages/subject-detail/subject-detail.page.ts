@@ -33,7 +33,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public selectedYear: number = -1;
 	public selectedSemester: number = -1;
-	public selectedProgram: number = -1;
+	public selectedCurriculum: number = -1;
 	public subjectId: string = '';
 	public section: number = -1;
 
@@ -63,7 +63,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		this.route.params.subscribe((params) => {
 			this.selectedYear = +params['year'];
 			this.selectedSemester = +params['semester'];
-			this.selectedProgram = +params['program'];
+			this.selectedCurriculum = +params['curriculum'];
 			this.section = +params['section'];
 			this.subjectId = params['subjectId'];
 
@@ -71,7 +71,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			console.log(`
 				selectedYear = ${this.selectedYear},
 				selectedSemester = ${this.selectedSemester},
-				selectedProgram = ${this.selectedProgram},
+				selectedCurriculum = ${this.selectedCurriculum},
 				section = ${this.section},
 				subjectId = ${this.subjectId}
 			`);
@@ -79,12 +79,12 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			if (
 				(this.selectedYear === -1 || isNaN(this.selectedYear)) &&
 				(this.selectedSemester === -1 || isNaN(this.selectedSemester)) &&
-				(this.selectedProgram === -1 || isNaN(this.selectedProgram)) &&
+				(this.selectedCurriculum === -1 || isNaN(this.selectedCurriculum)) &&
 				(this.section === -1 || isNaN(this.section)) &&
 				(this.subjectId !== '' || this.subjectId !== undefined)
 			) {
 				this.getSubjectsDataBySubjectId();
-			} else if (!isNaN(this.selectedYear) && !isNaN(this.selectedSemester) && !isNaN(this.selectedProgram) && this.subjectId !== '' && !isNaN(this.section)) {
+			} else if (!isNaN(this.selectedYear) && !isNaN(this.selectedSemester) && !isNaN(this.selectedCurriculum) && this.subjectId !== '' && !isNaN(this.section)) {
 				this.getEachSubjectData();
 			}
 			this.getSubjectReviews();
@@ -100,27 +100,25 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	}
 
 	public getEachSubjectData() {
-		this.apiManagementService
-			.GetSubjectsDataBySection(this.selectedYear - 543, this.selectedSemester, this.selectedProgram, this.subjectId, this.section.toString())
-			.subscribe({
-				next: (res) => {
-					if (res) {
-						this.eachSubjectData = res;
-						console.log('eachSubjectData : ', this.eachSubjectData);
-					} else {
-						console.log('No Subject Data Available.');
-					}
-				},
-				error: (error) => {
-					if (error.status === 404) {
-						console.error('Not found');
-					} else if (error.status === 500) {
-						console.error('Internal Server Error');
-					} else {
-						console.error('An unexpected error occurred:', error.status);
-					}
-				},
-			});
+		this.apiManagementService.GetSubjectsDataBySection(this.selectedYear - 543, this.selectedSemester, this.selectedCurriculum, this.subjectId, this.section.toString()).subscribe({
+			next: (res) => {
+				if (res) {
+					this.eachSubjectData = res;
+					console.log('eachSubjectData : ', this.eachSubjectData);
+				} else {
+					console.log('No Subject Data Available.');
+				}
+			},
+			error: (error) => {
+				if (error.status === 404) {
+					console.error('Not found');
+				} else if (error.status === 500) {
+					console.error('Internal Server Error');
+				} else {
+					console.error('An unexpected error occurred:', error.status);
+				}
+			},
+		});
 	}
 
 	public getSubjectsDataBySubjectId() {

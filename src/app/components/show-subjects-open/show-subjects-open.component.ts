@@ -13,7 +13,7 @@ import { SDMLoadingSkeletonComponent } from '../loading-skeleton/loading-skeleto
 export class SDMShowSubjectsOpenComponent implements OnInit {
 	@Input() selectedYear: number = -1;
 	@Input() selectedSemester: number = -1;
-	@Input() selectedProgram: number = -1;
+	@Input() selectedCurriculum: number = -1;
 	@Input() subjectId: string = '';
 
 	public currentYear: number = new Date().getFullYear() + 543;
@@ -49,7 +49,7 @@ export class SDMShowSubjectsOpenComponent implements OnInit {
 
 	public checkSubjectOpen(year: number, semester: number): Promise<any> {
 		return new Promise((resolve) => {
-			this.apiManagementService.GetOpenSubjectData(year - 543, semester, this.selectedProgram, this.subjectId).subscribe({
+			this.apiManagementService.GetOpenSubjectData(year - 543, semester, this.selectedCurriculum, this.subjectId).subscribe({
 				next: (res) => {
 					console.log(res);
 					resolve(res ? res : null);

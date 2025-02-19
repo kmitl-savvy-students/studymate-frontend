@@ -90,19 +90,19 @@ export class APIManagementService {
 	}
 
 	// get รายวิชาในหน้า subject ใหม่
-	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, program: number): Observable<SubjectCardData[]> {
+	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, curriculum: number): Observable<SubjectCardData[]> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-class`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('program', program);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('curriculum', curriculum);
 
 		return this.http.get<SubjectCardData[]>(apiUrl, { params });
 	}
 
 	// get ข้อมูลรายวิชานั้นๆทั้งหมดในหน้า subject-detail ใหม่
-	GetSubjectsDataBySection(year: number, semester: number, program: number, subjectId: string, section: string): Observable<SubjectCardData> {
+	GetSubjectsDataBySection(year: number, semester: number, curriculum: number, subjectId: string, section: string): Observable<SubjectCardData> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-subject-id`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('program', program).set('subjectId', subjectId).set('section', section);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculum', curriculum).set('subjectId', subjectId).set('section', section);
 
 		return this.http.get<SubjectCardData>(apiUrl, { params });
 	}
@@ -113,12 +113,12 @@ export class APIManagementService {
 
 		return this.http.get<Subject>(apiUrl);
 	}
-  
+
 	// get Open Subject Data ในหน้า subject-detail ใหม่
-	GetOpenSubjectData(year: number, semester: number, program: number, subjectId: string): Observable<boolean> {
+	GetOpenSubjectData(year: number, semester: number, curriculum: number, subjectId: string): Observable<boolean> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-subject-availability`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('program', program).set('subjectId', subjectId);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculum', curriculum).set('subjectId', subjectId);
 
 		return this.http.get<boolean>(apiUrl, { params });
 	}

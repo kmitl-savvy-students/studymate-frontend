@@ -1,19 +1,14 @@
 <div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn [subjectDetailData]="eachSubjectData" [subjectData]="subjectData"></sdm-subject-detail-cpn>
 
-	<sdm-show-subjects-open
-		*ngIf="eachSubjectData"
-		[selectedYear]="selectedYear"
-		[selectedSemester]="selectedSemester"
-		[selectedProgram]="selectedProgram"
-		[subjectId]="subjectId"></sdm-show-subjects-open>
+	<sdm-show-subjects-open *ngIf="eachSubjectData" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedCurriculum]="selectedCurriculum" [subjectId]="subjectId"></sdm-show-subjects-open>
 
 	<div class="flex h-24 w-full flex-col items-center justify-center gap-2 rounded-[15px] bg-orange-50 py-4 text-yellow-600">
 		*จะสามารถรีวิวได้เฉพาะรายวิชาที่เรียนไปแล้วเท่านั้น โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ
 	</div>
 
 	<!-- show review summary -->
-	<div class="text-dark-100 flex h-28 w-full flex-col items-center justify-center gap-2">
+	<div class="flex h-28 w-full flex-col items-center justify-center gap-2 text-dark-100">
 		<div class="font-semibold">คะแนนรีวิวและรีวิว</div>
 		<div class="flex items-center gap-x-1">
 			<sdm-rating mode="display" [rating]="4.0" customClass="text-base text-dark-100"></sdm-rating>
