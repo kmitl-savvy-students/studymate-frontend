@@ -1,11 +1,11 @@
 import { Component, SimpleChanges } from '@angular/core';
-import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
-import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { initFlowbite } from 'flowbite';
+import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
+import { paginationType } from '../../shared/models/SdmAppService.model';
+import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
+import { User } from '../../shared/models/User.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
-import { User } from '../../shared/models/User.model';
-import { paginationType } from '../../shared/models/SdmAppService.model';
 
 @Component({
 	selector: 'sdm-page-subject-detail',
@@ -58,6 +58,7 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.reviewData = res;
+					console.log('รีวิวทั้งหมด : ', this.reviewData);
 				} else {
 					console.log('No allReview Data Available.');
 				}
@@ -69,10 +70,7 @@ export class SDMPageReview {
 				} else if (error.status === 500) {
 					console.error('Internal Server Error');
 				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
-					);
+					console.error('An unexpected error occurred:', error.status);
 				}
 				this.isLoadingReview = false;
 			},
@@ -84,6 +82,7 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.currentYearTermReviewData = res;
+					console.log('เปิดในปีการศึกษาและภาคการศึกษาปัจจุบัน : ', this.currentYearTermReviewData);
 				} else {
 					console.log('No currentReview Data Available.');
 				}
@@ -95,10 +94,7 @@ export class SDMPageReview {
 				} else if (error.status === 500) {
 					console.error('Internal Server Error');
 				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
-					);
+					console.error('An unexpected error occurred:', error.status);
 				}
 				this.isLoadingReview = false;
 			},

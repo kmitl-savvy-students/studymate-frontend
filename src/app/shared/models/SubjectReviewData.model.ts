@@ -17,15 +17,15 @@ export class TeachtableSubject {
 		public teachtable: Teachtable,
 		public subject_id: string,
 		public interested: number,
-		public count_of_review: number,
 		public rating: number,
+		public count_of_review: number,
 	) {}
 }
 
 export class Teachtable {
 	constructor(
 		public id: number,
-		public academic_year: number,
-		public academic_term: number,
+		public year: number,
+		public term: number,
 	) {}
 }
