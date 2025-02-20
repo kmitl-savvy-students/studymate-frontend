@@ -1,4 +1,4 @@
-<div *ngIf="subjectCardData" class="border-1 text-dark-100 rounded-[20px] border border-main-25 bg-white p-6">
+<div *ngIf="subjectCardData" class="border-1 rounded-[20px] border border-main-25 bg-white p-6 text-dark-100">
 	<div class="flex flex-col gap-y-6">
 		<div class="flex flex-col gap-y-2 border-b border-main-25 pb-5">
 			<div class="flex flex-row flex-wrap items-center gap-x-3">
@@ -16,16 +16,13 @@
 				</div>
 			</div>
 			<div class="flex flex-col">
-				<div class="flex flex-row flex-wrap items-center gap-x-3">
+				<div class="flex flex-wrap items-center gap-x-3">
 					<div *ngIf="subjectCardData?.class_level === '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ทุกชั้นปี</div>
-					<div *ngIf="subjectCardData?.class_level != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">
-						ปี {{ subjectCardData.class_level }}
-					</div>
-
+					<div *ngIf="subjectCardData?.class_level != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ปี {{ subjectCardData.class_level }}</div>
 					<div class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">Sec {{ subjectCardData.section }}</div>
-					<div *ngIf="subjectCardData.group_name.length > 0; else noGroup">
-						<div *ngFor="let group of subjectCardData.group_name" class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">
-							{{ group }}
+					<div *ngIf="subjectCardData.group_name.length > 0; else noGroup" class="flex flex-wrap gap-x-3">
+						<div *ngFor="let group of subjectCardData.group_name" [ngStyle]="{ 'background-color': group.color || '#4D74CB26' }" class="rounded-[15px] px-3 py-1.5 text-xs">
+							{{ group.name }}
 						</div>
 					</div>
 					<ng-template #noGroup>
@@ -70,9 +67,8 @@
 						{{ data }}
 					</div>
 					<div class="tooltip" *ngIf="subjectCardData.teacher_list_th.length > 1">
-						<sdm-icon icon="ellipsis" class="text-dark-100 rounded-[15px] bg-orange-50 px-3 py-1 hover:cursor-pointer hover:bg-orange-100"></sdm-icon>
-						<div
-							class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center">
+						<sdm-icon icon="ellipsis" class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100 hover:cursor-pointer hover:bg-orange-100"></sdm-icon>
+						<div class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-dark-100">
 							<div class="text-sm" *ngFor="let teacher of subjectCardData.teacher_list_th">
 								{{ teacher }}
 							</div>
@@ -113,18 +109,12 @@
 				<div class="font-normal">เงื่อนไข</div>
 				<div class="tooltip relative" *ngIf="subjectCardData.rule !== ''">
 					<sdm-icon icon="circle-exclamation" class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"> </sdm-icon>
-					<div
-						[innerHTML]="subjectCardData.rule"
-						class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm"></div>
+					<div [innerHTML]="subjectCardData.rule" class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"></div>
 				</div>
 				<div class="flex" *ngIf="subjectCardData.rule === ''">
-					<div
-						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200"
-						*ngIf="subjectCardData.rule === ''">
+					<div class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200" *ngIf="subjectCardData.rule === ''">
 						-
-						<div class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center">
-							ไม่มีเงื่อนไข
-						</div>
+						<div class="tooltiptext tooltip-shadow absolute mt-3 flex min-w-max flex-col gap-y-2 rounded-[10px] bg-white p-4 text-center text-dark-100">ไม่มีเงื่อนไข</div>
 					</div>
 				</div>
 			</div>
@@ -134,16 +124,12 @@
 				<div class="font-normal">หมายเหตุ</div>
 				<div class="tooltip relative" *ngIf="subjectCardData.remark !== ''">
 					<sdm-icon icon="circle-exclamation" class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"> > </sdm-icon>
-					<div
-						[innerHTML]="subjectCardData.remark"
-						class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 max-h-[450px] w-[240px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm"></div>
+					<div [innerHTML]="subjectCardData.remark" class="tooltiptext tooltip-shadow absolute mt-3 max-h-[450px] w-[240px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"></div>
 				</div>
 				<div class="flex" *ngIf="subjectCardData.remark === ''">
-					<div
-						class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200"
-						*ngIf="subjectCardData.remark === ''">
+					<div class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200" *ngIf="subjectCardData.remark === ''">
 						-
-						<div class="tooltiptext tooltip-shadow text-dark-100 absolute mt-3 min-w-max rounded-[10px] bg-white p-4 text-center">ไม่มีหมายเหตุ</div>
+						<div class="tooltiptext tooltip-shadow absolute mt-3 min-w-max rounded-[10px] bg-white p-4 text-center text-dark-100">ไม่มีหมายเหตุ</div>
 					</div>
 				</div>
 			</div>
@@ -153,8 +139,8 @@
 				<div class="font-normal">คะแนนรีวิว</div>
 				<div class="flex items-center gap-x-1">
 					<sdm-rating mode="display" [rating]="subjectCardData.rating" customClass="text-sm text-primary-300"></sdm-rating>
-					<span class="text-dark-100 text-sm">{{ subjectCardData.rating }}</span>
-					<span class="text-dark-100 text-sm">({{ 0 }} รีวิว)</span>
+					<span class="text-sm text-dark-100">{{ subjectCardData.rating }}</span>
+					<span class="text-sm text-dark-100">({{ 0 }} รีวิว)</span>
 				</div>
 			</div>
 
