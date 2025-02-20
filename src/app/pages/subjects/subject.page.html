@@ -22,21 +22,21 @@
 							[listOptions]="departmentList"
 							(selectedValue)="handleSelectChange('selectedDepartment',$event)"
 							class="col-span-2"
-							[disabled]="disableDepartmentSelectDropdown || isLoading"></sdm-select>
+							[disabled]="disableDepartmentSelectDropdown || isLoading || isGened"></sdm-select>
 						<sdm-select
 							defaultLabel="แผนการเรียน"
 							SelectName="selectedProgram"
 							[listOptions]="programList"
 							(selectedValue)="handleSelectChange('selectedProgram',$event)"
 							class="col-span-2"
-							[disabled]="disableProgramSelectDropdown || isLoading"></sdm-select>
+							[disabled]="disableProgramSelectDropdown || isLoading || isGened"></sdm-select>
 						<sdm-select
 							defaultLabel="หลักสูตร"
 							SelectName="selectedCurriculum"
 							[listOptions]="curriculumList"
 							(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
 							class="col-span-4"
-							[disabled]="disableCurriculumSelectDropdown || isLoading"></sdm-select>
+							[disabled]="disableCurriculumSelectDropdown || isLoading || isGened"></sdm-select>
 					</div>
 				</sdm-base-accordion>
 
