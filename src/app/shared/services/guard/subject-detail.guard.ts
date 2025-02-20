@@ -52,7 +52,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		);
 	}
 
-	private validateFullPathAccess(year: number, semester: number, programId: number, section: number, subjectId: string): Observable<boolean> {
+	private validateFullPathAccess(year: number, semester: number, curriculumId: number, section: number, subjectId: string): Observable<boolean> {
 		// First validate basic parameters
 		if (!this.validateBasicParams(year, semester)) {
 			this.router.navigate(['/subject']);
@@ -60,7 +60,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		}
 
 		// Directly validate subject and section
-		return this.apiManagementService.GetSubjectsDataBySection(year - 543, semester, programId, subjectId, section.toString()).pipe(
+		return this.apiManagementService.GetSubjectsDataBySection(year - 543, semester, curriculumId, subjectId, section.toString()).pipe(
 			map((subject) => {
 				if (subject) {
 					return true;

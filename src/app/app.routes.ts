@@ -31,6 +31,7 @@ export const routes: Routes = [
 
 	// #region Old Subjects
 	{ path: 'subject', component: SDMPageSubject },
+	{ path: 'subject/:year/:semester/:classYear/:faculty/:curriculum', component: SDMPageSubject, canActivate: [SubjectValidationGuard] },
 	{ path: 'subject/:year/:semester/:classYear/:faculty/:department/:program/:curriculum', component: SDMPageSubject, canActivate: [SubjectValidationGuard] },
 	// #endregion
 
