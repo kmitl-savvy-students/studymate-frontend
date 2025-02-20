@@ -45,7 +45,6 @@ export class SDMBaseAccordion implements AfterViewInit {
 
 	ngAfterViewInit(): void {
 		this.initAccordion();
-		this.isExpanded = this.accordionDefaultStatus;
 	}
 
 	initAccordion(): void {
@@ -72,6 +71,7 @@ export class SDMBaseAccordion implements AfterViewInit {
 			];
 
 			this.accordion = new Accordion(container, items, options);
+			this.isExpanded = this.accordionDefaultStatus;
 		}, 0);
 	}
 }

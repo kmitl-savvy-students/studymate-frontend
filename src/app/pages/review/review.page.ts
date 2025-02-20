@@ -1,5 +1,6 @@
 import { Component, SimpleChanges } from '@angular/core';
 import { initFlowbite } from 'flowbite';
+import { SDMfilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
 import { paginationType } from '../../shared/models/SdmAppService.model';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
@@ -10,7 +11,7 @@ import { AuthenticationService } from '../../shared/services/authentication/auth
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
-	imports: [SDMReviewFilterComponent],
+	imports: [SDMReviewFilterComponent, SDMfilterBarComponent],
 	templateUrl: './review.page.html',
 })
 export class SDMPageReview {
@@ -58,7 +59,6 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.reviewData = res;
-					console.log('รีวิวทั้งหมด : ', this.reviewData);
 				} else {
 					console.log('No allReview Data Available.');
 				}
@@ -82,7 +82,6 @@ export class SDMPageReview {
 			next: (res) => {
 				if (res) {
 					this.currentYearTermReviewData = res;
-					console.log('เปิดในปีการศึกษาและภาคการศึกษาปัจจุบัน : ', this.currentYearTermReviewData);
 				} else {
 					console.log('No currentReview Data Available.');
 				}

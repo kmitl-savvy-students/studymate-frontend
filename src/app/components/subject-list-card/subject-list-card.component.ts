@@ -22,7 +22,6 @@ export class SDMSubjectListCardComponent {
 
 	public getSubjectDetailUrl(subjectData: Subject): string {
 		const path = this.router.serializeUrl(this.router.createUrlTree(['/subject/subject-detail', subjectData.id]));
-		console.log(path);
 		return path;
 	}
 }
