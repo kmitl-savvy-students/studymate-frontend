@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
 import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { Transcript } from '@models/Transcript.model.js';
+import { User } from '@models/User.model.js';
+import { APIManagementService } from '@services/api-management.service.js';
+import { AuthenticationService } from '@services/authentication/authentication.service.js';
+import { LoadingService } from '@services/loading/loading.service.js';
+import { IconComponent } from '../icon/icon.component';
+import { CurriculumGroup } from './../../shared/models/CurriculumGroup.model';
 
 @Component({
 	selector: 'sdm-filter-bar',
@@ -9,26 +15,60 @@ import { CommonModule } from '@angular/common';
 	templateUrl: './filter-bar.component.html',
 	styleUrl: './filter-bar.component.css',
 })
-export class SDMilterBarComponent {
+export class SDMfilterBarComponent implements OnInit {
 	isPointFilterOpen = true;
 	isSubCateFilterOpen = true;
 	isDayFilterOpen = true;
 	isTimeFilterOpen = true;
 
+	@Input() isReviewPage: boolean = false;
+
+	public currentUser: User | null = null;
+	public transcript: Transcript | null = null;
+	public isLoadingTranscript: boolean = false;
+	public curriculumGroup: Array<CurriculumGroup> | undefined = [];
+	// renderGroup: TemplateRef<{ $implicit: CurriculumGroup[]|undefined; level: number; }>|null;
+
+	constructor(
+		private apiManagementService: APIManagementService,
+		private loadingService: LoadingService,
+		private authService: AuthenticationService,
+	) {}
+
+	ngOnInit(): void {
+		this.authService.user$.subscribe((user) => {
+			this.currentUser = user;
+			this.fetchTranscripts();
+		});
+	}
+
+	fetchTranscripts() {
+		if (!this.currentUser) return;
+		this.isLoadingTranscript = true;
+		this.apiManagementService.FetchTranscript(this.currentUser.id).subscribe({
+			next: (data) => {
+				this.transcript = data;
+				this.curriculumGroup = data.user!.curriculum.curriculum_group?.children;
+				this.isLoadingTranscript = false;
+				console.log('filter data:', this.transcript);
+				console.log('curriculum data:', this.curriculumGroup);
+			},
+			error: (error) => {
+				console.error('Error fetching transcript:', error);
+			},
+		});
+	}
+
 	togglePointFilter() {
 		this.isPointFilterOpen = !this.isPointFilterOpen;
 	}
 
-	toggleSubCateFilter() {
+	toggleCurriculumnGroupFilter() {
 		this.isSubCateFilterOpen = !this.isSubCateFilterOpen;
 	}
 
 	toggleDayFilter() {
 		this.isDayFilterOpen = !this.isDayFilterOpen;
-	}
-
-	toggleTimeFilter() {
-		this.isTimeFilterOpen = !this.isTimeFilterOpen;
 	}
 
 	subjects = [
@@ -195,8 +235,7 @@ export class SDMilterBarComponent {
 									],
 								},
 								{
-									groupName:
-										'กลุ่มเทคโนโลยีและวิธีการทางซอฟต์แวร์',
+									groupName: 'กลุ่มเทคโนโลยีและวิธีการทางซอฟต์แวร์',
 									courses: [
 										{
 											code: '01076105',
@@ -258,8 +297,7 @@ export class SDMilterBarComponent {
 									],
 								},
 								{
-									groupName:
-										'กลุ่มฮาร์ดแวร์และสถาปัตยกรรมคอมพิวเตอร์',
+									groupName: 'กลุ่มฮาร์ดแวร์และสถาปัตยกรรมคอมพิวเตอร์',
 									courses: [
 										{
 											code: '01076112',

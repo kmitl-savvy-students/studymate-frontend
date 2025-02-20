@@ -15,7 +15,6 @@ import { SDMPageSignOut } from '@pages/sign-out/sign-out.page';
 import { SDMPageSignUp } from '@pages/sign-up/sign-up.page';
 import { SDMPageSubjectDetail } from '@pages/subject-detail/subject-detail.page';
 import { SDMPageSubject } from '@pages/subjects/subject.page';
-import { SDMPageSubjects } from '@pages/subjects/subjects.page';
 import { AuthenticationGuard } from '@services/authentication/authentication.guard';
 import { SubjectDetailValidationGuard } from '@services/guard/subject-detail.guard';
 import { SubjectValidationGuard } from '@services/guard/subject.guard';
@@ -36,7 +35,7 @@ export const routes: Routes = [
 	// #endregion
 
 	// #region New Subjects
-	{ path: 'subjects', component: SDMPageSubjects },
+	// { path: 'subjects', component: SDMPageSubjects },
 	// #endregion
 
 	// #region Edit Curriculum Structure
