@@ -14,7 +14,7 @@ import { User } from '@models/User.model';
 import { APIManagementService } from '@services/api-management.service';
 import { initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
@@ -279,10 +279,18 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public getDropdownFacultyAsObservable(): Observable<Faculty[]> {
 		return this.apiManagementService.GetDropdownFaculties().pipe(
-			tap((res) => {
-				if (res) {
-					this.facultyList = res;
+			map((faculties) => {
+				if (faculties) {
+					// แยก General Education ออกมา
+					const generalEducation = faculties.find((f) => f.id === 0);
+					const otherFaculties = faculties.filter((f) => f.id !== 0);
+
+					// รวม list โดยเอา General Education ไว้หน้าสุด
+					this.facultyList = generalEducation ? [generalEducation, ...otherFaculties] : otherFaculties;
+
+					return this.facultyList;
 				}
+				return [];
 			}),
 			catchError((error) => {
 				console.error('Error fetching facultyList:', error);
