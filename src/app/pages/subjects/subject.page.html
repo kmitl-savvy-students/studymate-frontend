@@ -17,6 +17,7 @@
 						<sdm-select defaultLabel="ชั้นปี" SelectName="selectedClassYear" [listOptions]="classYearList" (selectedValue)="handleSelectChange('selectedClassYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
 						<sdm-select defaultLabel="คณะ" SelectName="selectedFaculty" [listOptions]="facultyList" (selectedValue)="handleSelectChange('selectedFaculty',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
 						<sdm-select
+							*ngIf="!isGened"
 							defaultLabel="ภาควิชา"
 							SelectName="selectedDepartment"
 							[listOptions]="departmentList"
@@ -24,6 +25,7 @@
 							class="col-span-2"
 							[disabled]="disableDepartmentSelectDropdown || isLoading || isGened"></sdm-select>
 						<sdm-select
+							*ngIf="!isGened"
 							defaultLabel="แผนการเรียน"
 							SelectName="selectedProgram"
 							[listOptions]="programList"
@@ -31,6 +33,7 @@
 							class="col-span-2"
 							[disabled]="disableProgramSelectDropdown || isLoading || isGened"></sdm-select>
 						<sdm-select
+							*ngIf="!isGened"
 							defaultLabel="หลักสูตร"
 							SelectName="selectedCurriculum"
 							[listOptions]="curriculumList"
@@ -93,11 +96,11 @@
 				<div class="flex flex-col gap-y-4 text-sm">
 					<div *ngIf="selectedYear === -1 || selectedYear === undefined">โปรดเลือกปีการศึกษา เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedSemester === -1 || selectedSemester === undefined">โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา</div>
-					<div *ngIf="selectedClassYear === '' || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedClassYear === '' || selectedClassYear === '-1' || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedFaculty === -1 || selectedFaculty === undefined">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
-					<div *ngIf="selectedDepartment === -1 || selectedDepartment === undefined">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
-					<div *ngIf="selectedProgram === -1 || selectedProgram === undefined">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
-					<div *ngIf="selectedCurriculum === -1 ||selectedCurriculum === undefined">โปรดเลือกหลักสูตร เพื่อดูรายวิชา</div>
+					<div *ngIf="(selectedDepartment === -1 || selectedDepartment === undefined) && selectedFaculty !== 0">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
+					<div *ngIf="(selectedProgram === -1 || selectedProgram === undefined ) && selectedFaculty !== 0">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
+					<div *ngIf="(selectedCurriculum === -1 ||selectedCurriculum === undefined) && selectedFaculty !== 0">โปรดเลือกหลักสูตร เพื่อดูรายวิชา</div>
 				</div>
 			</div>
 		</ng-container>

@@ -148,7 +148,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 				this.selectedLatest = false;
 				this.selectedPopular = false;
 				this.clearSelect();
-				this.selectedCurrentYearTerm = true;
 				break;
 			default:
 				break;
