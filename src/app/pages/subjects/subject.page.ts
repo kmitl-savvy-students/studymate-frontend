@@ -281,11 +281,9 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		return this.apiManagementService.GetDropdownFaculties().pipe(
 			map((faculties) => {
 				if (faculties) {
-					// แยก General Education ออกมา
 					const generalEducation = faculties.find((f) => f.id === 0);
 					const otherFaculties = faculties.filter((f) => f.id !== 0);
 
-					// รวม list โดยเอา General Education ไว้หน้าสุด
 					this.facultyList = generalEducation ? [generalEducation, ...otherFaculties] : otherFaculties;
 
 					return this.facultyList;
@@ -300,10 +298,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	}
 
 	public getDropdownDepartmentsAsObservable(selectedFaculty: number): Observable<Department[]> {
-		if (selectedFaculty === 0) {
-			return of([]);
-		}
-
 		return this.apiManagementService.GetDropdownDepartments(selectedFaculty).pipe(
 			tap((res) => {
 				this.departmentList = res?.length > 0 ? res : [{ id: -1, kmitl_id: '-1', faculty: null, name_th: 'ไม่พบข้อมูลภาควิชา', name_en: 'No Department Data' }];
@@ -316,10 +310,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	}
 
 	public getDropdownProgramsAsObservable(selectedDepartment: number): Observable<Program[]> {
-		if (this.isGened) {
-			return of([]);
-		}
-
 		return this.apiManagementService.GetDropdownPrograms(selectedDepartment).pipe(
 			tap((res) => {
 				this.programList = res?.length > 0 ? res : [{ id: -1, kmitl_id: '-1', department: null, name_th: 'ไม่พบข้อมูลแผนการเรียน', name_en: 'No Program Data' }];
@@ -332,10 +322,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	}
 
 	public getDropdownCurriculumsAsObservable(selectedProgram: number): Observable<Curriculum[]> {
-		if (this.isGened) {
-			return of([]);
-		}
-
 		return this.apiManagementService.GetDropdownCurriculums(selectedProgram).pipe(
 			tap((res) => {
 				this.curriculumList =
