@@ -130,8 +130,20 @@ export class APIManagementService {
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
-	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+	CreateSubjectReviewLike(review_id: number) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/like`;
+
+		return this.http.post(apiUrl, { teachtable_subject_review_id: review_id });
+	}
+
+	DeleteSubjectReviewLike(teachtableSubjectReviewId: number) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/like/${teachtableSubjectReviewId}`;
+
+		return this.http.delete(apiUrl);
+	}
+
+	GetSubjectReviewLikeByAllUser(teachtableSubjectReviewId: number): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/like/${teachtableSubjectReviewId}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
@@ -162,6 +174,12 @@ export class APIManagementService {
 			subject_id: subject_id,
 			review: review,
 		});
+	}
+
+	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
 	GetCurriculumSubjectByUniqueIdYear(subjectId: string, uniqueId: string, year: string) {

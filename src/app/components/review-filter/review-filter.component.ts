@@ -38,6 +38,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
+	@Output() createLikeReview = new EventEmitter<void>();
+	@Output() deleteLikeReview = new EventEmitter<void>();
 
 	public ratingList = ratingList;
 
@@ -69,8 +71,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
 		}
-		if (changes['sidebarFilterRatingValue']) {
-			this.onSidebarRatingFilterChange(this.sidebarFilterRatingValue);
+		if (changes['isLoadingReview']) {
+			this.isLoadingReview = changes['isLoadingReview'].currentValue;
 		}
 	}
 
@@ -250,6 +252,14 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	public onDeleteUserReview() {
 		this.deleteUserReview.emit();
+	}
+
+	public onCreateLikeReview() {
+		this.createLikeReview.emit();
+	}
+
+	public onDeleteLikeReview() {
+		this.deleteLikeReview.emit();
 	}
 
 	public getSearchedReviewsDataList(searchedReviewDataList: SubjectReviewData[]) {

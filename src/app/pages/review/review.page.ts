@@ -1,4 +1,4 @@
-import { Component, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMfilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
@@ -18,21 +18,15 @@ export class SDMPageReview {
 	public reviewData: SubjectReviewData[] = [];
 	public currentYearTermReviewData: SubjectReviewData[] = [];
 
-	public isLoadingReview: boolean = false;
-
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
+
+	public isLoadingReview: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
 		private authService: AuthenticationService,
 	) {}
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['isLoadingReview']) {
-			console.log('Loading:', changes['isLoading'].currentValue);
-		}
-	}
 
 	ngOnInit(): void {
 		this.authService.signedIn$.subscribe((signedIn) => {
@@ -85,7 +79,6 @@ export class SDMPageReview {
 				} else {
 					console.log('No currentReview Data Available.');
 				}
-				this.isLoadingReview = false;
 			},
 			error: (error) => {
 				if (error.status === 404) {
@@ -95,7 +88,6 @@ export class SDMPageReview {
 				} else {
 					console.error('An unexpected error occurred:', error.status);
 				}
-				this.isLoadingReview = false;
 			},
 		});
 	}

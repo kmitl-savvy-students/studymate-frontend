@@ -50,8 +50,6 @@ export class SDMfilterBarComponent implements OnInit {
 				this.transcript = data;
 				this.curriculumGroup = data.user!.curriculum.curriculum_group?.children;
 				this.isLoadingTranscript = false;
-				console.log('filter data:', this.transcript);
-				console.log('curriculum data:', this.curriculumGroup);
 			},
 			error: (error) => {
 				console.error('Error fetching transcript:', error);
