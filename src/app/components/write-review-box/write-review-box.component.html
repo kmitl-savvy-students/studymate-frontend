@@ -53,8 +53,9 @@
 				<ng-template #showWarning>
 					<div class="mt-1.5 flex w-full flex-col flex-wrap items-center justify-center gap-2 rounded-[15px] bg-orange-50 px-10 py-20">
 						<sdm-icon *ngIf="!canReview" icon="triangle-exclamation" class="text-4xl text-gray-500"></sdm-icon>
-						<div *ngIf="isSubjectCompleted || !canReview" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากคุณไม่เคยเรียนรายวิชานี้ หรือกำลังเรียนอยู่</div>
+						<div *ngIf="noSubjectCompleted" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากคุณไม่เคยเรียนรายวิชานี้ หรือกำลังเรียนอยู่</div>
 						<div *ngIf="notHaveTranscript" class="text-center font-semibold text-gray-500">ขออภัย โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ</div>
+						<div *ngIf="isTransferCredit" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากรายวิชานี้เป็นรายวิชาเทียบโอนหน่วยกิต</div>
 					</div>
 				</ng-template>
 			</ng-template>

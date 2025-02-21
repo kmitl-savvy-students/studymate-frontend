@@ -48,8 +48,11 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public isLoadingReview: boolean = false;
 	public isLoadingTranscript: boolean = false;
 	public canReview: boolean = false;
-	public isSubjectCompleted: boolean = false;
+	public noSubjectCompleted: boolean = false;
 	public notHaveTranscript: boolean = false;
+	public hasTranscript: boolean = false;
+	public hasCompletedSubject: boolean = false;
+	public completedSubjectDetails: { year: number | null; term: number | null } | null = null;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -134,9 +137,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			});
 	}
 
-	public hasTranscript: boolean = false;
-	public hasCompletedSubject: boolean = false;
-	public completedSubjectDetails: { year: number | null; term: number | null } | null = null;
+	public isTransferCredit: boolean = false;
 
 	public checkReviewSubject() {
 		if (!this.transcript || !this.currentUser) {
@@ -165,9 +166,11 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		if (this.signedIn && this.hasTranscript && this.hasCompletedSubject && this.completedSubjectDetails) {
 			this.canReview = true;
 		} else if (this.signedIn && this.hasTranscript && !this.hasCompletedSubject) {
-			this.isSubjectCompleted = true;
+			this.noSubjectCompleted = true;
 		} else if (this.signedIn && !this.hasTranscript) {
 			this.notHaveTranscript = true;
+		} else if (this.hasCompletedSubject && !this.completedSubjectDetails) {
+			this.isTransferCredit = true;
 		}
 	}
 

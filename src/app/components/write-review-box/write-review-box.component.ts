@@ -23,8 +23,9 @@ export class SDMWriteReviewBoxComponent {
 	@Input() editReviewContent: string = '';
 	@Input() completedSubjectDetails: { year: number | null; term: number | null } | null = null;
 	@Input() canReview: boolean = false;
-	@Input() isSubjectCompleted: boolean = false;
+	@Input() noSubjectCompleted: boolean = false;
 	@Input() notHaveTranscript: boolean = false;
+	@Input() isTransferCredit: boolean = false;
 	@Input() isLoadingTranscript: boolean = false;
 
 	@Output() reviewSuccess = new EventEmitter<void>();
