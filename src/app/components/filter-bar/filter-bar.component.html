@@ -1,39 +1,48 @@
-<div class="text-dark-100 flex w-72 flex-col rounded-[20px] border border-main-25 px-4 pb-4">
+<div class="text-dark-100 flex flex-col rounded-[20px] border border-main-25 px-4 pb-4 md:w-64 2xl:w-72">
 	<!-- Filter  คะแนน -->
 	<sdm-base-accordion header="คะแนน" accordionId="rating-filter-acc" [accordionDefaultStatus]="true">
-		<div class="flex flex-col gap-y-2.5 px-2" *ngIf="isPointFilterOpen">
-			<div class="flex gap-x-3">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">5 คะแนน</div>
+		<ng-container *ngIf="isLoadingTranscript; else showRatingFilter">
+			<div class="flex w-full flex-col gap-y-2">
+				<sdm-loading-skeleton [loadingType]="103" [lines]="1"></sdm-loading-skeleton>
+				<sdm-loading-skeleton [loadingType]="103" [lines]="1"></sdm-loading-skeleton>
 			</div>
-			<div class="flex gap-x-3">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">4 คะแนน</div>
+		</ng-container>
+		<ng-template #showRatingFilter>
+			<div class="flex flex-col gap-y-2.5 px-2">
+				<div class="flex gap-x-3">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">5 คะแนน</div>
+				</div>
+				<div class="flex gap-x-3">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">4 คะแนน</div>
+				</div>
+				<div class="flex gap-x-3">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">3 คะแนน</div>
+				</div>
+				<div class="flex gap-x-3">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">2 คะแนน</div>
+				</div>
+				<div class="flex gap-x-3">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">1 คะแนน</div>
+				</div>
 			</div>
-			<div class="flex gap-x-3">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">3 คะแนน</div>
-			</div>
-			<div class="flex gap-x-3">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">2 คะแนน</div>
-			</div>
-			<div class="flex gap-x-3">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">1 คะแนน</div>
-			</div>
-		</div>
+		</ng-template>
 	</sdm-base-accordion>
 
 	<!-- Filter หมวดวิชา -->
 	<div class="flex flex-col">
 		<sdm-base-accordion header="หมวดวิชา" accordionId="curriculum-filter-acc" [accordionDefaultStatus]="true">
-			<ng-container *ngIf="isLoadingTranscript; else showData">
-				<div class="w-full">
+			<ng-container *ngIf="isLoadingTranscript; else showCurriculumFilter">
+				<div class="flex w-full flex-col gap-y-2">
+					<sdm-loading-skeleton [loadingType]="103" [lines]="1"></sdm-loading-skeleton>
 					<sdm-loading-skeleton [loadingType]="103" [lines]="1"></sdm-loading-skeleton>
 				</div>
 			</ng-container>
-			<ng-template #showData>
+			<ng-template #showCurriculumFilter>
 				<div class="max-w-full overflow-y-hidden overflow-x-scroll">
 					<div class="w-max">
 						<ng-container
@@ -85,36 +94,44 @@
 	<!-- Filter วัน -->
 	<ng-container *ngIf="!isReviewPage">
 		<sdm-base-accordion header="วัน" accordionId="day-filter-acc" [accordionDefaultStatus]="true">
-			<div class="flex flex-col gap-y-2.5 px-2" *ngIf="isDayFilterOpen">
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">จันทร์</div>
+			<ng-container *ngIf="isLoadingTranscript; else showDayFilter">
+				<div class="flex w-full flex-col gap-y-2">
+					<sdm-loading-skeleton [loadingType]="103" [lines]="1"></sdm-loading-skeleton>
+					<sdm-loading-skeleton [loadingType]="103" [lines]="1"></sdm-loading-skeleton>
 				</div>
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">อังคาร</div>
+			</ng-container>
+			<ng-template #showDayFilter>
+				<div class="flex flex-col gap-y-2.5 px-2">
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">จันทร์</div>
+					</div>
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">อังคาร</div>
+					</div>
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">พุธ</div>
+					</div>
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">พฤหัสบดี</div>
+					</div>
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">ศุกร์</div>
+					</div>
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">เสาร์</div>
+					</div>
+					<div class="flex gap-x-3.5">
+						<input id="checkbox" type="checkbox" class="check-box" />
+						<div class="col-span-2 -mb-1 text-sm">อาทิตย์</div>
+					</div>
 				</div>
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">พุธ</div>
-				</div>
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">พฤหัสบดี</div>
-				</div>
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">ศุกร์</div>
-				</div>
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">เสาร์</div>
-				</div>
-				<div class="flex gap-x-3.5">
-					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">อาทิตย์</div>
-				</div>
-			</div>
+			</ng-template>
 		</sdm-base-accordion>
 	</ng-container>
 </div>
