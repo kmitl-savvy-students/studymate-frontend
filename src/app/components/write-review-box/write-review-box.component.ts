@@ -60,8 +60,6 @@ export class SDMWriteReviewBoxComponent {
 
 	public resetForm(): void {
 		this.reviewRating = 0;
-		this.selectedSemester = 0;
-		this.selectedYear = 0;
 		this.showForm = false;
 		setTimeout(() => {
 			this.showForm = true;

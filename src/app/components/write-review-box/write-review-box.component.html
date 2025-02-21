@@ -38,7 +38,8 @@
 					[currentUser]="currentUser"
 					[subjectId]="subjectId"
 					[editReviewContent]="editReviewContent"
-					(resetComponent)="onReviewSuccess()"
+					(reviewSuccess)="onReviewSuccess()"
+					(resetComponent)="resetForm()"
 					(cancelEditReview)="onCancelEditReview()"
 					(confirmEditReview)="onConfirmEditReview()"></sdm-rich-text-editor></ng-container
 			><ng-template #cantReview>

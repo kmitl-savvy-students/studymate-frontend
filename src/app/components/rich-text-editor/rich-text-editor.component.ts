@@ -29,6 +29,7 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges, AfterVie
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() cancelEditReview = new EventEmitter<void>();
 	@Output() resetComponent = new EventEmitter<void>();
+	@Output() reviewSuccess = new EventEmitter<void>();
 	public editor: Editor;
 	public review_content: string = '';
 	public defaultText: string = '<p>very <strong>good </strong><u>eiei</u></p>';
@@ -77,7 +78,7 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges, AfterVie
 					next: (res) => {
 						this.alertService.showAlert('success', 'รีวิวสำเร็จ');
 						console.log('res write review : ', res);
-						this.resetComponent.emit();
+						this.reviewSuccess.emit();
 					},
 					error: (err) => {
 						switch (err.status) {
@@ -88,9 +89,10 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges, AfterVie
 								this.alertService.showAlert('error', 'An error occurred while submitting your review. Please try again later.');
 								break;
 						}
+						this.review_content = '';
+						this.resetComponent.emit();
 					},
 				});
-				this.rating = 0;
 				this.review_content = '';
 			}
 		}
