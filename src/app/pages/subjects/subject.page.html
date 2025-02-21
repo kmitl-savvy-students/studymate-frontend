@@ -65,7 +65,7 @@
 		</ng-container>
 		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !getSubjectDataIsNull && !isLoading">
 			<div class="flex w-full flex-col items-start">
-				<div class="text-dark-75 flex w-full flex-1 flex-col items-center gap-3">
+				<div class="flex w-full flex-1 flex-col items-center gap-3 text-dark-75">
 					<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage" class="mt-4"></sdm-pagination>
 					<div class="grid w-full grid-cols-1 gap-4">
 						<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
@@ -85,14 +85,14 @@
 			</div>
 		</ng-container>
 		<ng-container *ngIf="isSearched && searchSubjectDataIsNull && isSelectAllDropdown && (paginatedItems.length === 0) && !isLoading  && !getSubjectDataIsNull">
-			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center">ไม่พบข้อมูลรายวิชาที่ค้นหา</div>
+			<div class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75">ไม่พบข้อมูลรายวิชาที่ค้นหา</div>
 		</ng-container>
 		<ng-container *ngIf="isSelectAllDropdown && getSubjectDataIsNull">
-			<div class="text-dark-75 flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center">ไม่พบข้อมูลรายวิชา</div>
+			<div class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75">ไม่พบข้อมูลรายวิชา</div>
 		</ng-container>
 		<!-- คำแนะนำการดูรายวิชา -->
 		<ng-container *ngIf="!isSelectAllDropdown">
-			<div class="text-dark-75 mt-20 flex w-full flex-col items-center justify-center gap-3 text-center">
+			<div class="mt-20 flex w-full flex-col items-center justify-center gap-3 text-center text-dark-75">
 				<div class="flex flex-col gap-y-4 text-sm">
 					<div *ngIf="selectedYear === -1 || selectedYear === undefined">โปรดเลือกปีการศึกษา เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedSemester === -1 || selectedSemester === undefined">โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา</div>
