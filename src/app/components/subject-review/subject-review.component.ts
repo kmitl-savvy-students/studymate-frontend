@@ -124,7 +124,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 			this.apiManagementService.CreateSubjectReviewLike(this.subjectReviewData.id).subscribe({
 				next: () => {
 					this.subjectReviewData.like++;
-					this.alertService.showAlert('success', 'กด Like รีวิวสำเร็จ');
 				},
 				error: (err) => {
 					this.isCurrentUserLiked = false;
@@ -139,7 +138,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 			this.apiManagementService.DeleteSubjectReviewLike(this.subjectReviewData.id).subscribe({
 				next: () => {
 					this.subjectReviewData.like--;
-					this.alertService.showAlert('success', 'ลบ Like รีวิวสำเร็จ');
 				},
 				error: (err) => {
 					this.isCurrentUserLiked = true;
@@ -168,9 +166,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 						this.currentUserLikedSubjectReviews = this.allUsersLikedSubjectReviews.filter((review) => review.user_id === this.currentUser?.id.toString());
 
 						this.isCurrentUserLiked = this.currentUserLikedSubjectReviews.length > 0;
-
-						console.log('isCurrentUserLiked Get API: ', this.isCurrentUserLiked);
-						console.log('=========================================');
 					}
 				},
 				error: (err) => {
