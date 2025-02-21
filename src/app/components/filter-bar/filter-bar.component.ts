@@ -1,48 +1,93 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Transcript } from '@models/Transcript.model.js';
 import { User } from '@models/User.model.js';
 import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
-import { LoadingService } from '@services/loading/loading.service.js';
 import { SDMBaseAccordion } from '../accordion/base-accordion.component';
 import { IconComponent } from '../icon/icon.component';
 import { SDMLoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
+import { SDMRatingComponent } from '../rating/rating.component';
+import { Curriculum } from './../../shared/models/Curriculum.model';
 import { CurriculumGroup } from './../../shared/models/CurriculumGroup.model';
 
 @Component({
 	selector: 'sdm-filter-bar',
 	standalone: true,
-	imports: [IconComponent, CommonModule, SDMLoadingSkeletonComponent, SDMBaseAccordion],
+	imports: [IconComponent, CommonModule, SDMLoadingSkeletonComponent, SDMBaseAccordion, SDMRatingComponent],
 	templateUrl: './filter-bar.component.html',
 	styleUrl: './filter-bar.component.css',
 })
 export class SDMfilterBarComponent implements OnInit {
 	@Input() isReviewPage: boolean = false;
+	@Input() selectedCurriculum: Curriculum | undefined;
+	@Input() isLoading: boolean = false;
+	@Output() selectedDays = new EventEmitter<string[]>();
+	@Output() ratingFilter = new EventEmitter<number>();
 
+	public isLoadingTranscript: boolean = false;
 	public currentUser: User | null = null;
 	public transcript: Transcript | null = null;
-	public isLoadingTranscript: boolean = false;
+	public curriculum: Curriculum | undefined;
 	public curriculumGroup: Array<CurriculumGroup> | undefined = [];
 	public openAccordions: Set<number> = new Set<number>();
 	public accordionLevelExpands: number = 2;
-	public rootNode: CurriculumGroup | null = null;
+	public rootNode: CurriculumGroup | undefined = undefined;
+	public ratingOption: number[] = Array.from({ length: 5 }, (_, i) => i + 1);
+	public dayOption: string[] = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
+	public selectedDaysInput: string[] = [];
+	public selectedRating: number | null = null;
 
 	constructor(
 		private apiManagementService: APIManagementService,
-		private loadingService: LoadingService,
 		private authService: AuthenticationService,
 	) {}
 
 	ngOnInit(): void {
-		this.authService.user$.subscribe((user) => {
-			this.currentUser = user;
-			if (this.currentUser?.curriculum?.curriculum_group) {
-				this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
-				this.expandAccordions(this.currentUser.curriculum.curriculum_group, this.accordionLevelExpands - 1);
+		// this.authService.user$.subscribe((user) => {
+		// 	this.currentUser = user;
+		// 	console.log('cur user :', this.currentUser);
+		// 	if (this.currentUser?.curriculum?.curriculum_group) {
+		// 		this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
+		// 		this.expandAccordions(this.currentUser.curriculum.curriculum_group, this.accordionLevelExpands - 1);
+		// 	}
+		// 	// this.fetchTranscripts();
+		// });
+	}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['selectedCurriculum']) {
+			console.log('selectedCurriculum: ', changes['selectedCurriculum'].currentValue);
+			this.curriculum = changes['selectedCurriculum'].currentValue;
+			this.rootNode = this.curriculum?.curriculum_group ?? undefined;
+			this.curriculumGroup = this.curriculum?.curriculum_group?.children;
+			if (this.curriculum?.curriculum_group) {
+				this.openAccordions.add(this.curriculum?.curriculum_group.id);
+				this.expandAccordions(this.curriculum?.curriculum_group, this.accordionLevelExpands - 1);
 			}
-			this.fetchTranscripts();
-		});
+		}
+		if (changes['isLoading']) {
+			// setTimeout(() => {
+			// 	this.isLoadingTranscript = changes['isLoading'].currentValue;
+			// }, 300);
+			this.isLoadingTranscript = changes['isLoading'].currentValue;
+		}
+	}
+
+	onClickReviewFilter(rating: number) {
+		this.selectedRating = this.selectedRating === rating ? null : rating;
+		this.ratingFilter.emit(this.selectedRating!);
+	}
+
+	toggleDay(day: string) {
+		const dayOrder = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
+		if (this.selectedDaysInput.includes(day)) {
+			this.selectedDaysInput = this.selectedDaysInput.filter((d) => d !== day);
+		} else {
+			this.selectedDaysInput.push(day);
+		}
+		this.selectedDaysInput.sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b));
+		this.selectedDays.emit(this.selectedDaysInput);
 	}
 
 	findParentNodeColor(currentNode: CurriculumGroup): string {
@@ -50,7 +95,7 @@ export class SDMfilterBarComponent implements OnInit {
 		if (currentNode.color?.toUpperCase() !== '#FFFFFF' && currentNode.color?.trim().length !== 0) {
 			return currentNode.color;
 		}
-		const parentNode = this.findNodeById(currentNode.parent_id, this.rootNode);
+		const parentNode = this.findNodeById(currentNode.parent_id, this.rootNode!);
 		if (!parentNode) return GRAY;
 		return this.findParentNodeColor(parentNode);
 	}
@@ -91,21 +136,21 @@ export class SDMfilterBarComponent implements OnInit {
 		return this.openAccordions.has(groupId);
 	}
 
-	fetchTranscripts() {
-		if (!this.currentUser) return;
-		this.isLoadingTranscript = true;
-		this.apiManagementService.FetchTranscript(this.currentUser.id).subscribe({
-			next: (data) => {
-				this.transcript = data;
-				this.rootNode = data.user!.curriculum.curriculum_group;
-				this.curriculumGroup = data.user!.curriculum.curriculum_group?.children;
-				this.isLoadingTranscript = false;
-				console.log('filter data:', this.transcript);
-				console.log('curriculum data:', this.curriculumGroup);
-			},
-			error: (error) => {
-				console.error('Error fetching transcript:', error);
-			},
-		});
-	}
+	// fetchTranscripts() {
+	// 	if (!this.currentUser) return;
+	// 	this.isLoadingTranscript = true;
+	// 	this.apiManagementService.FetchTranscript(this.currentUser.id).subscribe({
+	// 		next: (data) => {
+	// 			this.transcript = data;
+	// 			this.rootNode = data.user!.curriculum.curriculum_group;
+	// 			this.curriculumGroup = data.user!.curriculum.curriculum_group?.children;
+	// 			this.isLoadingTranscript = false;
+	// 			// console.log('filter data:', this.transcript);
+	// 			// console.log('curriculum data:', this.curriculumGroup);
+	// 		},
+	// 		error: (error) => {
+	// 			console.error('Error fetching transcript:', error);
+	// 		},
+	// 	});
+	// }
 }

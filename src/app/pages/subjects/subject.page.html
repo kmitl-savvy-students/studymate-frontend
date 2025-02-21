@@ -1,42 +1,57 @@
 <div class="flex w-full gap-x-5">
-	<sdm-filter-bar class="flex-none"></sdm-filter-bar>
+	<sdm-filter-bar [selectedCurriculum]="selectedCurriculumData" [isLoading]="isLoading" (selectedDays)="onSelectedDaysChange($event)" (ratingFilter)="onReviewFilterValueChange($event)" class="flex-none"></sdm-filter-bar>
 	<div class="flex w-full flex-col">
 		<div class="flex w-full flex-col">
 			<div class="grid w-full flex-none grid-cols-1 gap-3">
 				<!-- <div class="text-xl font-semibold">รายวิชาเรียน</div> -->
 				<sdm-base-accordion header="ค้นหารายวิชาเรียน" accordionId="selectDropdown-acc" [accordionDefaultStatus]="false">
-					<div class="grid grid-cols-4 gap-x-3 gap-y-2 px-3 pt-3">
-						<sdm-select defaultLabel="ปีการศึกษา" SelectName="selectedYear" [listOptions]="yearsList" (selectedValue)="handleSelectChange('selectedYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
-						<sdm-select
-							defaultLabel="ภาคการศึกษา"
-							SelectName="selectedSemester"
-							[listOptions]="semesterList"
-							(selectedValue)="handleSelectChange('selectedSemester',$event)"
-							class="col-span-1"
-							[disabled]="isLoading"></sdm-select>
-						<sdm-select defaultLabel="ชั้นปี" SelectName="selectedClassYear" [listOptions]="classYearList" (selectedValue)="handleSelectChange('selectedClassYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
-						<sdm-select defaultLabel="คณะ" SelectName="selectedFaculty" [listOptions]="facultyList" (selectedValue)="handleSelectChange('selectedFaculty',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
-						<sdm-select
-							defaultLabel="ภาควิชา"
-							SelectName="selectedDepartment"
-							[listOptions]="departmentList"
-							(selectedValue)="handleSelectChange('selectedDepartment',$event)"
-							class="col-span-2"
-							[disabled]="disableDepartmentSelectDropdown || isLoading"></sdm-select>
-						<sdm-select
-							defaultLabel="แผนการเรียน"
-							SelectName="selectedProgram"
-							[listOptions]="programList"
-							(selectedValue)="handleSelectChange('selectedProgram',$event)"
-							class="col-span-2"
-							[disabled]="disableProgramSelectDropdown || isLoading"></sdm-select>
-						<sdm-select
-							defaultLabel="หลักสูตร"
-							SelectName="selectedCurriculum"
-							[listOptions]="curriculumList"
-							(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
-							class="col-span-4"
-							[disabled]="disableCurriculumSelectDropdown || isLoading"></sdm-select>
+					<div class="w-full border-t-2 border-gray-100">
+						<label class="inline-flex max-w-full cursor-pointer items-center overflow-x-auto rounded-md py-2 pl-1">
+							<input type="checkbox" class="peer sr-only" />
+							<div
+								class="peer relative h-7 w-14 rounded-xl bg-main-10 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-main-100 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
+							<span class="text-dark-100 ms-3 text-base font-medium">แสดงข้อมูลเฉพาะรายวิชาหมวดศึกษาทั่วไป</span>
+						</label>
+
+						<div class="grid grid-cols-4 gap-x-3 gap-y-2 px-3 pl-1">
+							<sdm-select defaultLabel="ปีการศึกษา" SelectName="selectedYear" [listOptions]="yearsList" (selectedValue)="handleSelectChange('selectedYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="ภาคการศึกษา"
+								SelectName="selectedSemester"
+								[listOptions]="semesterList"
+								(selectedValue)="handleSelectChange('selectedSemester',$event)"
+								class="col-span-1"
+								[disabled]="isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="ชั้นปี"
+								SelectName="selectedClassYear"
+								[listOptions]="classYearList"
+								(selectedValue)="handleSelectChange('selectedClassYear',$event)"
+								class="col-span-1"
+								[disabled]="isLoading"></sdm-select>
+							<sdm-select defaultLabel="คณะ" SelectName="selectedFaculty" [listOptions]="facultyList" (selectedValue)="handleSelectChange('selectedFaculty',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="ภาควิชา"
+								SelectName="selectedDepartment"
+								[listOptions]="departmentList"
+								(selectedValue)="handleSelectChange('selectedDepartment',$event)"
+								class="col-span-2"
+								[disabled]="disableDepartmentSelectDropdown || isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="แผนการเรียน"
+								SelectName="selectedProgram"
+								[listOptions]="programList"
+								(selectedValue)="handleSelectChange('selectedProgram',$event)"
+								class="col-span-2"
+								[disabled]="disableProgramSelectDropdown || isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="หลักสูตร"
+								SelectName="selectedCurriculum"
+								[listOptions]="curriculumList"
+								(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
+								class="col-span-4"
+								[disabled]="disableCurriculumSelectDropdown || isLoading"></sdm-select>
+						</div>
 					</div>
 				</sdm-base-accordion>
 

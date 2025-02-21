@@ -79,6 +79,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 	public disableProgramSelectDropdown: boolean = false;
 	public disableCurriculumSelectDropdown: boolean = false;
 
+	public selectedDays: string[] = [];
+	public ratingFilter: number | null = null;
+	public selectedCurriculumData: Curriculum | undefined;
+
 	constructor(
 		private apiManagementService: APIManagementService,
 		private router: Router,
@@ -212,10 +216,25 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 		});
 	}
 
+	public onSelectedDaysChange(days: string[]) {
+		this.selectedDays = days;
+		this.updatePaginatedItems();
+	}
+
+	public filterDay(data: SubjectCardData[]) {
+		if (this.selectedDays.length === 0) return data;
+		return data.filter((data) => this.selectedDays.includes(data.class_datetime[0]));
+	}
+
+	public onReviewFilterValueChange(rating: number) {
+		this.ratingFilter = rating;
+		console.log('selectedRating :', this.ratingFilter);
+	}
+
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
-		const dataToPaginate = this.isSearched ? this.filteredSubjectCardDataList : this.subjectCardData;
+		const dataToPaginate = this.filterDay(this.isSearched ? this.filteredSubjectCardDataList : this.subjectCardData);
 		this.paginatedItems = dataToPaginate.slice(start, end);
 		this.subjectCardTotal = dataToPaginate.length;
 	}
@@ -319,7 +338,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 						name_th: `${curriculum.name_th} (${curriculum.year})`,
 						name_en: `${curriculum.name_en} (${curriculum.year})`,
 					}));
-					// console.log('curriculumList:', this.curriculumList);
+					console.log('curriculumList:', this.curriculumList);
 				} else {
 					this.curriculumList = [{ id: -1, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
 					// console.log('programList:', this.programList);
@@ -394,6 +413,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit, OnChanges {
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
+				console.log('selected curriculum index :', this.selectedCurriculum);
+				this.selectedCurriculumData = this.curriculumList[this.selectedCurriculum - 1];
+				// console.log('final choose curriculum :', this.selectedCurriculumData);
+
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
