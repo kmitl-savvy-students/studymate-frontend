@@ -91,7 +91,7 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges, AfterVie
 					},
 				});
 				this.rating = 0;
-				// this.review_content = '';
+				this.review_content = '';
 			}
 		}
 	}

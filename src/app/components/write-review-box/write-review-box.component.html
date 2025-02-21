@@ -17,16 +17,18 @@
 						<sdm-icon icon="pen-to-square" class="h-full w-full text-dark-100"></sdm-icon>
 					</div>
 				</div>
-				<div *ngIf="canReview" class="flex flex-row items-center gap-1.5">
-					<div class="text-base font-semibold">ให้คะแนนรายวิชานี้</div>
-					<sdm-rating mode="selector" customClass="text-yellow-300" (value)="onRatingChange($event)"> </sdm-rating>
-				</div>
-				<div *ngIf="canReview" class="flex flex-wrap justify-start gap-x-3 gap-y-3">
-					<div class="rounded-[10px] bg-main-15 px-4 py-1 font-medium text-dark-100">ปีการศึกษา {{ completedSubjectDetails?.year }}</div>
-					<div class="rounded-[10px] bg-main-15 px-4 py-1 font-medium text-dark-100">ภาคการศึกษาที่ {{ completedSubjectDetails?.term }}</div>
-				</div>
+				<ng-container *ngIf="canReview">
+					<div class="flex flex-row items-center gap-1.5">
+						<div class="text-base font-semibold">ให้คะแนนรายวิชานี้</div>
+						<sdm-rating mode="selector" customClass="text-yellow-300" (value)="onRatingChange($event)"> </sdm-rating>
+					</div>
+					<div class="flex flex-wrap justify-start gap-x-3 gap-y-3">
+						<div class="rounded-[10px] bg-main-15 px-4 py-1 font-medium text-dark-100">ปีการศึกษา {{ completedSubjectDetails?.year }}</div>
+						<div class="rounded-[10px] bg-main-15 px-4 py-1 font-medium text-dark-100">ภาคการศึกษาที่ {{ completedSubjectDetails?.term }}</div>
+					</div>
+				</ng-container>
 			</ng-container>
-			<ng-container *ngIf="canReview; else canNotReview"
+			<ng-container *ngIf="canReview; else cantReview"
 				><sdm-rich-text-editor
 					[isEdit]="isEdit"
 					[rating]="reviewRating"
@@ -39,13 +41,22 @@
 					(resetComponent)="onReviewSuccess()"
 					(cancelEditReview)="onCancelEditReview()"
 					(confirmEditReview)="onConfirmEditReview()"></sdm-rich-text-editor></ng-container
-			><ng-template #canNotReview
-				><div class="mt-1.5 flex w-full flex-col flex-wrap items-center justify-center gap-2 rounded-[15px] bg-orange-50 px-10 py-20">
-					<sdm-icon *ngIf="!canReview" icon="triangle-exclamation" class="text-4xl text-gray-500"></sdm-icon>
-					<div *ngIf="notCompletedSubject || !canReview" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากคุณไม่เคยเรียนรายวิชานี้ หรือกำลังเรียนอยู่</div>
-					<div *ngIf="notHaveTranscript" class="text-center font-semibold text-gray-500">ขออภัย โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ</div>
-				</div></ng-template
-			>
+			><ng-template #cantReview>
+				<ng-container *ngIf="isLoadingTranscript; else showWarning">
+					<div class="flex animate-pulse flex-col gap-y-2">
+						<div class="h-6 w-40 rounded-md bg-primary-100"></div>
+						<div class="h-6 w-48 rounded-md bg-primary-100"></div>
+						<div class="h-52 w-full rounded-xl bg-primary-100"></div>
+					</div>
+				</ng-container>
+				<ng-template #showWarning>
+					<div class="mt-1.5 flex w-full flex-col flex-wrap items-center justify-center gap-2 rounded-[15px] bg-orange-50 px-10 py-20">
+						<sdm-icon *ngIf="!canReview" icon="triangle-exclamation" class="text-4xl text-gray-500"></sdm-icon>
+						<div *ngIf="isSubjectCompleted || !canReview" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากคุณไม่เคยเรียนรายวิชานี้ หรือกำลังเรียนอยู่</div>
+						<div *ngIf="notHaveTranscript" class="text-center font-semibold text-gray-500">ขออภัย โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ</div>
+					</div>
+				</ng-template>
+			</ng-template>
 		</div>
 	</ng-template>
 </div>

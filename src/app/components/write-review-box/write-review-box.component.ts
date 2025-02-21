@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { semesterList, yearsList } from '../../pages/subjects/subject-page-data.js';
 import { User } from '../../shared/models/User.model.js';
 import { SDMButtonLink } from '../buttons/button-link.component';
@@ -23,8 +23,9 @@ export class SDMWriteReviewBoxComponent {
 	@Input() editReviewContent: string = '';
 	@Input() completedSubjectDetails: { year: number | null; term: number | null } | null = null;
 	@Input() canReview: boolean = false;
-	@Input() notCompletedSubject: boolean = false;
+	@Input() isSubjectCompleted: boolean = false;
 	@Input() notHaveTranscript: boolean = false;
+	@Input() isLoadingTranscript: boolean = false;
 
 	@Output() reviewSuccess = new EventEmitter<void>();
 	@Output() confirmEditReview = new EventEmitter<void>();
@@ -42,6 +43,12 @@ export class SDMWriteReviewBoxComponent {
 	public markdownContent: string = '';
 
 	public reviewRating: number = 0;
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['isLoadingTranscript']) {
+			this.isLoadingTranscript = changes['isLoadingTranscript'].currentValue;
+		}
+	}
 
 	public onMarkdownChange(content: string): void {
 		this.markdownContent = content;

@@ -32,8 +32,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public subjectData?: Subject;
 	public subjectReviewData: SubjectReviewData[] = [];
 
-	public isLoadingReview: boolean = false;
-
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
 	public transcript: Transcript | null = null;
@@ -46,6 +44,12 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public avgReviewRating: number = 4;
 	public reviewCount: number = 30;
+
+	public isLoadingReview: boolean = false;
+	public isLoadingTranscript: boolean = false;
+	public canReview: boolean = false;
+	public isSubjectCompleted: boolean = false;
+	public notHaveTranscript: boolean = false;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -99,6 +103,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	fetchTranscripts() {
 		console.log('currentUser in fetch Transcript : ', this.currentUser);
+		this.isLoadingTranscript = true;
 		if (!this.currentUser) return;
 
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/get-by-user/${this.currentUser.id}`;
@@ -117,9 +122,10 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 					} else {
 						this.hasTranscript = false;
 					}
+
 					this.checkReviewSubject();
 					this.updateWriteReviewPermission();
-					console.log('333333333333333333333333333333333333333333333');
+					this.isLoadingTranscript = false;
 				},
 				error: (error) => {
 					console.error('Error fetching transcript:', error);
@@ -136,7 +142,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		if (!this.transcript || !this.currentUser) {
 			this.hasCompletedSubject = false;
 			this.completedSubjectDetails = null;
-			console.log('hasCompletedSubject : ', this.hasCompletedSubject);
 			return;
 		}
 		const completedSubject = this.transcript.details.find((detail) => detail.subject?.id === this.subjectId && detail.grade && detail.grade.toUpperCase() !== 'X');
@@ -154,26 +159,16 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			this.hasCompletedSubject = false;
 			this.completedSubjectDetails = null;
 		}
-
-		console.log('hasCompletedSubject : ', this.hasCompletedSubject);
-		console.log('completedSubjectDetails : ', this.completedSubjectDetails);
 	}
-
-	public canReview: boolean = false;
-	public notCompletedSubject: boolean = false;
-	public notHaveTranscript: boolean = false;
 
 	public updateWriteReviewPermission() {
 		if (this.signedIn && this.hasTranscript && this.hasCompletedSubject && this.completedSubjectDetails) {
 			this.canReview = true;
 		} else if (this.signedIn && this.hasTranscript && !this.hasCompletedSubject) {
-			this.notCompletedSubject = true;
+			this.isSubjectCompleted = true;
 		} else if (this.signedIn && !this.hasTranscript) {
 			this.notHaveTranscript = true;
 		}
-		console.log('canReview : ', this.canReview);
-		console.log('notCompletedSubject : ', this.notCompletedSubject);
-		console.log('notHaveTranscript : ', this.notHaveTranscript);
 	}
 
 	get paginationType() {
