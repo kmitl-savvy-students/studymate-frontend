@@ -17,18 +17,18 @@ export class SubjectDetailValidationGuard implements CanActivate {
 	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 		const year = +route.params['year'];
 		const semester = +route.params['semester'];
-		const programId = +route.params['program'];
+		const curriculumId = +route.params['curriculum'];
 		const section = +route.params['section'];
 		const subjectId = route.params['subjectId'];
 
 		// Case 1: Direct subject access (without year/semester/program/section)
-		if ((isNaN(year) || year === -1) && (isNaN(semester) || semester === -1) && (isNaN(programId) || programId === -1) && (isNaN(section) || section === -1) && subjectId) {
+		if ((isNaN(year) || year === -1) && (isNaN(semester) || semester === -1) && (isNaN(curriculumId) || curriculumId === -1) && (isNaN(section) || section === -1) && subjectId) {
 			return this.validateDirectSubjectAccess(subjectId);
 		}
 
 		// Case 2: Full path access (with all parameters)
-		if (subjectId && !isNaN(year) && !isNaN(semester) && !isNaN(programId) && !isNaN(section)) {
-			return this.validateFullPathAccess(year, semester, programId, section, subjectId);
+		if (subjectId && !isNaN(year) && !isNaN(semester) && !isNaN(curriculumId) && !isNaN(section)) {
+			return this.validateFullPathAccess(year, semester, curriculumId, section, subjectId);
 		}
 
 		// Invalid route parameters
@@ -52,7 +52,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		);
 	}
 
-	private validateFullPathAccess(year: number, semester: number, programId: number, section: number, subjectId: string): Observable<boolean> {
+	private validateFullPathAccess(year: number, semester: number, curriculumId: number, section: number, subjectId: string): Observable<boolean> {
 		// First validate basic parameters
 		if (!this.validateBasicParams(year, semester)) {
 			this.router.navigate(['/subject']);
@@ -60,7 +60,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		}
 
 		// Directly validate subject and section
-		return this.apiManagementService.GetSubjectsDataBySection(year - 543, semester, programId, subjectId, section.toString()).pipe(
+		return this.apiManagementService.GetSubjectsDataBySection(year - 543, semester, curriculumId, subjectId, section.toString()).pipe(
 			map((subject) => {
 				if (subject) {
 					return true;

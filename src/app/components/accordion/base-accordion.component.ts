@@ -72,6 +72,7 @@ export class SDMBaseAccordion implements AfterViewInit {
 			];
 
 			this.accordion = new Accordion(container, items, options);
+			this.isExpanded = this.accordionDefaultStatus;
 		}, 0);
 	}
 }

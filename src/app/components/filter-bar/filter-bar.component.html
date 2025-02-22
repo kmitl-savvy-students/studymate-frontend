@@ -1,95 +1,213 @@
-<div class="text-dark-100 flex w-64 flex-col rounded-[20px] border border-main-25 px-5">
-	<!-- Filter  คะแนน -->
-	<div class="flex flex-col gap-y-2 border-b border-b-main-25 py-4">
-		<div class="flex justify-between hover:cursor-pointer" (click)="togglePointFilter()">
-			<div class="text-lg font-medium">คะแนน</div>
-			<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isPointFilterOpen }"></sdm-icon>
-		</div>
+<ng-container *ngIf="!isReviewPage; else reviewFilter">
+	<div class="text-dark-100 flex w-64 flex-col rounded-[20px] border border-main-25 px-5">
+		<!-- Filter  คะแนน -->
+		<div class="flex flex-col gap-y-2 border-b border-b-main-25 py-4">
+			<div class="flex justify-between hover:cursor-pointer" (click)="togglePointFilter()">
+				<div class="text-lg font-medium">คะแนน</div>
+				<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isPointFilterOpen }"></sdm-icon>
+			</div>
 
-		<div class="flex flex-col gap-y-2.5" *ngIf="isPointFilterOpen">
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">5</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">4</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">3</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">2</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">1</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Filter หมวดวิชา -->
-	<div class="flex flex-col gap-y-2 border-b border-b-main-25 pb-4 pt-3">
-		<div class="flex justify-between hover:cursor-pointer" (click)="toggleSubCateFilter()">
-			<div class="text-lg font-medium">หมวดวิชา</div>
-			<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isSubCateFilterOpen }"></sdm-icon>
-		</div>
-		<div *ngIf="isSubCateFilterOpen">
-			<div class="flex flex-col gap-y-2.5 pb-2" *ngFor="let category of subjects; let categoryIndex = index">
+			<div class="flex flex-col gap-y-2.5" *ngIf="isPointFilterOpen">
 				<div class="flex gap-x-3.5">
 					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">
-						{{ category.category }}
-					</div>
+					<div class="col-span-2 -mb-1 text-sm">5</div>
 				</div>
-				<div class="ms-4 flex gap-x-3.5" *ngFor="let subCate of category.subCategories">
+				<div class="flex gap-x-3.5">
 					<input id="checkbox" type="checkbox" class="check-box" />
-					<div class="col-span-2 -mb-1 text-sm">
-						{{ subCate.name }}
+					<div class="col-span-2 -mb-1 text-sm">4</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">3</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">2</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">1</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Filter หมวดวิชา -->
+		<!-- <div class="flex flex-col border-b border-b-main-25 pt-3">
+			<div class="flex justify-between hover:cursor-pointer" (click)="toggleCurriculumnGroupFilter()">
+				<div class="text-lg font-medium">หมวดวิชา</div>
+				<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isSubCateFilterOpen }"></sdm-icon>
+			</div>
+			<div class="flex flex-col pb-4">
+				<div class="flex flex-col gap-y-2.5 pt-2">
+					<ng-container *ngIf="isSubCateFilterOpen">
+						<ng-container *ngFor="let mainGroup of curriculumGroup">
+							<div>
+								<div class="flex gap-x-3.5 pb-2">
+									<input id="checkbox" type="checkbox" class="check-box self-center" />
+									<div class="col-span-2 -mb-1 text-base font-semibold">
+										{{ mainGroup.name }}
+									</div>
+								</div>
+								<div class="flex flex-col gap-y-2">
+									<ng-container *ngFor="let subGroup of mainGroup.children">
+										<div class="ms-4 flex gap-x-3.5">
+											<input id="checkbox" type="checkbox" class="check-box" />
+											<div class="col-span-2 -mb-1 text-sm">{{ subGroup.name }}</div>
+										</div>
+									</ng-container>
+								</div>
+							</div>
+						</ng-container>
+					</ng-container>
+				</div>
+			</div>
+		</div> -->
+
+		<div class="flex flex-col border-b border-b-main-25 pt-3">
+			<div class="flex justify-between hover:cursor-pointer" (click)="toggleCurriculumnGroupFilter()">
+				<div class="text-lg font-medium">หมวดวิชา</div>
+				<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isSubCateFilterOpen }"></sdm-icon>
+			</div>
+			<ng-container
+				*ngTemplateOutlet="
+					renderGroup;
+					context: {
+						$implicit: curriculumGroup,
+						level: 6,
+					}
+				"></ng-container>
+			<ng-template #renderGroup let-node let-level="level">
+				<div class="flex flex-col pb-4">
+					<div class="flex flex-col gap-y-2.5 pt-2">
+						<ng-container *ngFor="let child of node">
+							<ng-container *ngIf="isSubCateFilterOpen">
+								<div>
+									<div class="flex gap-x-3.5 pb-2">
+										<input id="checkbox" type="checkbox" class="check-box self-center" />
+										<div class="col-span-2 -mb-1 text-base font-semibold">
+											{{ child.name }}
+										</div>
+									</div>
+									<!-- <div class="flex flex-col gap-y-2">
+											<ng-container *ngFor="let subGroup of child.children">
+												<div class="ms-4 flex gap-x-3.5">
+													<input id="checkbox" type="checkbox" class="check-box" />
+													<div class="col-span-2 -mb-1 text-sm">{{ subGroup.name }}</div>
+												</div>
+											</ng-container>
+										</div> -->
+								</div>
+							</ng-container>
+						</ng-container>
 					</div>
+				</div>
+			</ng-template>
+		</div>
+
+		<!-- Filter วัน -->
+		<div class="flex flex-col gap-y-2 pb-4 pt-3">
+			<div class="flex justify-between hover:cursor-pointer" (click)="toggleDayFilter()">
+				<div class="text-lg font-medium">วัน</div>
+				<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isDayFilterOpen }"></sdm-icon>
+			</div>
+
+			<div class="flex flex-col gap-y-2.5" *ngIf="isDayFilterOpen">
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">จันทร์</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">อังคาร</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">พุธ</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">พฤหัสบดี</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">ศุกร์</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">เสาร์</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">อาทิตย์</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</ng-container>
 
-	<!-- Filter วัน -->
-	<div class="flex flex-col gap-y-2 pb-4 pt-3">
-		<div class="flex justify-between hover:cursor-pointer" (click)="toggleDayFilter()">
-			<div class="text-lg font-medium">วัน</div>
-			<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isDayFilterOpen }"></sdm-icon>
+<ng-template #reviewFilter>
+	<div class="text-dark-100 flex w-64 flex-col rounded-[20px] border border-main-25 px-5">
+		<!-- Filter  คะแนน -->
+		<div class="flex flex-col gap-y-2 border-b border-b-main-25 py-4">
+			<div class="flex justify-between hover:cursor-pointer" (click)="togglePointFilter()">
+				<div class="text-lg font-medium">จำนวนดาว</div>
+				<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isPointFilterOpen }"></sdm-icon>
+			</div>
+
+			<div class="flex flex-col gap-y-2.5" *ngIf="isPointFilterOpen">
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">5 ดาว</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">4 ดาว</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">3 ดาว</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">2 ดาว</div>
+				</div>
+				<div class="flex gap-x-3.5">
+					<input id="checkbox" type="checkbox" class="check-box" />
+					<div class="col-span-2 -mb-1 text-sm">1 ดาว</div>
+				</div>
+			</div>
 		</div>
 
-		<div class="flex flex-col gap-y-2.5" *ngIf="isDayFilterOpen">
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">จันทร์</div>
+		<!-- Filter หมวดวิชา -->
+		<div class="flex flex-col pt-3">
+			<div class="flex justify-between hover:cursor-pointer" (click)="toggleCurriculumnGroupFilter()">
+				<div class="text-lg font-medium">หมวดวิชา</div>
+				<sdm-icon icon="chevron-up" class="icon-filter" [ngClass]="{ 'rotate-180': isSubCateFilterOpen }"></sdm-icon>
 			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">อังคาร</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">พุธ</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">พฤหัสบดี</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">ศุกร์</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">เสาร์</div>
-			</div>
-			<div class="flex gap-x-3.5">
-				<input id="checkbox" type="checkbox" class="check-box" />
-				<div class="col-span-2 -mb-1 text-sm">อาทิตย์</div>
+			<div class="flex flex-col pb-4">
+				<div class="flex flex-col gap-y-2.5 pt-2">
+					<ng-container *ngIf="isSubCateFilterOpen">
+						<ng-container *ngFor="let mainGroup of curriculumGroup">
+							<div>
+								<div class="flex gap-x-3.5 pb-2">
+									<input id="checkbox" type="checkbox" class="check-box self-center" />
+									<div class="col-span-2 -mb-1 text-base font-semibold">
+										{{ mainGroup.name }}
+									</div>
+								</div>
+								<div class="flex flex-col gap-y-2">
+									<ng-container *ngFor="let subGroup of mainGroup.children">
+										<div class="ms-4 flex gap-x-3.5">
+											<input id="checkbox" type="checkbox" class="check-box" />
+											<div class="col-span-2 -mb-1 text-sm">{{ subGroup.name }}</div>
+										</div>
+									</ng-container>
+								</div>
+							</div>
+						</ng-container>
+					</ng-container>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</ng-template>

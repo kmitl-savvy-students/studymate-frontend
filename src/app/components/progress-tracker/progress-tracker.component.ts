@@ -1,7 +1,6 @@
 // progress-tracker.component.ts
 
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { SDMBaseModal } from '@components/modals/base-modal.component.js';
@@ -11,8 +10,8 @@ import { Subject } from '@models/Subject.model.js';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
 import { User } from '@models/User.model';
+import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service';
-import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 import { SDMBaseButton } from '../buttons/base-button.component';
@@ -28,10 +27,9 @@ import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-e
 export class SDMProgressTrackerComponent implements OnInit {
 	constructor(
 		private authService: AuthenticationService,
-		private http: HttpClient,
-		private backendService: BackendService,
 		private loadingService: LoadingService,
 		private router: Router,
+		private apiManagementService: APIManagementService,
 	) {}
 
 	@ViewChild('showSubjectGroupModal') showSubjectGroupModal!: SDMBaseModal;
@@ -61,8 +59,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 				this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
 				this.expandAccordions(this.currentUser.curriculum.curriculum_group, this.accordionLevelExpands - 1);
 			}
+			this.fetchTranscripts();
 		});
-		this.fetchTranscripts();
 	}
 
 	public toggleIncludeXGrade(): void {
@@ -122,9 +120,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 	}
 	fetchTranscripts() {
 		if (!this.currentUser) return;
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/get-by-user/${this.currentUser.id}`;
-		this.http
-			.get<Transcript>(apiUrl)
+		this.apiManagementService
+			.FetchTranscript(this.currentUser.id)
 			.pipe(finalize(() => this.loadingService.hide()))
 			.subscribe({
 				next: (data) => {

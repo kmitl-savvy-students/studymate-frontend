@@ -178,7 +178,7 @@ export class SDMPageSignUp {
 			next: (res) => {
 				if (res) {
 					this.otpData = res;
-					this.alertService.showAlert('success', 'ระบบได้ส่งรหัส OTP ไปยังอีเมลของคุณเรียบร้อยแล้ว กรุณาตรวจสอบอีเมลของคุณ');
+					this.alertService.showAlert('success', 'ระบบได้ส่งรหัส OTP ไปยังอีเมลสถาบันของคุณเรียบร้อยแล้ว กรุณาตรวจสอบอีเมลสถาบันของคุณ');
 					this.isOtpButtonDisabled = true;
 					if (this.otpData) {
 						this.latestOtpReferer = this.otpData.referer;
