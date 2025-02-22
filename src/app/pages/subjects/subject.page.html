@@ -4,7 +4,7 @@
 		<div class="flex w-full flex-col">
 			<div class="grid w-full flex-none grid-cols-1 gap-3">
 				<!-- <div class="text-xl font-semibold">รายวิชาเรียน</div> -->
-				<sdm-base-accordion header="ค้นหารายวิชาเรียน" accordionId="selectDropdown-acc" [accordionDefaultStatus]="true">
+				<sdm-base-accordion header="ค้นหารายวิชาเรียน" accordionId="selectDropdown-acc" [accordionDefaultStatus]="false">
 					<div class="grid grid-cols-4 gap-x-3 gap-y-2 px-3 pt-3">
 						<sdm-select defaultLabel="ปีการศึกษา" SelectName="selectedYear" [listOptions]="yearsList" (selectedValue)="handleSelectChange('selectedYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
 						<sdm-select

@@ -33,8 +33,13 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() isShowSearchBar: boolean = false;
 	@Input() isReviewPage: boolean = false;
 
+	@Input() sidebarFilterRatingValue: number = -1;
+	@Input() isOnReviewPage: boolean = false;
+
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
+	@Output() createLikeReview = new EventEmitter<void>();
+	@Output() deleteLikeReview = new EventEmitter<void>();
 
 	public ratingList = ratingList;
 
@@ -43,7 +48,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public selectedRating: boolean = false;
 	public selectedCurrentYearTerm: boolean = false;
 
-	public selectedStarRatingValue: any;
+	public selectedStarRatingValue: number = -1;
 
 	public searchedReviewDataList: SubjectReviewData[] = [];
 	public currentPage: number = 1;
@@ -65,6 +70,9 @@ export class SDMReviewFilterComponent implements OnChanges {
 		if (changes['subjectReviewData'] && changes['subjectReviewData']) {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
+		}
+		if (changes['isLoadingReview']) {
+			this.isLoadingReview = changes['isLoadingReview'].currentValue;
 		}
 	}
 
@@ -204,6 +212,22 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.filterData();
 	}
 
+	public onSidebarRatingFilterChange(ratingValue: number) {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedStarRatingValue = ratingValue;
+		if (this.selectedStarRatingValue && this.selectedStarRatingValue !== -1) {
+			this.selectedRating = true;
+			this.resetOtherFilters('starRating');
+			this.currentPage = 1;
+		} else {
+			this.selectedRating = false;
+		}
+		this.filterData();
+	}
+
 	public onCurrentYearTermFilterChange() {
 		this.selectedCurrentYearTerm = !this.selectedCurrentYearTerm;
 		this.resetOtherFilters('currentYearTerm');
@@ -228,6 +252,14 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	public onDeleteUserReview() {
 		this.deleteUserReview.emit();
+	}
+
+	public onCreateLikeReview() {
+		this.createLikeReview.emit();
+	}
+
+	public onDeleteLikeReview() {
+		this.deleteLikeReview.emit();
 	}
 
 	public getSearchedReviewsDataList(searchedReviewDataList: SubjectReviewData[]) {

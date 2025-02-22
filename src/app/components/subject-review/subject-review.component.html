@@ -48,42 +48,24 @@
 			<div class="flex items-center gap-2">
 				<sdm-icon
 					icon="thumbs-up"
-					[iconStyle]="isLiked ? 'fas' : 'far'"
+					[iconStyle]="isCurrentUserLiked ? 'fas' : 'far'"
 					class="text-base text-dark-100"
 					[ngClass]="{
 						'default-cursor': !isSignIn,
 						'cursor-pointer': isSignIn,
+						'like-animation': isAnimating,
 					}"
-					(click)="isSignIn && toggleLike()"></sdm-icon>
+					(click)="toggleLike()"></sdm-icon>
 				<div>{{ this.subjectReviewData.like }}</div>
 			</div>
 			<div class="flex items-center gap-2.5">
 				<div class="text-sm font-normal text-dark-75">
 					{{ this.subjectReviewData.created }}
 				</div>
-				<!-- <sdm-icon
-					*ngIf="canEdit"
-					icon="pen-to-square"
-					iconStyle="fas"
-					class="cursor-pointer text-base text-dark-100"
-					(click)="onEditReview()"
-				></sdm-icon> -->
 				<sdm-icon *ngIf="canDelete" icon="trash-can" iconStyle="fas" class="cursor-pointer text-base text-red-400" data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"></sdm-icon>
 			</div>
 		</div>
 	</ng-container>
-
-	<!-- Editing -->
-	<!-- <ng-container *ngIf="isEditing">
-		<sdm-write-review-box
-			[isEdit]="true"
-			[signedIn]="isSignIn"
-			[editReviewContent]="reviewContent"
-			(confirmEditReview)="onConfirmEditReview()"
-			(cancelEditReview)="onCancelEditReview()"
-			class="m-5"
-		></sdm-write-review-box>
-	</ng-container> -->
 </div>
 
 <!-- Delete Review Modal -->

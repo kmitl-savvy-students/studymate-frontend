@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { SDMBaseAccordion } from '@components/accordion/base-accordion.component.js';
 import { Transcript } from '@models/Transcript.model.js';
 import { TranscriptDetail } from '@models/TranscriptDetail.model.js';
 import { User } from '@models/User.model.js';
+import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
-import { BackendService } from '@services/backend.service.js';
 import { LoadingService } from '@services/loading/loading.service.js';
 import { finalize } from 'rxjs';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
@@ -17,12 +16,11 @@ import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-c
 	templateUrl: './transcript-tracker.component.html',
 	styleUrl: './transcript-tracker.component.css',
 })
-export class SDMTranscriptTrackerComponent {
+export class SDMTranscriptTrackerComponent implements OnInit {
 	constructor(
 		private authService: AuthenticationService,
-		private http: HttpClient,
-		private backendService: BackendService,
 		private loadingService: LoadingService,
+		private apiManagementService: APIManagementService,
 	) {}
 
 	currentUser: User | null = null;
@@ -42,18 +40,16 @@ export class SDMTranscriptTrackerComponent {
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
+
+			this.fetchTranscripts();
 		});
-		this.fetchTranscripts();
 	}
 
 	fetchTranscripts() {
 		if (!this.currentUser) return;
-
 		this.isFetchingTranscriptDetails = true;
-
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/transcript/get-by-user/${this.currentUser.id}`;
-		this.http
-			.get<Transcript>(apiUrl)
+		this.apiManagementService
+			.FetchTranscript(this.currentUser.id)
 			.pipe(
 				finalize(() => {
 					this.loadingService.hide();

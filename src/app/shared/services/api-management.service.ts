@@ -5,6 +5,7 @@ import { Faculty } from '@models/Faculty';
 import { OtpRequest, OtpVerify } from '@models/OtpData.model';
 import { Program } from '@models/Program.model';
 import { Subject } from '@models/Subject.model';
+import { Transcript } from '@models/Transcript.model.js';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
 import { CurriculumGroup } from '../models/CurriculumGroup.model';
@@ -129,8 +130,20 @@ export class APIManagementService {
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
-	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+	CreateSubjectReviewLike(review_id: number) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/like`;
+
+		return this.http.post(apiUrl, { teachtable_subject_review_id: review_id });
+	}
+
+	DeleteSubjectReviewLike(teachtableSubjectReviewId: number) {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/like/${teachtableSubjectReviewId}`;
+
+		return this.http.delete(apiUrl);
+	}
+
+	GetSubjectReviewLikeByAllUser(teachtableSubjectReviewId: number): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/like/${teachtableSubjectReviewId}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
@@ -161,6 +174,12 @@ export class APIManagementService {
 			subject_id: subject_id,
 			review: review,
 		});
+	}
+
+	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
 	GetCurriculumSubjectByUniqueIdYear(subjectId: string, uniqueId: string, year: string) {
@@ -216,6 +235,11 @@ export class APIManagementService {
 			code: authCode,
 			redirect_uri: 'sign-in',
 		});
+	}
+
+	FetchTranscript(currentUserId: string) {
+		const apiUrl = `${environment.backendUrl}/api/transcript/get-by-user/${currentUserId}`;
+		return this.http.get<Transcript>(apiUrl);
 	}
 
 	DeleteTranscriptData(userTokenId: string, userId?: string) {

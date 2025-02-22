@@ -63,6 +63,7 @@
 	<ng-container *ngIf="getSubjectReviewIsNull">
 		<div class="flex w-full flex-1 flex-col items-center justify-center gap-3 py-10 text-center text-dark-75">ไม่พบข้อมูลรายรีวิวรายวิชา</div>
 	</ng-container>
+
 	<div class="grid w-full grid-cols-1 gap-4" *ngIf="!getSubjectReviewIsNull && !isLoadingReview && !filterReviewIsNull && paginatedItems.length > 0">
 		<!-- Pagination -->
 		<sdm-pagination
@@ -72,17 +73,22 @@
 			[itemsPerPage]="itemsPerPage"
 			[currentPage]="currentPage"
 			[scrollTargetId]="isShowSearchBar ? '' : 'filter-bar'"></sdm-pagination>
-		<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4"
-			><sdm-subject-review
+		<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
+			<sdm-subject-review
 				[isShowSubjectIdAndName]="isReviewPage"
 				[subjectReviewData]="data"
 				[isSignIn]="signedIn"
+				[isLoadingReview]="isLoadingReview"
 				[isReviewCreator]="isReviewOwner(data.user_id)"
 				[currentUser]="currentUser"
 				(confirmEditReview)="onConfirmEditReview()"
 				(deleteUserReview)="onDeleteUserReview()"
-				(isEditingReview)="onEditReview($event)"></sdm-subject-review
-		></ng-container>
+				(isEditingReview)="onEditReview($event)"
+				(createLikeReview)="onCreateLikeReview()"
+				(deleteLikeReview)="onDeleteLikeReview()">
+			</sdm-subject-review>
+		</ng-container>
+
 		<!-- Pagination -->
 		<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectReviewTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage" [scrollTargetId]="isShowSearchBar ? '' : 'filter-bar'"></sdm-pagination>
 	</div>

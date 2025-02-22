@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { SDMilterBarComponent } from '@components/filter-bar/filter-bar.component';
+import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
 import { SDMSelectComponent } from '@components/select/select.component';
 import { Curriculum } from '@models/Curriculum.model';
@@ -12,6 +12,7 @@ import { SelectedData } from '@models/SdmAppService.model';
 import { SubjectCardData } from '@models/SubjectCardData.model';
 import { User } from '@models/User.model';
 import { APIManagementService } from '@services/api-management.service';
+import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, map, switchMap, tap } from 'rxjs/operators';
@@ -23,7 +24,7 @@ import { classYearList, semesterList, subjects_added, yearsList } from './subjec
 @Component({
 	selector: 'sdm-page-subject',
 	standalone: true,
-	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion],
+	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
@@ -47,7 +48,9 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public selectedData?: SelectedData;
 
 	public currentRoute: string = '';
-	public user: User | null = null;
+
+	public currentUser: User | null = null;
+
 	public isNavigating: boolean = false;
 
 	public yearsList = yearsList;
@@ -80,9 +83,13 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		private apiManagementService: APIManagementService,
 		private router: Router,
 		private route: ActivatedRoute,
+		private authService: AuthenticationService,
 	) {}
 
 	ngOnInit(): void {
+		this.authService.user$.subscribe((user) => {
+			this.currentUser = user;
+		});
 		this.route.params
 			.pipe(
 				switchMap((params) => {
