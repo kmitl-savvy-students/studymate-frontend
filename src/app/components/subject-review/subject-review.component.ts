@@ -26,7 +26,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	@Input() isSignIn: boolean = false;
 	@Input() isReviewCreator: boolean = false;
 	@Input() currentUser: User | null = null;
-	@Input() isLoadingReview: boolean = false;
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
@@ -46,6 +45,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	public isCurrentUserLiked: boolean = false;
 
 	public reviewContent: string = '';
+	public isLoadingAllUsersLikedSubjectReviews: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -150,6 +150,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	}
 
 	public getAllUsersLikedSubjectReviews() {
+		this.isLoadingAllUsersLikedSubjectReviews = true;
 		if (this.currentUser && this.currentUser.id) {
 			this.apiManagementService.GetSubjectReviewLikeByAllUser(this.subjectReviewData.id).subscribe({
 				next: (res) => {
@@ -164,6 +165,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 						this.currentUserLikedSubjectReviews = this.allUsersLikedSubjectReviews.filter((review) => review.user_id === this.currentUser?.id.toString());
 
 						this.isCurrentUserLiked = this.currentUserLikedSubjectReviews.length > 0;
+						this.isLoadingAllUsersLikedSubjectReviews = false;
 					}
 				},
 				error: (err) => {
@@ -178,6 +180,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 						// log error กรณีอื่นๆ ที่ไม่ใช่ 404
 						console.error('Error fetching review likes:', err);
 					}
+					this.isLoadingAllUsersLikedSubjectReviews = false;
 				},
 			});
 		}
