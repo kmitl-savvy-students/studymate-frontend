@@ -70,7 +70,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public isLoading: boolean = false;
 	public isError: boolean = false;
 	public isSelectAllDropdown: boolean = false;
-	public isGened: string = '';
+	public isGened: string = '0';
 	public isShowGened: boolean = false;
 	public isSignIn: boolean = false;
 	public getSubjectDataIsNull: boolean = false;
@@ -104,7 +104,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
-
 					return this.getDropdownFacultyAsObservable().pipe(
 						concatMap(() => {
 							if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {
@@ -125,66 +124,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 							return of(null);
 						}),
 					);
-
-					// if (
-					// 	this.selectedYear !== -1 &&
-					// 	this.selectedYear !== undefined &&
-					// 	this.selectedSemester !== -1 &&
-					// 	this.selectedSemester !== undefined &&
-					// 	this.selectedClassYear !== '' &&
-					// 	this.selectedClassYear !== '-1' &&
-					// 	this.selectedClassYear !== undefined &&
-					// 	this.selectedFaculty === 0 &&
-					// 	isNaN(this.selectedDepartment) &&
-					// 	isNaN(this.selectedProgram) &&
-					// 	this.selectedCurriculum === 0
-					// ) {
-					// 	this.isGened = true;
-					// } else if (
-					// 	this.selectedYear !== -1 &&
-					// 	this.selectedYear !== undefined &&
-					// 	this.selectedSemester !== -1 &&
-					// 	this.selectedSemester !== undefined &&
-					// 	this.selectedClassYear !== '' &&
-					// 	this.selectedClassYear !== '-1' &&
-					// 	this.selectedClassYear !== undefined &&
-					// 	this.selectedFaculty !== -1 &&
-					// 	this.selectedFaculty !== 0 &&
-					// 	this.selectedFaculty !== undefined &&
-					// 	this.selectedDepartment !== -1 &&
-					// 	this.selectedDepartment !== undefined &&
-					// 	this.selectedProgram !== -1 &&
-					// 	this.selectedProgram !== undefined &&
-					// 	this.selectedCurriculum !== -1 &&
-					// 	this.selectedCurriculum !== undefined
-					// ) {
-					// 	this.isGened = false;
-					// }
-
-					// if (!this.isGened) {
-					// 	return this.getDropdownFacultyAsObservable().pipe(
-					// 		concatMap(() => {
-					// 			if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {
-					// 				return this.getDropdownDepartmentsAsObservable(this.selectedFaculty);
-					// 			}
-					// 			return of(null);
-					// 		}),
-					// 		concatMap(() => {
-					// 			if (this.selectedDepartment !== -1 && this.selectedDepartment !== undefined) {
-					// 				return this.getDropdownProgramsAsObservable(this.selectedDepartment);
-					// 			}
-					// 			return of(null);
-					// 		}),
-					// 		concatMap(() => {
-					// 			if (this.selectedProgram !== -1 && this.selectedProgram !== undefined) {
-					// 				return this.getDropdownCurriculumsAsObservable(this.selectedProgram);
-					// 			}
-					// 			return of(null);
-					// 		}),
-					// 	);
-					// } else {
-					// 	return this.getDropdownFacultyAsObservable();
-					// }
 				}),
 			)
 			.subscribe(() => {
@@ -397,14 +336,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 			case 'selectedFaculty':
 				const oldSelectFaculty = this.selectedFaculty;
 				this.selectedFaculty = selectedData.value;
-				// this.isGened = this.selectedFaculty === 0;
 
 				if (this.selectedFaculty === undefined || this.selectedFaculty === -1 || (oldSelectFaculty !== this.selectedFaculty && oldSelectFaculty !== -1)) {
 					this.resetDependentDropdowns('faculty');
 				}
-				// if (this.selectedFaculty !== -1 && !this.isGened) {
-				// 	this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
-				// }
 				if (this.selectedFaculty !== -1) {
 					this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
 				}
@@ -529,14 +464,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 			this.selectedClassYear !== '-1' &&
 			this.selectedClassYear !== undefined &&
 			this.selectedFaculty !== -1 &&
-			this.selectedFaculty !== 0 &&
 			this.selectedFaculty !== undefined &&
 			this.selectedDepartment !== -1 &&
 			this.selectedDepartment !== undefined &&
 			this.selectedProgram !== -1 &&
 			this.selectedProgram !== undefined &&
 			this.selectedCurriculum !== -1 &&
-			this.selectedCurriculum !== undefined
+			this.selectedCurriculum !== undefined &&
+			this.isGened !== '' &&
+			this.isGened !== undefined
 		) {
 			this.isSelectAllDropdown = true;
 		} else {

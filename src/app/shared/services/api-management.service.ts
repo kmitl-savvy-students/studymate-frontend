@@ -103,7 +103,7 @@ export class APIManagementService {
 	GetSubjectsDataBySection(year: number, semester: number, curriculumId: number, subjectId: string, section: string, is_gened: string): Observable<SubjectCardData> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-subject-id`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculumId', curriculumId).set('subjectId', subjectId).set('section', section).set('is_gened ,', is_gened);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculumId', curriculumId).set('subjectId', subjectId).set('section', section).set('is_gened', is_gened);
 
 		return this.http.get<SubjectCardData>(apiUrl, { params });
 	}
@@ -116,10 +116,10 @@ export class APIManagementService {
 	}
 
 	// get Open Subject Data ในหน้า subject-detail ใหม่
-	GetOpenSubjectData(year: number, semester: number, curriculumId: number, subjectId: string): Observable<boolean> {
+	GetOpenSubjectData(year: number, semester: number, curriculumId: number, subjectId: string, is_gened: string): Observable<boolean> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-subject-availability`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculumId', curriculumId).set('subjectId', subjectId);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculumId', curriculumId).set('subjectId', subjectId).set('is_gened', is_gened);
 
 		return this.http.get<boolean>(apiUrl, { params });
 	}

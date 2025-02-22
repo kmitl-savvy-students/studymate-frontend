@@ -41,7 +41,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public selectedCurriculum: number = -1;
 	public subjectId: string = '';
 	public section: number = -1;
-	public isGened: boolean = false;
+	public isGened: string = '';
 
 	public avgReviewRating: number = 4;
 	public reviewCount: number = 30;
@@ -82,16 +82,18 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				this.selectedCurriculum = +params['curriculum'];
 				this.section = +params['section'];
 				this.subjectId = params['subjectId'];
+				this.isGened = params['isGened'];
 
 				if (
 					(this.selectedYear === -1 || isNaN(this.selectedYear)) &&
 					(this.selectedSemester === -1 || isNaN(this.selectedSemester)) &&
 					(this.selectedCurriculum === -1 || isNaN(this.selectedCurriculum)) &&
 					(this.section === -1 || isNaN(this.section)) &&
-					(this.subjectId !== '' || this.subjectId !== undefined)
+					(this.subjectId !== '' || this.subjectId !== undefined) &&
+					(!this.isGened || this.isGened === '')
 				) {
 					this.getSubjectsDataBySubjectId();
-				} else if (!isNaN(this.selectedYear) && !isNaN(this.selectedSemester) && !isNaN(this.selectedCurriculum) && this.subjectId !== '' && !isNaN(this.section)) {
+				} else if (!isNaN(this.selectedYear) && !isNaN(this.selectedSemester) && !isNaN(this.selectedCurriculum) && this.subjectId !== '' && !isNaN(this.section) && (this.isGened === '0' || this.isGened === '1')) {
 					this.getEachSubjectData();
 				}
 				this.fetchTranscripts();

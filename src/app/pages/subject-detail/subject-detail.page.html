@@ -1,7 +1,7 @@
 <div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn [subjectDetailData]="eachSubjectData" [subjectData]="subjectData"></sdm-subject-detail-cpn>
 
-	<sdm-show-subjects-open *ngIf="eachSubjectData" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedCurriculum]="selectedCurriculum" [subjectId]="subjectId"></sdm-show-subjects-open>
+	<sdm-show-subjects-open *ngIf="eachSubjectData" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedCurriculum]="selectedCurriculum" [subjectId]="subjectId" [isGened]="isGened"></sdm-show-subjects-open>
 
 	<div *ngIf="eachSubjectData" class="flex h-28 w-full flex-col items-center justify-center gap-2 text-dark-100">
 		<div class="font-semibold">คะแนนรีวิวและรีวิว</div>
