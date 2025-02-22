@@ -26,6 +26,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	@Input() isSignIn: boolean = false;
 	@Input() isReviewCreator: boolean = false;
 	@Input() currentUser: User | null = null;
+	@Input() isLoadingReview: boolean = false;
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();

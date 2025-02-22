@@ -66,6 +66,7 @@
 				[isSignIn]="signedIn"
 				[isReviewCreator]="isReviewOwner(data.user_id)"
 				[currentUser]="currentUser"
+				[isLoadingReview]="isLoadingReview"
 				(confirmEditReview)="onConfirmEditReview()"
 				(deleteUserReview)="onDeleteUserReview()"
 				(isEditingReview)="onEditReview($event)"

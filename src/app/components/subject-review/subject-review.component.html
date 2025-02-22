@@ -1,4 +1,4 @@
-<ng-container *ngIf="isLoadingAllUsersLikedSubjectReviews; else showSubjectReviewComponent">
+<ng-container *ngIf="isLoadingAllUsersLikedSubjectReviews || isLoadingReview; else showSubjectReviewComponent">
 	<div class="flex animate-pulse flex-col gap-y-2">
 		<div class="h-32 w-full rounded-xl bg-primary-100"></div>
 	</div>
