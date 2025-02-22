@@ -4,7 +4,6 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
 import { SDMSelectComponent } from '@components/select/select.component';
-import { Curriculum } from '@models/Curriculum.model';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
 import { Program } from '@models/Program.model';
@@ -19,6 +18,7 @@ import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
+import { Curriculum } from './../../shared/models/Curriculum.model';
 import { classYearList, semesterList, subjects_added, yearsList } from './subject-page-data';
 
 @Component({
@@ -83,6 +83,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public selectedDays: string[] = [];
 	public ratingFilter: number | null = null;
 	public selectedCurriculumData: Curriculum | undefined;
+	public selectedCurriculumIdList: number[] = [];
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -223,7 +224,12 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public onReviewFilterValueChange(rating: number) {
 		this.ratingFilter = rating;
-		console.log('selectedRating :', this.ratingFilter);
+		this.updatePaginatedItems();
+	}
+
+	public onSelectedCurriculumIdChange(curriculumIdList: number[]) {
+		this.selectedCurriculumIdList = curriculumIdList;
+		console.log('selected cur lst from subject page:', this.selectedCurriculumIdList);
 		this.updatePaginatedItems();
 	}
 
