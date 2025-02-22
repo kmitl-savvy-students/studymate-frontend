@@ -105,9 +105,9 @@
 					<div *ngIf="selectedSemester === -1 || selectedSemester === undefined">โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedClassYear === '' || selectedClassYear === '-1' || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
 					<div *ngIf="selectedFaculty === -1 || selectedFaculty === undefined">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
-					<div *ngIf="(selectedDepartment === -1 || selectedDepartment === undefined) && selectedFaculty !== 0">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
-					<div *ngIf="(selectedProgram === -1 || selectedProgram === undefined) && selectedFaculty !== 0">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
-					<div *ngIf="(selectedCurriculum === -1 ||selectedCurriculum === undefined) && selectedFaculty !== 0">โปรดเลือกหลักสูตร เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedDepartment === -1 || selectedDepartment === undefined">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedProgram === -1 || selectedProgram === undefined ">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedCurriculum === -1 ||selectedCurriculum === undefined ">โปรดเลือกหลักสูตร เพื่อดูรายวิชา</div>
 				</div>
 			</div>
 		</ng-container>
