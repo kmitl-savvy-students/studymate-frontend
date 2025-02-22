@@ -19,6 +19,7 @@ export class SDMSubjectComponent {
 	@Input() selectedCurriculum: number = -1;
 	@Input() subjectId: string = '';
 	@Input() section: number = -1;
+	@Input() isGened: boolean = false;
 
 	constructor(private router: Router) {}
 
@@ -43,7 +44,7 @@ export class SDMSubjectComponent {
 			this.section !== -1 &&
 			this.section !== undefined
 		) {
-			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear + 543, this.selectedSemester, this.selectedCurriculum, this.section, this.subjectId]).toString();
+			latestSubjectDetailUrl = this.router.createUrlTree(['/subject/subject-detail', this.selectedYear + 543, this.selectedSemester, this.selectedCurriculum, this.section, this.subjectId, this.isGened.toString()]).toString();
 			return latestSubjectDetailUrl;
 		}
 		return undefined;
