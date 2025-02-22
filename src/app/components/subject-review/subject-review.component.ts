@@ -109,7 +109,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 
 	public deleteReviewData() {
 		if (this.currentUser) {
-			this.apiManagementService.DeleteUserReviewData(this.subjectReviewData.teachtable_subject.subject_id, this.currentUser.id).subscribe({
+			this.apiManagementService.DeleteUserReviewData(this.subjectReviewData.subject_id, this.currentUser.id).subscribe({
 				next: () => {
 					this.deleteUserReview.emit();
 					this.alertService.showAlert('success', 'ลบรีวิวสำเร็จ');
@@ -187,6 +187,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	}
 
 	public getSubjectDetailUrl(): string {
-		return this.router.serializeUrl(this.router.createUrlTree(['/subject/subject-detail', this.subjectReviewData.teachtable_subject.subject_id]));
+		return this.router.serializeUrl(this.router.createUrlTree(['/subject/subject-detail', this.subjectReviewData.subject_id]));
 	}
 }

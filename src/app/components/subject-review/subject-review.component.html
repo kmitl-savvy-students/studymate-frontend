@@ -10,17 +10,17 @@
 			<a *ngIf="isShowSubjectIdAndName" class="flex items-center gap-4 hover:text-main-100" [href]="getSubjectDetailUrl()" target="_blank">
 				<div class="flex items-center gap-4">
 					<div>
-						{{ subjectReviewData.teachtable_subject.subject_id }}
+						{{ subjectReviewData.subject_id }}
 					</div>
 					<div>{{ subjectReviewData.subject_name_en }}</div>
 				</div>
 				<div>
 					ปีการศึกษา
-					{{ subjectReviewData.teachtable_subject.teachtable.year }}
+					{{ subjectReviewData.teachtable.year }}
 				</div>
 				<div>
 					ภาคการศึกษาที่
-					{{ subjectReviewData.teachtable_subject.teachtable.term }}
+					{{ subjectReviewData.teachtable.term }}
 				</div>
 				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
 			</a>
@@ -28,11 +28,11 @@
 			<a class="flex items-center gap-4" *ngIf="!isShowSubjectIdAndName">
 				<div>
 					ปีการศึกษา
-					{{ subjectReviewData.teachtable_subject.teachtable.year }}
+					{{ subjectReviewData.teachtable.year }}
 				</div>
 				<div>
 					ภาคการศึกษาที่
-					{{ subjectReviewData.teachtable_subject.teachtable.term }}
+					{{ subjectReviewData.teachtable.term }}
 				</div>
 				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
 			</a>
@@ -72,13 +72,12 @@
 					<sdm-icon *ngIf="canDelete" icon="trash-can" iconStyle="fas" class="cursor-pointer text-base text-red-400" data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"></sdm-icon>
 				</div>
 			</div>
-		</ng-container></div
-></ng-template>
-
-<!-- Delete Review Modal -->
-<sdm-confirm-delete-modal
-	*ngIf="canDelete"
-	modalID="confirm-delete-modal"
-	text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?"
-	subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น"
-	[deleteFunction]="deleteReviewData.bind(this)"></sdm-confirm-delete-modal>
+		</ng-container>
+	</div>
+	<sdm-confirm-delete-modal
+		*ngIf="canDelete"
+		modalID="confirm-delete-modal"
+		text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?"
+		subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น"
+		[deleteFunction]="deleteReviewData.bind(this)"></sdm-confirm-delete-modal>
+</ng-template>

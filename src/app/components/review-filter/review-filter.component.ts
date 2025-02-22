@@ -270,6 +270,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
-		return data.filter((review) => review?.teachtable_subject?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
+		return data.filter((review) => review?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
 	}
 }
