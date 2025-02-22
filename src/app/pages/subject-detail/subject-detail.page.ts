@@ -250,4 +250,9 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			},
 		});
 	}
+
+	public handleReviewChange() {
+		this.getSubjectReviews();
+		this.getEachSubjectData();
+	}
 }

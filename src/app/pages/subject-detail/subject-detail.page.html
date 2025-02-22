@@ -8,10 +8,7 @@
 		<div class="flex items-center gap-x-1">
 			<sdm-rating mode="display" [rating]="eachSubjectData.rating" customClass="text-base text-dark-100"></sdm-rating>
 		</div>
-		<div>
-			<span>{{ eachSubjectData.rating }}</span><span> | </span>
-			<!-- <span>{{ eachSubjectData.count_of_review }}</span> --><span>{{ 0 }}</span> <span> รีวิว</span>
-		</div>
+		<div><span>{{ eachSubjectData.rating }}</span><span> | </span> <span>{{ eachSubjectData.review }}</span><span> รีวิว</span></div>
 	</div>
 
 	<sdm-write-review-box
@@ -26,7 +23,7 @@
 		[hasCompletedSubject]="hasCompletedSubject"
 		[completedSubjectDetails]="completedSubjectDetails"
 		[subjectId]="subjectId"
-		(reviewSuccess)="getSubjectReviews()">
+		(reviewSuccess)="handleReviewChange()">
 	</sdm-write-review-box>
 
 	<div class="grid w-full grid-cols-1 items-center gap-3">
@@ -38,7 +35,7 @@
 			[currentUser]="currentUser"
 			[prioritizeUserReview]="true"
 			[itemsPerPage]="5"
-			(confirmEditReview)="getSubjectReviews()"
-			(deleteUserReview)="getSubjectReviews()"></sdm-review-filter>
+			(confirmEditReview)="handleReviewChange()"
+			(deleteUserReview)="handleReviewChange()"></sdm-review-filter>
 	</div>
 </div>
