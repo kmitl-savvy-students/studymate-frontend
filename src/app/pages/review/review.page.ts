@@ -34,9 +34,9 @@ export class SDMPageReview {
 		});
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
+			this.getCurrentYearTermReview();
 		});
 		this.getSubjectReviews();
-		this.getCurrentYearTermReview();
 	}
 
 	ngAfterViewInit(): void {
@@ -72,23 +72,25 @@ export class SDMPageReview {
 	}
 
 	public getCurrentYearTermReview() {
-		this.apiManagementService.GetSubjectReviewsCurrentYearTerm().subscribe({
-			next: (res) => {
-				if (res) {
-					this.currentYearTermReviewData = res;
-				} else {
-					console.log('No currentReview Data Available.');
-				}
-			},
-			error: (error) => {
-				if (error.status === 404) {
-					console.error('Not found!!!!!!!');
-				} else if (error.status === 500) {
-					console.error('Internal Server Error');
-				} else {
-					console.error('An unexpected error occurred:', error.status);
-				}
-			},
-		});
+		if (this.currentUser) {
+			this.apiManagementService.GetSubjectReviewsCurrentYearTerm().subscribe({
+				next: (res) => {
+					if (res) {
+						this.currentYearTermReviewData = res;
+					} else {
+						console.log('No currentReview Data Available.');
+					}
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						console.error('Not found!!!!!!!');
+					} else if (error.status === 500) {
+						console.error('Internal Server Error');
+					} else {
+						console.error('An unexpected error occurred:', error.status);
+					}
+				},
+			});
+		}
 	}
 }

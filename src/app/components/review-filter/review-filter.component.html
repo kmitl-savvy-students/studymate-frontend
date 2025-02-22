@@ -73,7 +73,7 @@
 			[itemsPerPage]="itemsPerPage"
 			[currentPage]="currentPage"
 			[scrollTargetId]="isShowSearchBar ? '' : 'filter-bar'"></sdm-pagination>
-		><ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
+		<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
 			<sdm-subject-review
 				[isShowSubjectIdAndName]="isReviewPage"
 				[subjectReviewData]="data"

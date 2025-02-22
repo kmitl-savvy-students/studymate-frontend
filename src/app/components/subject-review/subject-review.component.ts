@@ -40,7 +40,10 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	public isLiked: boolean = false;
 	public isEditing: boolean = false;
 	public isAnimating: boolean = false;
-	// public isLoadingReview: boolean = false;
+
+	public allUsersLikedSubjectReviews: SubjectReviewData[] = [];
+	public currentUserLikedSubjectReviews: SubjectReviewData[] = [];
+	public isCurrentUserLiked: boolean = false;
 
 	public reviewContent: string = '';
 
@@ -72,10 +75,8 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 			return;
 		}
 
-		// เริ่ม animation
 		this.isAnimating = true;
 
-		// จบ animation หลัง 300ms (ตรงกับความยาว animation)
 		setTimeout(() => {
 			this.isAnimating = false;
 		}, 300);
@@ -110,6 +111,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 		if (this.currentUser) {
 			this.apiManagementService.DeleteUserReviewData(this.subjectReviewData.teachtable_subject.subject_id, this.currentUser.id).subscribe({
 				next: () => {
+					this.deleteUserReview.emit();
 					this.alertService.showAlert('success', 'ลบรีวิวสำเร็จ');
 				},
 				error: (err) => {
@@ -147,10 +149,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 		}
 	}
 
-	public allUsersLikedSubjectReviews: SubjectReviewData[] = [];
-	public currentUserLikedSubjectReviews: SubjectReviewData[] = [];
-	public isCurrentUserLiked: boolean = false;
-
 	public getAllUsersLikedSubjectReviews() {
 		if (this.currentUser && this.currentUser.id) {
 			this.apiManagementService.GetSubjectReviewLikeByAllUser(this.subjectReviewData.id).subscribe({
@@ -169,6 +167,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 					}
 				},
 				error: (err) => {
+					// ถ้าตุนแก้ API ให้ return [] มาในกรณี ไม่มีใครกด like เดี๋ยวมาลบ 404 ออก
 					// จัดการกรณี 404 - ไม่มีใครกด like
 					if (err.status === 404) {
 						this.allUsersLikedSubjectReviews = [];
