@@ -1,12 +1,13 @@
 <div class="flex flex-col rounded-[20px] border border-main-25 px-4 pb-4 text-dark-100 md:w-64 2xl:w-72">
 	<!-- Filter หมวดวิชา -->
 	<!-- <div class="h-4 w-1 rounded-xl align-middle" [style.background-color]="findParentNodeColor(child)"></div> -->
+
 	<div class="flex flex-col">
 		<sdm-base-accordion header="หมวดวิชา" accordionId="curriculum-filter-acc" [accordionDefaultStatus]="true">
 			<ng-container *ngIf="!selectedCurriculum; else showCurFilter">
 				<div class="flex h-72 w-full flex-col items-center justify-center gap-y-3 rounded-xl border border-main-10 text-center">
-					<sdm-icon icon="arrow-pointer" class="text-2xl text-main-10"></sdm-icon>
-					<div class="text-main-25">โปรดเลือกหลักสูตร เพื่อฟิลเตอร์รายวิชาในหมวดหมู่ต่างๆ</div>
+					<sdm-icon icon="arrow-pointer" class="text-2xl text-dark-75"></sdm-icon>
+					<div class="m-3 text-sm text-dark-75">โปรดเลือกหลักสูตร เพื่อฟิลเตอร์รายวิชาในหมวดหมู่ต่างๆ</div>
 				</div>
 			</ng-container>
 			<ng-template #showCurFilter>
@@ -19,6 +20,8 @@
 				<ng-template #showCurriculumFilter>
 					<div class="max-w-full overflow-y-hidden overflow-x-scroll">
 						<div class="w-max">
+							<!-- <h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ selectedCurriculum?.year }}</h3> -->
+							<!-- <h2 class="mb-2 text-sm font-semibold">{{ selectedCurriculum?.name_th }}</h2> -->
 							<ng-container
 								*ngTemplateOutlet="
 									renderGroup;
@@ -51,7 +54,7 @@
 														type="checkbox"
 														[disabled]="true"
 														[checked]="true"
-														class="check-box border-2 hover:cursor-not-allowed"
+														class="check-box h-5 w-5 border-2 hover:cursor-not-allowed"
 														[style.border-color]="findParentNodeColor(child)"
 														[style.color]="findParentNodeColor(child)" />
 												</ng-container>
@@ -59,7 +62,7 @@
 													<input
 														id="checkbox"
 														type="checkbox"
-														class="check-box border-2"
+														class="check-box h-5 w-5 border-2"
 														[checked]="isChecked(child.id)"
 														(change)="toggleCheckbox(child.id, child)"
 														[style.border-color]="findParentNodeColor(child)"
@@ -149,7 +152,7 @@
 				<div class="flex flex-col gap-y-2.5 px-2">
 					<ng-container *ngFor="let day of dayOption">
 						<div class="flex gap-x-3.5">
-							<input type="checkbox" class="check-box" [checked]="selectedDaysInput.includes(day)" (change)="toggleDay(day)" />
+							<input type="checkbox" class="check-box h-5 w-5" [checked]="selectedDaysInput.includes(day)" (change)="toggleDay(day)" />
 							<div class="text-sm">{{ day }}</div>
 						</div>
 					</ng-container>

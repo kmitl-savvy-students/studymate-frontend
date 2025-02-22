@@ -282,20 +282,26 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.updatePaginatedItems();
 	}
 
+	public onReviewFilterValueChange(rating: number) {
+		this.ratingFilter = rating;
+		console.log('selectedRating :', this.ratingFilter);
+		this.updatePaginatedItems();
+	}
+
 	public filterDay(data: SubjectCardData[]) {
 		if (this.selectedDays.length === 0) return data;
 		return data.filter((data) => this.selectedDays.includes(data.class_datetime[0]));
 	}
 
-	public onReviewFilterValueChange(rating: number) {
-		this.ratingFilter = rating;
-		console.log('selectedRating :', this.ratingFilter);
+	public filterReview(data: SubjectCardData[]) {
+		if (this.ratingFilter === null || this.ratingFilter === undefined) return data;
+		return data.filter((item) => item.rating >= this.ratingFilter! && item.rating < this.ratingFilter! + 1);
 	}
 
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
-		const dataToPaginate = this.filterDay(this.isSearched ? this.filteredSubjectCardDataList : this.subjectCardData);
+		const dataToPaginate = this.filterDay(this.filterReview(this.isSearched ? this.filteredSubjectCardDataList : this.subjectCardData));
 		this.paginatedItems = dataToPaginate.slice(start, end);
 		this.subjectCardTotal = dataToPaginate.length;
 	}
