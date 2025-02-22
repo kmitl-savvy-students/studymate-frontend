@@ -20,6 +20,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		const curriculumId = +route.params['curriculum'];
 		const section = +route.params['section'];
 		const subjectId = route.params['subjectId'];
+		const isGened = route.params['isGened'];
 
 		// Case 1: Direct subject access (without year/semester/program/section)
 		if ((isNaN(year) || year === -1) && (isNaN(semester) || semester === -1) && (isNaN(curriculumId) || curriculumId === -1) && (isNaN(section) || section === -1) && subjectId) {
@@ -28,7 +29,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 
 		// Case 2: Full path access (with all parameters)
 		if (subjectId && !isNaN(year) && !isNaN(semester) && !isNaN(curriculumId) && !isNaN(section)) {
-			return this.validateFullPathAccess(year, semester, curriculumId, section, subjectId);
+			return this.validateFullPathAccess(year, semester, curriculumId, section, subjectId, isGened);
 		}
 
 		// Invalid route parameters
@@ -52,7 +53,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		);
 	}
 
-	private validateFullPathAccess(year: number, semester: number, programId: number, section: number, subjectId: string): Observable<boolean> {
+	private validateFullPathAccess(year: number, semester: number, curriculumId: number, section: number, subjectId: string, isGened: string): Observable<boolean> {
 		// First validate basic parameters
 		if (!this.validateBasicParams(year, semester)) {
 			this.router.navigate(['/subject']);
@@ -60,7 +61,7 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		}
 
 		// Directly validate subject and section
-		return this.apiManagementService.GetSubjectsDataBySection(year - 543, semester, programId, subjectId, section.toString()).pipe(
+		return this.apiManagementService.GetSubjectsDataBySection(year - 543, semester, curriculumId, subjectId, section.toString(), isGened).pipe(
 			map((subject) => {
 				if (subject) {
 					return true;

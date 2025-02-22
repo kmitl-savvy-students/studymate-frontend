@@ -38,6 +38,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
+	@Output() createLikeReview = new EventEmitter<void>();
+	@Output() deleteLikeReview = new EventEmitter<void>();
 
 	public ratingList = ratingList;
 
@@ -69,8 +71,8 @@ export class SDMReviewFilterComponent implements OnChanges {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
 		}
-		if (changes['sidebarFilterRatingValue']) {
-			this.onSidebarRatingFilterChange(this.sidebarFilterRatingValue);
+		if (changes['isLoadingReview']) {
+			this.isLoadingReview = changes['isLoadingReview'].currentValue;
 		}
 	}
 
@@ -90,7 +92,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		let userReview = null;
 
 		if (this.prioritizeUserReview && !this.selectedPopular && !this.selectedLatest && this.selectedStarRatingValue === undefined && this.signedIn && this.currentUser) {
-			userReview = dataToFilter.find((item) => item.user_id === this.currentUser?.id);
+			userReview = dataToFilter.find((item) => item.user_id === Number(this.currentUser?.id));
 		}
 
 		if (this.selectedPopular) {
@@ -106,7 +108,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		}
 
 		if (userReview) {
-			this.filterItems = [userReview, ...this.filterItems.filter((item) => item.user_id !== this.currentUser?.id)];
+			this.filterItems = [userReview, ...this.filterItems.filter((item) => item.user_id !== Number(this.currentUser?.id))];
 		}
 		this.updatePaginatedItems();
 	}
@@ -124,7 +126,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		return paginationType;
 	}
 
-	public isReviewOwner(reviewUserId: string): boolean {
+	public isReviewOwner(reviewUserId: number): boolean {
 		if (this.signedIn && this.currentUser) {
 			return Number(reviewUserId) === Number(this.currentUser.id);
 		}
@@ -154,7 +156,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 				this.selectedLatest = false;
 				this.selectedPopular = false;
 				this.clearSelect();
-				this.selectedCurrentYearTerm = true;
 				break;
 			default:
 				break;
@@ -253,6 +254,14 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.deleteUserReview.emit();
 	}
 
+	public onCreateLikeReview() {
+		this.createLikeReview.emit();
+	}
+
+	public onDeleteLikeReview() {
+		this.deleteLikeReview.emit();
+	}
+
 	public getSearchedReviewsDataList(searchedReviewDataList: SubjectReviewData[]) {
 		this.searchedReviewDataList = searchedReviewDataList;
 		this.isSearched = true;
@@ -261,6 +270,6 @@ export class SDMReviewFilterComponent implements OnChanges {
 	}
 
 	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
-		return data.filter((review) => review?.teachtable_subject?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
+		return data.filter((review) => review?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
 	}
 }

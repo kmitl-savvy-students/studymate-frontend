@@ -91,19 +91,19 @@ export class APIManagementService {
 	}
 
 	// get รายวิชาในหน้า subject ใหม่
-	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, curriculumId: number): Observable<SubjectCardData[]> {
+	GetSubjectsDataInSubjectPage(year: number, semester: number, classYear: string, curriculumId: number, is_gened: string): Observable<SubjectCardData[]> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-class`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('curriculumId', curriculumId);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('year', classYear).set('curriculumId', curriculumId).set('is_gened', is_gened);
 
 		return this.http.get<SubjectCardData[]>(apiUrl, { params });
 	}
 
 	// get ข้อมูลรายวิชานั้นๆทั้งหมดในหน้า subject-detail ใหม่
-	GetSubjectsDataBySection(year: number, semester: number, curriculumId: number, subjectId: string, section: string): Observable<SubjectCardData> {
+	GetSubjectsDataBySection(year: number, semester: number, curriculumId: number, subjectId: string, section: string, is_gened: string): Observable<SubjectCardData> {
 		const apiUrl = `${environment.backendUrl}/api/subject-class/get-by-subject-id`;
 
-		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculumId', curriculumId).set('subjectId', subjectId).set('section', section);
+		const params = new HttpParams().set('academic_year', year).set('academic_term', semester).set('curriculumId', curriculumId).set('subjectId', subjectId).set('section', section).set('is_gened ,', is_gened);
 
 		return this.http.get<SubjectCardData>(apiUrl, { params });
 	}
@@ -125,26 +125,38 @@ export class APIManagementService {
 	}
 
 	GetAllSubjectReviews(): Observable<SubjectReviewData[]> {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review`;
+		const apiUrl = `${environment.backendUrl}/api/subject-review`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
-	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}`;
+	CreateSubjectReviewLike(review_id: number) {
+		const apiUrl = `${environment.backendUrl}/api/subject-review-like`;
+
+		return this.http.post(apiUrl, { teachtable_subject_review_id: review_id });
+	}
+
+	DeleteSubjectReviewLike(teachtableSubjectReviewId: number) {
+		const apiUrl = `${environment.backendUrl}/api/subject-review-like/${teachtableSubjectReviewId}`;
+
+		return this.http.delete(apiUrl);
+	}
+
+	GetSubjectReviewLikeByAllUser(teachtableSubjectReviewId: number): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/subject-review-like/${teachtableSubjectReviewId}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
 	// รอตูนแก้ก่อน แล้วมาแก้อีกที
 	GetSubjectReviewsCurrentYearTerm(): Observable<SubjectReviewData[]> {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/current`;
+		const apiUrl = `${environment.backendUrl}/api/subject-review/current`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
 	CreateSubjectReviewByUser(student_id: string, year: number, term: number, subject_id: string, review: string, rating: number) {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review`;
+		const apiUrl = `${environment.backendUrl}/api/subject-review`;
 		return this.http.post(apiUrl, {
 			student_id: student_id,
 			year: year,
@@ -156,12 +168,18 @@ export class APIManagementService {
 	}
 
 	UpdateSubjectReviewByUser(student_id: string, subject_id: string, review: string) {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/update`;
+		const apiUrl = `${environment.backendUrl}/api/subject-review/update`;
 		return this.http.patch(apiUrl, {
 			student_id: student_id,
 			subject_id: subject_id,
 			review: review,
 		});
+	}
+
+	GetSubjectReviewsBySubjectID(subjectId: string): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/subject-review/${subjectId}`;
+
+		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
 	GetCurriculumSubjectByUniqueIdYear(subjectId: string, uniqueId: string, year: string) {
@@ -231,7 +249,7 @@ export class APIManagementService {
 	}
 
 	DeleteUserReviewData(subjectId: string, studentId: string) {
-		const apiUrl = `${environment.backendUrl}/api/teachtable-subject-review/${subjectId}/${studentId}`;
+		const apiUrl = `${environment.backendUrl}/api/subject-review/${subjectId}/${studentId}`;
 		return this.http.delete(apiUrl);
 	}
 

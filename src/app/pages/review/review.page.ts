@@ -1,4 +1,4 @@
-import { Component, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 import { SDMfilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
@@ -18,21 +18,15 @@ export class SDMPageReview {
 	public reviewData: SubjectReviewData[] = [];
 	public currentYearTermReviewData: SubjectReviewData[] = [];
 
-	public isLoadingReview: boolean = false;
-
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
+
+	public isLoadingReview: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
 		private authService: AuthenticationService,
 	) {}
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['isLoadingReview']) {
-			console.log('Loading:', changes['isLoading'].currentValue);
-		}
-	}
 
 	ngOnInit(): void {
 		this.authService.signedIn$.subscribe((signedIn) => {
@@ -40,9 +34,9 @@ export class SDMPageReview {
 		});
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
+			this.getCurrentYearTermReview();
 		});
 		this.getSubjectReviews();
-		this.getCurrentYearTermReview();
 	}
 
 	ngAfterViewInit(): void {
@@ -78,25 +72,25 @@ export class SDMPageReview {
 	}
 
 	public getCurrentYearTermReview() {
-		this.apiManagementService.GetSubjectReviewsCurrentYearTerm().subscribe({
-			next: (res) => {
-				if (res) {
-					this.currentYearTermReviewData = res;
-				} else {
-					console.log('No currentReview Data Available.');
-				}
-				this.isLoadingReview = false;
-			},
-			error: (error) => {
-				if (error.status === 404) {
-					console.error('Not found!!!!!!!');
-				} else if (error.status === 500) {
-					console.error('Internal Server Error');
-				} else {
-					console.error('An unexpected error occurred:', error.status);
-				}
-				this.isLoadingReview = false;
-			},
-		});
+		if (this.currentUser) {
+			this.apiManagementService.GetSubjectReviewsCurrentYearTerm().subscribe({
+				next: (res) => {
+					if (res) {
+						this.currentYearTermReviewData = res;
+					} else {
+						console.log('No currentReview Data Available.');
+					}
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						console.error('Not found!!!!!!!');
+					} else if (error.status === 500) {
+						console.error('Internal Server Error');
+					} else {
+						console.error('An unexpected error occurred:', error.status);
+					}
+				},
+			});
+		}
 	}
 }
