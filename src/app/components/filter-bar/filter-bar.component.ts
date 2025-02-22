@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Transcript } from '@models/Transcript.model.js';
 import { User } from '@models/User.model.js';
-import { APIManagementService } from '@services/api-management.service.js';
-import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { SDMBaseAccordion } from '../accordion/base-accordion.component';
 import { IconComponent } from '../icon/icon.component';
 import { SDMLoadingSkeletonComponent } from '../loading-skeleton/loading-skeleton.component';
@@ -23,7 +21,8 @@ export class SDMfilterBarComponent implements OnInit {
 	@Input() selectedCurriculum: Curriculum | undefined;
 	@Input() isLoading: boolean = false;
 	@Output() selectedDays = new EventEmitter<string[]>();
-	@Output() ratingFilter = new EventEmitter<number>();
+	@Output() selectedRating = new EventEmitter<number>();
+	@Output() selectedCurriculumId = new EventEmitter<number[]>();
 
 	public isLoadingTranscript: boolean = false;
 	public currentUser: User | null = null;
@@ -33,35 +32,21 @@ export class SDMfilterBarComponent implements OnInit {
 	public openAccordions: Set<number> = new Set<number>();
 	public accordionLevelExpands: number = 2;
 	public rootNode: CurriculumGroup | undefined = undefined;
-	public ratingOption: number[] = Array.from({ length: 6 }, (_, i) => i);
+	public ratingOption: number[] = Array.from({ length: 6 }, (_, i) => i).reverse();
 	public dayOption: string[] = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
 	public selectedDaysInput: string[] = [];
-	public selectedRating: number | null = null;
+	public selectedRatingInput: number | null = null;
 
 	public curriculumGroupIsChecked: Record<number, boolean> = {};
 	public lastCheckId: number | null = null;
 	public curriculumIdList: number[] = [];
 
-	constructor(
-		private apiManagementService: APIManagementService,
-		private authService: AuthenticationService,
-	) {}
+	constructor() {}
 
-	ngOnInit(): void {
-		// this.authService.user$.subscribe((user) => {
-		// 	this.currentUser = user;
-		// 	console.log('cur user :', this.currentUser);
-		// 	if (this.currentUser?.curriculum?.curriculum_group) {
-		// 		this.openAccordions.add(this.currentUser.curriculum.curriculum_group.id);
-		// 		this.expandAccordions(this.currentUser.curriculum.curriculum_group, this.accordionLevelExpands - 1);
-		// 	}
-		// 	// this.fetchTranscripts();
-		// });
-	}
+	ngOnInit(): void {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['selectedCurriculum']) {
-			console.log('selectedCurriculum: ', changes['selectedCurriculum'].currentValue);
 			this.curriculum = changes['selectedCurriculum'].currentValue;
 			this.rootNode = this.curriculum?.curriculum_group ?? undefined;
 			this.curriculumGroup = this.curriculum?.curriculum_group?.children;
@@ -89,7 +74,7 @@ export class SDMfilterBarComponent implements OnInit {
 		this.lastCheckId = curriculumId;
 
 		this.getChildIdWithSubject(curriculumGroup);
-		console.log('cur list:', this.curriculumIdList);
+		this.selectedCurriculumId.emit(this.curriculumIdList);
 
 		this.findChildNodeCheckbox(curriculumGroup, true);
 	}
@@ -102,7 +87,6 @@ export class SDMfilterBarComponent implements OnInit {
 
 	findChildNodeCheckbox(curriculumGroup: CurriculumGroup, status: boolean) {
 		if (!curriculumGroup) return;
-		// console.log('cur group id:', curriculumGroup.id, this.curriculumGroupIsChecked[curriculumGroup.id]);
 		this.curriculumGroupIsChecked[curriculumGroup.id] = status;
 		if (curriculumGroup.children) {
 			for (const child of curriculumGroup.children) {
@@ -130,25 +114,13 @@ export class SDMfilterBarComponent implements OnInit {
 		}
 	}
 
-	//listOfId = []
-
-	//getChildIdWithSubject(node:CurriculumGroup){
-	// node.subject.length != 0
-	// return node.id
-	// let lst = []
-	// foreach(child of node.chidren)
-	// lst.push(getChildIdWithSubject(child))
-	// }
-
-	// return lst
-
 	isChecked(curriculumId: number): boolean {
 		return this.curriculumGroupIsChecked[curriculumId] || false;
 	}
 
 	onClickReviewFilter(rating: number) {
-		this.selectedRating = this.selectedRating === rating ? null : rating;
-		this.ratingFilter.emit(this.selectedRating!);
+		this.selectedRatingInput = this.selectedRatingInput === rating ? null : rating;
+		this.selectedRating.emit(this.selectedRatingInput!);
 	}
 
 	toggleDay(day: string) {
@@ -207,22 +179,4 @@ export class SDMfilterBarComponent implements OnInit {
 	isAccordionOpen(groupId: number): boolean {
 		return this.openAccordions.has(groupId);
 	}
-
-	// fetchTranscripts() {
-	// 	if (!this.currentUser) return;
-	// 	this.isLoadingTranscript = true;
-	// 	this.apiManagementService.FetchTranscript(this.currentUser.id).subscribe({
-	// 		next: (data) => {
-	// 			this.transcript = data;
-	// 			this.rootNode = data.user!.curriculum.curriculum_group;
-	// 			this.curriculumGroup = data.user!.curriculum.curriculum_group?.children;
-	// 			this.isLoadingTranscript = false;
-	// 			// console.log('filter data:', this.transcript);
-	// 			// console.log('curriculum data:', this.curriculumGroup);
-	// 		},
-	// 		error: (error) => {
-	// 			console.error('Error fetching transcript:', error);
-	// 		},
-	// 	});
-	// }
 }

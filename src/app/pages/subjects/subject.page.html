@@ -1,5 +1,11 @@
 <div class="flex w-full gap-x-5">
-	<sdm-filter-bar [selectedCurriculum]="selectedCurriculumData" [isLoading]="isLoading" (selectedDays)="onSelectedDaysChange($event)" (ratingFilter)="onReviewFilterValueChange($event)" class="flex-none"></sdm-filter-bar>
+	<sdm-filter-bar
+		[selectedCurriculum]="selectedCurriculumData"
+		[isLoading]="isLoading"
+		(selectedDays)="onSelectedDaysChange($event)"
+		(selectedRating)="onReviewFilterValueChange($event)"
+		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		class="flex-none"></sdm-filter-bar>
 	<div class="flex w-full flex-col">
 		<div class="flex w-full flex-col">
 			<div class="grid w-full flex-none grid-cols-1 gap-3">

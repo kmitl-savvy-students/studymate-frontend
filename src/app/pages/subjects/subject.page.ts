@@ -4,7 +4,6 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
 import { SDMSelectComponent } from '@components/select/select.component';
-import { Curriculum } from '@models/Curriculum.model';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
 import { Program } from '@models/Program.model';
@@ -19,6 +18,7 @@ import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
+import { Curriculum } from './../../shared/models/Curriculum.model';
 import { classYearList, semesterList, subjects_added, yearsList } from './subject-page-data';
 
 @Component({
@@ -83,6 +83,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public selectedDays: string[] = [];
 	public ratingFilter: number | null = null;
 	public selectedCurriculumData: Curriculum | undefined;
+	public selectedCurriculumIdList: number[] = [];
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -129,66 +130,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 							return of(null);
 						}),
 					);
-
-					// if (
-					// 	this.selectedYear !== -1 &&
-					// 	this.selectedYear !== undefined &&
-					// 	this.selectedSemester !== -1 &&
-					// 	this.selectedSemester !== undefined &&
-					// 	this.selectedClassYear !== '' &&
-					// 	this.selectedClassYear !== '-1' &&
-					// 	this.selectedClassYear !== undefined &&
-					// 	this.selectedFaculty === 0 &&
-					// 	isNaN(this.selectedDepartment) &&
-					// 	isNaN(this.selectedProgram) &&
-					// 	this.selectedCurriculum === 0
-					// ) {
-					// 	this.isGened = true;
-					// } else if (
-					// 	this.selectedYear !== -1 &&
-					// 	this.selectedYear !== undefined &&
-					// 	this.selectedSemester !== -1 &&
-					// 	this.selectedSemester !== undefined &&
-					// 	this.selectedClassYear !== '' &&
-					// 	this.selectedClassYear !== '-1' &&
-					// 	this.selectedClassYear !== undefined &&
-					// 	this.selectedFaculty !== -1 &&
-					// 	this.selectedFaculty !== 0 &&
-					// 	this.selectedFaculty !== undefined &&
-					// 	this.selectedDepartment !== -1 &&
-					// 	this.selectedDepartment !== undefined &&
-					// 	this.selectedProgram !== -1 &&
-					// 	this.selectedProgram !== undefined &&
-					// 	this.selectedCurriculum !== -1 &&
-					// 	this.selectedCurriculum !== undefined
-					// ) {
-					// 	this.isGened = false;
-					// }
-
-					// if (!this.isGened) {
-					// 	return this.getDropdownFacultyAsObservable().pipe(
-					// 		concatMap(() => {
-					// 			if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {
-					// 				return this.getDropdownDepartmentsAsObservable(this.selectedFaculty);
-					// 			}
-					// 			return of(null);
-					// 		}),
-					// 		concatMap(() => {
-					// 			if (this.selectedDepartment !== -1 && this.selectedDepartment !== undefined) {
-					// 				return this.getDropdownProgramsAsObservable(this.selectedDepartment);
-					// 			}
-					// 			return of(null);
-					// 		}),
-					// 		concatMap(() => {
-					// 			if (this.selectedProgram !== -1 && this.selectedProgram !== undefined) {
-					// 				return this.getDropdownCurriculumsAsObservable(this.selectedProgram);
-					// 			}
-					// 			return of(null);
-					// 		}),
-					// 	);
-					// } else {
-					// 	return this.getDropdownFacultyAsObservable();
-					// }
 				}),
 			)
 			.subscribe(() => {
@@ -284,7 +225,12 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public onReviewFilterValueChange(rating: number) {
 		this.ratingFilter = rating;
-		console.log('selectedRating :', this.ratingFilter);
+		this.updatePaginatedItems();
+	}
+
+	public onSelectedCurriculumIdChange(curriculumIdList: number[]) {
+		this.selectedCurriculumIdList = curriculumIdList;
+		console.log('selected cur lst from subject page:', this.selectedCurriculumIdList);
 		this.updatePaginatedItems();
 	}
 
