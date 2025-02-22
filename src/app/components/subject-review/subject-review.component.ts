@@ -163,7 +163,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 							return;
 						}
 
-						this.currentUserLikedSubjectReviews = this.allUsersLikedSubjectReviews.filter((review) => review.user_id === this.currentUser?.id.toString());
+						this.currentUserLikedSubjectReviews = this.allUsersLikedSubjectReviews.filter((review) => review.user_id === Number(this.currentUser?.id));
 
 						this.isCurrentUserLiked = this.currentUserLikedSubjectReviews.length > 0;
 						this.isLoadingAllUsersLikedSubjectReviews = false;
