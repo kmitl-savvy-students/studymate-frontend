@@ -41,6 +41,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public selectedCurriculum: number = -1;
 	public subjectId: string = '';
 	public section: number = -1;
+	public isGened: boolean = false;
 
 	public avgReviewRating: number = 4;
 	public reviewCount: number = 30;
@@ -179,7 +180,7 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	}
 
 	public getEachSubjectData() {
-		this.apiManagementService.GetSubjectsDataBySection(this.selectedYear - 543, this.selectedSemester, this.selectedCurriculum, this.subjectId, this.section.toString()).subscribe({
+		this.apiManagementService.GetSubjectsDataBySection(this.selectedYear - 543, this.selectedSemester, this.selectedCurriculum, this.subjectId, this.section.toString(), this.isGened.toString()).subscribe({
 			next: (res) => {
 				if (res) {
 					this.eachSubjectData = res;

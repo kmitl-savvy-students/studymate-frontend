@@ -16,6 +16,7 @@ export class SubjectCardData {
 		public midterm_datetime: string[],
 		public final_datetime: string[],
 		public rating: number,
+		public review: number,
 		public session_type: string,
 		public rule: string | null,
 		public remark: string | null,
