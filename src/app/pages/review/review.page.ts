@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { initFlowbite } from 'flowbite';
-import { SDMfilterBarComponent } from '../../components/filter-bar/filter-bar.component';
 import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
 import { paginationType } from '../../shared/models/SdmAppService.model';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
@@ -11,7 +10,7 @@ import { AuthenticationService } from '../../shared/services/authentication/auth
 @Component({
 	selector: 'sdm-page-subject-detail',
 	standalone: true,
-	imports: [SDMReviewFilterComponent, SDMfilterBarComponent],
+	imports: [SDMReviewFilterComponent],
 	templateUrl: './review.page.html',
 })
 export class SDMPageReview {

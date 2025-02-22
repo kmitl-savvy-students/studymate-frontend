@@ -25,12 +25,11 @@ export const routes: Routes = [
 
 	// #region New Subject Detail
 	{ path: 'subject/subject-detail/:subjectId', component: SDMPageSubjectDetail, canActivate: [SubjectDetailValidationGuard] },
-	{ path: 'subject/subject-detail/:year/:semester/:curriculum/:section/:subjectId', component: SDMPageSubjectDetail, canActivate: [SubjectDetailValidationGuard] },
+	{ path: 'subject/subject-detail/:year/:semester/:curriculum/:section/:subjectId/:isGened', component: SDMPageSubjectDetail, canActivate: [SubjectDetailValidationGuard] },
 	// #endregion
 
 	// #region Old Subjects
 	{ path: 'subject', component: SDMPageSubject },
-	// { path: 'subject/:year/:semester/:classYear/:faculty/:curriculum/', component: SDMPageSubject, canActivate: [SubjectValidationGuard] },
 	{ path: 'subject/:year/:semester/:classYear/:faculty/:department/:program/:curriculum/:isGened', component: SDMPageSubject, canActivate: [SubjectValidationGuard] },
 	// #endregion
 

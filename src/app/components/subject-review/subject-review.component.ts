@@ -151,8 +151,8 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 	}
 
 	public getAllUsersLikedSubjectReviews() {
-		this.isLoadingAllUsersLikedSubjectReviews = true;
 		if (this.currentUser && this.currentUser.id) {
+			this.isLoadingAllUsersLikedSubjectReviews = true;
 			this.apiManagementService.GetSubjectReviewLikeByAllUser(this.subjectReviewData.id).subscribe({
 				next: (res) => {
 					if (res) {
@@ -160,6 +160,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 
 						if (!this.currentUser?.id) {
 							console.warn('currentUser.id is undefined or null');
+							this.isLoadingAllUsersLikedSubjectReviews = false;
 							return;
 						}
 
@@ -171,7 +172,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 				},
 				error: (err) => {
 					console.error('Error fetching review likes:', err);
-
 					this.isLoadingAllUsersLikedSubjectReviews = false;
 				},
 			});
