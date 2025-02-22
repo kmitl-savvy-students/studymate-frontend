@@ -170,17 +170,8 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 					}
 				},
 				error: (err) => {
-					// ถ้าตุนแก้ API ให้ return [] มาในกรณี ไม่มีใครกด like เดี๋ยวมาลบ 404 ออก
-					// จัดการกรณี 404 - ไม่มีใครกด like
-					if (err.status === 404) {
-						this.allUsersLikedSubjectReviews = [];
-						this.currentUserLikedSubjectReviews = [];
-						this.isCurrentUserLiked = false;
-						// ไม่ต้อง log error เพราะเป็นกรณีปกติ
-					} else {
-						// log error กรณีอื่นๆ ที่ไม่ใช่ 404
-						console.error('Error fetching review likes:', err);
-					}
+					console.error('Error fetching review likes:', err);
+
 					this.isLoadingAllUsersLikedSubjectReviews = false;
 				},
 			});
