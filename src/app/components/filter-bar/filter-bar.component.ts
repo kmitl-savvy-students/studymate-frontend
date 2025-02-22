@@ -33,10 +33,14 @@ export class SDMfilterBarComponent implements OnInit {
 	public openAccordions: Set<number> = new Set<number>();
 	public accordionLevelExpands: number = 2;
 	public rootNode: CurriculumGroup | undefined = undefined;
-	public ratingOption: number[] = Array.from({ length: 5 }, (_, i) => i + 1);
+	public ratingOption: number[] = Array.from({ length: 6 }, (_, i) => i);
 	public dayOption: string[] = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
 	public selectedDaysInput: string[] = [];
 	public selectedRating: number | null = null;
+
+	public curriculumGroupIsChecked: Record<number, boolean> = {};
+	public lastCheckId: number | null = null;
+	public curriculumIdList: number[] = [];
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -67,11 +71,79 @@ export class SDMfilterBarComponent implements OnInit {
 			}
 		}
 		if (changes['isLoading']) {
-			// setTimeout(() => {
-			// 	this.isLoadingTranscript = changes['isLoading'].currentValue;
-			// }, 300);
 			this.isLoadingTranscript = changes['isLoading'].currentValue;
 		}
+	}
+
+	toggleCheckbox(curriculumId: number, curriculumGroup: CurriculumGroup) {
+		console.log('id :', curriculumId);
+
+		this.findChildNodeCheckbox(this.rootNode!, false);
+
+		if (this.lastCheckId === curriculumId) {
+			console.log('clear checkbox !!!');
+			this.lastCheckId = null;
+			return;
+		}
+
+		this.lastCheckId = curriculumId;
+
+		this.getChildIdWithSubject(curriculumGroup);
+		console.log('cur list:', this.curriculumIdList);
+
+		this.findChildNodeCheckbox(curriculumGroup, true);
+	}
+
+	setCheckboxForSubjects(status: boolean) {
+		for (const id of this.curriculumIdList) {
+			this.curriculumGroupIsChecked[id] = status;
+		}
+	}
+
+	findChildNodeCheckbox(curriculumGroup: CurriculumGroup, status: boolean) {
+		if (!curriculumGroup) return;
+		// console.log('cur group id:', curriculumGroup.id, this.curriculumGroupIsChecked[curriculumGroup.id]);
+		this.curriculumGroupIsChecked[curriculumGroup.id] = status;
+		if (curriculumGroup.children) {
+			for (const child of curriculumGroup.children) {
+				this.findChildNodeCheckbox(child, status);
+			}
+		}
+	}
+
+	getChildIdWithSubject(curriculumGroup: CurriculumGroup) {
+		this.curriculumIdList = [];
+		this.collectChildIdWithSubject(curriculumGroup);
+	}
+
+	private collectChildIdWithSubject(curriculumGroup: CurriculumGroup) {
+		if (!curriculumGroup) return;
+
+		if (curriculumGroup.subjects && curriculumGroup.subjects.length !== 0) {
+			this.curriculumIdList.push(curriculumGroup.id);
+		}
+
+		if (curriculumGroup.children) {
+			for (const child of curriculumGroup.children) {
+				this.collectChildIdWithSubject(child);
+			}
+		}
+	}
+
+	//listOfId = []
+
+	//getChildIdWithSubject(node:CurriculumGroup){
+	// node.subject.length != 0
+	// return node.id
+	// let lst = []
+	// foreach(child of node.chidren)
+	// lst.push(getChildIdWithSubject(child))
+	// }
+
+	// return lst
+
+	isChecked(curriculumId: number): boolean {
+		return this.curriculumGroupIsChecked[curriculumId] || false;
 	}
 
 	onClickReviewFilter(rating: number) {

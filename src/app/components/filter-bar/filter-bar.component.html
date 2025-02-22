@@ -1,4 +1,4 @@
-<div class="text-dark-100 flex flex-col rounded-[20px] border border-main-25 px-4 pb-4 md:w-64 2xl:w-72">
+<div class="flex flex-col rounded-[20px] border border-main-25 px-4 pb-4 text-dark-100 md:w-64 2xl:w-72">
 	<!-- Filter หมวดวิชา -->
 	<!-- <div class="h-4 w-1 rounded-xl align-middle" [style.background-color]="findParentNodeColor(child)"></div> -->
 	<div class="flex flex-col">
@@ -45,7 +45,26 @@
 												<ng-template #showDefault>
 													<sdm-icon icon="caret-right" class=""></sdm-icon>
 												</ng-template>
-												<input id="checkbox" type="checkbox" class="check-box border-2" [style.border-color]="findParentNodeColor(child)" [style.color]="findParentNodeColor(child)" />
+												<ng-container *ngIf="child.type === 'FREE'; else canCheck">
+													<input
+														id="checkbox"
+														type="checkbox"
+														[disabled]="true"
+														[checked]="true"
+														class="check-box border-2 hover:cursor-not-allowed"
+														[style.border-color]="findParentNodeColor(child)"
+														[style.color]="findParentNodeColor(child)" />
+												</ng-container>
+												<ng-template #canCheck>
+													<input
+														id="checkbox"
+														type="checkbox"
+														class="check-box border-2"
+														[checked]="isChecked(child.id)"
+														(change)="toggleCheckbox(child.id, child)"
+														[style.border-color]="findParentNodeColor(child)"
+														[style.color]="findParentNodeColor(child)" />
+												</ng-template>
 												<div class="col-span-2 -mb-1 text-sm">
 													{{ child.name }}
 												</div>
@@ -106,7 +125,7 @@
 									'hover:bg-gray-100': selectedRating !== rating,
 								}">
 								<sdm-rating mode="display" [rating]="rating" customClass="text-base text-primary-300"></sdm-rating>
-								<ng-container *ngIf="rating != 5">
+								<ng-container *ngIf="rating != 5 && rating != 0">
 									<span class="pl-1"> ขึ้นไป</span>
 								</ng-container>
 							</button>
