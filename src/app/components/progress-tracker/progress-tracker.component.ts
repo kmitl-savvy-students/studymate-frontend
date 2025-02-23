@@ -1,5 +1,3 @@
-// progress-tracker.component.ts
-
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';

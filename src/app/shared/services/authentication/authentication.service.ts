@@ -35,6 +35,10 @@ export class AuthenticationService {
 		return this.userSubject.value;
 	}
 
+	public setUser(user: User | null): void {
+		if (user != null) this.userSubject.next(user);
+	}
+
 	async handleGoogleCallback(authCode: string, redirectUri: 'sign-in' | 'sign-up'): Promise<UserToken> {
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/google/callback`;
 		return lastValueFrom(
