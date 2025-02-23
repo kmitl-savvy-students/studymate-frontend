@@ -92,7 +92,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		let userReview = null;
 
 		if (this.prioritizeUserReview && !this.selectedPopular && !this.selectedLatest && this.selectedStarRatingValue === undefined && this.signedIn && this.currentUser) {
-			userReview = dataToFilter.find((item) => item.user_id === this.currentUser?.id);
+			userReview = dataToFilter.find((item) => item.user_id === Number(this.currentUser?.id));
 		}
 
 		if (this.selectedPopular) {
@@ -108,7 +108,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		}
 
 		if (userReview) {
-			this.filterItems = [userReview, ...this.filterItems.filter((item) => item.user_id !== this.currentUser?.id)];
+			this.filterItems = [userReview, ...this.filterItems.filter((item) => item.user_id !== Number(this.currentUser?.id))];
 		}
 		this.updatePaginatedItems();
 	}
@@ -126,7 +126,7 @@ export class SDMReviewFilterComponent implements OnChanges {
 		return paginationType;
 	}
 
-	public isReviewOwner(reviewUserId: string): boolean {
+	public isReviewOwner(reviewUserId: number): boolean {
 		if (this.signedIn && this.currentUser) {
 			return Number(reviewUserId) === Number(this.currentUser.id);
 		}

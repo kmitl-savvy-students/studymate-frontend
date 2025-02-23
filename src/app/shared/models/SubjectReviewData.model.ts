@@ -3,7 +3,7 @@ export class SubjectReviewData {
 		public id: number,
 		public teachtable: Teachtable,
 		public subject_id: string,
-		public user_id: string,
+		public user_id: number,
 		public review: string,
 		public rating: number,
 		public like: number,
