@@ -117,7 +117,11 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
-
+					if (this.isGened === '0') {
+						this.isShowGened = false;
+					} else if (this.isGened === '1') {
+						this.isShowGened = true;
+					}
 					return this.getDropdownFacultyAsObservable().pipe(
 						concatMap(() => {
 							if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {

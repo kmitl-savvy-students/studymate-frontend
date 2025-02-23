@@ -3,12 +3,17 @@
 
 	<sdm-show-subjects-open *ngIf="eachSubjectData" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedCurriculum]="selectedCurriculum" [subjectId]="subjectId" [isGened]="isGened"></sdm-show-subjects-open>
 
-	<div *ngIf="eachSubjectData" class="flex h-28 w-full flex-col items-center justify-center gap-2 text-dark-100">
+	<div *ngIf="displayData" class="flex h-28 w-full flex-col items-center justify-center gap-2 text-dark-100">
 		<div class="font-semibold">คะแนนรีวิวและรีวิว</div>
 		<div class="flex items-center gap-x-1">
-			<sdm-rating mode="display" [rating]="eachSubjectData.rating" customClass="text-base text-dark-100"></sdm-rating>
+			<sdm-rating mode="display" [rating]="displayData.rating" customClass="text-base text-dark-100"> </sdm-rating>
 		</div>
-		<div><span>{{ eachSubjectData.rating }}</span><span> | </span> <span>{{ eachSubjectData.review }}</span><span> รีวิว</span></div>
+		<div>
+			<span>{{ displayData.rating }}</span>
+			<span> | </span>
+			<span>{{ displayData.review }}</span>
+			<span> รีวิว</span>
+		</div>
 	</div>
 
 	<sdm-write-review-box
