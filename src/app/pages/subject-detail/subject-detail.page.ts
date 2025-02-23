@@ -4,7 +4,6 @@ import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from '@models/Subject.model';
 import { Transcript } from '@models/Transcript.model';
-import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { initFlowbite } from 'flowbite';
@@ -61,7 +60,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		private authService: AuthenticationService,
 		private http: HttpClient,
 		private backendService: BackendService,
-		private alertService: AlertService,
 		private loadingService: LoadingService,
 	) {}
 
@@ -100,7 +98,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				this.getSubjectReviews();
 			});
 		});
-		console.log('currentUser in ngOnInIt : ', this.currentUser);
 	}
 
 	ngAfterViewInit(): void {
@@ -181,6 +178,19 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 		return paginationType;
 	}
 
+	get displayData() {
+		return this.eachSubjectData || this.subjectData;
+	}
+
+	public handleReviewChange() {
+		this.getSubjectReviews();
+		if (this.eachSubjectData) {
+			this.getEachSubjectData();
+		} else if (this.subjectData) {
+			this.getSubjectsDataBySubjectId();
+		}
+	}
+
 	public getEachSubjectData() {
 		this.apiManagementService.GetSubjectsDataBySection(this.selectedYear - 543, this.selectedSemester, this.selectedCurriculum, this.subjectId, this.section.toString(), this.isGened.toString()).subscribe({
 			next: (res) => {
@@ -249,10 +259,5 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 				this.isLoadingReview = false;
 			},
 		});
-	}
-
-	public handleReviewChange() {
-		this.getSubjectReviews();
-		this.getEachSubjectData();
 	}
 }

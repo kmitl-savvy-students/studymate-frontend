@@ -5,5 +5,7 @@ export class Subject {
 		public name_en: string,
 		public credit: number,
 		public detail: string,
+		public rating: number,
+		public review: number,
 	) {}
 }
