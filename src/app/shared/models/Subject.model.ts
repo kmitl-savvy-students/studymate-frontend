@@ -7,3 +7,17 @@ export class Subject {
 		public detail: string,
 	) {}
 }
+
+export class SubjectRatingReview extends Subject {
+	constructor(
+		id: string,
+		name_th: string,
+		name_en: string,
+		credit: number,
+		detail: string,
+		public rating: number,
+		public review: number,
+	) {
+		super(id, name_th, name_en, credit, detail);
+	}
+}
