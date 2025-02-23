@@ -109,6 +109,12 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
+
+					if (this.isGened === '0') {
+						this.isShowGened = false;
+					} else if (this.isGened === '1') {
+						this.isShowGened = true;
+					}
 					return this.getDropdownFacultyAsObservable().pipe(
 						concatMap(() => {
 							if (this.selectedFaculty !== -1 && this.selectedFaculty !== undefined) {
@@ -265,7 +271,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (res && res.length > 0) {
 					this.subjectCardData = res;
 					this.subjectCardTotal = this.subjectCardData.length;
-					console.log('this.subjectCardData : ', this.subjectCardData);
 					this.updatePaginatedItems();
 				} else {
 					console.log('ไม่พบข้อมูลรายวิชาจาก API');

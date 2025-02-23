@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from '@models/Subject.model';
+import { SubjectRatingReview } from '@models/Subject.model';
 import { Transcript } from '@models/Transcript.model';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
@@ -28,7 +28,7 @@ import { AuthenticationService } from '../../shared/services/authentication/auth
 })
 export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	public eachSubjectData?: SubjectCardData;
-	public subjectData?: Subject;
+	public subjectData?: SubjectRatingReview;
 	public subjectReviewData: SubjectReviewData[] = [];
 
 	public signedIn: boolean = false;

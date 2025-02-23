@@ -4,7 +4,7 @@ import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
 import { OtpRequest, OtpVerify } from '@models/OtpData.model';
 import { Program } from '@models/Program.model';
-import { Subject } from '@models/Subject.model';
+import { SubjectRatingReview } from '@models/Subject.model';
 import { Transcript } from '@models/Transcript.model.js';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from '../../../environments/environment';
@@ -109,10 +109,10 @@ export class APIManagementService {
 	}
 
 	// get ข้อมูลรายวิชานั้นๆอย่างเดียวในหน้า subject-detail ใหม่
-	GetSubjectsDataBySubjectId(subjectId: string): Observable<Subject> {
+	GetSubjectsDataBySubjectId(subjectId: string): Observable<SubjectRatingReview> {
 		let apiUrl = `${environment.backendUrl}/api/subject/get/${subjectId}`;
 
-		return this.http.get<Subject>(apiUrl);
+		return this.http.get<SubjectRatingReview>(apiUrl);
 	}
 
 	// get Open Subject Data ในหน้า subject-detail ใหม่
