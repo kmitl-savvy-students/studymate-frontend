@@ -68,7 +68,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public isLoading: boolean = false;
 	public isError: boolean = false;
 	public isSelectAllDropdown: boolean = false;
-	public isGened: string = '';
+	public isGened: string = '0';
 	public isShowGened: boolean = false;
 	public isSignIn: boolean = false;
 	public getSubjectDataIsNull: boolean = false;
@@ -117,6 +117,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
+					console.log('isGened in param ; ', this.isGened);
 					if (this.isGened === '0') {
 						this.isShowGened = false;
 					} else if (this.isGened === '1') {
@@ -608,14 +609,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 			this.selectedClassYear !== '-1' &&
 			this.selectedClassYear !== undefined &&
 			this.selectedFaculty !== -1 &&
-			this.selectedFaculty !== 0 &&
 			this.selectedFaculty !== undefined &&
 			this.selectedDepartment !== -1 &&
 			this.selectedDepartment !== undefined &&
 			this.selectedProgram !== -1 &&
 			this.selectedProgram !== undefined &&
 			this.selectedCurriculum !== -1 &&
-			this.selectedCurriculum !== undefined
+			this.selectedCurriculum !== undefined &&
+			this.isGened !== '' &&
+			this.isGened !== undefined
 		) {
 			this.isSelectAllDropdown = true;
 		} else {
