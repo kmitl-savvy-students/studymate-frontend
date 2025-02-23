@@ -61,16 +61,14 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public programList: Program[] = [];
 	public curriculumList: Curriculum[] = [];
 
-	public subjectCardData: SubjectCardData[] = [];
 	public subjects_added = subjects_added;
 
-	public filteredSubjectCardDataList: SubjectCardData[] = [];
+	// public searchedSubjectCardDataList: SubjectCardData[] = [];
 
-	public isSearched: boolean = false;
 	public isLoading: boolean = false;
 	public isError: boolean = false;
 	public isSelectAllDropdown: boolean = false;
-	public isGened: string = '0';
+	public isGened: string = '';
 	public isShowGened: boolean = false;
 	public isSignIn: boolean = false;
 	public getSubjectDataIsNull: boolean = false;
@@ -81,9 +79,19 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public disableCurriculumSelectDropdown: boolean = false;
 
 	public selectedDays: string[] = [];
-	public ratingFilter: number | null = null;
+	public selectedRatingFilter: number | null = null;
 	public selectedCurriculumData: Curriculum | undefined;
 	public selectedCurriculumIdList: number[] = [];
+
+	public isSearched: boolean = false;
+	public isFilter: boolean = false;
+
+	// ตัวแปรเดิม
+	public subjectCardData: SubjectCardData[] = [];
+	// เพิ่มตัวแปรใหม่
+	public filteredData: SubjectCardData[] = []; // เก็บผลลัพธ์หลังการ filter
+	public searchedData: SubjectCardData[] = []; // เก็บผลลัพธ์หลังการ search
+	public finalDisplayData: SubjectCardData[] = []; // เก็บผลลัพธ์สุดท้ายที่จะแสดง
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -109,7 +117,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
-
 					if (this.isGened === '0') {
 						this.isShowGened = false;
 					} else if (this.isGened === '1') {
@@ -140,8 +147,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 			.subscribe(() => {
 				this.updateDropdownValues();
 				this.checkSelectAllDropdown();
-				this.filteredSubjectCardDataList = [];
+				this.isFilter = false;
 				this.isSearched = false;
+				this.resetAllFilters();
+				this.resetSearch();
 				if (this.isSelectAllDropdown) {
 					this.getSubjectData();
 				}
@@ -223,20 +232,80 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		});
 	}
 
+	// เพิ่ม getter สำหรับความสะดวกในการใช้งาน
+	get hasNoResults(): boolean {
+		return this.finalDisplayData.length === 0;
+	}
+
+	get showNoDataMessage(): boolean {
+		return this.isSelectAllDropdown && !this.isLoading && (this.getSubjectDataIsNull || this.hasNoResults);
+	}
+
+	get noDataMessageType(): 'api' | 'search' | 'filter' | 'both' {
+		if (this.getSubjectDataIsNull) return 'api';
+		if (this.isSearched && !this.isFilter) return 'search';
+		if (!this.isSearched && this.isFilter) return 'filter';
+		return 'both';
+	}
+
+	private processDataWithFiltersAndSearch(): void {
+		// เริ่มจากข้อมูลต้นฉบับเสมอ
+		let processedData = [...this.subjectCardData];
+
+		// ถ้ามีการ search ให้กรองด้วย search ก่อน
+		console.log('isSearch in process', this.isSearched);
+		if (this.isSearched) {
+			processedData = this.searchedData;
+		}
+
+		// นำไป filter ต่อ
+		if (this.isFilter) {
+			processedData = this.filterDay(processedData);
+			processedData = this.filterReview(processedData);
+			processedData = this.filterCurriculum(processedData);
+		}
+
+		// เก็บผลลัพธ์สุดท้าย
+		this.finalDisplayData = processedData;
+		console.log('final display data :', this.finalDisplayData);
+		this.subjectCardTotal = this.finalDisplayData.length;
+
+		// อัพเดท pagination
+		this.currentPage = 1;
+		this.updatePaginatedItems();
+	}
+
 	public onSelectedDaysChange(days: string[]) {
 		this.selectedDays = days;
+		this.handleFilterBar();
 		this.updatePaginatedItems();
 	}
 
 	public onReviewFilterValueChange(rating: number) {
-		this.ratingFilter = rating;
+		this.selectedRatingFilter = rating;
+		this.handleFilterBar();
 		this.updatePaginatedItems();
 	}
 
 	public onSelectedCurriculumIdChange(curriculumIdList: number[]) {
 		this.selectedCurriculumIdList = curriculumIdList;
-		console.log('selected cur lst from subject page:', this.selectedCurriculumIdList);
+		this.clearSearch();
+		this.handleFilterBar();
 		this.updatePaginatedItems();
+	}
+
+	public handleFilterBar() {
+		this.isFilter = this.selectedDays.length > 0 || this.selectedCurriculumIdList.length > 0 || this.selectedRatingFilter !== null;
+		console.log('filter', this.isFilter);
+		this.processDataWithFiltersAndSearch();
+	}
+
+	public resetAllFilters() {
+		this.selectedDays = [];
+		this.selectedRatingFilter = null;
+		this.selectedCurriculumIdList = [];
+		this.isFilter = false;
+		this.processDataWithFiltersAndSearch();
 	}
 
 	public filterDay(data: SubjectCardData[]) {
@@ -245,16 +314,48 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	}
 
 	public filterReview(data: SubjectCardData[]) {
-		if (this.ratingFilter === null || this.ratingFilter === undefined) return data;
-		return data.filter((item) => item.rating >= this.ratingFilter! && item.rating < this.ratingFilter! + 1);
+		if (this.selectedRatingFilter === null || this.selectedRatingFilter === undefined) return data;
+		return data.filter((item) => item.rating >= this.selectedRatingFilter! && item.rating < this.selectedRatingFilter! + 1);
+	}
+
+	public filterCurriculum(data: SubjectCardData[]) {
+		if (this.selectedCurriculumIdList.length === 0) return data;
+		return data.filter((data) => data.group_name.some((groupName) => this.selectedCurriculumIdList.includes(groupName.id)));
+	}
+
+	public getSearchedSubjectCardDataList(searchResults: SubjectCardData[]) {
+		this.searchedData = searchResults;
+		console.log('search data :', this.searchedData);
+		this.isSearched = searchResults.length !== this.subjectCardData.length;
+		this.searchSubjectDataIsNull = searchResults.length === 0;
+
+		this.processDataWithFiltersAndSearch();
+	}
+
+	// เพิ่มฟังก์ชันใหม่สำหรับจัดการเมื่อ clear search
+	public onSearchCleared() {
+		this.isSearched = false;
+		this.searchedData = this.isFilter ? [...this.filteredData] : [...this.subjectCardData];
+		this.searchSubjectDataIsNull = false;
+		console.log('isSearch in onclearsearch', this.isSearched);
+		this.processDataWithFiltersAndSearch();
+	}
+
+	public resetSearch() {
+		this.searchedData = [...this.subjectCardData];
+		this.isSearched = false;
+		this.processDataWithFiltersAndSearch();
+	}
+
+	public searchFunction(data: SubjectCardData[], searchValue: string): SubjectCardData[] {
+		return data.filter((subject) => subject?.subject?.id?.toLowerCase().includes(searchValue.toLowerCase()) || subject?.subject?.name_en?.toLowerCase().includes(searchValue.toLowerCase()));
 	}
 
 	public updatePaginatedItems() {
 		const start = (this.currentPage - 1) * this.itemsPerPage;
 		const end = start + this.itemsPerPage;
-		const dataToPaginate = this.filterDay(this.filterReview(this.isSearched ? this.filteredSubjectCardDataList : this.subjectCardData));
-		this.paginatedItems = dataToPaginate.slice(start, end);
-		this.subjectCardTotal = dataToPaginate.length;
+
+		this.paginatedItems = this.finalDisplayData.slice(start, end);
 	}
 
 	public changePage(page: number) {
@@ -271,6 +372,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (res && res.length > 0) {
 					this.subjectCardData = res;
 					this.subjectCardTotal = this.subjectCardData.length;
+					this.processDataWithFiltersAndSearch();
 					this.updatePaginatedItems();
 				} else {
 					console.log('ไม่พบข้อมูลรายวิชาจาก API');
@@ -372,10 +474,14 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 			case 'selectedFaculty':
 				const oldSelectFaculty = this.selectedFaculty;
 				this.selectedFaculty = selectedData.value;
+				// this.isGened = this.selectedFaculty === 0;
 
 				if (this.selectedFaculty === undefined || this.selectedFaculty === -1 || (oldSelectFaculty !== this.selectedFaculty && oldSelectFaculty !== -1)) {
 					this.resetDependentDropdowns('faculty');
 				}
+				// if (this.selectedFaculty !== -1 && !this.isGened) {
+				// 	this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
+				// }
 				if (this.selectedFaculty !== -1) {
 					this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
 				}
@@ -502,15 +608,14 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 			this.selectedClassYear !== '-1' &&
 			this.selectedClassYear !== undefined &&
 			this.selectedFaculty !== -1 &&
+			this.selectedFaculty !== 0 &&
 			this.selectedFaculty !== undefined &&
 			this.selectedDepartment !== -1 &&
 			this.selectedDepartment !== undefined &&
 			this.selectedProgram !== -1 &&
 			this.selectedProgram !== undefined &&
 			this.selectedCurriculum !== -1 &&
-			this.selectedCurriculum !== undefined &&
-			this.isGened !== '' &&
-			this.isGened !== undefined
+			this.selectedCurriculum !== undefined
 		) {
 			this.isSelectAllDropdown = true;
 		} else {
@@ -609,15 +714,11 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		}
 	}
 
-	public getSearchedSubjectCardDataList(filteredSubjectCardDataList: SubjectCardData[]) {
-		this.filteredSubjectCardDataList = filteredSubjectCardDataList;
-		this.searchSubjectDataIsNull = this.filteredSubjectCardDataList.length === 0;
-		this.isSearched = true;
-		this.currentPage = 1;
-		this.updatePaginatedItems();
-	}
-
-	public searchFunction(data: SubjectCardData[], searchValue: string): SubjectCardData[] {
-		return data.filter((subject) => subject?.subject?.id?.toLowerCase().includes(searchValue.toLowerCase()) || subject?.subject?.name_en?.toLowerCase().includes(searchValue.toLowerCase()));
-	}
+	// public getSearchedSubjectCardDataList(SubjectCardDataListbySearch: SubjectCardData[]) {
+	// 	this.searchedSubjectCardDataList = SubjectCardDataListbySearch;
+	// 	this.searchSubjectDataIsNull = this.searchedSubjectCardDataList.length === 0;
+	// 	this.searchedSubjectCardDataList === this.subjectCardData ? (this.isSearched = false) : (this.isSearched = true);
+	// 	this.currentPage = 1;
+	// 	this.updatePaginatedItems();
+	// }
 }

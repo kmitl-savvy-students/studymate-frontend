@@ -68,6 +68,7 @@ export class SDMfilterBarComponent implements OnInit {
 		if (this.lastCheckId === curriculumId) {
 			console.log('clear checkbox !!!');
 			this.lastCheckId = null;
+			this.selectedCurriculumId.emit([]);
 			return;
 		}
 

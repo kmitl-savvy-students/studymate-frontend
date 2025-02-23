@@ -20,13 +20,16 @@
 					<div *ngIf="subjectCardData?.class_level === '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ทุกชั้นปี</div>
 					<div *ngIf="subjectCardData?.class_level != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ปี {{ subjectCardData.class_level }}</div>
 					<div class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">Sec {{ subjectCardData.section }}</div>
-					<div *ngIf="subjectCardData.group_name.length > 0; else noGroup" class="flex flex-wrap gap-x-3">
-						<div *ngFor="let group of subjectCardData.group_name" [ngStyle]="{ 'background-color': group.color || '#4D74CB26' }" class="rounded-[15px] px-3 py-1.5 text-xs">
-							{{ group.name }}
+					<ng-container *ngIf="subjectCardData.group_name.length > 0; else noGroup">
+						<div *ngFor="let group of subjectCardData.group_name" class="flex flex-wrap gap-x-3">
+							<div [ngStyle]="{ 'background-color': group.color || '#4D74CB26' }" class="rounded-[15px] px-3 py-1.5 text-xs">
+								{{ group.name }}
+							</div>
 						</div>
-					</div>
+					</ng-container>
 					<ng-template #noGroup>
-						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่ระบุหมวดหมู่</div>
+						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่พบหมวดวิชาในหลักสูตรที่เลือก</div>
+						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">เสรี</div>
 					</ng-template>
 				</div>
 			</div>
