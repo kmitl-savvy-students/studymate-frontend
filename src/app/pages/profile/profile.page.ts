@@ -1,19 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
-import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 import { SDMBaseButton } from '../../components/buttons/base-button.component';
 import { IconComponent } from '../../components/icon/icon.component';
+import { SDMBaseModal } from '../../components/modals/base-modal.component';
 import { User } from '../../shared/models/User.model.js';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 
 @Component({
 	selector: 'sdm-page-profile',
 	standalone: true,
-	imports: [IconComponent, CommonModule, SDMBaseButton, ReactiveFormsModule],
+	imports: [IconComponent, CommonModule, SDMBaseButton, ReactiveFormsModule, SDMBaseModal],
 	templateUrl: './profile.page.html',
 	styleUrl: './profile.page.css',
 })
@@ -24,7 +25,7 @@ export class SDMPageProfile {
 		private authService: AuthenticationService,
 		private fb: FormBuilder,
 		private backendService: BackendService,
-		private loadingService: LoadingService,
+		private alertService: AlertService,
 		private http: HttpClient,
 	) {
 		this.editProfileForm = this.fb.group({
@@ -79,6 +80,8 @@ export class SDMPageProfile {
 					this.currentUser.lastname = this.editProfileForm.value.lastname;
 					this.authService.setUser(this.currentUser);
 
+					this.alertService.showAlert('success', 'บันทึกข้อมูลเสร็จสิ้น');
+
 					this.toggleEditProfileForm(false);
 				},
 				error: () => {
@@ -97,5 +100,10 @@ export class SDMPageProfile {
 			this.editProfileForm.get('firstname')?.enable();
 			this.editProfileForm.get('lastname')?.enable();
 		}
+	}
+
+	@ViewChild('uploadProfileModal') uploadProfileModal!: SDMBaseModal;
+	onUploadProfile(): void {
+		this.uploadProfileModal.show();
 	}
 }

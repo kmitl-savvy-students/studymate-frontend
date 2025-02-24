@@ -1,14 +1,19 @@
 <div class="grid grid-cols-4 gap-x-5">
 	<div class="">
 		<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
-			<div *ngIf="currentUser?.profile_picture" class="h-32 w-32">
-				<sdm-icon [src]="currentUser?.profile_picture || null" class="h-full w-full"></sdm-icon>
-			</div>
-			<div *ngIf="!currentUser?.profile_picture" class="h-32 w-32">
-				<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
+			<div class="relative">
+				<div *ngIf="currentUser?.profile_picture" class="h-32 w-32">
+					<sdm-icon [src]="currentUser?.profile_picture || null" class="h-full w-full"></sdm-icon>
+				</div>
+				<div *ngIf="!currentUser?.profile_picture" class="h-32 w-32">
+					<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
+				</div>
+				<button type="button" class="absolute -bottom-2 -end-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-300 text-sm font-bold text-white hover:bg-primary-400" (click)="onUploadProfile()">
+					<sdm-icon icon="pen"></sdm-icon>
+				</button>
 			</div>
 			<div class="text-center">
-				<p class="truncate text-xl font-semibold text-dark-100">คุณ {{ currentUser?.nickname }}</p>
+				<div class="max-w-[220px] truncate text-xl font-semibold text-dark-100">คุณ {{ currentUser?.nickname }}</div>
 			</div>
 		</div>
 	</div>
@@ -59,3 +64,17 @@
 		</div>
 	</div>
 </div>
+
+<sdm-base-modal #uploadProfileModal modalId="uploadProfile" header="อัปโหลดรูปโปรไฟล์ใหม่">
+	<label for="uploadProfileInput" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
+		<div class="flex flex-col items-center justify-center pb-6 pt-5">
+			<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-primary-300"></sdm-icon>
+			<p class="mb-2 text-base">
+				<span class="font-semibold">เลือก</span>
+				หรือวางไฟล์รูปโปรไฟล์ใหม่ที่นี่
+			</p>
+			<p class="text-sm opacity-50">ไฟล์ jpg,jpeg,png ขนาดไม่เกิน 5 MB</p>
+		</div>
+		<input id="uploadProfileInput" class="hidden" type="file" />
+	</label>
+</sdm-base-modal>
