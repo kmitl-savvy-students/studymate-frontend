@@ -162,7 +162,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 			return;
 		}
 
-		const apiUrl = `${this.backendService.getBackendUrl()}/api/user/update`;
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/user/update/curriculum`;
 		const body = {
 			id: this.currentUser?.id,
 			curriculum_id: this.dropdownForm.value.curriculum,
