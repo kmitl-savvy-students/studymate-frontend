@@ -1,5 +1,12 @@
 <div class="mb-3 flex">
-	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="navigateToProgram()"></sdm-base-button>
+	<sdm-base-button
+		icon="right-to-bracket"
+		text="ย้อนกลับ"
+		textColor="text-light"
+		textColorHover="hover:text-light"
+		backgroundColor="bg-primary-300"
+		backgroundColorHover="hover:bg-primary-400"
+		(clickEvent)="navigateToProgram()"></sdm-base-button>
 </div>
 
 <h1 class="mt-5 text-3xl font-semibold">{{ program?.name_th }}</h1>
@@ -47,6 +54,23 @@
 	<div *ngIf="isLoading" class="my-2 text-center">
 		<div class="spinner-border animate-spin"></div>
 	</div>
+	<form [formGroup]="cloneCurriculumForm">
+		<div class="input-primary mb-5">
+			<label for="cloneCurriculum">คัดลอกหลักสูตร</label>
+			<select id="cloneCurriculum" formControlName="cloneCurriculum" required>
+				<option value="" disabled selected>กรุณาเลือกหลักสูตรที่ต้องการคัดลอก</option>
+				<option *ngFor="let curriculum of curriculums" [value]="curriculum.curriculum_group?.id">({{ curriculum.id }}) {{ curriculum.name_th }}</option>
+			</select>
+		</div>
+		<sdm-base-button
+			icon="pen"
+			text="คัดลอกหลักสูตรที่เลือก"
+			textColor="text-light"
+			textColorHover="hover:text-light"
+			backgroundColor="bg-warning-300"
+			backgroundColorHover="hover:bg-warning-400"
+			(clickEvent)="onCloneCurriculumConfirm()"></sdm-base-button>
+	</form>
 	<div *ngIf="!isLoading">
 		<div *ngIf="curriculums.length === 0" class="my-2 border p-5">
 			<div class="text-center">ไม่มีผลลัพธ์</div>
@@ -59,10 +83,24 @@
 						<div class="font-semibold">{{ curriculum.name_th }}</div>
 						<div class="text-sm opacity-50">{{ curriculum.name_en }}</div>
 					</div>
-					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditCurriculum(curriculum)"></sdm-base-button>
+					<sdm-base-button
+						icon="pen"
+						text="แก้ไข"
+						textColor="text-light"
+						textColorHover="hover:text-light"
+						backgroundColor="bg-warning-300"
+						backgroundColorHover="hover:bg-warning-400"
+						(clickEvent)="onEditCurriculum(curriculum)"></sdm-base-button>
 				</li>
 			</ul>
 		</div>
 	</div>
-	<sdm-base-button icon="plus" text="สร้างหลักสูตรใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onCreateCurriculum()"></sdm-base-button>
+	<sdm-base-button
+		icon="plus"
+		text="สร้างหลักสูตรใหม่"
+		textColor="text-light"
+		textColorHover="hover:text-light"
+		backgroundColor="bg-primary-300"
+		backgroundColorHover="hover:bg-primary-400"
+		(clickEvent)="onCreateCurriculum()"></sdm-base-button>
 </div>

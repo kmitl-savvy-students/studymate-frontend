@@ -50,6 +50,9 @@ export class SDMPageCurriculum implements OnInit {
 			nameTh: [''],
 			nameEn: [''],
 		});
+		this.cloneCurriculumForm = this.fb.group({
+			cloneCurriculum: [''],
+		});
 	}
 
 	ngOnInit(): void {
@@ -224,6 +227,51 @@ export class SDMPageCurriculum implements OnInit {
 					},
 					error: (error) => {
 						console.error('Error updating curriculum:', error);
+					},
+				});
+		});
+	}
+	// #endregion
+
+	// #region Clone
+	cloneCurriculumForm: FormGroup;
+
+	onCloneCurriculumConfirm() {
+		if (this.cloneCurriculumForm.value.cloneCurriculum === '') {
+			this.alertService.showAlert('error', 'กรุณาเลือกหลักสูตรที่ต้องการคัดลอก');
+			return;
+		}
+
+		const cloneCurriculumGroup = {
+			id: this.cloneCurriculumForm.value.cloneCurriculum,
+			parent_id: -1,
+			type: 'REQUIRED_ALL',
+			name: 'Root',
+			credit: -1,
+			color: '#FFFFFF',
+		};
+
+		console.log(cloneCurriculumGroup);
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group/clone`;
+
+		this.loadingService.show(() => {
+			this.http
+				.post(apiUrl, cloneCurriculumGroup)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.alertService.showAlert('success', 'คัดลอกหลักสูตรสำเร็จ');
+						this.fetchCurriculums();
+
+						this.cloneCurriculumForm.reset({ cloneCurriculum: '' });
+					},
+					error: (error) => {
+						console.error('Error cloning curriculum:', error);
 					},
 				});
 		});

@@ -1,27 +1,35 @@
 <div class="grid w-full grid-cols-1 gap-y-10">
 	<sdm-subject-detail-cpn [subjectDetailData]="eachSubjectData" [subjectData]="subjectData"></sdm-subject-detail-cpn>
 
-	<sdm-show-subjects-open
-		*ngIf="eachSubjectData"
-		[selectedYear]="selectedYear"
-		[selectedSemester]="selectedSemester"
-		[selectedProgram]="selectedProgram"
-		[subjectId]="subjectId"></sdm-show-subjects-open>
+	<sdm-show-subjects-open *ngIf="eachSubjectData" [selectedYear]="selectedYear" [selectedSemester]="selectedSemester" [selectedCurriculum]="selectedCurriculum" [subjectId]="subjectId" [isGened]="isGened"></sdm-show-subjects-open>
 
-	<div class="flex h-24 w-full flex-col items-center justify-center gap-2 rounded-[15px] bg-orange-50 py-4 text-yellow-600">
-		*จะสามารถรีวิวได้เฉพาะรายวิชาที่เรียนไปแล้วเท่านั้น โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ
-	</div>
-
-	<!-- show review summary -->
-	<div class="text-dark-100 flex h-28 w-full flex-col items-center justify-center gap-2">
+	<div *ngIf="displayData" class="flex h-28 w-full flex-col items-center justify-center gap-2 text-dark-100">
 		<div class="font-semibold">คะแนนรีวิวและรีวิว</div>
 		<div class="flex items-center gap-x-1">
-			<sdm-rating mode="display" [rating]="4.0" customClass="text-base text-dark-100"></sdm-rating>
+			<sdm-rating mode="display" [rating]="displayData.rating" customClass="text-base text-dark-100"> </sdm-rating>
 		</div>
-		<div><span>{{ avgReviewRating | number:'1.1-1' }}</span><span> | </span><span>{{reviewCount}}</span><span> รีวิว</span></div>
+		<div>
+			<span>{{ displayData.rating }}</span>
+			<span> | </span>
+			<span>{{ displayData.review }}</span>
+			<span> รีวิว</span>
+		</div>
 	</div>
 
-	<sdm-write-review-box [isEdit]="false" [signedIn]="signedIn" [currentUser]="currentUser" [subjectId]="subjectId" (reviewSuccess)="getSubjectReviews()"> </sdm-write-review-box>
+	<sdm-write-review-box
+		[isEdit]="false"
+		[signedIn]="signedIn"
+		[currentUser]="currentUser"
+		[canReview]="canReview"
+		[noSubjectCompleted]="noSubjectCompleted"
+		[isTransferCredit]="isTransferCredit"
+		[isLoadingTranscript]="isLoadingTranscript"
+		[notHaveTranscript]="notHaveTranscript"
+		[hasCompletedSubject]="hasCompletedSubject"
+		[completedSubjectDetails]="completedSubjectDetails"
+		[subjectId]="subjectId"
+		(reviewSuccess)="handleReviewChange()">
+	</sdm-write-review-box>
 
 	<div class="grid w-full grid-cols-1 items-center gap-3">
 		<sdm-review-filter
@@ -32,7 +40,7 @@
 			[currentUser]="currentUser"
 			[prioritizeUserReview]="true"
 			[itemsPerPage]="5"
-			(confirmEditReview)="getSubjectReviews()"
-			(deleteUserReview)="getSubjectReviews()"></sdm-review-filter>
+			(confirmEditReview)="handleReviewChange()"
+			(deleteUserReview)="handleReviewChange()"></sdm-review-filter>
 	</div>
 </div>

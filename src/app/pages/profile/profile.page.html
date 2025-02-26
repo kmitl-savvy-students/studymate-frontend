@@ -1,72 +1,80 @@
-<div class="flex w-full gap-x-5">
-	<div class="flex-none">
-		<div class="grid grid-cols-2 gap-5">
-			<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
+<div class="grid grid-cols-4 gap-x-5">
+	<div class="">
+		<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
+			<div class="relative">
 				<div *ngIf="currentUser?.profile_picture" class="h-32 w-32">
 					<sdm-icon [src]="currentUser?.profile_picture || null" class="h-full w-full"></sdm-icon>
 				</div>
 				<div *ngIf="!currentUser?.profile_picture" class="h-32 w-32">
 					<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
 				</div>
-				<div class="text-center">
-					<div class="text-dark-100 text-xl font-semibold">{{ currentUser?.firstname }}</div>
-					<div class="text-dark-100 text-xl font-semibold">{{ currentUser?.lastname }}</div>
-				</div>
+				<button type="button" class="absolute -bottom-2 -end-2 inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-300 text-sm font-bold text-white hover:bg-primary-400" (click)="onUploadProfile()">
+					<sdm-icon icon="pen"></sdm-icon>
+				</button>
 			</div>
-			<div class="col-span-1 rounded-[20px] border border-main-25 p-5">
-				<div class="grid grid-flow-col grid-rows-2 items-center text-center">
-					<div class="row-span-1 text-sm">ลงแล้ว</div>
-					<div class="row-span-1 text-sm">หน่วยกิต</div>
-					<div class="row-span-2 text-lg font-medium text-teal-500">118</div>
-				</div>
-			</div>
-			<div class="col-span-1 rounded-[20px] border border-main-25 p-5">
-				<div class="grid grid-flow-col grid-rows-2 items-center text-center">
-					<div class="row-span-1 text-sm">ขาดอีก</div>
-					<div class="row-span-1 text-sm">หน่วยกิต</div>
-					<div class="row-span-2 text-lg font-medium text-red-400">18</div>
-				</div>
+			<div class="text-center">
+				<div class="max-w-[220px] truncate text-xl font-semibold text-dark-100">คุณ {{ currentUser?.nickname }}</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="grid w-full flex-1 grid-cols-1 rounded-[20px] border border-main-25 p-12">
-		<div class="grid w-full grid-cols-5 gap-y-7 pb-10">
-			<div class="text-dark-100 col-span-4 text-xl font-medium">โปรไฟล์</div>
-			<button (click)="editProfile()" class="col-span-1 text-end text-base font-bold text-primary-300 hover:text-main-120">แก้ไขข้อมูล</button>
-			<div class="text-dark-75 col-span-1 mt-4 text-sm font-medium">รูปโปรไฟล์</div>
-			<div *ngIf="currentUser?.profile_picture" class="col-span-4 h-12 w-12">
-				<sdm-icon [src]="currentUser?.profile_picture || null" class="h-full w-full text-main-25"></sdm-icon>
+	<div class="col-span-3 w-full rounded-[20px] border border-main-25 p-12">
+		<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="user"></sdm-icon>ข้อมูลผู้ใช้</div>
+
+		<form class="my-5 flex flex-col gap-y-4" [formGroup]="editProfileForm">
+			<div class="input-primary">
+				<label for="nickname">ชื่อเล่น</label>
+				<input type="text" id="nickname" formControlName="nickname" placeholder="ชื่อเล่น" required />
 			</div>
-			<div *ngIf="!currentUser?.profile_picture" class="col-span-4 h-12 w-12">
-				<sdm-icon [src]="'images/default-user-avatar.png'"></sdm-icon>
+			<div class="input-primary">
+				<label for="firstname">ชื่อจริง</label>
+				<input type="text" id="firstname" formControlName="firstname" placeholder="ชื่อจริง" required />
 			</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">ชื่อ</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">{{ currentUser?.firstname }}</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">นามสกุล</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">{{ currentUser?.lastname }}</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">รหัสนักศึกษา</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">{{ currentUser?.id }}</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">คณะ</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">{{ currentUser?.curriculum?.program?.department?.faculty?.name_th }}</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">สาขาวิชา</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">{{ currentUser?.curriculum?.program?.department?.name_th }}</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">หลักสูตร</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">พ.ศ. {{ currentUser?.curriculum?.year }} {{ currentUser?.curriculum?.name_th }}</div>
+			<div class="input-primary">
+				<label for="lastname">นามสกุล</label>
+				<input type="text" id="lastname" formControlName="lastname" placeholder="นามสกุล" required />
+			</div>
+		</form>
+
+		<div *ngIf="!isEditProfile">
+			<sdm-base-button icon="pen" text="แก้ไขข้อมูลผู้ใช้" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onEditProfileForm()" />
 		</div>
-		<div class="grid w-full grid-cols-5 gap-y-7 border-t border-t-main-25 py-10">
-			<div class="text-dark-100 col-span-4 text-xl font-medium">บัญชีที่เข้าสู่ระบบ</div>
-			<button (click)="editAccount()" class="col-span-1 text-end text-base font-bold text-primary-300 hover:text-main-120">เปลี่ยนรหัสผ่าน</button>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">Email</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">64010359&#64;kmitl.ac.th</div>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">Password</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">*******************</div>
+		<div *ngIf="isEditProfileLoading">
+			<sdm-base-button text="กำลังโหลด..." textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" [isDisabled]="true" />
 		</div>
-		<div class="grid w-full grid-cols-5 gap-y-7 border-t border-t-main-25 pt-10">
-			<div class="text-dark-100 col-span-4 text-xl font-medium">ทรานสคริปต์ของฉัน</div>
-			<button (click)="editTranscript()" class="col-span-1 text-end text-base font-bold text-primary-300 hover:text-main-120">แก้ไข Transcript</button>
-			<div class="text-dark-75 col-span-1 text-sm font-medium">Transcript File</div>
-			<div class="text-dark-100 col-span-4 text-base font-normal">Transcript - Tanchanok Charungpattananon.pdf</div>
+		<div class="flex gap-2" *ngIf="isEditProfile && !isEditProfileLoading">
+			<sdm-base-button
+				class="flex-grow"
+				icon="xmark"
+				text="ยกเลิก"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-danger-300"
+				backgroundColorHover="hover:bg-danger-400"
+				(clickEvent)="onEditProfileFormCancel()" />
+			<sdm-base-button
+				class="flex-grow"
+				icon="save"
+				text="บันทึกข้อมูล"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-success-300"
+				backgroundColorHover="hover:bg-success-400"
+				(clickEvent)="onEditProfileFormConfirm()" />
 		</div>
 	</div>
 </div>
+
+<sdm-base-modal #uploadProfileModal modalId="uploadProfile" header="อัปโหลดรูปโปรไฟล์ใหม่">
+	<label for="uploadProfileInput" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
+		<div class="flex flex-col items-center justify-center pb-6 pt-5">
+			<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-primary-300"></sdm-icon>
+			<p class="mb-2 text-base">
+				<span class="font-semibold">เลือก</span>
+				หรือวางไฟล์รูปโปรไฟล์ใหม่ที่นี่
+			</p>
+			<p class="text-sm opacity-50">ไฟล์ jpg,jpeg,png ขนาดไม่เกิน 5 MB</p>
+		</div>
+		<input id="uploadProfileInput" class="hidden" type="file" />
+	</label>
+</sdm-base-modal>

@@ -21,18 +21,14 @@ export class SubjectValidationGuard implements CanActivate {
 		const facultyId = +route.params['faculty'];
 		const departmentId = +route.params['department'];
 		const programId = +route.params['program'];
-		const curriculumId = route.params['curriculum'];
+		const curriculumId = +route.params['curriculum'];
+		const isGened = route.params['isGened'];
 
 		// ตรวจสอบค่าพื้นฐานก่อน
-		if (!this.validateBasicParams(year, semester, classYear)) {
+		if (!this.validateBasicParams(year, semester, classYear, isGened)) {
 			this.router.navigate(['/subject']);
 			return of(false);
 		}
-
-		// กรณี GenEd
-		// if (facultyId === 90 && departmentId === 90) {
-		// 	return of(true);
-		// }
 
 		// ตรวจสอบข้อมูลจาก API ตามลำดับ
 		return this.apiManagementService.GetDropdownFaculties().pipe(
@@ -61,7 +57,7 @@ export class SubjectValidationGuard implements CanActivate {
 				return this.apiManagementService.GetDropdownCurriculums(programId);
 			}),
 			map((curriculums) => {
-				const curriculumExists = curriculums.some((c) => c.id.toString() === curriculumId);
+				const curriculumExists = curriculums.some((c) => c.id === curriculumId);
 				if (!curriculumExists) {
 					throw new Error('Invalid curriculum');
 				}
@@ -75,7 +71,7 @@ export class SubjectValidationGuard implements CanActivate {
 		);
 	}
 
-	private validateBasicParams(year: number, semester: number, classYear: string): boolean {
+	private validateBasicParams(year: number, semester: number, classYear: string, isGened: string): boolean {
 		// ตรวจสอบปีการศึกษาจาก yearsList
 		const validYear = yearsList.some((y) => y.value === year);
 		if (!validYear) return false;
@@ -90,6 +86,10 @@ export class SubjectValidationGuard implements CanActivate {
 		// const validClassYear = classYearList.some((c) => c.value === classYearNumber && c.value !== 0); // ไม่รวม "ทุกชั้นปี"
 		const validClassYear = classYearList.some((c) => c.value === classYearNumber);
 		if (!validClassYear) return false;
+
+		// ตรวจสอบ isGened ว่าเป็น "1" หรือ "0" เท่านั้น
+		const validIsGened = isGened === '1' || isGened === '0';
+		if (!validIsGened) return false;
 
 		return true;
 	}

@@ -1,8 +1,9 @@
 export class SubjectReviewData {
 	constructor(
 		public id: number,
-		public teachtable_subject: TeachtableSubject,
-		public user_id: string,
+		public teachtable: Teachtable,
+		public subject_id: string,
+		public user_id: number,
 		public review: string,
 		public rating: number,
 		public like: number,
@@ -11,21 +12,10 @@ export class SubjectReviewData {
 	) {}
 }
 
-export class TeachtableSubject {
-	constructor(
-		public id: number,
-		public teachtable: Teachtable,
-		public subject_id: string,
-		public interested: number,
-		public count_of_review: number,
-		public rating: number,
-	) {}
-}
-
 export class Teachtable {
 	constructor(
 		public id: number,
-		public academic_year: number,
-		public academic_term: number,
+		public year: number,
+		public term: number,
 	) {}
 }

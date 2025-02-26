@@ -1,19 +1,24 @@
-<div class="grid w-full grid-cols-1 gap-8">
-	<div class="text-center text-xl font-semibold">รีวิววิชา</div>
-	<div class="grid w-full grid-cols-1 items-center gap-3">
-		<sdm-review-filter
-			[subjectReviewData]="reviewData"
-			[currentYearTermReviewData]="currentYearTermReviewData"
-			[isLoadingReview]="isLoadingReview"
-			[paginationType]="paginationType.double"
-			[signedIn]="signedIn"
-			[currentUser]="currentUser"
-			[prioritizeUserReview]="false"
-			[itemsPerPage]="10"
-			[isShowSearchBar]="true"
-			[isReviewPage]="true"
-			(confirmEditReview)="getSubjectReviews()"
-			(deleteUserReview)="getSubjectReviews()"
-		></sdm-review-filter>
+<div class="flex w-full items-start gap-x-5">
+	<!-- <sdm-filter-bar [isReviewPage]="true"></sdm-filter-bar> -->
+	<div class="grid w-full grid-cols-1 gap-8">
+		<div class="text-center text-xl font-semibold">รีวิววิชา</div>
+		<div class="grid w-full grid-cols-1 items-center gap-3">
+			<sdm-review-filter
+				[subjectReviewData]="reviewData"
+				[currentYearTermReviewData]="currentYearTermReviewData"
+				[isLoadingReview]="isLoadingReview"
+				[paginationType]="paginationType.double"
+				[signedIn]="signedIn"
+				[currentUser]="currentUser"
+				[prioritizeUserReview]="false"
+				[itemsPerPage]="10"
+				[isShowSearchBar]="true"
+				[isReviewPage]="true"
+				(confirmEditReview)="getSubjectReviews()"
+				(deleteUserReview)="getSubjectReviews()"
+				(createLikeReview)="getSubjectReviews()"
+				(deleteLikeReview)="getSubjectReviews()">
+			</sdm-review-filter>
+		</div>
 	</div>
 </div>

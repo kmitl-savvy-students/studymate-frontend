@@ -1,90 +1,83 @@
-<div class="flex w-full flex-col rounded-[15px] border border-main-25">
-	<!-- Header Section -->
-	<div class="flex w-full items-center justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold">
-		<a *ngIf="isShowSubjectIdAndName" class="flex items-center gap-4" [href]="getSubjectDetailUrl()" target="_blank">
-			<div class="flex items-center gap-4">
-				<div>
-					{{ subjectReviewData.teachtable_subject.subject_id }}
-				</div>
-				<div>{{ subjectReviewData.subject_name_en }}</div>
-			</div>
-			<div>
-				ปีการศึกษา
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_year }}
-			</div>
-			<div>
-				ภาคการศึกษาที่
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_term }}
-			</div>
-			<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
-		</a>
-
-		<a class="flex items-center gap-4" *ngIf="!isShowSubjectIdAndName">
-			<div>
-				ปีการศึกษา
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_year }}
-			</div>
-			<div>
-				ภาคการศึกษาที่
-				{{ subjectReviewData.teachtable_subject.teachtable.academic_term }}
-			</div>
-			<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
-		</a>
-
-		<div class="flex items-center gap-x-1">
-			<sdm-rating mode="display" [rating]="subjectReviewData.rating" customClass="text-base text-dark-100"></sdm-rating>
-		</div>
+<ng-container *ngIf="isLoadingAllUsersLikedSubjectReviews || isLoadingReview; else showSubjectReviewComponent">
+	<div class="flex animate-pulse flex-col gap-y-2">
+		<div class="h-32 w-full rounded-xl bg-primary-100"></div>
 	</div>
-
-	<!-- แสดงผลการแก้ไขหรือรีวิว -->
-	<ng-container *ngIf="!isEditing">
-		<!-- Subject Review -->
-		<div>
-			<div class="text-dark-100 px-5 pb-2 pt-3 text-sm font-normal" [innerHTML]="this.subjectReviewData.review"></div>
-		</div>
-
-		<!-- Footer Section -->
-		<div class="flex items-center justify-between px-5 pb-3">
-			<div class="flex items-center gap-2">
-				<sdm-icon
-					icon="thumbs-up"
-					[iconStyle]="isLiked ? 'fas' : 'far'"
-					class="text-dark-100 text-base"
-					[ngClass]="{
-						'default-cursor': !isSignIn,
-						'cursor-pointer': isSignIn,
-					}"
-					(click)="isSignIn && toggleLike()"></sdm-icon>
-				<div>{{ this.subjectReviewData.like }}</div>
-			</div>
-			<div class="flex items-center gap-2.5">
-				<div class="text-dark-75 text-sm font-normal">
-					{{ this.subjectReviewData.created }}
+</ng-container>
+<ng-template #showSubjectReviewComponent
+	><div *ngIf="subjectReviewData" class="flex w-full flex-col rounded-[15px] border border-main-25">
+		<!-- Header Section -->
+		<div class="flex w-full items-center justify-between gap-x-2 rounded-[15px] bg-main-15 px-5 py-2.5 text-base font-semibold">
+			<a *ngIf="isShowSubjectIdAndName" class="flex items-center gap-4 hover:text-main-100" [href]="getSubjectDetailUrl()" target="_blank">
+				<div class="flex items-center gap-4">
+					<div>
+						{{ subjectReviewData.subject_id }}
+					</div>
+					<div>{{ subjectReviewData.subject_name_en }}</div>
 				</div>
-				<!-- <sdm-icon
-					*ngIf="canEdit"
-					icon="pen-to-square"
-					iconStyle="fas"
-					class="cursor-pointer text-base text-dark-100"
-					(click)="onEditReview()"
-				></sdm-icon> -->
-				<sdm-icon *ngIf="canDelete" icon="trash-can" iconStyle="fas" class="cursor-pointer text-base text-red-400" data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"></sdm-icon>
+				<div>
+					ปีการศึกษา
+					{{ subjectReviewData.teachtable.year }}
+				</div>
+				<div>
+					ภาคการศึกษาที่
+					{{ subjectReviewData.teachtable.term }}
+				</div>
+				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
+			</a>
+
+			<a class="flex items-center gap-4" *ngIf="!isShowSubjectIdAndName">
+				<div>
+					ปีการศึกษา
+					{{ subjectReviewData.teachtable.year }}
+				</div>
+				<div>
+					ภาคการศึกษาที่
+					{{ subjectReviewData.teachtable.term }}
+				</div>
+				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
+			</a>
+
+			<div class="flex items-center gap-x-1">
+				<sdm-rating mode="display" [rating]="subjectReviewData.rating" customClass="text-base text-dark-100"></sdm-rating>
 			</div>
 		</div>
-	</ng-container>
 
-	<!-- Editing -->
-	<!-- <ng-container *ngIf="isEditing">
-		<sdm-write-review-box
-			[isEdit]="true"
-			[signedIn]="isSignIn"
-			[editReviewContent]="reviewContent"
-			(confirmEditReview)="onConfirmEditReview()"
-			(cancelEditReview)="onCancelEditReview()"
-			class="m-5"
-		></sdm-write-review-box>
-	</ng-container> -->
-</div>
+		<!-- แสดงผลการแก้ไขหรือรีวิว -->
+		<ng-container *ngIf="!isEditing">
+			<!-- Subject Review -->
+			<div>
+				<div class="px-5 pb-2 pt-3 text-sm font-normal text-dark-100" [innerHTML]="this.subjectReviewData.review"></div>
+			</div>
 
-<!-- Delete Review Modal -->
-<sdm-confirm-delete-modal *ngIf="canDelete" modalID="confirm-delete-modal" text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?" subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น" [deleteFunction]="deleteReviewData.bind(this)"></sdm-confirm-delete-modal>
+			<!-- Footer Section -->
+
+			<div class="flex items-center justify-between px-5 pb-3">
+				<div class="flex items-center gap-2">
+					<sdm-icon
+						icon="thumbs-up"
+						[iconStyle]="isCurrentUserLiked ? 'fas' : 'far'"
+						class="text-base text-dark-100"
+						[ngClass]="{
+							'default-cursor': !isSignIn,
+							'cursor-pointer': isSignIn,
+							'like-animation': isAnimating,
+						}"
+						(click)="toggleLike()"></sdm-icon>
+					<div>{{ this.subjectReviewData.like }}</div>
+				</div>
+				<div class="flex items-center gap-2.5">
+					<div class="text-sm font-normal text-dark-75">
+						{{ this.subjectReviewData.created }}
+					</div>
+					<sdm-icon *ngIf="canDelete" icon="trash-can" iconStyle="fas" class="cursor-pointer text-base text-red-400" data-modal-target="confirm-delete-modal" data-modal-toggle="confirm-delete-modal"></sdm-icon>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+	<sdm-confirm-delete-modal
+		*ngIf="canDelete"
+		modalID="confirm-delete-modal"
+		text="คุณต้องการลบข้อมูลรีวิวใช่หรือไม่?"
+		subtext="*หากลบแล้วจะไม่สามารถกู้คืนได้ ต้องเขียนรีวิวใหม่เท่านั้น"
+		[deleteFunction]="deleteReviewData.bind(this)"></sdm-confirm-delete-modal>
+</ng-template>

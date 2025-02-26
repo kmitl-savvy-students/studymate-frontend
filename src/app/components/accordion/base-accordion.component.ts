@@ -1,12 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { Accordion, AccordionInterface, AccordionItem, AccordionOptions } from 'flowbite';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'sdm-base-accordion',
 	standalone: true,
 	template: `
 		<div [id]="accordionId" data-accordion="collapse" data-active-classes="text-dark-100" data-inactive-classes="text-dark-100">
-			<h2 [id]="accordionId + '-heading'" [class.border-b-2]="!isExpanded" class="border-gray-100 p-4 hover:bg-main-10">
+			<h2 [id]="accordionId + '-heading'" [class.border-b-2]="!isExpanded" class="border-gray-100 py-4">
 				<button
 					type="button"
 					class="flex w-full items-center justify-between gap-3"
@@ -19,9 +21,7 @@ import { Accordion, AccordionInterface, AccordionItem, AccordionOptions } from '
 						<div class="text-sm opacity-50">{{ subHeader }}</div>
 					</div>
 					<div class="flex items-center">
-						<svg data-accordion-icon class="h-3 w-3 shrink-0" [class.rotate-180]="accordionDefaultStatus" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5" />
-						</svg>
+						<sdm-icon icon="angle-up" class="flex h-7 w-7 items-center justify-center rounded-full text-sm hover:bg-main-10" [ngClass]="{ 'rotate-180': isExpanded }"></sdm-icon>
 					</div>
 				</button>
 			</h2>
@@ -31,6 +31,7 @@ import { Accordion, AccordionInterface, AccordionItem, AccordionOptions } from '
 			</div>
 		</div>
 	`,
+	imports: [IconComponent, CommonModule],
 })
 export class SDMBaseAccordion implements AfterViewInit {
 	@Input() header: string = '';
@@ -45,7 +46,7 @@ export class SDMBaseAccordion implements AfterViewInit {
 
 	ngAfterViewInit(): void {
 		this.initAccordion();
-		this.isExpanded = this.accordionDefaultStatus;
+		setTimeout(() => (this.isExpanded = this.accordionDefaultStatus));
 	}
 
 	initAccordion(): void {
@@ -72,6 +73,7 @@ export class SDMBaseAccordion implements AfterViewInit {
 			];
 
 			this.accordion = new Accordion(container, items, options);
+			this.isExpanded = this.accordionDefaultStatus;
 		}, 0);
 	}
 }
