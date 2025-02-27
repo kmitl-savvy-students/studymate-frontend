@@ -8,18 +8,21 @@ import { finalize } from 'rxjs';
 import { SDMBaseButton } from '../../components/buttons/base-button.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMBaseModal } from '../../components/modals/base-modal.component';
+import { SelectCurriculumModalComponent } from '../../components/select-curriculum/select-curriculum-modal.component';
 import { User } from '../../shared/models/User.model.js';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 
 @Component({
 	selector: 'sdm-page-profile',
 	standalone: true,
-	imports: [IconComponent, CommonModule, SDMBaseButton, ReactiveFormsModule, SDMBaseModal],
+	imports: [IconComponent, CommonModule, SDMBaseButton, ReactiveFormsModule, SDMBaseModal, SelectCurriculumModalComponent],
 	templateUrl: './profile.page.html',
 	styleUrl: './profile.page.css',
 })
 export class SDMPageProfile {
 	public currentUser: User | null = null;
+
+	@ViewChild('selectCurriculumModal') selectCurriculum!: SelectCurriculumModalComponent;
 
 	constructor(
 		private authService: AuthenticationService,
@@ -51,6 +54,7 @@ export class SDMPageProfile {
 	editProfileForm: FormGroup;
 	isEditProfile: boolean = false;
 	isEditProfileLoading: boolean = false;
+	isEditCurriculum: boolean = false;
 
 	onEditProfileForm(): void {
 		this.toggleEditProfileForm(true);
@@ -58,6 +62,11 @@ export class SDMPageProfile {
 	onEditProfileFormCancel(): void {
 		this.toggleEditProfileForm(false);
 	}
+
+	toggleEditCurriculum(): void {
+		this.selectCurriculum.toggleModalVisibility(true);
+	}
+
 	onEditProfileFormConfirm(): void {
 		if (this.currentUser == null) return;
 		this.isEditProfileLoading = true;

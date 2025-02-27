@@ -1,3 +1,4 @@
+<modal-select-curriculum #selectCurriculumModal></modal-select-curriculum>
 <div class="grid grid-cols-4 gap-x-5">
 	<div class="">
 		<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
@@ -17,50 +18,72 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-span-3 flex w-full flex-col gap-y-4">
+		<div class="w-full rounded-[20px] border border-main-25 p-12">
+			<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="user"></sdm-icon>ข้อมูลผู้ใช้</div>
 
-	<div class="col-span-3 w-full rounded-[20px] border border-main-25 p-12">
-		<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="user"></sdm-icon>ข้อมูลผู้ใช้</div>
+			<form class="my-5 flex flex-col gap-y-4" [formGroup]="editProfileForm">
+				<div class="input-primary">
+					<label for="nickname">ชื่อเล่น</label>
+					<input type="text" id="nickname" formControlName="nickname" placeholder="ชื่อเล่น" required />
+				</div>
+				<div class="input-primary">
+					<label for="firstname">ชื่อจริง</label>
+					<input type="text" id="firstname" formControlName="firstname" placeholder="ชื่อจริง" required />
+				</div>
+				<div class="input-primary">
+					<label for="lastname">นามสกุล</label>
+					<input type="text" id="lastname" formControlName="lastname" placeholder="นามสกุล" required />
+				</div>
+			</form>
 
-		<form class="my-5 flex flex-col gap-y-4" [formGroup]="editProfileForm">
-			<div class="input-primary">
-				<label for="nickname">ชื่อเล่น</label>
-				<input type="text" id="nickname" formControlName="nickname" placeholder="ชื่อเล่น" required />
+			<div *ngIf="!isEditProfile">
+				<sdm-base-button icon="pen" text="แก้ไขข้อมูลผู้ใช้" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onEditProfileForm()" />
 			</div>
-			<div class="input-primary">
-				<label for="firstname">ชื่อจริง</label>
-				<input type="text" id="firstname" formControlName="firstname" placeholder="ชื่อจริง" required />
+			<div *ngIf="isEditProfileLoading">
+				<sdm-base-button text="กำลังโหลด..." textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" [isDisabled]="true" />
 			</div>
-			<div class="input-primary">
-				<label for="lastname">นามสกุล</label>
-				<input type="text" id="lastname" formControlName="lastname" placeholder="นามสกุล" required />
+			<div class="flex gap-2" *ngIf="isEditProfile && !isEditProfileLoading">
+				<sdm-base-button
+					class="flex-grow"
+					icon="xmark"
+					text="ยกเลิก"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-danger-300"
+					backgroundColorHover="hover:bg-danger-400"
+					(clickEvent)="onEditProfileFormCancel()" />
+				<sdm-base-button
+					class="flex-grow"
+					icon="save"
+					text="บันทึกข้อมูล"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-success-300"
+					backgroundColorHover="hover:bg-success-400"
+					(clickEvent)="onEditProfileFormConfirm()" />
 			</div>
-		</form>
-
-		<div *ngIf="!isEditProfile">
-			<sdm-base-button icon="pen" text="แก้ไขข้อมูลผู้ใช้" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onEditProfileForm()" />
 		</div>
-		<div *ngIf="isEditProfileLoading">
-			<sdm-base-button text="กำลังโหลด..." textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" [isDisabled]="true" />
-		</div>
-		<div class="flex gap-2" *ngIf="isEditProfile && !isEditProfileLoading">
-			<sdm-base-button
-				class="flex-grow"
-				icon="xmark"
-				text="ยกเลิก"
-				textColor="text-light"
-				textColorHover="hover:text-light"
-				backgroundColor="bg-danger-300"
-				backgroundColorHover="hover:bg-danger-400"
-				(clickEvent)="onEditProfileFormCancel()" />
-			<sdm-base-button
-				class="flex-grow"
-				icon="save"
-				text="บันทึกข้อมูล"
-				textColor="text-light"
-				textColorHover="hover:text-light"
-				backgroundColor="bg-success-300"
-				backgroundColorHover="hover:bg-success-400"
-				(clickEvent)="onEditProfileFormConfirm()" />
+		<div class="flex w-full flex-col gap-y-4 rounded-[20px] border border-main-25 p-12">
+			<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="book-bookmark"></sdm-icon>หลักสูตร</div>
+			<div class="mb-4">
+				<h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h3>
+				<h2 class="text-xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h2>
+				<h3 class="text-base opacity-50">{{ currentUser?.curriculum?.name_en }}</h3>
+			</div>
+			<div>
+				<sdm-base-button
+					icon="pen"
+					text="แก้ไขข้อมูลหลักสูตร"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-primary-300"
+					backgroundColorHover="hover:bg-primary-400"
+					(clickEvent)="toggleEditCurriculum()" />
+			</div>
+			<div *ngIf="isEditProfileLoading">
+				<sdm-base-button text="กำลังโหลด..." textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" [isDisabled]="true" />
+			</div>
 		</div>
 	</div>
 </div>
