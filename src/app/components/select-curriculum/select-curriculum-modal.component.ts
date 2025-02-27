@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Curriculum } from '@models/Curriculum.model';
 import { Department } from '@models/Department';
@@ -20,6 +20,7 @@ import { SDMBaseButton } from '../buttons/base-button.component';
 	imports: [SDMBaseButton, ReactiveFormsModule, CommonModule],
 })
 export class SelectCurriculumModalComponent implements OnInit {
+	@Output() confirmEvent = new EventEmitter<void>();
 	modal: ModalInterface | undefined;
 	currentUser: User | null = null;
 
@@ -98,6 +99,11 @@ export class SelectCurriculumModalComponent implements OnInit {
 		});
 	}
 
+	toggleModalVisibility(status: boolean) {
+		if (status) this.modal?.show();
+		else this.modal?.hide();
+	}
+
 	handleModalVisibility() {
 		if (this.currentUser == null) {
 			return;
@@ -171,10 +177,12 @@ export class SelectCurriculumModalComponent implements OnInit {
 		this.http.put(apiUrl, body).subscribe({
 			next: () => {
 				this.alertService.showAlert('success', 'เลือกหลักสูตรสำเร็จ!');
+				this.confirmEvent.emit();
 				location.reload();
 			},
 			error: (error) => {
 				console.error('Error updating curriculum:', error);
+				this.confirmEvent.emit();
 				this.alertService.showAlert('error', 'ไม่สามารถเลือกหลักสูตรได้ กรุณาลองอีกครั้ง');
 			},
 		});
