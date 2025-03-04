@@ -1,6 +1,7 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SDMBaseButton } from '@components/buttons/base-button.component';
@@ -8,6 +9,7 @@ import { SDMBaseModal } from '@components/modals/base-modal.component';
 import { Curriculum } from '@models/Curriculum.model';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject';
+import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
@@ -19,6 +21,7 @@ import { IconComponent } from '../../../components/icon/icon.component';
 	imports: [ReactiveFormsModule, CommonModule, SDMBaseModal, SDMBaseButton, IconComponent],
 	templateUrl: 'curriculum-group.page.html',
 	styleUrl: 'curriculum-group.page.css',
+	providers: [Clipboard],
 })
 export class SDMPageCurriculumGroup implements OnInit {
 	curriculumId: number | null = null;
@@ -40,6 +43,8 @@ export class SDMPageCurriculumGroup implements OnInit {
 
 	currentParentNode: CurriculumGroup | null = null;
 
+	private clipboard = inject(Clipboard);
+
 	constructor(
 		private http: HttpClient,
 		private backendService: BackendService,
@@ -47,6 +52,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 		private router: Router,
 		private fb: FormBuilder,
 		private loadingService: LoadingService,
+		private alertService: AlertService,
 	) {
 		this.addNodeForm = this.fb.group({
 			name: [''],
@@ -325,6 +331,33 @@ export class SDMPageCurriculumGroup implements OnInit {
 	}
 	// #endregion
 	// #region Edit Subjects
+	onCopyAllSubject(): void {
+		if (!this.currentParentNode) return;
+
+		let subjectsString = this.currentParentNode.subjects.flatMap((subject) => subject.subject?.id).join(',');
+		this.clipboard.copy(subjectsString);
+		this.alertService.showAlert('success', 'คัดลอกรายวิชาสำเร็จ!');
+	}
+	onDeleteAllSubject(): void {
+		if (!this.currentParentNode) return;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group-subject/delete-all/${this.currentParentNode.id}`;
+		this.loadingService.show(() => {
+			this.http
+				.delete(apiUrl)
+				.pipe(finalize(() => this.loadingService.hide()))
+				.subscribe({
+					next: () => {
+						this.fetchCurriculumGroupSubjects();
+						this.fetchCurriculumAndNode();
+					},
+					error: () => {
+						console.error('Error delete subjects');
+					},
+				});
+		});
+	}
+
 	onEditSubjects(): void {
 		this.fetchCurriculumGroupSubjects();
 		this.editNodeModal.hide();
