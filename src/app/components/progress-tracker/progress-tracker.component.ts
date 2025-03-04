@@ -124,6 +124,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			.subscribe({
 				next: (data) => {
 					this.transcript = data;
+					this.transcript.details.sort((detailA, detailB) => detailA.id - detailB.id);
 					if (data.user?.curriculum?.curriculum_group) {
 						this.rootNode = data.user.curriculum.curriculum_group;
 					}
