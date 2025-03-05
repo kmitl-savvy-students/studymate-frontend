@@ -11,14 +11,14 @@
 						<div class="flex flex-col gap-y-6">
 							<div class="input-primary">
 								<label for="faculty">เลือกคณะ</label>
-								<select id="faculty" formControlName="faculty">
+								<select id="faculty" formControlName="faculty" class="w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
 									<option value="" disabled>กรุณาเลือกคณะ</option>
 									<option *ngFor="let faculty of faculties" [value]="faculty.id">{{ faculty.name_th }}</option>
 								</select>
 							</div>
 							<div class="input-primary">
 								<label for="department">เลือกภาควิชา</label>
-								<select id="department" formControlName="department">
+								<select id="department" formControlName="department" class="w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
 									<option value="" disabled>กรุณาเลือกภาควิชา</option>
 									<option *ngIf="departments.length === 0" value="" disabled>ไม่พบข้อมูล</option>
 									<option *ngFor="let department of departments" [value]="department.id">{{ department.name_th }}</option>
@@ -26,7 +26,7 @@
 							</div>
 							<div class="input-primary">
 								<label for="program">เลือกแผนการเรียน</label>
-								<select id="program" formControlName="program">
+								<select id="program" formControlName="program" class="w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
 									<option value="" disabled>กรุณาเลือกแผนการเรียน</option>
 									<option *ngIf="programs.length === 0" value="" disabled>ไม่พบข้อมูล</option>
 									<option *ngFor="let program of programs" [value]="program.id">{{ program.name_th }}</option>
@@ -34,10 +34,10 @@
 							</div>
 							<div class="input-primary">
 								<label for="curriculum">เลือกหลักสูตร</label>
-								<select id="curriculum" formControlName="curriculum">
+								<select id="curriculum" formControlName="curriculum" class="w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
 									<option value="" disabled>กรุณาเลือกหลักสูตร</option>
 									<option *ngIf="curriculums.length === 0" value="" disabled>ไม่พบข้อมูล</option>
-									<option *ngFor="let curriculum of curriculums" [value]="curriculum.id">หลักสูตรปี {{ curriculum.year }} - {{ curriculum.name_th }}</option>
+									<option *ngFor="let curriculum of curriculums" [value]="curriculum.id" class="overflow-hidden text-ellipsis whitespace-nowrap">หลักสูตรปี {{ curriculum.year }} - {{ curriculum.name_th }}</option>
 								</select>
 							</div>
 						</div>

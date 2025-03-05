@@ -169,7 +169,27 @@
 			</div>
 		</div>
 	</div>
-	<div class="mb-5">
+	<div class="mb-5 flex flex-col gap-2">
+		<div class="flex gap-2">
+			<sdm-base-button
+				class="flex-grow"
+				icon="copy"
+				text="คัดลอกรายวิชาทั้งหมด"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-primary-300"
+				backgroundColorHover="hover:bg-primary-400"
+				(clickEvent)="onCopyAllSubject()" />
+			<sdm-base-button
+				class="flex-grow"
+				icon="trash"
+				text="เคลียร์รายวิชาทั้งหมด"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-danger-300"
+				backgroundColorHover="hover:bg-danger-400"
+				(clickEvent)="onDeleteAllSubject()" />
+		</div>
 		<sdm-base-button icon="plus" text="เพิ่มรายวิชา" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-success-300" backgroundColorHover="hover:bg-success-400" (clickEvent)="onAddSubject()" />
 	</div>
 </sdm-base-modal>
