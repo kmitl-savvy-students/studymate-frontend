@@ -189,7 +189,7 @@
 				<a [href]="getSubjectDetailUrl(subject.subject?.id!)" target="_blank" class="flex items-center justify-between rounded-xl border border-gray-200 py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10">
 					<div class="flex flex-row p-2">
 						<div class="flex items-center justify-center pr-3">
-							<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)" disabled />
+							<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="false" disabled />
 						</div>
 						<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="currentSubjectsGroupColor"></div>
 						<div class="flex flex-col">
