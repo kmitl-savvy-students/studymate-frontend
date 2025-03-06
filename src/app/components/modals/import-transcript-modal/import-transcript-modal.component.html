@@ -11,7 +11,7 @@
 					{{ headerModal }}
 				</p>
 			</div>
-			<div class="text-dark-100 flex flex-col gap-y-8 bg-white p-8">
+			<div class="flex flex-col gap-y-8 bg-white p-8 text-dark-100">
 				<div *ngIf="uploadComplete && statusMessage" class="text-center text-green-500">
 					<div class="flex items-center justify-center rounded-lg bg-green-50 px-4 py-2 text-green-400">
 						<div class="max-w-64 text-ellipsis text-sm font-medium">
@@ -24,18 +24,22 @@
 					<label for="dropzone-file" class="flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-main-25 bg-white hover:bg-main-5" [class.opacity-50]="isUploading">
 						<div class="flex flex-col items-center justify-center pb-6 pt-5">
 							<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-main-25"></sdm-icon>
-							<p class="text-dark-100 mb-2 text-base">
+							<p class="mb-2 text-base text-dark-100">
 								<span class="font-semibold">เลือก</span>
-								หรือวางไฟล์ Transcript ที่นี่
+								ไฟล์ Transcript ที่นี่
 							</p>
-							<p class="text-dark-50 text-sm">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
+							<p class="text-sm text-dark-50">ไฟล์ PDF ขนาดไม่เกิน 15 MB</p>
 
 							<div *ngIf="selectedFileName" class="mt-4 cursor-default px-10 text-center" (click)="onDivClick($event)">
-								<div class="text-dark-100 flex items-center rounded-lg bg-main-10 py-2 pe-2 ps-4">
+								<div class="flex items-center rounded-lg bg-main-10 py-2 pe-2 ps-4 text-dark-100">
 									<div class="me-3 max-w-64 text-ellipsis text-sm font-medium">
 										{{ selectedFileName }}
 									</div>
-									<button type="button" class="text-dark-100 flex h-8 w-8 items-center justify-center rounded-lg p-1.5 hover:bg-main-10" (click)="clearFile(); $event.stopPropagation(); $event.preventDefault()" [disabled]="isUploading">
+									<button
+										type="button"
+										class="flex h-8 w-8 items-center justify-center rounded-lg p-1.5 text-dark-100 hover:bg-main-10"
+										(click)="clearFile(); $event.stopPropagation(); $event.preventDefault()"
+										[disabled]="isUploading">
 										<sdm-icon icon="xmark" class="-mb-1 text-main-50"></sdm-icon>
 									</button>
 								</div>
@@ -53,7 +57,9 @@
 				</div>
 
 				<div class="flex justify-end gap-x-5 text-base font-medium">
-					<button [attr.data-modal-hide]="modalID" type="button" class="text-dark-100 rounded-[10px] border border-main-25 bg-white px-4 py-2 text-center hover:bg-main-5" (click)="clearFile()" [disabled]="isUploading">ยกเลิก</button>
+					<button [attr.data-modal-hide]="modalID" type="button" class="rounded-[10px] border border-main-25 bg-white px-4 py-2 text-center text-dark-100 hover:bg-main-5" (click)="clearFile()" [disabled]="isUploading">
+						ยกเลิก
+					</button>
 					<button type="button" class="rounded-[10px] bg-main-100 px-4 py-2 text-center text-light hover:bg-main-120" (click)="uploadFile()" [disabled]="isSubmitDisabled || isUploading">อัปโหลด</button>
 				</div>
 			</div>
