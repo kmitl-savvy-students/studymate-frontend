@@ -1,15 +1,60 @@
-<div class="my-6">
+<div class="my-4">
 	<h1 class="text-xl font-semibold">ความคืบหน้าของการลงเรียนวิชาต่างๆ ตามโครงสร้างหลักสูตร</h1>
 	<h3 class="text-sm opacity-50">คุณ {{ currentUser?.firstname }} {{ currentUser?.lastname }}</h3>
 </div>
 
-<div class="my-6">
-	<label class="inline-flex max-w-full cursor-pointer items-center overflow-x-auto rounded-xl border border-gray-200 p-4">
-		<input type="checkbox" class="peer sr-only" (change)="toggleIncludeXGrade()" [checked]="includeXGrade" />
-		<div
-			class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
-		<span class="ms-3 text-sm font-medium text-main-75">แสดงข้อมูลรายวิชาที่ลงในเทอมปัจจุบัน</span>
-	</label>
+<!-- <ng-container *ngIf="isFetchingTranscriptDetails">
+	<div class="text-semibold rounded-3xl border bg-orange-50 p-12 text-center text-lg text-warning-400">กรุณาอัปโหลดไฟล์ Transcript เพื่อดูข้อมูลส่วนนี้</div>
+</ng-container> -->
+
+<div class="my-4 grid grid-cols-10 gap-x-2">
+	<div class="col-span-4">
+		<label class="inline-flex w-full cursor-pointer items-center justify-center overflow-x-auto rounded-xl border border-gray-200 p-3">
+			<input type="checkbox" class="peer sr-only" (change)="toggleIncludeXGrade()" [checked]="includeXGrade" />
+			<div
+				class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
+			<span class="ms-3 text-sm font-medium text-dark-100">แสดงข้อมูลรายวิชาที่ลงในเทอมปัจจุบัน</span>
+		</label>
+	</div>
+	<div class="col-span-6">
+		<div class="grid grid-cols-6 justify-items-center gap-x-2">
+			<div class="col-span-2 w-full">
+				<div class="flex flex-row items-center justify-center rounded-xl border border-gray-200 p-3.5 text-sm font-medium text-dark-100">
+					<span class="pr-1">สถานะ : </span>
+					<ng-container *ngIf="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1); else notDone"> <div class="rounded-xl bg-emerald-200 px-2 py-0.5 font-semibold">ครบ</div></ng-container>
+					<ng-template #notDone>
+						<div class="rounded-xl bg-gray-100 px-2 py-0.5">คงเหลือ</div>
+					</ng-template>
+				</div>
+			</div>
+			<div class="col-span-4 grid w-full grid-cols-4 items-center justify-items-center rounded-xl border border-gray-200 p-3.5">
+				<div class="col-span-2 text-sm font-medium text-dark-100">
+					หน่วยกิตทั้งหมด :
+					<div class="inline-flex pl-1 text-sm font-semibold text-main-75">{{ this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
+				</div>
+
+				<div class="col-span-2 text-sm font-medium text-dark-100">
+					หน่วยกิตที่ขาด :
+					<div class="inline-flex pl-1 text-sm font-semibold text-red-300">
+						{{ groupCreditTotal }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="my-4 w-full items-center overflow-x-auto rounded-xl border border-gray-200 p-4">
+	<div class="flex w-full flex-row items-center">
+		<div class="h-5 w-full rounded-lg bg-gray-200">
+			<div
+				class="h-5 rounded-md p-0.5 text-center align-middle text-base font-semibold leading-none"
+				[style.width.%]="progressPercentage"
+				[ngClass]="{ 'text-white': progressPercentage > 0, 'text-dark-100': progressPercentage == 0, 'bg-blue-600': progressPercentage < 100, 'bg-emerald-400': progressPercentage == 100 }">
+				<div class="py-0.5">{{ progressPercentage | number: '1.2-2' }}%</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="flex flex-col gap-y-6">
@@ -143,9 +188,12 @@
 			<ng-container *ngFor="let subject of currentSubjects">
 				<a [href]="getSubjectDetailUrl(subject.subject?.id!)" target="_blank" class="flex items-center justify-between rounded-xl border border-gray-200 py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10">
 					<div class="flex flex-row p-2">
+						<div class="flex items-center justify-center pr-3">
+							<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="false" disabled />
+						</div>
 						<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="currentSubjectsGroupColor"></div>
 						<div class="flex flex-col">
-							<div class="max-w-64 truncate text-base font-semibold">{{ subject.subject?.id }} {{ subject.subject?.name_th }}</div>
+							<div class="max-w-52 truncate text-base font-semibold">{{ subject.subject?.id }} {{ subject.subject?.name_th }}</div>
 							<div class="text-xs opacity-50">
 								{{ subject.subject?.name_en }}
 							</div>

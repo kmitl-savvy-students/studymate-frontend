@@ -182,6 +182,7 @@ export class SDMPageMySubject implements OnInit {
 						},
 						error: (error) => {
 							console.error('Error upload transcript:', error);
+							this.alertService.showAlert('error', 'กรุณาอัปโหลดไฟล์ PDF เฉพาะไฟล์ Transcript แบบ Unofficial เท่านั้น');
 						},
 					});
 			});

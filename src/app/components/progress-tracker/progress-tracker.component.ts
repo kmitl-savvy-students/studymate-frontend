@@ -42,7 +42,10 @@ export class SDMProgressTrackerComponent implements OnInit {
 	groupMatches = new Map<number, TranscriptDetail[]>();
 	groupCreditUsed = new Map<number, number>();
 	groupCreditRequired = new Map<number, number>();
+	groupCreditTotal: number = 0;
 	groupComplete = new Map<number, boolean>();
+	progressPercentage: number = 0;
+
 	notFittedSubjects: TranscriptDetail[] = [];
 
 	subjectData!: Subject;
@@ -51,6 +54,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	accordionLevelExpands = 2;
 	includeXGrade = false;
+
+	isFetchingTranscriptDetails: boolean = false;
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -127,13 +132,31 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	fetchTranscripts() {
 		if (!this.currentUser) return;
+		this.isFetchingTranscriptDetails = true;
 		this.apiManagementService
 			.FetchTranscript(this.currentUser.id)
-			.pipe(finalize(() => this.loadingService.hide()))
+			.pipe(
+				finalize(() => {
+					this.loadingService.hide();
+					this.isFetchingTranscriptDetails = false;
+				}),
+			)
 			.subscribe({
 				next: (data) => {
 					this.transcript = data;
-					this.transcript.details.sort((a, b) => a.id - b.id);
+					const gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'F', 'X'];
+
+					// this.transcript.details = [...this.transcript.details].sort((a, b) => a.id - b.id);
+
+					this.transcript.details.sort((a, b) => b.subject!.credit - a.subject!.credit);
+
+					this.transcript.details.sort((a, b) => {
+						return gradeOrder.indexOf(a.grade) - gradeOrder.indexOf(b.grade);
+					});
+					console.log(
+						'after sort all :',
+						this.transcript.details.map((d) => ({ id: d.subject!.id, credit: d.subject!.credit, grade: d.grade })),
+					);
 					if (data.user?.curriculum?.curriculum_group) {
 						this.rootNode = data.user.curriculum.curriculum_group;
 					}
@@ -161,14 +184,18 @@ export class SDMProgressTrackerComponent implements OnInit {
 		this.groupCreditUsed.clear();
 		this.groupCreditRequired.clear();
 		this.groupComplete.clear();
-
+		this.groupCreditTotal = 0;
 		this.collectAllGroupIds(this.currentUser.curriculum.curriculum_group);
 		this.computeRequiredCredits(this.currentUser.curriculum.curriculum_group);
-
 		const used = new Set<TranscriptDetail>();
 		this.processGroup(this.currentUser.curriculum.curriculum_group, used);
-
+		this.groupCreditTotal = Math.max(0, (this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0) - (this.groupCreditUsed.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0));
+		this.calculateProgressPercentage();
 		this.notFittedSubjects = this.transcript.details.filter((d) => !used.has(d));
+	}
+
+	calculateProgressPercentage(): void {
+		this.progressPercentage = 0 ? 0 : ((this.groupCreditUsed.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0) / (this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0)) * 100;
 	}
 
 	private computeRequiredCredits(group: CurriculumGroup): number {
@@ -309,7 +336,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 		}
 
 		this.groupCreditUsed.set(group.id, totalUsed);
-
 		let groupIsComplete = false;
 
 		if (group.children?.length) {
@@ -353,6 +379,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		}
 
 		this.groupComplete.set(group.id, groupIsComplete);
+
 		return { used: totalUsed, complete: groupIsComplete };
 	}
 
