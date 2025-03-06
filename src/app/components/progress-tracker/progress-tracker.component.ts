@@ -40,7 +40,9 @@ export class SDMProgressTrackerComponent implements OnInit {
 	groupMatches = new Map<number, TranscriptDetail[]>();
 	groupCreditUsed = new Map<number, number>();
 	groupCreditRequired = new Map<number, number>();
+	groupCreditTotal: number = 0;
 	groupComplete = new Map<number, boolean>();
+	groupCreditRemain = new Map<number, number>();
 	notFittedSubjects: TranscriptDetail[] = [];
 
 	public subjectData!: Subject;
@@ -149,10 +151,12 @@ export class SDMProgressTrackerComponent implements OnInit {
 		this.groupCreditUsed.clear();
 		this.groupCreditRequired.clear();
 		this.groupComplete.clear();
+		this.groupCreditTotal = 0;
 		this.collectAllGroupIds(this.currentUser.curriculum.curriculum_group);
 		this.computeRequiredCredits(this.currentUser.curriculum.curriculum_group);
 		const used = new Set<TranscriptDetail>();
 		this.processGroup(this.currentUser.curriculum.curriculum_group, used);
+		this.groupCreditTotal = Math.max(0, (this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0) - (this.groupCreditUsed.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0));
 		this.notFittedSubjects = this.transcript.details.filter((d) => !used.has(d));
 	}
 	private computeRequiredCredits(group: CurriculumGroup): number {
@@ -267,6 +271,17 @@ export class SDMProgressTrackerComponent implements OnInit {
 				break;
 		}
 		this.groupCreditUsed.set(group.id, totalUsed);
+
+		// คำนวณ remainCredit
+		let remainCredit = Math.max(needed - totalUsed, 0);
+
+		// รวม remainCredit ของ node ลูก
+		for (const child of group.children || []) {
+			remainCredit += this.groupCreditRemain.get(child.id) || 0;
+		}
+		console.log(remainCredit);
+		this.groupCreditRemain.set(group.id, remainCredit);
+
 		let groupIsComplete = false;
 		if (group.children?.length) {
 			switch (group.type) {
@@ -306,8 +321,14 @@ export class SDMProgressTrackerComponent implements OnInit {
 			}
 		}
 		this.groupComplete.set(group.id, groupIsComplete);
+
+		// console.log('Complete : ', this.groupComplete);
+		// console.log(totalUsed);
+		console.log('Remain Credit : ', this.groupCreditRemain);
+
 		return { used: totalUsed, complete: groupIsComplete };
 	}
+
 	private hasAtLeastOneChildCompleted(group: CurriculumGroup): boolean {
 		if (!group.children || group.children.length === 0) return false;
 		for (const child of group.children) {
