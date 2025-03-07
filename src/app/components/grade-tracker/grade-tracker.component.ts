@@ -27,6 +27,9 @@ function getGradeValue(grade: string): number {
 			return 1.0;
 		case 'F':
 			return 0.0;
+		case 'S':
+		case 'U':
+			return -1;
 		default:
 			return -1;
 	}
