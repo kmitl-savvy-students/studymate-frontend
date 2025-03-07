@@ -48,7 +48,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	accordionLevelExpands = 2;
 	includeXGrade = false;
 	isFetchingTranscriptDetails = false;
-	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'T', 'X', 'F', 'U'];
+	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'X', 'F', 'U'];
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
