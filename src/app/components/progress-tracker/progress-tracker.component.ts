@@ -48,7 +48,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	accordionLevelExpands = 2;
 	includeXGrade = false;
 	isFetchingTranscriptDetails = false;
-	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'X', 'F', 'U'];
+	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'T', 'X', 'F', 'U'];
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -137,8 +137,20 @@ export class SDMProgressTrackerComponent implements OnInit {
 				next: (data) => {
 					this.transcript = data;
 					if (this.transcript?.details) {
-						this.transcript.details.sort((a, b) => this.gradeOrder.indexOf(a.grade) - this.gradeOrder.indexOf(b.grade));
+						this.transcript.details.sort((a, b) => {
+							// Determine grade order based on the defined gradeOrder array
+							const gradeIndexA = this.gradeOrder.indexOf(a.grade);
+							const gradeIndexB = this.gradeOrder.indexOf(b.grade);
+							if (gradeIndexA !== gradeIndexB) {
+								return gradeIndexA - gradeIndexB;
+							}
+							// If grades are the same, order by credit descending
+							const creditA = a.subject?.credit || 0;
+							const creditB = b.subject?.credit || 0;
+							return creditB - creditA;
+						});
 					}
+
 					if (data.user?.curriculum?.curriculum_group) {
 						this.rootNode = data.user.curriculum.curriculum_group;
 					}
