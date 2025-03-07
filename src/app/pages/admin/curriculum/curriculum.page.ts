@@ -252,6 +252,7 @@ export class SDMPageCurriculum implements OnInit {
 	cloneCurriculumForm: FormGroup;
 
 	onCloneCurriculumConfirm() {
+		if (!this.programId) return;
 		if (this.cloneCurriculumForm.value.cloneCurriculum === '') {
 			this.alertService.showAlert('error', 'กรุณาเลือกหลักสูตรที่ต้องการคัดลอก');
 			return;
@@ -259,7 +260,7 @@ export class SDMPageCurriculum implements OnInit {
 
 		const cloneCurriculumGroup = {
 			id: this.cloneCurriculumForm.value.cloneCurriculum,
-			parent_id: -1,
+			parent_id: this.programId,
 			type: 'REQUIRED_ALL',
 			name: 'Root',
 			credit: -1,
