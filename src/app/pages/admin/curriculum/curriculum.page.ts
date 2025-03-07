@@ -28,6 +28,8 @@ export class SDMPageCurriculum implements OnInit {
 	curriculumCreateForm: FormGroup;
 	curriculumEditForm: FormGroup;
 
+	curriculumsAll: Curriculum[] = [];
+
 	@ViewChild('createCurriculumModal') createCurriculumModal!: SDMBaseModal;
 	@ViewChild('editCurriculumModal') editCurriculumModal!: SDMBaseModal;
 
@@ -61,11 +63,24 @@ export class SDMPageCurriculum implements OnInit {
 			if (id) {
 				this.programId = +id;
 				this.fetchCurriculums();
+				this.fetchCurriculumsAll();
 			}
 		});
 	}
 
 	// #region Fetchings
+	fetchCurriculumsAll(): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/get`;
+
+		this.http.get<Curriculum[]>(apiUrl).subscribe({
+			next: (data) => {
+				this.curriculumsAll = data;
+			},
+			error: (error) => {
+				console.error('Error fetching all curriculums:', error);
+			},
+		});
+	}
 	fetchCurriculums(): void {
 		if (!this.programId) return;
 		this.isLoading = true;

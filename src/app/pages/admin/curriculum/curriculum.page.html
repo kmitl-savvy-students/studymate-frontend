@@ -59,7 +59,7 @@
 			<label for="cloneCurriculum">คัดลอกหลักสูตร</label>
 			<select id="cloneCurriculum" formControlName="cloneCurriculum" required>
 				<option value="" disabled selected>กรุณาเลือกหลักสูตรที่ต้องการคัดลอก</option>
-				<option *ngFor="let curriculum of curriculums" [value]="curriculum.curriculum_group?.id">({{ curriculum.id }}) {{ curriculum.name_th }}</option>
+				<option *ngFor="let curriculum of curriculumsAll" [value]="curriculum.curriculum_group?.id">({{ curriculum.id }}) {{ curriculum.name_th }}</option>
 			</select>
 		</div>
 		<sdm-base-button
