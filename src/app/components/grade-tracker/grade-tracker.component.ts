@@ -61,6 +61,8 @@ export class SDMGradeTrackerComponent implements OnInit {
 	transcript: Transcript | null = null;
 	isFetchingTranscript = false;
 
+	finalGpa: Number | null = null;
+
 	groupedTranscriptDetails: YearTermGroup[] = [];
 	private originalGrades = new Map<number, string>();
 
@@ -149,6 +151,8 @@ export class SDMGradeTrackerComponent implements OnInit {
 			totalCreditsSoFar += termCredits;
 
 			group.gpa = totalCreditsSoFar > 0 ? totalPointsSoFar / totalCreditsSoFar : 0;
+
+			this.finalGpa = group.gpa;
 		}
 	}
 
