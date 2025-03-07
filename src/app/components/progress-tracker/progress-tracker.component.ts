@@ -48,7 +48,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 	accordionLevelExpands = 2;
 	includeXGrade = false;
 	isFetchingTranscriptDetails = false;
-	// Grade order used to sort details. (Assumes best grade appears first.)
 	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'X', 'F', 'U'];
 
 	ngOnInit(): void {
@@ -137,7 +136,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 			.subscribe({
 				next: (data) => {
 					this.transcript = data;
-					// Sort details by grade order (best grade comes first)
 					if (this.transcript?.details) {
 						this.transcript.details.sort((a, b) => this.gradeOrder.indexOf(a.grade) - this.gradeOrder.indexOf(b.grade));
 					}
@@ -152,10 +150,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 			});
 	}
 
-	/**
-	 * Assigns transcript details to groups. If a subject appears more than once, only the first (best grade)
-	 * is placed in its proper group. Duplicate details will then be considered “uncategorized.”
-	 */
 	assignSubjectsToGroups(): void {
 		if (!this.transcript?.details || !this.currentUser?.curriculum?.curriculum_group) {
 			this.notFittedSubjects = [];
@@ -173,18 +167,10 @@ export class SDMProgressTrackerComponent implements OnInit {
 			this.groupCreditUsed.set(id, 0);
 		});
 		const usedDetails = new Set<TranscriptDetail>();
-		const assignedSubjectIds = new Set<string>(); // Track assigned subject IDs
-
 		for (const detail of this.transcript.details) {
 			if (!this.shouldIncludeDetail(detail)) continue;
-			const subjectId = detail.subject?.id;
-			// If this subject has already been assigned, skip it so it remains uncategorized
-			if (subjectId && assignedSubjectIds.has(subjectId)) continue;
 			if (this.placeDetailInGroup(detail, this.currentUser.curriculum.curriculum_group)) {
 				usedDetails.add(detail);
-				if (subjectId) {
-					assignedSubjectIds.add(subjectId);
-				}
 			}
 		}
 		this.updateUsageFromChildren(this.currentUser.curriculum.curriculum_group);
@@ -197,12 +183,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 		this.notFittedSubjects = this.transcript.details.filter((d) => !usedDetails.has(d));
 	}
 
-	/**
-	 * Places a transcript detail into the appropriate group.
-	 * For credit-based groups, the check is now “at least” the required amount:
-	 * if the current usage is less than the required credits, the subject is added regardless of exceeding the limit.
-	 * Once the group’s usage meets or exceeds the required credits, no additional subjects are added.
-	 */
 	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
 		if (group.children?.length) {
 			for (const child of group.children) {
@@ -230,26 +210,28 @@ export class SDMProgressTrackerComponent implements OnInit {
 					const parent = this.findParentRequiredCreditGroup(group);
 					const parentNeeded = parent ? this.groupCreditRequired.get(parent.id) || 0 : 0;
 					const parentUsed = parent ? this.groupCreditUsed.get(parent.id) || 0 : 0;
-					// Allow adding as long as the current used credits are less than required
 					if (used < needed) {
-						if (parent && parentUsed >= parentNeeded) {
-							break;
+						if (used + (detail.subject?.credit ?? 0) <= needed) {
+							if (parent && parentUsed >= parentNeeded) {
+								break;
+							}
+							this.groupMatches.get(group.id)?.push(detail);
+							this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
+							if (parent) {
+								this.groupCreditUsed.set(parent.id, Math.min(parentUsed + (detail.subject?.credit ?? 0), parentNeeded));
+							}
+							return true;
 						}
-						this.groupMatches.get(group.id)?.push(detail);
-						this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
-						if (parent) {
-							this.groupCreditUsed.set(parent.id, Math.min(parentUsed + (detail.subject?.credit ?? 0), parentNeeded));
-						}
-						return true;
 					}
 				}
 				break;
 			case 'FREE':
-				// Similar “at least” check for free groups
 				if (used < needed) {
-					this.groupMatches.get(group.id)?.push(detail);
-					this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
-					return true;
+					if (used + (detail.subject?.credit ?? 0) <= needed) {
+						this.groupMatches.get(group.id)?.push(detail);
+						this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
+						return true;
+					}
 				}
 				break;
 		}
@@ -264,6 +246,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 				childrenUsage += this.updateUsageFromChildren(child);
 			}
 		}
+		const needed = this.groupCreditRequired.get(group.id) || 0;
 		let usage = ownUsage;
 		if (group.children && group.children.length > 0) {
 			if (!group.subjects || group.subjects.length === 0 || group.type === 'FREE') {
@@ -272,7 +255,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 				usage = ownUsage + childrenUsage;
 			}
 		}
-		// Removed clamping so that usage reflects the actual total credits
+		if (usage > needed) usage = needed;
 		this.groupCreditUsed.set(group.id, usage);
 		return usage;
 	}
@@ -384,10 +367,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 		}
 	}
 
-	/**
-	 * Excludes details with grade F or U.
-	 * Also, if includeXGrade is false, any detail with grade X is excluded.
-	 */
 	private shouldIncludeDetail(detail: TranscriptDetail): boolean {
 		const grade = detail.grade?.toUpperCase().trim() || '';
 		if (!this.includeXGrade && grade === 'X') return false;
