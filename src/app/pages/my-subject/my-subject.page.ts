@@ -12,6 +12,7 @@ import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
 import { SDMCreditDashboardComponent } from '../../components/credit-dashboard/credit-dashboard.component';
+import { SDMGradeTrackerComponent } from '../../components/grade-tracker/grade-tracker.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { SDMBaseModal } from '../../components/modals/base-modal.component';
 import { SDMTabsComponent } from '../../components/tabs/tabs.component';
@@ -20,7 +21,7 @@ import { SDMTranscriptTrackerComponent } from '../../components/transcript-track
 @Component({
 	selector: 'sdm-page-my-subject',
 	standalone: true,
-	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMCreditDashboardComponent, SDMTabsComponent, SDMProgressTrackerComponent, SDMTranscriptTrackerComponent],
+	imports: [CommonModule, SDMBaseButton, SDMBaseModal, IconComponent, SDMCreditDashboardComponent, SDMTabsComponent, SDMProgressTrackerComponent, SDMTranscriptTrackerComponent, SDMGradeTrackerComponent],
 	templateUrl: './my-subject.page.html',
 	styleUrls: ['./my-subject.page.css'],
 })

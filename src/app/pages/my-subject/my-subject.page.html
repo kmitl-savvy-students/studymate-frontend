@@ -13,9 +13,7 @@
 				<sdm-progress-tracker #progressTracker />
 			</ng-template>
 			<ng-template #grade>
-				<div class="flex h-60 items-center justify-center align-middle">
-					<p class="text-2xl font-semibold">tab grade is coming soon ...</p>
-				</div>
+				<sdm-grade-tracker #gradeTracker />
 			</ng-template>
 		</sdm-tabs>
 	</div>
@@ -40,7 +38,6 @@
 					(clickEvent)="onDeleteTranscript()"></sdm-base-button>
 			</div>
 			<sdm-credit-dashboard [totalCompleted]="calculateTotalCompleteCredit()" [totalCredit]="136" [totalRemaining]="136 - calculateTotalCompleteCredit()"></sdm-credit-dashboard>
-			<!-- <sdm-advice-dashboard></sdm-advice-dashboard> -->
 		</div>
 	</div>
 </div>
