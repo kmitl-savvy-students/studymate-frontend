@@ -48,7 +48,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	accordionLevelExpands = 2;
 	includeXGrade = false;
 	isFetchingTranscriptDetails = false;
-	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'T', 'X', 'F', 'U'];
+	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'X', 'F', 'U'];
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -73,7 +73,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	expandAccordions(group: CurriculumGroup, levelLeft: number): void {
 		if (levelLeft === 0) return;
 		if (group.children?.length) {
-			for (let child of group.children) {
+			for (const child of group.children) {
 				this.openAccordions.add(child.id);
 				this.expandAccordions(child, levelLeft - 1);
 			}
@@ -109,7 +109,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	findNodeById(id: number, currentNode: CurriculumGroup | null): CurriculumGroup | null {
 		if (!currentNode) return null;
 		if (currentNode.id === id) return currentNode;
-		for (let child of currentNode.children) {
+		for (const child of currentNode.children) {
 			const result = this.findNodeById(id, child);
 			if (result) return result;
 		}
@@ -166,8 +166,13 @@ export class SDMProgressTrackerComponent implements OnInit {
 			this.groupMatches.set(id, []);
 			this.groupCreditUsed.set(id, 0);
 		});
-		let assignedSubjectIds = new Set<string>();
-		this.assignGroupSubjects(this.currentUser.curriculum.curriculum_group, assignedSubjectIds);
+		const usedDetails = new Set<TranscriptDetail>();
+		for (const detail of this.transcript.details) {
+			if (!this.shouldIncludeDetail(detail)) continue;
+			if (this.placeDetailInGroup(detail, this.currentUser.curriculum.curriculum_group)) {
+				usedDetails.add(detail);
+			}
+		}
 		this.updateUsageFromChildren(this.currentUser.curriculum.curriculum_group);
 		this.computeCompleteness(this.currentUser.curriculum.curriculum_group);
 		const rootId = this.currentUser.curriculum.curriculum_group.id;
@@ -175,106 +180,141 @@ export class SDMProgressTrackerComponent implements OnInit {
 		const usedRoot = this.groupCreditUsed.get(rootId) || 0;
 		this.groupCreditTotal = Math.max(0, requiredRoot - usedRoot);
 		this.calculateProgressPercentage();
-		this.notFittedSubjects = this.transcript.details.filter((d) => {
-			const sid = d.subject?.id;
-			return !sid || !assignedSubjectIds.has(sid);
-		});
+		this.notFittedSubjects = this.transcript.details.filter((d) => !usedDetails.has(d));
 	}
 
-	assignGroupSubjects(group: CurriculumGroup, assignedSubjectIds: Set<string>): void {
-		let candidates;
-		if (group.type === 'FREE') {
-			candidates = this.transcript!.details.filter((detail) => {
-				const sid = detail.subject?.id;
-				if (!sid) return false;
-				if (assignedSubjectIds.has(sid)) return false;
-				return this.shouldIncludeDetail(detail);
-			});
-		} else {
-			candidates = this.transcript!.details.filter((detail) => {
-				const sid = detail.subject?.id;
-				if (!sid) return false;
-				if (assignedSubjectIds.has(sid)) return false;
-				return group.subjects?.some((gs) => gs.subject?.id === sid) && this.shouldIncludeDetail(detail);
-			});
-		}
-		if (group.type === 'COLLECTIVE' || group.type === 'REQUIRED_CREDIT' || group.type === 'REQUIRED_BRANCH' || group.type === 'FREE') {
-			candidates.sort((a, b) => (b.subject?.credit || 0) - (a.subject?.credit || 0));
-			let required = this.groupCreditRequired.get(group.id) || 0;
-			let used = this.groupCreditUsed.get(group.id) || 0;
-			for (let detail of candidates) {
-				let credit = detail.subject?.credit || 0;
-				if (used + credit <= required) {
-					this.groupMatches.get(group.id)?.push(detail);
-					used += credit;
-					assignedSubjectIds.add(detail.subject?.id || '');
+	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
+		if (group.children?.length) {
+			for (const child of group.children) {
+				if (this.placeDetailInGroup(detail, child)) {
+					return true;
 				}
 			}
-			this.groupCreditUsed.set(group.id, used);
-		} else if (group.type === 'REQUIRED_ALL') {
-			candidates.sort((a, b) => this.gradeOrder.indexOf(a.grade) - this.gradeOrder.indexOf(b.grade));
-			let used = this.groupCreditUsed.get(group.id) || 0;
-			for (let detail of candidates) {
-				this.groupMatches.get(group.id)?.push(detail);
-				assignedSubjectIds.add(detail.subject?.id || '');
-				used += detail.subject?.credit || 0;
-			}
-			this.groupCreditUsed.set(group.id, used);
 		}
-		if (group.children?.length) {
-			for (let child of group.children) {
-				this.assignGroupSubjects(child, assignedSubjectIds);
-			}
+		const needed = this.groupCreditRequired.get(group.id) || 0;
+		const used = this.groupCreditUsed.get(group.id) || 0;
+		switch (group.type) {
+			case 'REQUIRED_ALL':
+				if (group.subjects?.some((gs) => gs.subject?.id === detail.subject?.id)) {
+					if (!this.groupMatches.get(group.id)?.includes(detail)) {
+						this.groupMatches.get(group.id)?.push(detail);
+						this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
+						return true;
+					}
+				}
+				break;
+			case 'COLLECTIVE':
+			case 'REQUIRED_CREDIT':
+			case 'REQUIRED_BRANCH':
+				if (group.subjects?.some((gs) => gs.subject?.id === detail.subject?.id)) {
+					const parent = this.findParentRequiredCreditGroup(group);
+					const parentNeeded = parent ? this.groupCreditRequired.get(parent.id) || 0 : 0;
+					const parentUsed = parent ? this.groupCreditUsed.get(parent.id) || 0 : 0;
+					if (used < needed) {
+						if (used + (detail.subject?.credit ?? 0) <= needed) {
+							if (parent && parentUsed >= parentNeeded) {
+								break;
+							}
+							this.groupMatches.get(group.id)?.push(detail);
+							this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
+							if (parent) {
+								this.groupCreditUsed.set(parent.id, Math.min(parentUsed + (detail.subject?.credit ?? 0), parentNeeded));
+							}
+							return true;
+						}
+					}
+				}
+				break;
+			case 'FREE':
+				if (used < needed) {
+					if (used + (detail.subject?.credit ?? 0) <= needed) {
+						this.groupMatches.get(group.id)?.push(detail);
+						this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
+						return true;
+					}
+				}
+				break;
 		}
+		return false;
 	}
 
-	updateUsageFromChildren(group: CurriculumGroup): number {
+	private updateUsageFromChildren(group: CurriculumGroup): number {
 		let ownUsage = this.groupCreditUsed.get(group.id) || 0;
 		let childrenUsage = 0;
 		if (group.children?.length) {
-			for (let child of group.children) {
+			for (const child of group.children) {
 				childrenUsage += this.updateUsageFromChildren(child);
 			}
 		}
-		let usage = group.children && group.children.length > 0 ? (group.subjects && group.subjects.length > 0 && group.type !== 'FREE' ? ownUsage + childrenUsage : childrenUsage) : ownUsage;
+		const needed = this.groupCreditRequired.get(group.id) || 0;
+		let usage = ownUsage;
+		if (group.children && group.children.length > 0) {
+			if (!group.subjects || group.subjects.length === 0 || group.type === 'FREE') {
+				usage = childrenUsage;
+			} else {
+				usage = ownUsage + childrenUsage;
+			}
+		}
+		if (usage > needed) usage = needed;
 		this.groupCreditUsed.set(group.id, usage);
 		return usage;
 	}
 
-	computeCompleteness(group: CurriculumGroup): boolean {
+	private computeCompleteness(group: CurriculumGroup): boolean {
 		const needed = this.groupCreditRequired.get(group.id) || 0;
 		const used = this.groupCreditUsed.get(group.id) || 0;
 		let childrenComplete = true;
 		if (group.children?.length) {
-			for (let child of group.children) {
+			for (const child of group.children) {
 				if (!this.computeCompleteness(child)) {
 					childrenComplete = false;
 				}
 			}
 		}
 		let isComplete = false;
-		if (group.type === 'REQUIRED_ALL') {
-			isComplete = group.children?.length ? childrenComplete : group.subjects && group.subjects.length ? this.groupMatches.get(group.id)?.length === group.subjects.length : true;
-		} else if (group.type === 'REQUIRED_CREDIT' || group.type === 'FREE') {
-			isComplete = used >= needed;
-		} else if (group.type === 'REQUIRED_BRANCH') {
-			isComplete = group.children?.length ? used >= needed && this.hasAtLeastOneChildCompleted(group) : false;
-		} else {
-			isComplete = group.children?.length ? childrenComplete : false;
+		switch (group.type) {
+			case 'REQUIRED_ALL':
+				if (group.children?.length) {
+					isComplete = childrenComplete;
+				} else {
+					if (group.subjects?.length) {
+						const matched = this.groupMatches.get(group.id) || [];
+						isComplete = matched.length === group.subjects.length;
+					} else {
+						isComplete = true;
+					}
+				}
+				break;
+			case 'REQUIRED_CREDIT':
+			case 'FREE':
+				isComplete = used >= needed;
+				break;
+			case 'REQUIRED_BRANCH':
+				if (group.children?.length) {
+					isComplete = used >= needed && this.hasAtLeastOneChildCompleted(group);
+				} else {
+					isComplete = false;
+				}
+				break;
+			default:
+				if (group.children?.length) {
+					isComplete = childrenComplete;
+				}
+				break;
 		}
 		this.groupComplete.set(group.id, isComplete);
 		return isComplete;
 	}
 
-	hasAtLeastOneChildCompleted(group: CurriculumGroup): boolean {
+	private hasAtLeastOneChildCompleted(group: CurriculumGroup): boolean {
 		if (!group.children || group.children.length === 0) return false;
-		for (let child of group.children) {
+		for (const child of group.children) {
 			if (this.groupComplete.get(child.id)) return true;
 		}
 		return false;
 	}
 
-	findParentRequiredCreditGroup(current: CurriculumGroup): CurriculumGroup | null {
+	private findParentRequiredCreditGroup(current: CurriculumGroup): CurriculumGroup | null {
 		if (!current.parent_id || current.parent_id <= 0) return null;
 		const parent = this.findNodeById(current.parent_id, this.rootNode);
 		if (!parent) return null;
@@ -284,24 +324,24 @@ export class SDMProgressTrackerComponent implements OnInit {
 		return this.findParentRequiredCreditGroup(parent);
 	}
 
-	collectAllGroupIds(group: CurriculumGroup): void {
+	private collectAllGroupIds(group: CurriculumGroup): void {
 		if (group.children?.length) {
-			for (let child of group.children) {
+			for (const child of group.children) {
 				this.collectAllGroupIds(child);
 			}
 		}
 	}
 
-	computeRequiredCredits(group: CurriculumGroup): number {
+	private computeRequiredCredits(group: CurriculumGroup): number {
 		let required = 0;
 		if (group.children?.length) {
-			for (let child of group.children) {
+			for (const child of group.children) {
 				required += this.computeRequiredCredits(child);
 			}
 		}
 		if ((group.type === 'REQUIRED_ALL' || group.credit === 0) && group.subjects?.length) {
 			let sum = 0;
-			for (let gs of group.subjects) {
+			for (const gs of group.subjects) {
 				if (gs.subject) {
 					sum += gs.subject.credit;
 				}
@@ -316,11 +356,15 @@ export class SDMProgressTrackerComponent implements OnInit {
 		return required;
 	}
 
-	calculateProgressPercentage(): void {
+	private calculateProgressPercentage(): void {
 		const rootId = this.currentUser?.curriculum?.curriculum_group?.id ?? -1;
 		const required = this.groupCreditRequired.get(rootId) || 0;
 		const used = this.groupCreditUsed.get(rootId) || 0;
-		this.progressPercentage = required === 0 ? 0 : (used / required) * 100;
+		if (required === 0) {
+			this.progressPercentage = 0;
+		} else {
+			this.progressPercentage = (used / required) * 100;
+		}
 	}
 
 	private shouldIncludeDetail(detail: TranscriptDetail): boolean {
