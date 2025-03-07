@@ -8,6 +8,7 @@ import { AlertService } from '@services/alert/alert.service';
 import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { finalize } from 'rxjs';
+import { SDMBaseButton } from '../buttons/base-button.component';
 
 function getGradeValue(grade: string): number {
 	switch (grade.toUpperCase()) {
@@ -46,7 +47,7 @@ interface YearTermGroup {
 @Component({
 	selector: 'sdm-grade-tracker',
 	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, SDMBaseButton],
 	templateUrl: './grade-tracker.component.html',
 })
 export class SDMGradeTrackerComponent implements OnInit {
@@ -59,6 +60,8 @@ export class SDMGradeTrackerComponent implements OnInit {
 	currentUser: User | null = null;
 	transcript: Transcript | null = null;
 	isFetchingTranscript = false;
+
+	finalGpa: Number | null = null;
 
 	groupedTranscriptDetails: YearTermGroup[] = [];
 	private originalGrades = new Map<number, string>();
@@ -148,6 +151,8 @@ export class SDMGradeTrackerComponent implements OnInit {
 			totalCreditsSoFar += termCredits;
 
 			group.gpa = totalCreditsSoFar > 0 ? totalPointsSoFar / totalCreditsSoFar : 0;
+
+			this.finalGpa = group.gpa;
 		}
 	}
 
