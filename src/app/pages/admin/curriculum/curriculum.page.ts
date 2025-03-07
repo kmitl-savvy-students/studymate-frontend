@@ -197,6 +197,29 @@ export class SDMPageCurriculum implements OnInit {
 		});
 	}
 	// #endregion
+	// #region Delete
+	onDeleteCurriculum(curriculum: Curriculum): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/delete/${curriculum.id}`;
+
+		this.loadingService.show(() => {
+			this.http
+				.delete(apiUrl)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchCurriculums();
+					},
+					error: (error) => {
+						console.error('Error deleting curriculum:', error);
+					},
+				});
+		});
+	}
+	// #endregion
 	// #region Edit
 	onEditCurriculum(curriculum: Curriculum): void {
 		this.selectedCurriculum = curriculum;
