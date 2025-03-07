@@ -1,0 +1,96 @@
+<div class="my-4">
+	<h1 class="text-xl font-semibold">คำนวณเกรด</h1>
+	<h3 class="text-sm opacity-50">คุณ {{ currentUser?.firstname }} {{ currentUser?.lastname }}</h3>
+</div>
+
+<div *ngIf="!transcript && !isFetchingTranscript" class="text-sm">ไม่มีข้อมูลเกรด</div>
+
+<div *ngIf="isFetchingTranscript" class="animate-pulse rounded-xl border border-gray-200 p-6">
+	<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+	<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+	<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+	<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+	<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+</div>
+
+<div *ngIf="transcript && groupedTranscriptDetails.length > 0" class="mb-5">
+	<div class="my-4 grid grid-cols-8 gap-x-2">
+		<div class="col-span-2">
+			<sdm-base-button
+				icon="rotate"
+				text="รีเซ็ตเกรดทั้งหมด"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-main-100"
+				backgroundColorHover="hover:bg-primary-400"
+				(clickEvent)="onResetAllGrades()"></sdm-base-button>
+		</div>
+		<div class="col-span-6 inline-flex w-full cursor-pointer items-center justify-center overflow-x-auto rounded-xl border border-gray-200 p-3 font-semibold">
+			<div>
+				ค่าเกรดเฉลี่ยสะสม (GPA): <span class="ml-2 font-semibold text-main-100">{{ finalGpa?.toFixed(2) }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="max-w-full overflow-x-auto rounded-lg border border-gray-200 p-6">
+		<div *ngFor="let group of groupedTranscriptDetails" class="mb-2 border-gray-300">
+			<div *ngIf="group.year == 0 && group.term == 0" class="py-4 text-lg font-semibold">Transfer Credit</div>
+			<div *ngIf="group.year != 0 && group.term != 0" class="py-4 text-lg font-semibold">ปีการศึกษา {{ group.year }} / ภาคเรียนที่ {{ group.term }}</div>
+
+			<div class="overflow-hidden rounded-xl border border-gray-300">
+				<table class="w-full table-fixed border-separate border-spacing-0 text-sm leading-none">
+					<thead>
+						<tr class="h-12 bg-gray-50">
+							<th class="w-2/12 border px-1 py-0.5">รหัสวิชา</th>
+							<th class="w-4/12 border px-1 py-0.5">ชื่อวิชา (EN)</th>
+							<th class="w-2/12 border px-1 py-0.5">หน่วยกิต</th>
+							<th class="w-2/12 border px-1 py-0.5">เกรด</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let detail of group.details" class="h-10 hover:bg-gray-50">
+							<td class="border px-1 py-0.5 text-center">
+								{{ detail.subject?.id }}
+							</td>
+
+							<td class="max-w-[150px] overflow-hidden truncate text-ellipsis whitespace-nowrap border px-1 py-0.5" title="{{ detail.subject?.name_en }}">
+								{{ detail.subject?.name_en }}
+							</td>
+
+							<td class="border px-1 py-0.5 text-center">
+								{{ detail.subject?.credit }}
+							</td>
+              
+							<td class="border px-1 py-0.5 text-center">
+								<select class="rounded border border-gray-300 px-1 text-sm font-semibold leading-none text-main-100" [(ngModel)]="detail.grade" (ngModelChange)="onGradeChange(detail, $any($event))">
+								<option value="">(ไม่มี)</option>
+                <option value="A">A</option>
+                <option value="B+">B+</option>
+                <option value="B">B</option>
+                <option value="C+">C+</option>
+                <option value="C">C</option>
+                <option value="D+">D+</option>
+                <option value="D">D</option>
+                <option value="F">F</option>
+                <option value="S">S</option>
+                <option value="U">U</option>
+                <option value="X">X</option>
+								</select>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="flex w-full flex-row justify-center gap-x-2 py-4 text-center text-base">
+				<div>
+					ค่าเกรดเฉลี่ยในภาคเรียน (GPS): <span class="font-semibold text-main-100">{{ group.gps.toFixed(2) }}</span>
+				</div>
+				<div>|</div>
+				<div>
+					ค่าเกรดเฉลี่ยสะสม (GPA): <span class="font-semibold text-main-100">{{ group.gpa.toFixed(2) }}</span>
+				</div>
+			</div>
+			<div class="border border-b border-gray-200"></div>
+		</div>
+	</div>
+</div>
