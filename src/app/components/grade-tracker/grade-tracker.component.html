@@ -59,20 +59,21 @@
 							<td class="border px-1 py-0.5 text-center">
 								{{ detail.subject?.credit }}
 							</td>
-
+              
 							<td class="border px-1 py-0.5 text-center">
 								<select class="rounded border border-gray-300 px-1 text-sm font-semibold leading-none text-main-100" [(ngModel)]="detail.grade" (ngModelChange)="onGradeChange(detail, $any($event))">
-									<option value="">(ไม่มี)</option>
-									<option value="A">A</option>
-									<option value="B+">B+</option>
-									<option value="B">B</option>
-									<option value="C+">C+</option>
-									<option value="C">C</option>
-									<option value="D+">D+</option>
-									<option value="D">D</option>
-									<option value="F">F</option>
-									<option value="S">S</option>
-									<option value="X">X</option>
+								<option value="">(ไม่มี)</option>
+                <option value="A">A</option>
+                <option value="B+">B+</option>
+                <option value="B">B</option>
+                <option value="C+">C+</option>
+                <option value="C">C</option>
+                <option value="D+">D+</option>
+                <option value="D">D</option>
+                <option value="F">F</option>
+                <option value="S">S</option>
+                <option value="U">U</option>
+                <option value="X">X</option>
 								</select>
 							</td>
 						</tr>
