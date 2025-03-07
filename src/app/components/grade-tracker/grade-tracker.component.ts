@@ -8,6 +8,7 @@ import { AlertService } from '@services/alert/alert.service';
 import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { finalize } from 'rxjs';
+import { SDMBaseButton } from '../buttons/base-button.component';
 
 function getGradeValue(grade: string): number {
 	switch (grade.toUpperCase()) {
@@ -43,7 +44,7 @@ interface YearTermGroup {
 @Component({
 	selector: 'sdm-grade-tracker',
 	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, SDMBaseButton],
 	templateUrl: './grade-tracker.component.html',
 })
 export class SDMGradeTrackerComponent implements OnInit {
