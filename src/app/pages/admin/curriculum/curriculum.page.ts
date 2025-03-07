@@ -28,6 +28,8 @@ export class SDMPageCurriculum implements OnInit {
 	curriculumCreateForm: FormGroup;
 	curriculumEditForm: FormGroup;
 
+	curriculumsAll: Curriculum[] = [];
+
 	@ViewChild('createCurriculumModal') createCurriculumModal!: SDMBaseModal;
 	@ViewChild('editCurriculumModal') editCurriculumModal!: SDMBaseModal;
 
@@ -61,11 +63,24 @@ export class SDMPageCurriculum implements OnInit {
 			if (id) {
 				this.programId = +id;
 				this.fetchCurriculums();
+				this.fetchCurriculumsAll();
 			}
 		});
 	}
 
 	// #region Fetchings
+	fetchCurriculumsAll(): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/get`;
+
+		this.http.get<Curriculum[]>(apiUrl).subscribe({
+			next: (data) => {
+				this.curriculumsAll = data;
+			},
+			error: (error) => {
+				console.error('Error fetching all curriculums:', error);
+			},
+		});
+	}
 	fetchCurriculums(): void {
 		if (!this.programId) return;
 		this.isLoading = true;
@@ -182,6 +197,29 @@ export class SDMPageCurriculum implements OnInit {
 		});
 	}
 	// #endregion
+	// #region Delete
+	onDeleteCurriculum(curriculum: Curriculum): void {
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/delete/${curriculum.id}`;
+
+		this.loadingService.show(() => {
+			this.http
+				.delete(apiUrl)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchCurriculums();
+					},
+					error: (error) => {
+						console.error('Error deleting curriculum:', error);
+					},
+				});
+		});
+	}
+	// #endregion
 	// #region Edit
 	onEditCurriculum(curriculum: Curriculum): void {
 		this.selectedCurriculum = curriculum;
@@ -237,6 +275,7 @@ export class SDMPageCurriculum implements OnInit {
 	cloneCurriculumForm: FormGroup;
 
 	onCloneCurriculumConfirm() {
+		if (!this.programId) return;
 		if (this.cloneCurriculumForm.value.cloneCurriculum === '') {
 			this.alertService.showAlert('error', 'กรุณาเลือกหลักสูตรที่ต้องการคัดลอก');
 			return;
@@ -244,7 +283,7 @@ export class SDMPageCurriculum implements OnInit {
 
 		const cloneCurriculumGroup = {
 			id: this.cloneCurriculumForm.value.cloneCurriculum,
-			parent_id: -1,
+			parent_id: this.programId,
 			type: 'REQUIRED_ALL',
 			name: 'Root',
 			credit: -1,
