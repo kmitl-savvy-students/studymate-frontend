@@ -26,7 +26,9 @@
 				(clickEvent)="onResetAllGrades()"></sdm-base-button>
 		</div>
 		<div class="col-span-6 inline-flex w-full cursor-pointer items-center justify-center overflow-x-auto rounded-xl border border-gray-200 p-3 font-semibold">
-			<div>ค่าเกรดเฉลี่ยสะสม (GPA): <span class="ml-2 font-semibold text-main-100">3.50</span></div>
+			<div>
+				ค่าเกรดเฉลี่ยสะสม (GPA): <span class="ml-2 font-semibold text-main-100">{{ finalGpa?.toFixed(2) }}</span>
+			</div>
 		</div>
 	</div>
 	<div class="max-w-full overflow-x-auto rounded-lg border border-gray-200 p-6">
