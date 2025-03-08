@@ -138,19 +138,16 @@ export class SDMProgressTrackerComponent implements OnInit {
 					this.transcript = data;
 					if (this.transcript?.details) {
 						this.transcript.details.sort((a, b) => {
-							// Determine grade order based on the defined gradeOrder array
 							const gradeIndexA = this.gradeOrder.indexOf(a.grade);
 							const gradeIndexB = this.gradeOrder.indexOf(b.grade);
 							if (gradeIndexA !== gradeIndexB) {
 								return gradeIndexA - gradeIndexB;
 							}
-							// If grades are the same, order by credit descending
 							const creditA = a.subject?.credit || 0;
 							const creditB = b.subject?.credit || 0;
 							return creditB - creditA;
 						});
 					}
-
 					if (data.user?.curriculum?.curriculum_group) {
 						this.rootNode = data.user.curriculum.curriculum_group;
 					}
@@ -167,6 +164,20 @@ export class SDMProgressTrackerComponent implements OnInit {
 			this.notFittedSubjects = [];
 			return;
 		}
+		const uniqueDetails: TranscriptDetail[] = [];
+		const duplicateDetails: TranscriptDetail[] = [];
+		const seenSubjects = new Set<string>();
+		for (const detail of this.transcript.details) {
+			if (!this.shouldIncludeDetail(detail)) continue;
+			const subId = detail.subject?.id;
+			if (subId == null) continue;
+			if (!seenSubjects.has(subId)) {
+				seenSubjects.add(subId);
+				uniqueDetails.push(detail);
+			} else {
+				duplicateDetails.push(detail);
+			}
+		}
 		this.groupMatches.clear();
 		this.groupCreditUsed.clear();
 		this.groupCreditRequired.clear();
@@ -179,8 +190,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			this.groupCreditUsed.set(id, 0);
 		});
 		const usedDetails = new Set<TranscriptDetail>();
-		for (const detail of this.transcript.details) {
-			if (!this.shouldIncludeDetail(detail)) continue;
+		for (const detail of uniqueDetails) {
 			if (this.placeDetailInGroup(detail, this.currentUser.curriculum.curriculum_group)) {
 				usedDetails.add(detail);
 			}
@@ -192,7 +202,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 		const usedRoot = this.groupCreditUsed.get(rootId) || 0;
 		this.groupCreditTotal = Math.max(0, requiredRoot - usedRoot);
 		this.calculateProgressPercentage();
-		this.notFittedSubjects = this.transcript.details.filter((d) => !usedDetails.has(d));
+		const notUsedUnique = uniqueDetails.filter((d) => !usedDetails.has(d));
+		this.notFittedSubjects = duplicateDetails.concat(notUsedUnique);
 	}
 
 	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
