@@ -48,7 +48,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	accordionLevelExpands = 2;
 	includeXGrade = false;
 	isFetchingTranscriptDetails = false;
-	private gradeOrder = ['S', 'A', 'B+', 'B', 'C+', 'C', 'D+', 'D', 'T', 'X', 'F', 'U'];
+	private gradeOrder = ['S', 'A', 'B', 'C', 'D', 'T', 'X'];
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -138,14 +138,14 @@ export class SDMProgressTrackerComponent implements OnInit {
 					this.transcript = data;
 					if (this.transcript?.details) {
 						this.transcript.details.sort((a, b) => {
-							const gradeIndexA = this.gradeOrder.indexOf(a.grade);
-							const gradeIndexB = this.gradeOrder.indexOf(b.grade);
-							if (gradeIndexA !== gradeIndexB) {
-								return gradeIndexA - gradeIndexB;
-							}
 							const creditA = a.subject?.credit || 0;
 							const creditB = b.subject?.credit || 0;
-							return creditB - creditA;
+							if (creditA !== creditB) {
+								return creditB - creditA;
+							}
+							const gradeIndexA = this.gradeOrder.indexOf(a.grade.toUpperCase().trim());
+							const gradeIndexB = this.gradeOrder.indexOf(b.grade.toUpperCase().trim());
+							return gradeIndexA - gradeIndexB;
 						});
 					}
 					if (data.user?.curriculum?.curriculum_group) {
@@ -164,20 +164,50 @@ export class SDMProgressTrackerComponent implements OnInit {
 			this.notFittedSubjects = [];
 			return;
 		}
-		const uniqueDetails: TranscriptDetail[] = [];
+		// Build best detail per subject using credit descending then grade order.
+		// Always include grade X in this mapping so they remain uncategorized if toggle is off.
+		const bestBySubject = new Map<string, TranscriptDetail>();
 		const duplicateDetails: TranscriptDetail[] = [];
-		const seenSubjects = new Set<string>();
 		for (const detail of this.transcript.details) {
-			if (!this.shouldIncludeDetail(detail)) continue;
-			const subId = detail.subject?.id;
-			if (subId == null) continue;
-			if (!seenSubjects.has(subId)) {
-				seenSubjects.add(subId);
-				uniqueDetails.push(detail);
+			if (!detail.subject?.id) continue;
+			const grade = detail.grade?.toUpperCase().trim() || '';
+			// Exclude F and U outright.
+			if (grade === 'F' || grade === 'U') continue;
+			const subId = detail.subject.id.toString();
+			if (!bestBySubject.has(subId)) {
+				bestBySubject.set(subId, detail);
 			} else {
-				duplicateDetails.push(detail);
+				const currentBest = bestBySubject.get(subId)!;
+				const creditDetail = detail.subject?.credit || 0;
+				const creditCurrent = currentBest.subject?.credit || 0;
+				if (creditDetail > creditCurrent) {
+					duplicateDetails.push(currentBest);
+					bestBySubject.set(subId, detail);
+				} else if (creditDetail === creditCurrent) {
+					const gradeIndexDetail = this.gradeOrder.indexOf(grade);
+					const gradeIndexCurrent = this.gradeOrder.indexOf(currentBest.grade.toUpperCase().trim());
+					if (gradeIndexDetail < gradeIndexCurrent) {
+						duplicateDetails.push(currentBest);
+						bestBySubject.set(subId, detail);
+					} else {
+						duplicateDetails.push(detail);
+					}
+				} else {
+					duplicateDetails.push(detail);
+				}
 			}
 		}
+		const uniqueDetails = Array.from(bestBySubject.values());
+		uniqueDetails.sort((a, b) => {
+			const creditA = a.subject?.credit || 0;
+			const creditB = b.subject?.credit || 0;
+			if (creditA !== creditB) {
+				return creditB - creditA;
+			}
+			const gradeIndexA = this.gradeOrder.indexOf(a.grade.toUpperCase().trim());
+			const gradeIndexB = this.gradeOrder.indexOf(b.grade.toUpperCase().trim());
+			return gradeIndexA - gradeIndexB;
+		});
 		this.groupMatches.clear();
 		this.groupCreditUsed.clear();
 		this.groupCreditRequired.clear();
@@ -207,6 +237,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 	}
 
 	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
+		// If grade is X and toggle is off, do not place this detail in a group.
+		if (detail.grade?.toUpperCase().trim() === 'X' && !this.includeXGrade) return false;
 		if (group.children?.length) {
 			for (const child of group.children) {
 				if (this.placeDetailInGroup(detail, child)) {
@@ -392,7 +424,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	private shouldIncludeDetail(detail: TranscriptDetail): boolean {
 		const grade = detail.grade?.toUpperCase().trim() || '';
-		if (!this.includeXGrade && grade === 'X') return false;
 		if (grade === 'F' || grade === 'U') return false;
 		return true;
 	}
