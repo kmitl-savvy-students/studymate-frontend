@@ -48,6 +48,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	accordionLevelExpands = 2;
 	includeXGrade = false;
 	isFetchingTranscriptDetails = false;
+	// Grade priority: "S" > "A" > "B" > "C" > "D" > "T" > "X"
 	private gradeOrder = ['S', 'A', 'B', 'C', 'D', 'T', 'X'];
 
 	ngOnInit(): void {
@@ -159,13 +160,38 @@ export class SDMProgressTrackerComponent implements OnInit {
 			});
 	}
 
+	// Compute maximum allowed credit for a group based on its subjects and children.
+	private computeMaxCredits(group: CurriculumGroup): number {
+		let max = 0;
+		if (group.children?.length) {
+			for (const child of group.children) {
+				max += this.computeMaxCredits(child);
+			}
+		}
+		let subjectSum = 0;
+		if (group.subjects && group.subjects.length > 0) {
+			for (const gs of group.subjects) {
+				if (gs.subject) {
+					subjectSum += gs.subject.credit;
+				}
+			}
+		}
+		if (subjectSum > max) {
+			max = subjectSum;
+		}
+		if (max === 0) {
+			max = group.credit || 0;
+		}
+		return max;
+	}
+
 	assignSubjectsToGroups(): void {
 		if (!this.transcript?.details || !this.currentUser?.curriculum?.curriculum_group) {
 			this.notFittedSubjects = [];
 			return;
 		}
 		// Build best detail per subject using credit descending then grade order.
-		// Always include grade X in this mapping so they remain uncategorized if toggle is off.
+		// Always include grade X in mapping so they remain uncategorized when toggle is off.
 		const bestBySubject = new Map<string, TranscriptDetail>();
 		const duplicateDetails: TranscriptDetail[] = [];
 		for (const detail of this.transcript.details) {
@@ -178,7 +204,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 				bestBySubject.set(subId, detail);
 			} else {
 				const currentBest = bestBySubject.get(subId)!;
-				const creditDetail = detail.subject?.credit || 0;
+				const creditDetail = detail.subject.credit || 0;
 				const creditCurrent = currentBest.subject?.credit || 0;
 				if (creditDetail > creditCurrent) {
 					duplicateDetails.push(currentBest);
@@ -236,8 +262,9 @@ export class SDMProgressTrackerComponent implements OnInit {
 		this.notFittedSubjects = duplicateDetails.concat(notUsedUnique);
 	}
 
+	// Allow subject with credit 0 to be added regardless of group's full state.
 	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
-		// If grade is X and toggle is off, do not place this detail in a group.
+		// If grade is X and toggle is off, do not place detail.
 		if (detail.grade?.toUpperCase().trim() === 'X' && !this.includeXGrade) return false;
 		if (group.children?.length) {
 			for (const child of group.children) {
@@ -246,14 +273,21 @@ export class SDMProgressTrackerComponent implements OnInit {
 				}
 			}
 		}
-		const needed = this.groupCreditRequired.get(group.id) || 0;
+		const subjectCredit = detail.subject?.credit ?? 0;
+		const required = this.groupCreditRequired.get(group.id) || 0;
+		const max = this.computeMaxCredits(group);
 		const used = this.groupCreditUsed.get(group.id) || 0;
+		// For nonzero credit, if group is full or adding exceeds max, do not add.
+		if (subjectCredit !== 0) {
+			if (used >= required) return false;
+			if (used + subjectCredit > max) return false;
+		}
 		switch (group.type) {
 			case 'REQUIRED_ALL':
 				if (group.subjects?.some((gs) => gs.subject?.id === detail.subject?.id)) {
 					if (!this.groupMatches.get(group.id)?.includes(detail)) {
 						this.groupMatches.get(group.id)?.push(detail);
-						this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
+						this.groupCreditUsed.set(group.id, used + subjectCredit);
 						return true;
 					}
 				}
@@ -265,28 +299,22 @@ export class SDMProgressTrackerComponent implements OnInit {
 					const parent = this.findParentRequiredCreditGroup(group);
 					const parentNeeded = parent ? this.groupCreditRequired.get(parent.id) || 0 : 0;
 					const parentUsed = parent ? this.groupCreditUsed.get(parent.id) || 0 : 0;
-					if (used < needed) {
-						if (used + (detail.subject?.credit ?? 0) <= needed) {
-							if (parent && parentUsed >= parentNeeded) {
-								break;
-							}
-							this.groupMatches.get(group.id)?.push(detail);
-							this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
-							if (parent) {
-								this.groupCreditUsed.set(parent.id, Math.min(parentUsed + (detail.subject?.credit ?? 0), parentNeeded));
-							}
-							return true;
+					if (subjectCredit === 0 || (used < required && used + subjectCredit <= max)) {
+						if (parent && parentUsed >= parentNeeded) break;
+						this.groupMatches.get(group.id)?.push(detail);
+						this.groupCreditUsed.set(group.id, used + subjectCredit);
+						if (parent) {
+							this.groupCreditUsed.set(parent.id, Math.min(parentUsed + subjectCredit, parentNeeded));
 						}
+						return true;
 					}
 				}
 				break;
 			case 'FREE':
-				if (used < needed) {
-					if (used + (detail.subject?.credit ?? 0) <= needed) {
-						this.groupMatches.get(group.id)?.push(detail);
-						this.groupCreditUsed.set(group.id, used + (detail.subject?.credit ?? 0));
-						return true;
-					}
+				if (subjectCredit === 0 || (used < required && used + subjectCredit <= max)) {
+					this.groupMatches.get(group.id)?.push(detail);
+					this.groupCreditUsed.set(group.id, used + subjectCredit);
+					return true;
 				}
 				break;
 		}
