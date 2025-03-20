@@ -62,7 +62,7 @@
 							'cursor-pointer': isSignIn,
 							'like-animation': isAnimating,
 						}"
-						(click)="toggleLike()"></sdm-icon>
+						(click)="!isLoadingUpdateReviewLike && toggleLike()"></sdm-icon>
 					<div>{{ this.subjectReviewData.like }}</div>
 				</div>
 				<div class="flex items-center gap-2.5">

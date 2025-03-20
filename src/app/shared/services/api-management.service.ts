@@ -130,20 +130,20 @@ export class APIManagementService {
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
 
-	CreateSubjectReviewLike(review_id: number) {
+	CreateSubjectReviewLike(subject_review_id: number) {
 		const apiUrl = `${environment.backendUrl}/api/subject-review-like`;
 
-		return this.http.post(apiUrl, { teachtable_subject_review_id: review_id });
+		return this.http.post(apiUrl, { subject_review_id: subject_review_id });
 	}
 
-	DeleteSubjectReviewLike(teachtableSubjectReviewId: number) {
-		const apiUrl = `${environment.backendUrl}/api/subject-review-like/${teachtableSubjectReviewId}`;
+	DeleteSubjectReviewLike(subject_review_id: number) {
+		const apiUrl = `${environment.backendUrl}/api/subject-review-like/${subject_review_id}`;
 
 		return this.http.delete(apiUrl);
 	}
 
-	GetSubjectReviewLikeByAllUser(teachtableSubjectReviewId: number): Observable<SubjectReviewData[]> {
-		const apiUrl = `${environment.backendUrl}/api/subject-review-like/${teachtableSubjectReviewId}`;
+	GetSubjectReviewLikeByAllUser(subject_review_id: number): Observable<SubjectReviewData[]> {
+		const apiUrl = `${environment.backendUrl}/api/subject-review-like/${subject_review_id}`;
 
 		return this.http.get<SubjectReviewData[]>(apiUrl);
 	}
