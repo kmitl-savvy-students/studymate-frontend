@@ -1,11 +1,16 @@
-<div
-	class="flex min-h-96 w-64 flex-col items-center justify-between gap-y-4 rounded-[80px] bg-orange-50 px-14 py-8 2xl:w-72 2xl:px-16"
->
+<div class="flex min-h-96 w-64 flex-col items-center justify-between gap-y-4 rounded-[80px] bg-orange-50 px-14 py-8 2xl:w-72 2xl:px-16">
 	<div class="text-lg font-bold">{{ headerText }}</div>
 	<img [src]="image" alt="" />
-	<button
-		class="hover:bg-dark-10 rounded-full border border-dark-100 px-3.5 py-2.5 text-base font-bold"
-	>
-		{{ buttonText }}
-	</button>
+	<sdm-button-link
+		[link]="link"
+		[text]="buttonText"
+		textSize="text-base"
+		fontWeight="font-bold"
+		textColor="text-dark-100"
+		textColorHover="text-dark-100"
+		backgroundColorHover="hover:bg-dark-10"
+		borderStyle="border border-dark-100"
+		borderRadius="rounded-full"
+		width="w-fit"
+		padding="px-3.5 py-2.5"></sdm-button-link>
 </div>
