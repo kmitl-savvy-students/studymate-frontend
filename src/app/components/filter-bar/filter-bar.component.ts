@@ -56,10 +56,10 @@ export class SDMfilterBarComponent implements OnInit {
 				this.expandAccordions(this.curriculum?.curriculum_group, this.accordionLevelExpands - 1);
 			}
 		}
-		if (changes['isLoading']) {
-			this.isLoadingTranscript = changes['isLoading'].currentValue;
-			console.log('isLoadingTranscript :', this.isLoadingTranscript);
-		}
+		// if (changes['isLoading']) {
+		// 	this.isLoadingTranscript = changes['isLoading'].currentValue;
+		// 	console.log('isLoadingTranscript :', this.isLoadingTranscript);
+		// }
 	}
 
 	toggleCheckbox(curriculumId: number, curriculumGroup: CurriculumGroup) {

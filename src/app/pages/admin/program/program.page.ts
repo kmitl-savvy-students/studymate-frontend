@@ -62,6 +62,8 @@ export class SDMPageProgram implements OnInit {
 		});
 	}
 
+	checkShowProgram(): void {}
+
 	// #region Fetchings
 	fetchPrograms(): void {
 		if (!this.departmentId) return;

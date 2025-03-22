@@ -117,7 +117,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
-					console.log('isGened in param ; ', this.isGened);
+					// console.log('isGened in param ; ', this.isGened);
 					if (this.isGened === '0') {
 						this.isShowGened = false;
 					} else if (this.isGened === '1') {
@@ -297,7 +297,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public handleFilterBar() {
 		this.isFilter = this.selectedDays.length > 0 || this.selectedCurriculumIdList.length > 0 || this.selectedRatingFilter !== null;
-		console.log('filter', this.isFilter);
+		// console.log('filter', this.isFilter);
 		this.processDataWithFiltersAndSearch();
 	}
 
@@ -326,7 +326,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public getSearchedSubjectCardDataList(searchResults: SubjectCardData[]) {
 		this.searchedData = searchResults;
-		console.log('search data :', this.searchedData);
+		// console.log('search data :', this.searchedData);
 		this.isSearched = searchResults.length !== this.subjectCardData.length;
 		this.searchSubjectDataIsNull = searchResults.length === 0;
 
@@ -446,7 +446,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 								name_en: `${curriculum.name_en} (${curriculum.year})`,
 							}))
 						: [{ id: -1, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
-				console.log('curriculumList :', this.curriculumList);
 			}),
 			catchError((error) => {
 				console.error('Error fetching curriculumList:', error);
@@ -515,10 +514,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
-				console.log('selected curriculum index :', this.selectedCurriculum);
+				// console.log('selected curriculum index :', this.selectedCurriculum);
 				// this.selectedCurriculumData = this.curriculumList[this.selectedCurriculum - 1];
 				this.selectedCurriculumData = this.curriculumList.find((curriculum) => curriculum.id === this.selectedCurriculum);
-				console.log('final choose curriculum :', this.selectedCurriculumData);
+				// console.log('final choose curriculum :', this.selectedCurriculumData);
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);

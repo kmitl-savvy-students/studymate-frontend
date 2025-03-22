@@ -42,17 +42,33 @@
 		<div class="spinner-border animate-spin"></div>
 	</div>
 	<div *ngIf="!isLoading">
-		<div *ngIf="faculties.length === 0" class="my-2 border p-5">
+		<div *ngIf="faculties.length === 0" class="my-2 rounded-xl border p-5">
 			<div class="text-center">ไม่มีผลลัพธ์</div>
 		</div>
-		<div *ngIf="faculties.length > 0" class="my-2 border p-5">
-			<ul class="flex flex-col gap-2">
-				<li *ngFor="let faculty of faculties" class="flex items-center justify-between">
+		<div *ngIf="faculties.length > 0" class="my-2 rounded-xl border p-5">
+			<ul class="flex flex-col divide-y">
+				<li *ngFor="let faculty of faculties" class="flex items-center justify-between py-2">
 					<div (click)="navigateToDepartment(faculty.id)" class="cursor-pointer text-lg hover:text-primary-300">
 						<div class="font-semibold">({{faculty.kmitl_id}}) {{ faculty.name_th }}</div>
 						<div class="text-sm opacity-50">{{ faculty.name_en }}</div>
 					</div>
-					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditFaculty(faculty)"></sdm-base-button>
+					<div class="flex flex-row gap-2">
+						<label class="inline-flex w-full cursor-pointer items-center justify-center gap-x-2 overflow-x-auto rounded-xl border border-gray-300 p-1.5">
+							<input type="checkbox" class="peer sr-only" (change)="checkShowFaculty()" [checked]="" />
+							<div
+								class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-main-100 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
+							<div class="mr-2 text-sm font-medium text-dark-100">แสดงในระบบ</div>
+						</label>
+
+						<sdm-base-button
+							icon="pen"
+							text="แก้ไข"
+							textColor="text-light"
+							textColorHover="hover:text-light"
+							backgroundColor="bg-warning-300"
+							backgroundColorHover="hover:bg-warning-400"
+							(clickEvent)="onEditFaculty(faculty)"></sdm-base-button>
+					</div>
 				</li>
 			</ul>
 		</div>

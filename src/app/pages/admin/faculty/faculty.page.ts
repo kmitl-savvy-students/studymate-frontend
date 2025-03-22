@@ -51,6 +51,8 @@ export class SDMPageFaculty implements OnInit {
 		this.fetchFaculties();
 	}
 
+	checkShowFaculty(): void {}
+
 	// #region Fetchings
 	fetchFaculties(): void {
 		this.isLoading = true;

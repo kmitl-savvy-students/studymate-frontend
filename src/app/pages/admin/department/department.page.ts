@@ -62,6 +62,8 @@ export class SDMPageDepartment implements OnInit {
 		});
 	}
 
+	checkShowDepartment(): void {}
+
 	// #region Fetchings
 	fetchDepartments(): void {
 		if (!this.facultyId) return;
