@@ -16,6 +16,8 @@ import { initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
+import { SDMBaseButton } from '../../components/buttons/base-button.component';
+import { IconComponent } from '../../components/icon/icon.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { Curriculum } from './../../shared/models/Curriculum.model';
@@ -24,7 +26,7 @@ import { classYearList, semesterList, subjects_added, yearsList } from './subjec
 @Component({
 	selector: 'sdm-page-subject',
 	standalone: true,
-	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion],
+	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion, SDMBaseButton, IconComponent],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
@@ -299,6 +301,20 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.isFilter = this.selectedDays.length > 0 || this.selectedCurriculumIdList.length > 0 || this.selectedRatingFilter !== null;
 		// console.log('filter', this.isFilter);
 		this.processDataWithFiltersAndSearch();
+	}
+
+	public clearAll() {
+		this.resetDropdowns('selectedYear');
+		this.resetDropdowns('selectedSemester');
+		this.resetDropdowns('selectedClassYear');
+		this.resetDropdowns('selectedFaculty');
+		this.resetDropdowns('selectedDepartment');
+		this.resetDropdowns('selectedProgram');
+		this.resetDropdowns('selectedCurriculum');
+		this.isGened = '0';
+		this.isShowGened = false;
+		this.checkSelectAllDropdown();
+		this.router.navigate(['/subject']);
 	}
 
 	public resetAllFilters() {
