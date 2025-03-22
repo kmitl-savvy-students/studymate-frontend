@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { SDMPageAbout } from '@pages/about-us/about.page';
 import { SDMPageCurriculumGroup } from '@pages/admin/curriculum-group/curriculum-group.page';
 import { SDMPageCurriculum } from '@pages/admin/curriculum/curriculum.page';
 import { SDMPageDepartment } from '@pages/admin/department/department.page';
@@ -51,6 +52,7 @@ export const routes: Routes = [
 	{ path: 'my-subject', component: SDMPageMySubject, canActivate: [AuthenticationGuard] },
 	{ path: 'curriculum-progress-tracker', component: SDMPageCurriculumProgressTracker, canActivate: [AuthenticationGuard] },
 	{ path: 'profile', component: SDMPageProfile, canActivate: [AuthenticationGuard] },
+	{ path: 'about', component: SDMPageAbout },
 	// #endregion
 
 	{ path: '**', component: SDMPageNotFound },
