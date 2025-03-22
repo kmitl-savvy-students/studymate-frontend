@@ -48,6 +48,7 @@ export class SDMfilterBarComponent implements OnInit {
 	ngOnChanges(changes: SimpleChanges): void {
 		if (changes['selectedCurriculum']) {
 			this.curriculum = changes['selectedCurriculum'].currentValue;
+			console.log('curriculum :', this.curriculum);
 			this.rootNode = this.curriculum?.curriculum_group ?? undefined;
 			this.curriculumGroup = this.curriculum?.curriculum_group?.children;
 			if (this.curriculum?.curriculum_group) {
@@ -57,6 +58,7 @@ export class SDMfilterBarComponent implements OnInit {
 		}
 		if (changes['isLoading']) {
 			this.isLoadingTranscript = changes['isLoading'].currentValue;
+			console.log('isLoadingTranscript :', this.isLoadingTranscript);
 		}
 	}
 

@@ -254,7 +254,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		let processedData = [...this.subjectCardData];
 
 		// ถ้ามีการ search ให้กรองด้วย search ก่อน
-		console.log('isSearch in process', this.isSearched);
+		// console.log('isSearch in process', this.isSearched);
 		if (this.isSearched) {
 			processedData = this.searchedData;
 		}
@@ -268,7 +268,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 		// เก็บผลลัพธ์สุดท้าย
 		this.finalDisplayData = processedData;
-		console.log('final display data :', this.finalDisplayData);
+		// console.log('final display data :', this.finalDisplayData);
 		this.subjectCardTotal = this.finalDisplayData.length;
 
 		// อัพเดท pagination
@@ -338,7 +338,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.isSearched = false;
 		this.searchedData = this.isFilter ? [...this.filteredData] : [...this.subjectCardData];
 		this.searchSubjectDataIsNull = false;
-		console.log('isSearch in onclearsearch', this.isSearched);
+		// console.log('isSearch in onclearsearch', this.isSearched);
 		this.processDataWithFiltersAndSearch();
 	}
 
@@ -446,6 +446,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 								name_en: `${curriculum.name_en} (${curriculum.year})`,
 							}))
 						: [{ id: -1, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
+				console.log('curriculumList :', this.curriculumList);
 			}),
 			catchError((error) => {
 				console.error('Error fetching curriculumList:', error);
@@ -462,15 +463,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
-				console.log('selectedYear :', this.selectedYear);
+				// console.log('selectedYear :', this.selectedYear);
 				break;
 			case 'selectedSemester':
 				this.selectedSemester = selectedData.value;
-				console.log('selectedSemester :', this.selectedSemester);
+				// console.log('selectedSemester :', this.selectedSemester);
 				break;
 			case 'selectedClassYear':
 				this.selectedClassYear = selectedData.value.toString();
-				console.log('selectedClassYear :', this.selectedClassYear);
+				// console.log('selectedClassYear :', this.selectedClassYear);
 				break;
 			case 'selectedFaculty':
 				const oldSelectFaculty = this.selectedFaculty;
@@ -486,7 +487,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (this.selectedFaculty !== -1) {
 					this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
 				}
-				console.log('selectedFaculty :', this.selectedFaculty);
+				// console.log('selectedFaculty :', this.selectedFaculty);
 				break;
 			case 'selectedDepartment':
 				const oldSelectedDepartment = this.selectedDepartment;
@@ -498,7 +499,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (this.selectedDepartment !== -1) {
 					this.getDropdownProgramsAsObservable(this.selectedDepartment).subscribe();
 				}
-				console.log('selectedDepartment :', this.selectedDepartment);
+				// console.log('selectedDepartment :', this.selectedDepartment);
 				break;
 			case 'selectedProgram':
 				const oldSelectedProgram = this.selectedProgram;
@@ -510,13 +511,14 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (this.selectedProgram !== -1) {
 					this.getDropdownCurriculumsAsObservable(this.selectedProgram).subscribe();
 				}
-				console.log('selectedProgram :', this.selectedProgram);
+				// console.log('selectedProgram :', this.selectedProgram);
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
 				console.log('selected curriculum index :', this.selectedCurriculum);
-				this.selectedCurriculumData = this.curriculumList[this.selectedCurriculum - 1];
-				// console.log('final choose curriculum :', this.selectedCurriculumData);
+				// this.selectedCurriculumData = this.curriculumList[this.selectedCurriculum - 1];
+				this.selectedCurriculumData = this.curriculumList.find((curriculum) => curriculum.id === this.selectedCurriculum);
+				console.log('final choose curriculum :', this.selectedCurriculumData);
 				break;
 			default:
 				console.warn(`Unhandled select: ${selectName}`);
