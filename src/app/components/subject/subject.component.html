@@ -22,7 +22,7 @@
 					<div class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">Sec {{ subjectCardData.section }}</div>
 					<ng-container *ngIf="subjectCardData.group_name.length > 0; else noGroup">
 						<div *ngFor="let group of subjectCardData.group_name" class="flex flex-wrap gap-x-3">
-							<div [ngStyle]="{ 'background-color': group.color || '#4D74CB26' }" class="rounded-[15px] px-3 py-1.5 text-xs">
+							<div [ngStyle]="{ 'background-color': (group.color === '#FFFFFF' ? '#4D74CB26' : group.color) || '#4D74CB26' }" class="rounded-[15px] px-3 py-1.5 text-xs">
 								{{ group.name }}
 							</div>
 						</div>
@@ -146,23 +146,6 @@
 					<span class="text-sm text-dark-100">({{ subjectCardData.review }} รีวิว)</span>
 				</div>
 			</div>
-
-			<!-- Interesed Subject -->
-			<!-- <div class="col-span-3 flex flex-col gap-y-1">
-				<div class="font-normal">นักศึกษาที่ขอเปิดรายวิชา</div>
-				<div class="flex flex-row items-center gap-x-2 text-sm">
-					<sdm-icon icon="hand-holding-heart" class="text-lg text-primary-300"></sdm-icon>
-					<div>{{ subjectCardData.interested }} คน</div>
-				</div>
-			</div> -->
-
-			<!-- Add Button -->
-			<!-- <div class="col-span-1 flex flex-row items-end justify-end">
-				<button class="col-end-16 flex h-min w-min flex-row items-center justify-end gap-x-2 rounded-[15px] bg-main-100 px-3 py-1.5 font-medium hover:bg-main-120">
-					<sdm-icon icon="plus" class="text-sm text-light"></sdm-icon>
-					<p class="text-sm text-light">เพิ่ม</p>
-				</button>
-			</div> -->
 		</div>
 	</div>
 </div>
