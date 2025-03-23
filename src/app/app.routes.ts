@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { SDMPageAbout } from '@pages/about/about.page';
 import { SDMPageCurriculumGroup } from '@pages/admin/curriculum-group/curriculum-group.page';
 import { SDMPageCurriculum } from '@pages/admin/curriculum/curriculum.page';
 import { SDMPageDepartment } from '@pages/admin/department/department.page';
@@ -8,6 +9,7 @@ import { SDMPageCurriculumProgressTracker } from '@pages/curriculum-progress-tra
 import { SDMPageHome } from '@pages/home/home.page';
 import { SDMPageMySubject } from '@pages/my-subject/my-subject.page';
 import { SDMPageNotFound } from '@pages/page-not-found/page-not-found.page';
+import { SDMPagePrivacyPolicy } from '@pages/privacy-policy/privacy-policy.page';
 import { SDMPageProfile } from '@pages/profile/profile.page';
 import { SDMPageReview } from '@pages/review/review.page';
 import { SDMPageSignIn } from '@pages/sign-in/sign-in.page';
@@ -15,6 +17,7 @@ import { SDMPageSignOut } from '@pages/sign-out/sign-out.page';
 import { SDMPageSignUp } from '@pages/sign-up/sign-up.page';
 import { SDMPageSubjectDetail } from '@pages/subject-detail/subject-detail.page';
 import { SDMPageSubject } from '@pages/subjects/subject.page';
+import { SDMPageTermOfUse } from '@pages/term-of-use/term-of-use.page';
 import { AuthenticationGuard } from '@services/authentication/authentication.guard';
 import { SubjectDetailValidationGuard } from '@services/guard/subject-detail.guard';
 import { SubjectValidationGuard } from '@services/guard/subject.guard';
@@ -51,6 +54,9 @@ export const routes: Routes = [
 	{ path: 'my-subject', component: SDMPageMySubject, canActivate: [AuthenticationGuard] },
 	{ path: 'curriculum-progress-tracker', component: SDMPageCurriculumProgressTracker, canActivate: [AuthenticationGuard] },
 	{ path: 'profile', component: SDMPageProfile, canActivate: [AuthenticationGuard] },
+	{ path: 'about', component: SDMPageAbout },
+	{ path: 'privacy-policy', component: SDMPagePrivacyPolicy },
+	{ path: 'term-of-use', component: SDMPageTermOfUse },
 	// #endregion
 
 	{ path: '**', component: SDMPageNotFound },

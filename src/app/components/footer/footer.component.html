@@ -1,21 +1,21 @@
 <div class="bg-orange-50 py-10">
-	<div class="text-dark-100 container mx-auto flex flex-col space-y-9">
+	<div class="mx-auto flex w-full max-w-[2000px] flex-1 flex-col space-y-9 px-6 text-dark-100 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28">
+		<!-- <div class="container mx-auto flex flex-col space-y-9 text-dark-100"> -->
 		<div class="flex justify-start">
 			<div class="flex flex-col items-center">
-				<p class="text-3xl font-semibold text-primary-300">KMITL</p>
-				<p class="-mt-2 text-sm font-semibold text-primary-300">Study Mate</p>
+				<p class="text-3xl font-semibold text-main-100">KMITL</p>
+				<p class="-mt-2 text-sm font-semibold text-main-100">Study Mate</p>
 			</div>
 		</div>
 		<div class="flex items-end justify-between">
-			<p class="w-3/12 text-base">นักศึกษาสถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง คณะวิศวกรรมศาสตร์ สาขาวิขาวิศวกรรมคอมพิวเตอร์</p>
+			<p class="w-3/12 text-base">นักศึกษาสถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
 			<div class="flex w-5/12 flex-col space-y-4">
 				<p class="text-xl font-medium">CATEGORIES</p>
 				<div class="flex justify-between text-base">
-					<a href="/subject" class="hover:text-primary-300">รายวิชาเรียน</a>
-					<a href="#" class="hover:text-primary-300">รีวิววิชา</a>
-					<a href="#" class="hover:text-primary-300">จัดตารางเรียน</a>
-					<a href="/my-subject" class="hover:text-primary-300">รายวิชาของฉัน</a>
-					<a href="#" class="hover:text-primary-300">เกี่ยวกับเรา</a>
+					<a href="/subject" class="hover:text-main-100">ค้นหารายวิชาเรียน</a>
+					<a href="/review" class="hover:text-main-100">ดูรีวิวรายวิชาเรียน</a>
+					<a href="/my-subject" class="hover:text-main-100">รายวิชาของฉัน</a>
+					<a href="/about" class="hover:text-main-100">เกี่ยวกับเรา</a>
 				</div>
 			</div>
 			<div class="">
@@ -23,15 +23,19 @@
 					<p class="text-xl font-medium">CONTACT</p>
 					<div class="mt-4 flex content-center justify-start text-base">
 						<sdm-icon icon="envelope" iconStyle="far" class="flex items-center text-2xl"></sdm-icon>
-						<p class="ml-4 flex items-center text-base">studymate.eiei&#64;gmail.com</p>
+						<p class="ml-4 flex items-center text-base">studymate.kmitl&#64;gmail.com</p>
 					</div>
 				</div>
 			</div>
 		</div>
-		<hr class="bg-dark-100 my-8 h-px border-0" />
+		<hr class="my-8 h-px border-0 bg-dark-100" />
 		<div class="flex justify-center space-x-32 2xl:space-x-40">
 			<p>Copyright © 2024 KMITL StudyMate. All Rights Reserved.</p>
-			<p>Privacy Policy | Terms of Use</p>
+			<div class="flex justify-between gap-2 text-base">
+				<a href="/privacy-policy" class="hover:text-main-100">Privacy Policy</a>
+				<p>|</p>
+				<a href="/term-of-use" class="hover:text-main-100">Terms of Use</a>
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,81 +1,57 @@
 <sdm-announce
-	[details]="[{ detail: 'ใกล้จะถึงวันลงทะเบียนเรียนล่วงหน้าแล้ว อย่าลืมมาลงทะเบียนเรียนกันนะ', date: 'จ. 10 มิ.ย. - ศ. 14 มิ.ย. 67' }, { detail: 'ใกล้จะถึงวันประกาศผลลงทะเบียนเรียนล่วงหน้าแล้ว อย่าลืมมาตรวจสอบผลกันนะ', date: 'ศ. 21 มิ.ย. 67' }, { detail: 'ใกล้จะถึงวันลงทะเบียนเรียนปกติแล้ว อย่าลืมมาลงทะเบียนเรียนกันนะ', date: 'จ. 24 มิ.ย. - ศ. 28 มิ.ย. 67' }]"
-></sdm-announce>
+	[details]="[
+		{ detail: 'ติดตามความคืบหน้าของการเรียนของคุณตามโครงสร้างหลักสูตรได้ง่าย ๆ ทราบว่าเรียนครบแล้วหรือยัง!' },
+		{ detail: 'แชร์ประสบการณ์เรียนและอ่านรีวิวจากเพื่อน ๆ เพื่อช่วยในการเลือกวิชาที่ดีที่สุดสำหรับคุณ!' },
+		{ detail: 'ค้นหารายวิชาต่าง ๆ ที่ตรงกับความสนใจ และดูรายละเอียดการเปิดสอนอย่างครบถ้วน!'},
+		{ detail: 'ใช้เครื่องมือคำนวณเกรดเพื่อประเมินผลการเรียนของคุณในแต่ละภาคการศึกษา!' }
+	]">
+</sdm-announce>
 
 <div class="mt-8">
 	<sdm-let-plan></sdm-let-plan>
 </div>
 
-<div
-	class="mt-16 grid grid-cols-2 items-center justify-items-center gap-y-16 px-14 2xl:px-20"
->
-	<sdm-pic-box-home
-		image="images/home/online-planner-to-do-list-home.png"
-		class="justify-self-start"
-	></sdm-pic-box-home>
-	<sdm-text-box-home
-		headerText="ตรวจสอบรายวิชาที่ต้องการ"
-		[listText]="['ค้นหารายวิชาต่าง ๆ ที่คุณสนใจ', 'Filter หารายวิชาต่าง ๆ ตามที่ต้องการ', 'ดูรายละเอียดของรายวิชาต่าง ๆ', 'ร่วมร้องขอการเปิดรายวิชาที่ต้องการ', 'เพิ่มวิชาที่สนใจลงตารางเรียน']"
-		class="flex justify-self-end"
-	></sdm-text-box-home>
-	<sdm-text-box-home
-		headerText="ดูรีวิวรายวิชาต่าง ๆ"
-		[listText]="['หารายวิชาที่ต้องการอ่านและเขียนรีวิวได้', 'อ่านรีวิวรายวิชาต่าง ๆ ที่ต้องการ', 'เขียนรีวิวรายวิชาที่คุณเคยลงทะเบียนเรียนไปแล้วได้']"
-		class="flex justify-self-start"
-	>
-	</sdm-text-box-home>
-	<sdm-pic-box-home
-		image="images/home/young-man-pointing-at-rating-window-home.png"
-		class="justify-self-end"
-	></sdm-pic-box-home>
-	<sdm-pic-box-home
-		image="images/home/clock-and-calendar-home.png"
-		class="justify-self-start"
-	></sdm-pic-box-home>
-	<sdm-text-box-home
-		headerText="จัดตารางเรียนและวางแผนการเรียนล่วงหน้า"
-		[listText]="['ลองจัดตารางเรียนได้หลายรูปแบบ', 'สร้างแผนการเรียนได้หลายรูปแบบ', 'เพิ่ม / ลบ รายวิชาที่ต้องการได้', 'Export ตารางเรียนและแผนการเรียนออกมาได้']"
-		class="flex justify-self-end"
-	>
-	</sdm-text-box-home>
-	<sdm-text-box-home
-		headerText="สรุปรายวิชาทั้งหมดที่เคยลงทะเบียนเรียนไปแล้ว"
-		[listText]="['Import Transcript เข้ามาเพื่อดูสรุปรายวิชาของคุณ', 'แสดงหมวดหมู่รายวิชาตามหลักสูตร', 'บอกจำนวนหน่วยกิตที่ลงไปแล้ว', 'บอกจำนวนหน่วยกิตที่ยังขาด']"
-		class="flex justify-self-start"
-	>
-	</sdm-text-box-home>
-	<sdm-pic-box-home
-		image="images/home/user-interface-elements-home.png"
-		class="justify-self-end"
-	></sdm-pic-box-home>
+<div class="mx-auto mt-16 grid w-full max-w-7xl grid-cols-1 gap-y-10 px-4 sm:px-6">
+	<div class="3xl:gap-x-56 grid grid-cols-1 items-center justify-items-center gap-y-10 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-40">
+		<sdm-pic-box-home image="images/home/online-planner-to-do-list-home.png" class="order-1 flex w-full justify-center lg:justify-self-end"></sdm-pic-box-home>
+		<sdm-text-box-home
+			headerText="ค้นหาวิชาที่ใช่สำหรับคุณ!"
+			[listText]="['ค้นหารายวิชาต่าง ๆ ที่คุณสนใจ', 'Filter หารายวิชาต่าง ๆ ตามที่ต้องการ', 'ดูรายละเอียดของรายวิชาต่าง ๆ', 'ตรวจสอบปีการศึกษาและภาคเรียนที่เปิดสอน']"
+			class="order-2 flex w-full justify-center lg:justify-self-start"></sdm-text-box-home>
+	</div>
+	<div class="3xl:gap-x-56 grid grid-cols-1 items-center justify-items-center gap-y-10 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-40">
+		<sdm-text-box-home
+			headerText="อ่าน & เขียนรีวิวรายวิชา"
+			[listText]="['แบ่งปันประสบการณ์เรียนของคุณ','อ่านรีวิวจากนักศึกษาที่เคยลงเรียนจริง', 'ให้คะแนนและแสดงความคิดเห็นเกี่ยวกับรายวิชาที่คุณเคยเรียน']"
+			class="order-2 flex w-full justify-center lg:order-1 lg:justify-self-end">
+		</sdm-text-box-home>
+		<sdm-pic-box-home image="images/home/young-man-pointing-at-rating-window-home.png" class="order-1 flex w-full justify-center lg:order-2 lg:justify-self-start"> </sdm-pic-box-home>
+	</div>
+	<div class="3xl:gap-x-56 grid grid-cols-1 items-center justify-items-center gap-y-10 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-40">
+		<sdm-pic-box-home image="images/home/user-interface-elements-home.png" class="order-1 flex w-full justify-center lg:justify-self-end"> </sdm-pic-box-home>
+		<sdm-text-box-home
+			headerText="สรุปรายวิชาที่เคยเรียน & คำนวณเกรด"
+			[listText]="['อัปโหลดทรานสคริปต์ของคุณเพื่อดูรายวิชาที่เคยเรียน','ตรวจสอบผลการเรียนแยกตามภาคการศึกษา', 'ทดลองคำนวณเกรดเฉลี่ยของคุณ']"
+			class="order-2 flex w-full justify-center lg:justify-self-start">
+		</sdm-text-box-home>
+	</div>
+	<div class="3xl:gap-x-56 grid grid-cols-1 items-center justify-items-center gap-y-10 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-40">
+		<sdm-text-box-home
+			headerText="ติดตามความคืบหน้าของการเรียนของคุณตามโครงสร้างหลักสูตร"
+			[listText]="['แสดงรายวิชาที่ลงทะเบียนตามหมวดหมู่ของหลักสูตร','คำนวณหน่วยกิตที่ได้รับและหน่วยกิตที่ยังขาด', 'ดูภาพรวมการเรียนของคุณตลอดหลักสูตร']"
+			class="order-2 flex w-full justify-center lg:order-1 lg:justify-self-end">
+		</sdm-text-box-home>
+		<sdm-pic-box-home image="images/home/checklist with pen.png" containerClass="p-20" class="order-1 flex w-full justify-center lg:order-2 lg:justify-self-start"> </sdm-pic-box-home>
+	</div>
 </div>
+
 <div class="flex justify-center">
-	<p
-		class="mb-36 mt-36 w-9/12 text-center text-3xl font-medium text-dark-100 2xl:w-7/12"
-	>
-		Make study planning easy. Start your experience with KMITL StudyMate
-		now!
-	</p>
+	<p class="mb-36 mt-36 w-9/12 text-center text-3xl font-medium text-dark-100 2xl:w-6/12">ติดตามความก้าวหน้าทางการเรียนของคุณได้ง่าย ๆ เริ่มต้นใช้งาน <b>KMITL StudyMate</b> ได้เลยวันนี้</p>
 </div>
-<div class="flex justify-between 2xl:justify-center 2xl:gap-x-12 2xl:px-32">
-	<sdm-card-home
-		headerText="เรียนวิชาอะไรดี ?"
-		image="images/home/stack-of-books-home.png"
-		buttonText="ค้นหาวิชา"
-	></sdm-card-home>
-	<sdm-card-home
-		headerText="อยากดูรีวิวรายวิชา"
-		image="images/home/rating-window-chat-home.png"
-		buttonText="ดูรีวิว"
-	></sdm-card-home>
-	<sdm-card-home
-		headerText="ลองจัดตารางเรียน"
-		image="images/home/time-management-home.png"
-		buttonText="จัดตารางเรียน"
-	></sdm-card-home>
-	<sdm-card-home
-		headerText="รายวิชาของฉัน"
-		image="images/home/cat-sitting-on-bookshelf-home.png"
-		buttonText="ดูรายวิชา"
-	></sdm-card-home>
+
+<div class="flex h-full flex-wrap justify-center gap-x-12 gap-y-6">
+	<sdm-card-home headerText="เรียนวิชาอะไรดี ?" image="images/home/stack-of-books-home.png" buttonText="ค้นหารายวิชา" link="/subject" containerClass="h-96 w-72"></sdm-card-home>
+	<sdm-card-home headerText="อยากดูรีวิวรายวิชา" image="images/home/rating-window-chat-home.png" buttonText="ดูรีวิว" link="/review" containerClass="h-96 w-72"></sdm-card-home>
+	<sdm-card-home headerText="รายวิชาของฉัน" image="images/home/cat-sitting-on-bookshelf-home.png" buttonText="ดูรายวิชาของฉัน" link="/my-subject" containerClass="h-96 w-72"></sdm-card-home>
+	<sdm-card-home headerText="ความคืบหน้าหลักสูตร" image="images/home/document with check mark.png" buttonText="ดูความคืบหน้า" link="/my-subject" containerClass="h-96 w-72" imageClass="p-6"></sdm-card-home>
 </div>
