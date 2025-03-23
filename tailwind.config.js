@@ -1,14 +1,4 @@
-import {
-	amber as _amber,
-	blue as _blue,
-	emerald as _emerald,
-	indigo as _indigo,
-	lime as _lime,
-	orange as _orange,
-	red as _red,
-	teal as _teal,
-	violet as _violet,
-} from 'tailwindcss/colors';
+import { amber as _amber, blue as _blue, emerald as _emerald, indigo as _indigo, lime as _lime, orange as _orange, red as _red, teal as _teal, violet as _violet } from 'tailwindcss/colors';
 import { fontFamily as _fontFamily } from 'tailwindcss/defaultTheme';
 
 export const content = ['./src/**/*.{html,ts}', './node_modules/flowbite/**/*.js'];
@@ -17,6 +7,9 @@ export const theme = {
 	extend: {
 		fontFamily: {
 			sans: ['IBM Plex Sans Thai', ..._fontFamily.sans],
+		},
+		screens: {
+			'3xl': '1600px',
 		},
 		colors: {
 			violet: _violet,
@@ -91,6 +84,7 @@ export const theme = {
 		},
 	},
 	container: {
+		center: true,
 		padding: {
 			'DEFAULT': '1rem',
 			'sm': '2rem',
@@ -100,4 +94,18 @@ export const theme = {
 			'2xl': '6rem',
 		},
 	},
+	// container: {
+	// 	center: false, // ปิดการจัดกึ่งกลางเพื่อไม่ให้มี margin อัตโนมัติ
+	// 	screens: {
+	// 		'2xl': '100%', // ทำให้ container กว้างเต็มจอในหน้าจอใหญ่
+	// 	},
+	// 	padding: {
+	// 		'DEFAULT': '16px', // 16px
+	// 		'sm': '32px', // 32px
+	// 		'md': '48px', // 48px
+	// 		'lg': '64px', // 64px
+	// 		'xl': '80px', // 80px
+	// 		'2xl': '96px', // 96px
+	// 	},
+	// },
 };
