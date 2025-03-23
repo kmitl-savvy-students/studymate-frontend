@@ -3,142 +3,189 @@
 	<h3 class="text-sm opacity-50">คุณ {{ currentUser?.firstname }} {{ currentUser?.lastname }}</h3>
 </div>
 
-<!-- <ng-container *ngIf="isFetchingTranscriptDetails">
-	<div class="text-semibold rounded-3xl border bg-orange-50 p-12 text-center text-lg text-warning-400">กรุณาอัปโหลดไฟล์ Transcript เพื่อดูข้อมูลส่วนนี้</div>
-</ng-container> -->
-
-<div class="my-4 grid grid-cols-10 gap-x-2">
-	<div class="col-span-4">
-		<label class="inline-flex w-full cursor-pointer items-center justify-center overflow-x-auto rounded-xl border border-gray-200 p-3">
-			<input type="checkbox" class="peer sr-only" (change)="toggleIncludeXGrade()" [checked]="includeXGrade" />
-			<div
-				class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
-			<span class="ms-3 text-sm font-medium text-dark-100">แสดงข้อมูลรายวิชาที่ลงในเทอมปัจจุบัน</span>
-		</label>
-	</div>
-	<div class="col-span-6">
-		<div class="grid grid-cols-6 justify-items-center gap-x-2">
-			<div class="col-span-2 w-full">
-				<div class="flex flex-row items-center justify-center rounded-xl border border-gray-200 p-3.5 text-sm font-medium text-dark-100">
-					<span class="pr-1">สถานะ : </span>
-					<ng-container *ngIf="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1); else notDone"> <div class="rounded-xl bg-emerald-200 px-2 py-0.5 font-semibold">ครบ</div></ng-container>
-					<ng-template #notDone>
-						<div class="rounded-xl bg-gray-100 px-2 py-0.5">คงเหลือ</div>
-					</ng-template>
-				</div>
+<sdm-base-accordion header="เงื่อนไขและคำแนะนำ ⓘ" accordionId="rating-filter-acc" [accordionDefaultStatus]="false">
+	<div class="border-t"></div>
+	<div class="my-4 space-y-2">
+		<div class="rounded-xl border border-gray-200 p-6">
+			<h1 class="text-center text-lg font-bold text-dark-100 underline underline-offset-4">คำเตือน</h1>
+			<!-- REQUIRED_ALL -->
+			<div class="bg-white p-2">
+				<ul class="space-y-2">
+					<li class="text-sm text-gray-700">• ระบบเป็นเพียงเครื่องมือที่ช่วยเหลือ นักศึกษาควรศึกษาและทำความเข้าใจกับเล่มหลักสูตรของตัวเองอย่างถี่ถ้วนก่อนใช้งานระบบ</li>
+					<li class="text-sm text-gray-700">• ระบบช่วยตรวจสอบความถูกต้อง แต่นักศึกษาควรตรวจเช็คด้วยตัวเองอย่างถี่ถ้วนด้วยเช่นกัน</li>
+					<li class="text-sm text-gray-700">• ระบบอาจมีปัญหารายวิชาไม่ตรงหรือไม่อัพเดตได้ หากพบปัญหาโปรดแจ้ง admin หรือ ผู้ดูแลระบบ</li>
+				</ul>
+				<p class="text-sm text-gray-700"></p>
 			</div>
-			<div class="col-span-4 grid w-full grid-cols-4 items-center justify-items-center rounded-xl border border-gray-200 p-3.5">
-				<div class="col-span-2 text-sm font-medium text-dark-100">
-					หน่วยกิตทั้งหมด :
-					<div class="inline-flex pl-1 text-sm font-semibold text-main-75">{{ this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
-				</div>
+		</div>
+	</div>
+	<div class="my-4 space-y-2">
+		<div class="rounded-xl border border-gray-200 p-6">
+			<h1 class="text-center text-lg font-bold text-main-100 underline underline-offset-4">ประเภทของเงื่อนไข</h1>
+			<!-- REQUIRED_ALL -->
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-main-100">REQUIRED_ALL</h2>
+				<p class="text-sm text-gray-700">หมวดหมู่นี้กำหนดให้นักศึกษาต้อง<span class="font-semibold">ผ่านทุกรายวิชา</span>ในหมวดหมู่นี้ หรือในกรณีที่มีหมวดหมู่ย่อย ต้องผ่านทุกหมวดหมู่ย่อยที่กำหนด</p>
+			</div>
 
-				<div class="col-span-2 text-sm font-medium text-dark-100">
-					หน่วยกิตที่ขาด :
-					<div class="inline-flex pl-1 text-sm font-semibold text-red-300">
-						{{ groupCreditTotal }}
+			<!-- REQUIRED_CREDIT -->
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-main-100">REQUIRED_CREDIT</h2>
+				<p class="text-sm text-gray-700">หมวดหมู่นี้กำหนดให้นักศึกษาต้อง<span class="font-semibold">สะสมหน่วยกิตให้ครบ</span>ตามที่กำหนด โดยสามารถเลือกเรียนวิชาใดก็ได้ในหมวดหมู่นี้ หรือรวมหน่วยกิตจากหมวดหมู่ย่อย</p>
+			</div>
+
+			<!-- REQUIRED_BRANCH -->
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-main-100">REQUIRED_BRANCH</h2>
+				<p class="text-sm text-gray-700">หมวดหมู่นี้กำหนดให้นักศึกษาต้อง<span class="font-semibold">เลือกลงเรียนหมวดหมู่ย่อยอย่างน้อยหนึ่งหมวดหมู่ให้ครบเงื่อนไข</span> และสะสมหน่วยกิตให้ครบตามที่กำหนด</p>
+			</div>
+
+			<!-- COLLECTIVE -->
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-main-100">COLLECTIVE</h2>
+				<p class="text-sm text-gray-700">หมวดหมู่นี้ให้นักศึกษาสามารถลงทะเบียนเรียนวิชาตามที่กำหนดไว้โดยไม่มีเงื่อนไขเพิ่มเติม ใช้สำหรับแบ่งกลุ่มวิชาเท่านั้น</p>
+			</div>
+
+			<!-- FREE-ELECTIVES -->
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-main-100">FREE</h2>
+				<p class="text-sm text-gray-700">หมวดหมู่นี้ให้นักศึกษาสามารถเลือกเรียนวิชาใดก็ได้ตามต้องการ และต้องสะสมหน่วยกิตให้ครบตามเกณฑ์ที่กำหนด</p>
+			</div>
+		</div>
+	</div>
+	<div class="my-4 space-y-2">
+		<div class="rounded-xl border border-gray-200 p-6">
+			<h1 class="pb-2 text-center text-lg font-bold text-red-400 underline underline-offset-4">รายวิชาที่ไม่เข้าหมวดหมู่ใดๆ</h1>
+			<div class="flex h-14 w-full items-center justify-center rounded-xl bg-red-50 py-2 font-semibold text-red-500">* หมายเหตุ: รายวิชาที่ยังไม่อยู่ในกลุ่มใดจะถูกแสดงด้านล่าง โดยอาจเกิดจากสาเหตุต่างๆ ดังต่อไปนี้</div>
+
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-red-400">เกรดที่ได้รับเป็น X</h2>
+				<p class="text-sm text-gray-700">
+					หมายความว่าในรายวิชานั้นๆนักศึกษายังเรียนอยู่และยังไม่ได้รับเกรด โดยสามารถจำลองการนำรายวิชาไปคำนวณตามหลักสูตรได้โดยการกด <span class="font-semibold">"แสดงข้อมูลรายวิชาที่ลงในเทอมปัจจุบัน"</span>
+				</p>
+			</div>
+
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-red-400">รายวิชาไม่ตรงกับหลักสูตร</h2>
+				<p class="text-sm text-gray-700">หมายความว่ารายวิชานี้ <span class="font-semibold">มีรหัสวิชาที่ไม่ตรงกับหลักสูตรที่นักศึกษาเลือกอยู่ ณ ปัจจุบัน</span> แนะนำให้ลองเปิดเช็คกับเล่มหลักสูตร</p>
+			</div>
+
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-red-400">รายวิชามีการลงซ้ำ</h2>
+				<p class="text-sm text-gray-700">หมายความว่ารายวิชานี้ <span class="font-semibold">อาจมีการลงไปมากกว่า 1 ครั้ง</span> โดยระบบจะนำรายวิชาตัวที่มีเกรดมากกว่าไปคำนวณตามหลักสูตร</p>
+			</div>
+
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-red-400">รายวิชานั้นๆเรียนไม่ผ่านเกณฑ์</h2>
+				<p class="text-sm text-gray-700">หมายความว่ารายวิชานี้ นักศึกษาได้รับ <span class="font-semibold">เกรด F หรือ U</span> ซึ่งคือเกรดที่ไม่ผ่านเกณฑ์ของทางสถาบัน</p>
+			</div>
+
+			<div class="border-b bg-white p-2">
+				<h2 class="mb-2 text-base font-semibold text-red-400">เรียนเกินที่หลักสูตรกำหนด</h2>
+				<p class="text-sm text-gray-700">หมายความว่านักศึกษา อาจเรียนและลงรายวิชาเกินตามที่หลักสูตรกำหนดในหมวดหมู่ต่างๆ ระบบจะนำวิชาที่เกินมาไว้ทางด้านล่างนี้</p>
+			</div>
+		</div>
+	</div>
+</sdm-base-accordion>
+
+<ng-container *ngIf="isFetchingTranscriptDetails; else showDetails">
+	<div class="animate-pulse rounded-xl border border-gray-200 p-6">
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+		<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>
+	</div>
+</ng-container>
+<ng-template #showDetails>
+	<div class="my-4 grid grid-cols-10 gap-x-2">
+		<div class="col-span-4">
+			<label class="inline-flex w-full cursor-pointer items-center justify-center overflow-x-auto rounded-xl border border-gray-200 p-3">
+				<input type="checkbox" class="peer sr-only" (change)="toggleIncludeXGrade()" [checked]="includeXGrade" />
+				<div
+					class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
+				<span class="ms-3 text-sm font-medium text-dark-100">แสดงข้อมูลรายวิชาที่ลงในเทอมปัจจุบัน</span>
+			</label>
+		</div>
+		<div class="col-span-6">
+			<div class="grid grid-cols-6 justify-items-center gap-x-2">
+				<div class="col-span-2 w-full">
+					<div class="flex flex-row items-center justify-center rounded-xl border border-gray-200 p-3.5 text-sm font-medium text-dark-100">
+						<span class="pr-1">สถานะ : </span>
+						<ng-container *ngIf="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1); else notDone"> <div class="rounded-xl bg-emerald-200 px-2 py-0.5 font-semibold">ครบ</div></ng-container>
+						<ng-template #notDone>
+							<div class="rounded-xl bg-gray-100 px-2 py-0.5">คงเหลือ</div>
+						</ng-template>
+					</div>
+				</div>
+				<div class="col-span-4 grid w-full grid-cols-4 items-center justify-items-center rounded-xl border border-gray-200 p-3.5">
+					<div class="col-span-2 text-sm font-medium text-dark-100">
+						หน่วยกิตทั้งหมด :
+						<div class="inline-flex pl-1 text-sm font-semibold text-main-75">{{ this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
+					</div>
+
+					<div class="col-span-2 text-sm font-medium text-dark-100">
+						หน่วยกิตที่ขาด :
+						<div class="inline-flex pl-1 text-sm font-semibold text-red-300">
+							{{ groupCreditTotal }}
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<div class="my-4 w-full items-center overflow-x-auto rounded-xl border border-gray-200 p-4">
-	<div class="flex w-full flex-row items-center">
-		<div class="h-5 w-full rounded-lg bg-gray-200">
-			<div
-				class="h-5 rounded-md p-0.5 text-center align-middle text-base font-semibold leading-none"
-				[style.width.%]="progressPercentage"
-				[ngClass]="{ 'text-white': progressPercentage > 0, 'text-dark-100': progressPercentage == 0, 'bg-blue-600': progressPercentage < 100, 'bg-emerald-400': progressPercentage == 100 }">
-				<div class="py-0.5">{{ progressPercentage | number: '1.2-2' }}%</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="flex flex-col gap-y-6">
-	<div *ngIf="currentUser?.curriculum?.curriculum_group" class="max-w-full overflow-x-auto rounded-xl border border-gray-200 p-6">
-		<div data-accordion="collapse">
-			<div class="mb-2 flex flex-wrap items-center gap-3">
-				<button
-					class="flex w-full items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 font-medium hover:bg-gray-50"
-					[attr.data-accordion-target]="'#group-' + currentUser?.curriculum?.curriculum_group?.id"
-					(click)="toggleAccordion(currentUser?.curriculum?.curriculum_group?.id ?? -1)">
-					<div class="flex w-full flex-row items-center justify-between gap-5">
-						<div class="flex flex-row items-center gap-5">
-							<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)" disabled />
-							<div class="text-left">
-								<div class="font-semibold">
-									<span>{{ currentUser?.curriculum?.name_th }}</span>
-									<!-- <span> : ปี {{ currentUser?.curriculum?.year }}</span> -->
-								</div>
-								<div class="text-sm opacity-75">
-									ประเภท:
-									{{ currentUser?.curriculum?.curriculum_group?.type }}
-								</div>
-							</div>
-						</div>
-						<div class="flex flex-row items-center gap-5">
-							<sdm-total-credit-earn
-								[isCollectCredit]="false"
-								[Checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)"
-								[earnCredit]="groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0"
-								[totalCredit]="groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0"></sdm-total-credit-earn>
-							<div
-								class="transition-transform duration-200"
-								[ngClass]="{
-									'rotate-90': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
-									'text-black': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
-								}">
-								▶
-							</div>
-						</div>
-					</div>
-				</button>
-			</div>
-
-			<div [id]="'group-' + currentUser?.curriculum?.curriculum_group?.id" [class.hidden]="!isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1)" class="ml-16">
-				<ng-container
-					*ngTemplateOutlet="
-						renderGroup;
-						context: {
-							$implicit: currentUser?.curriculum?.curriculum_group?.children,
-							level: 6,
-						}
-					"></ng-container>
+	<div class="my-4 w-full items-center overflow-x-auto rounded-xl border border-gray-200 p-4">
+		<div class="flex w-full flex-row items-center">
+			<div class="h-5 w-full rounded-lg bg-gray-200">
+				<div
+					class="h-5 rounded-md p-0.5 text-center align-middle text-base font-semibold leading-none"
+					[style.width.%]="progressPercentage"
+					[ngClass]="{ 'text-white': progressPercentage > 0, 'text-dark-100': progressPercentage == 0, 'bg-blue-600': progressPercentage < 100, 'bg-emerald-400': progressPercentage == 100 }">
+					<div class="py-0.5">{{ progressPercentage | number: '1.2-2' }}%</div>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<ng-template #renderGroup let-node let-level="level">
-		<ul>
-			<li *ngFor="let child of node" class="mb-3">
-				<div class="flex flex-wrap items-center gap-3">
-					<button class="flex w-full items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 font-medium hover:bg-gray-50" [attr.data-accordion-target]="'#group-' + child.id" (click)="toggleAccordion(child.id)">
+	<div class="flex flex-col gap-y-6">
+		<div *ngIf="currentUser?.curriculum?.curriculum_group" class="max-w-full overflow-x-auto rounded-xl border border-gray-200 p-6">
+			<div data-accordion="collapse">
+				<div class="mb-2 flex flex-wrap items-center gap-3">
+					<button
+						class="flex w-full items-center gap-2 rounded-xl border border-gray-300 px-4 py-2 font-medium hover:bg-gray-100"
+						[attr.data-accordion-target]="'#group-' + currentUser?.curriculum?.curriculum_group?.id"
+						(click)="toggleAccordion(currentUser?.curriculum?.curriculum_group?.id ?? -1)">
 						<div class="flex w-full flex-row items-center justify-between gap-5">
 							<div class="flex flex-row items-center gap-5">
-								<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="groupComplete.get(child.id)" disabled />
-								<div class="h-10 w-2 rounded-xl align-middle" [style.background-color]="findParentNodeColor(child)"></div>
+								<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)" disabled />
 								<div class="text-left">
 									<div class="font-semibold">
-										{{ child.name }}
+										<span>{{ currentUser?.curriculum?.name_th }}</span>
+										<!-- <span> : ปี {{ currentUser?.curriculum?.year }}</span> -->
 									</div>
-									<div class="text-sm opacity-75">ประเภท: {{ child.type }}</div>
+									<div class="text-sm opacity-75">
+										ประเภท:
+										{{ currentUser?.curriculum?.curriculum_group?.type }}
+									</div>
 								</div>
 							</div>
 							<div class="flex flex-row items-center gap-5">
 								<sdm-total-credit-earn
-									[isCollectCredit]="child.type == 'COLLECTIVE'"
-									[bgColor]="'#2563eb'"
-									[Checked]="groupComplete.get(child.id)"
-									[earnCredit]="groupCreditUsed.get(child.id) || 0"
-									[totalCredit]="groupCreditRequired.get(child.id) || 0"></sdm-total-credit-earn>
+									[isCollectCredit]="false"
+									[Checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)"
+									[earnCredit]="groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0"
+									[totalCredit]="groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0"></sdm-total-credit-earn>
 								<div
-									class="text-gray-500 transition-transform duration-200"
+									class="transition-transform duration-200"
 									[ngClass]="{
-										'rotate-90': isAccordionOpen(child.id),
-										'text-black': isAccordionOpen(child.id),
+										'rotate-90': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
+										'text-black': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
 									}">
 									▶
 								</div>
@@ -147,49 +194,103 @@
 					</button>
 				</div>
 
-				<div [id]="'group-' + child.id" class="ml-4 mt-2 min-w-fit overflow-hidden transition-all" [class.hidden]="!isAccordionOpen(child.id)" [style.padding-left.px]="level * 8">
-					<ng-container *ngIf="groupMatches.get(child.id)?.length || child.subjects.length != 0">
-						<div class="rounded-xl border border-gray-200 px-2 py-6">
-							<sdm-subject-list-card maxTextLength="max-w-52" [transcriptDetails]="groupMatches.get(child.id)" [subjectLabelColor]="findParentNodeColor(child)"></sdm-subject-list-card>
-							<ng-container *ngIf="child.type != 'FREE'">
-								<div class="px-4 pt-3">
-									<sdm-base-button
-										text="ดูรายวิชาในหมวดหมู่นี้"
-										[backgroundColorCustom]="findParentNodeColor(child)"
-										backgroundColorHover="hover:bg-primary-400"
-										textColorHover="hover:underline"
-										(clickEvent)="onClickShowSubjectGroup(child.subjects, findParentNodeColor(child))"></sdm-base-button>
-								</div>
-							</ng-container>
-						</div>
-					</ng-container>
-					<ng-container *ngTemplateOutlet="renderGroup; context: { $implicit: child.children, level: 6 }"></ng-container>
+				<div [id]="'group-' + currentUser?.curriculum?.curriculum_group?.id" [class.hidden]="!isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1)" class="ml-16">
+					<ng-container
+						*ngTemplateOutlet="
+							renderGroup;
+							context: {
+								$implicit: currentUser?.curriculum?.curriculum_group?.children,
+								level: 6,
+							}
+						"></ng-container>
 				</div>
-			</li>
-		</ul>
-	</ng-template>
-	<div class="flex h-24 w-full items-center justify-center rounded-xl bg-red-50 py-4 font-semibold text-red-500">* หมายเหตุ: รายวิชาที่ยังไม่อยู่ในกลุ่มใดจะถูกแสดงด้านล่าง</div>
-	<div *ngIf="notFittedSubjects.length > 0">
-		<h3 class="my-3 font-bold text-red-600">รายวิชาที่ยังไม่อยู่ในกลุ่มใด:</h3>
-		<div class="rounded-xl border border-gray-200 px-2 py-6">
-			<sdm-subject-list-card [transcriptDetails]="notFittedSubjects" subjectLabelColor="#FEF2F2"></sdm-subject-list-card>
-		</div>
-	</div>
-</div>
-
-<sdm-base-modal #showSubjectGroupModal modalId="showSubjectGroup" header="รายวิชาที่เกี่ยวข้อง" [normalModal]="true">
-	<div class="mb-3 max-h-[500px] overflow-y-scroll">
-		<div class="sticky top-0 z-10 flex w-full flex-col items-center justify-center bg-white pb-2">
-			<div class="font-semibold">
-				มีรายวิชาในหมวดนี้ทั้งหมด <span>{{ currentSubjects.length }}</span> รายวิชา
 			</div>
 		</div>
+
+		<ng-template #renderGroup let-node let-level="level">
+			<ul>
+				<li *ngFor="let child of node" class="mb-3">
+					<div class="flex flex-wrap items-center gap-3">
+						<button class="flex w-full items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 font-medium hover:bg-gray-50" [attr.data-accordion-target]="'#group-' + child.id" (click)="toggleAccordion(child.id)">
+							<div class="flex w-full flex-row items-center justify-between gap-5">
+								<div class="flex flex-row items-center gap-5">
+									<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="groupComplete.get(child.id)" disabled />
+									<div class="h-10 w-2 rounded-xl align-middle" [style.background-color]="findParentNodeColor(child)"></div>
+									<div class="text-left">
+										<div class="text-nowrap font-semibold">
+											{{ child.name }}
+										</div>
+										<div class="text-sm opacity-75">ประเภท: {{ child.type }}</div>
+									</div>
+								</div>
+								<div class="flex flex-row items-center gap-5">
+									<sdm-total-credit-earn
+										[isCollectCredit]="child.type == 'COLLECTIVE'"
+										[bgColor]="'#2563eb'"
+										[Checked]="groupComplete.get(child.id)"
+										[earnCredit]="groupCreditUsed.get(child.id) || 0"
+										[totalCredit]="groupCreditRequired.get(child.id) || 0"></sdm-total-credit-earn>
+									<div
+										class="text-gray-500 transition-transform duration-200"
+										[ngClass]="{
+											'rotate-90': isAccordionOpen(child.id),
+											'text-black': isAccordionOpen(child.id),
+										}">
+										▶
+									</div>
+								</div>
+							</div>
+						</button>
+					</div>
+
+					<div [id]="'group-' + child.id" class="ml-4 mt-2 min-w-fit overflow-hidden transition-all" [class.hidden]="!isAccordionOpen(child.id)" [style.padding-left.px]="level * 8">
+						<ng-container *ngIf="groupMatches.get(child.id)?.length || child.subjects.length != 0">
+							<div class="rounded-xl border border-gray-200 px-2 py-6">
+								<sdm-subject-list-card maxTextLength="max-w-52" [transcriptDetails]="groupMatches.get(child.id)" [subjectLabelColor]="findParentNodeColor(child)"></sdm-subject-list-card>
+								<ng-container *ngIf="child.type != 'FREE'">
+									<div class="px-4 pt-3">
+										<sdm-base-button
+											text="ดูรายวิชาในหมวดหมู่นี้"
+											[backgroundColorCustom]="findParentNodeColor(child)"
+											backgroundColorHover="hover:bg-primary-400"
+											textColorHover="hover:underline"
+											(clickEvent)="onClickShowSubjectGroup(child)"></sdm-base-button>
+									</div>
+								</ng-container>
+							</div>
+						</ng-container>
+						<ng-container *ngTemplateOutlet="renderGroup; context: { $implicit: child.children, level: 6 }"></ng-container>
+					</div>
+				</li>
+			</ul>
+		</ng-template>
+		<div *ngIf="notFittedSubjects.length > 0">
+			<h3 class="my-3 font-bold text-red-600">รายวิชาที่ยังไม่อยู่ในกลุ่มใด:</h3>
+			<div class="rounded-xl border border-gray-200 px-2 py-6">
+				<sdm-subject-list-card [transcriptDetails]="notFittedSubjects" subjectLabelColor="#FEF2F2"></sdm-subject-list-card>
+			</div>
+		</div>
+	</div>
+</ng-template>
+<sdm-base-modal #showSubjectGroupModal modalId="showSubjectGroup" header="รายวิชาในหมวดหมู่" [normalModal]="true">
+	<div class="sticky top-0 z-10 flex w-full flex-col items-center justify-center bg-white pb-2">
+		<div class="font-semibold">
+			มีรายวิชาในหมวดนี้ทั้งหมด <span>{{ currentSubjects.length }}</span> รายวิชา ลงไปแล้ว <span>{{ transcriptSubjectIds.length }}</span> รายวิชา
+		</div>
+
+		<div class="text-sm opacity-75">
+			ประเภท: <span class="text-red-400">{{ nodeType }}</span>
+		</div>
+
+		<div class="text-sm opacity-50">หมายเหตุ: รายวิชาที่เช็คถูกคือรายวิชาที่คุณได้ลงเรียนแล้ว</div>
+	</div>
+	<div class="mb-3 max-h-[500px] overflow-y-scroll">
 		<div class="flex flex-col gap-3 px-4">
 			<ng-container *ngFor="let subject of currentSubjects">
 				<a [href]="getSubjectDetailUrl(subject.subject?.id!)" target="_blank" class="flex items-center justify-between rounded-xl border border-gray-200 py-0.5 ps-5 text-lg transition-all hover:cursor-pointer hover:bg-main-10">
 					<div class="flex flex-row p-2">
 						<div class="flex items-center justify-center pr-3">
-							<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="false" disabled />
+							<input type="checkbox" class="h-7 w-7 rounded-3xl accent-green-600" [checked]="matchSubjectWithTranscript(subject.subject?.id!)" disabled />
 						</div>
 						<div class="mr-3 w-2 rounded-xl align-middle" [style.background-color]="currentSubjectsGroupColor"></div>
 						<div class="flex flex-col">
