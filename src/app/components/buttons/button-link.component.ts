@@ -45,7 +45,7 @@ export class SDMButtonLink {
 	@Input() iconEnd: string = '';
 	@Input() iconEndCustom: any | null = null;
 	@Input() textColor: string = 'text-dark-100';
-	@Input() textColorHover: string = 'hover:text-primary-300';
+	@Input() textColorHover: string = 'hover:text-main-100';
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorHover: string = '';
 	@Input() backgroundColorCustom: string = '';
