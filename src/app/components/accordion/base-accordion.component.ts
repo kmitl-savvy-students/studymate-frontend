@@ -26,7 +26,17 @@ import { IconComponent } from '../icon/icon.component';
 				</button>
 			</h2>
 
-			<div [id]="accordionId + '-body'" class="mb-5 hidden" [attr.aria-labelledby]="accordionId + '-heading'">
+			<!-- <div [id]="accordionId + '-body'" class="mb-5 hidden" [attr.aria-labelledby]="accordionId + '-heading'">
+				<ng-content></ng-content>
+			</div> -->
+
+			<div
+				[id]="accordionId + '-body'"
+				class="mb-5"
+				[ngClass]="{
+					hidden: !isExpanded,
+				}"
+				[attr.aria-labelledby]="accordionId + '-heading'">
 				<ng-content></ng-content>
 			</div>
 		</div>
@@ -47,6 +57,10 @@ export class SDMBaseAccordion implements AfterViewInit {
 	ngAfterViewInit(): void {
 		this.initAccordion();
 		setTimeout(() => (this.isExpanded = this.accordionDefaultStatus));
+		console.log('========================');
+		console.log('header : ', this.header);
+		console.log('accordionDefaultStatus : ', this.accordionDefaultStatus);
+		console.log('========================');
 	}
 
 	initAccordion(): void {

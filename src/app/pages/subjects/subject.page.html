@@ -1,11 +1,30 @@
 <div class="flex w-full gap-x-5">
+	<!-- วิธี 1 ไม่แชร์ค่า filter ที่เลือกให้กับ 2 component -->
+	<!-- <ng-container *ngIf="isLgScreen"
+		><sdm-filter-bar
+			*ngIf="isLgScreen"
+			[isLgScreen]="isLgScreen"
+			[selectedCurriculum]="selectedCurriculumData"
+			[isLoading]="isLoading"
+			(selectedDays)="onSelectedDaysChange($event)"
+			(selectedRating)="onReviewFilterValueChange($event)"
+			(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+			class="flex-none"></sdm-filter-bar
+	></ng-container> -->
+
+	<!-- วิธี 2 แชร์ค่า filter ที่เลือกให้กับ 2 component-->
 	<sdm-filter-bar
+		[isLgScreen]="isLgScreen"
 		[selectedCurriculum]="selectedCurriculumData"
 		[isLoading]="isLoading"
+		[initialSelectedDays]="selectedDays"
+		[initialSelectedRating]="selectedRatingFilter"
 		(selectedDays)="onSelectedDaysChange($event)"
 		(selectedRating)="onReviewFilterValueChange($event)"
 		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
-		class="flex-none"></sdm-filter-bar>
+		class="flex-none"
+		[class.hidden]="!isLgScreen"></sdm-filter-bar>
+
 	<div class="flex w-full flex-col">
 		<div class="flex w-full flex-col">
 			<div class="grid w-full flex-none grid-cols-1 gap-3">
@@ -70,7 +89,16 @@
 						</div>
 					</div>
 				</sdm-base-accordion>
-				<sdm-search-bar [data]="isFilter ? finalDisplayData : subjectCardData" (searchCleared)="onSearchCleared()" [filterFunction]="searchFunction" (searchedDataList)="getSearchedSubjectCardDataList($event)"> </sdm-search-bar>
+				<div class="flex w-full gap-2">
+					<div class="w-full">
+						<sdm-search-bar [data]="isFilter ? finalDisplayData : subjectCardData" (searchCleared)="onSearchCleared()" [filterFunction]="searchFunction" (searchedDataList)="getSearchedSubjectCardDataList($event)">
+						</sdm-search-bar>
+					</div>
+					<!-- Filter Sidebar button for mobile -->
+					<div class="flex cursor-pointer items-center rounded-[20px] bg-main-10 px-3 py-2 hover:bg-main-25 lg:hidden">
+						<sdm-icon icon="filter" class="text-sm text-dark-100" data-drawer-target="filter-sidebar" data-drawer-show="filter-sidebar" aria-controls="filter-sidebar"></sdm-icon>
+					</div>
+				</div>
 			</div>
 		</div>
 		<ng-container *ngIf="isSelectAllDropdown && isLoading">
@@ -139,4 +167,57 @@
 			</div>
 		</ng-container>
 	</div>
+</div>
+
+<!-- Sidebar Menu สำหรับ mobile -->
+
+<!-- วิธี 1 ไม่แชร์ค่า filter ที่เลือกให้กับ 2 component -->
+<!-- <div id="filter-sidebar" class="filter-sidebar fixed left-0 top-0 z-50 h-screen -translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="filter-sidebar-label">
+	<div class="flex items-center justify-between">
+		<div class="text-base font-semibold text-dark-100">ตัวกรองข้อมูล</div>
+		<button type="button" data-drawer-hide="nav-sidebar" aria-controls="nav-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path
+					fill-rule="evenodd"
+					d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+					clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only">Close menu</span>
+		</button>
+	</div>
+	<sdm-filter-bar
+		*ngIf="!isLgScreen"
+		[isLgScreen]="isLgScreen"
+		[selectedCurriculum]="selectedCurriculumData"
+		[isLoading]="isLoading"
+		(selectedDays)="onSelectedDaysChange($event)"
+		(selectedRating)="onReviewFilterValueChange($event)"
+		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		class="flex-none"></sdm-filter-bar>
+</div> -->
+
+<!-- วิธี 2 แชร์ค่า filter ที่เลือกให้กับ 2 component -->
+<div id="filter-sidebar" class="filter-sidebar fixed left-0 top-0 z-50 h-screen -translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="filter-sidebar-label">
+	<div class="flex items-center justify-between">
+		<div class="text-base font-semibold text-dark-100">ตัวกรองข้อมูล</div>
+		<button type="button" data-drawer-hide="nav-sidebar" aria-controls="nav-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path
+					fill-rule="evenodd"
+					d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+					clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only">Close menu</span>
+		</button>
+	</div>
+	<sdm-filter-bar
+		[isLgScreen]="isLgScreen"
+		[selectedCurriculum]="selectedCurriculumData"
+		[isLoading]="isLoading"
+		[initialSelectedDays]="selectedDays"
+		[initialSelectedRating]="selectedRatingFilter"
+		(selectedDays)="onSelectedDaysChange($event)"
+		(selectedRating)="onReviewFilterValueChange($event)"
+		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		class="flex-none"></sdm-filter-bar>
 </div>
