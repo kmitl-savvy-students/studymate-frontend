@@ -91,10 +91,14 @@
 			<select id="type" formControlName="type" required (input)="onUpdateNodeType($event)">
 				<option value="REQUIRED_ALL">ต้องลงทุกวิชาที่กำหนดให้ครบหรือกลุ่มย่อยในกลุ่มต้องสมบูรณ์ทุกกลุ่ม (REQUIRED_ALL)</option>
 				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
-				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
+				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์ตามที่กำหนด (REQUIRED_BRANCH)</option>
 				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
 				<option value="COLLECTIVE">ไม่มีข้อกำหนด (COLLECTIVE)</option>
 			</select>
+		</div>
+		<div *ngIf="currentParentNode?.type == 'REQUIRED_BRANCH'" class="input-primary mb-5">
+			<label for="branch">จำนวนกลุ่มที่สมบูรณ์ขั้นต่ำ</label>
+			<input type="number" id="branch" formControlName="branch" placeholder="จำนวนกลุ่มที่สมบูรณ์ขั้นต่ำ" required />
 		</div>
 		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL' && currentParentNode?.type != 'COLLECTIVE'" class="input-primary mb-5">
 			<label for="credit">จำนวนหน่วยกิตที่จะทำให้กลุ่มสมบูรณ์</label>
@@ -117,10 +121,14 @@
 			<select id="type" formControlName="type" required (input)="onUpdateNodeType($event)">
 				<option value="REQUIRED_ALL">ต้องลงทุกวิชาที่กำหนดให้ครบหรือกลุ่มย่อยในกลุ่มต้องสมบูรณ์ทุกกลุ่ม (REQUIRED_ALL)</option>
 				<option value="REQUIRED_CREDIT">ต้องลงให้ครบหน่วยกิตในวิชาที่กำหนดเท่านั้น (REQUIRED_CREDIT)</option>
-				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์อย่างน้อยหนึ่งกลุ่ม (REQUIRED_BRANCH)</option>
+				<option value="REQUIRED_BRANCH">ต้องลงให้ครบหน่วยกิตและต้องมีกลุ่มที่สมบูรณ์ตามที่กำหนด (REQUIRED_BRANCH)</option>
 				<option value="FREE">ลงอะไรก็ได้ให้ครบหน่วยกิตที่กำหนด (FREE)</option>
 				<option value="COLLECTIVE">ไม่มีข้อกำหนด (COLLECTIVE)</option>
 			</select>
+		</div>
+		<div *ngIf="currentParentNode?.type == 'REQUIRED_BRANCH'" class="input-primary mb-5">
+			<label for="branch">จำนวนกลุ่มที่สมบูรณ์ขั้นต่ำ</label>
+			<input type="number" id="branch" formControlName="branch" placeholder="จำนวนกลุ่มที่สมบูรณ์ขั้นต่ำ" required />
 		</div>
 		<div *ngIf="currentParentNode?.type != 'REQUIRED_ALL' && currentParentNode?.type != 'COLLECTIVE'" class="input-primary mb-5">
 			<label for="credit">จำนวนหน่วยกิตที่จะทำให้กลุ่มสมบูรณ์</label>

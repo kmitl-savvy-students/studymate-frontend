@@ -58,12 +58,14 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: [''],
 			type: ['REQUIRED_ALL'],
 			credit: 0,
+			branch: 1,
 			color: ['#FFFFFF'],
 		});
 		this.editNodeForm = this.fb.group({
 			name: [''],
 			type: ['REQUIRED_ALL'],
 			credit: 0,
+			branch: 1,
 			color: ['#FFFFFF'],
 		});
 		this.addSubjectForm = this.fb.group({
@@ -174,6 +176,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: 'Root',
 			type: 'REQUIRED_ALL',
 			credit: 0,
+			branch: 1,
 			color: '#FFFFFF',
 			children: [],
 			subjects: [],
@@ -226,6 +229,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: '',
 			type: 'REQUIRED_ALL',
 			credit: 0,
+			branch: 1,
 			color: '#FFFFFF',
 		});
 		this.addNodeModal.show();
@@ -239,6 +243,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: this.addNodeForm.value.name,
 			type: this.addNodeForm.value.type,
 			credit: this.addNodeForm.value.credit,
+			branch: this.addNodeForm.value.branch,
 			color: this.addNodeForm.value.color,
 			children: [],
 			subjects: [],
@@ -268,6 +273,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: node.name,
 			type: node.type,
 			credit: node.credit,
+			branch: node.branch ?? 1, // TODO: Temp fix, please update database
 			color: node.color,
 		});
 		if (this.editNodeForm.value.color.length === 0) {
@@ -288,6 +294,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: this.editNodeForm.value.name,
 			type: this.editNodeForm.value.type,
 			credit: this.editNodeForm.value.credit,
+			branch: this.editNodeForm.value.branch,
 			color: this.editNodeForm.value.color,
 			children: [],
 			subjects: [],
