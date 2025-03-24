@@ -1,9 +1,9 @@
 <div class="flex flex-col gap-y-2">
 	<div class="text-base font-semibold">ข้อมูลการเปิดรายวิชา ( 4 ปีการศึกษาล่าสุด )</div>
-	<div class="flex w-1/2 min-w-96 flex-col gap-y-5 rounded-[20px] border border-main-25">
+	<div class="flex w-1/2 min-w-96 flex-col gap-y-5 rounded-[20px] border border-main-25 shadow-md transition-shadow">
 		<table class="table-auto">
 			<thead>
-				<tr class="h-14">
+				<tr class="relative h-14 bg-gradient-to-r from-main-75 to-main-100 text-white">
 					<th class="w-1/4 rounded-tl-[19px] bg-main-25 text-sm font-semibold">ปีการศึกษา \ เทอม</th>
 					<th class="w-1/4 bg-main-25 text-sm font-semibold">เทอม 1</th>
 					<th class="w-1/4 bg-main-25 text-sm font-semibold">เทอม 2</th>
@@ -85,7 +85,7 @@
 						<td class="rounded-bl-[19px] text-center text-sm font-semibold">
 							<span>ปี </span><span>{{ classYear[3] }}</span>
 						</td>
-						<td *ngFor="let semester of fourthYear" class="text-center text-sm">
+						<td *ngFor="let semester of fourthYear; let last = last" class="text-center text-sm" [ngClass]="{ 'rounded-br-[19px]': last }">
 							<ng-container *ngIf="semester === true; else closeBlock">
 								<span class="rounded-[20px] bg-emerald-100 px-2">เปิด</span>
 							</ng-container>

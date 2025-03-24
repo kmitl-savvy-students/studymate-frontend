@@ -62,6 +62,30 @@ export class SDMPageDepartment implements OnInit {
 		});
 	}
 
+	checkShowDepartment(department: Department): void {
+		department.is_visible = !department.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/department/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, department)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchDepartments();
+					},
+					error: (error) => {
+						console.error('Error updating department:', error);
+					},
+				});
+		});
+	}
+
 	// #region Fetchings
 	fetchDepartments(): void {
 		if (!this.facultyId) return;
@@ -138,7 +162,7 @@ export class SDMPageDepartment implements OnInit {
 		this.createDepartmentModal.show();
 	}
 	onConfirmCreate(): void {
-		if (this.departmentCreateForm.value.nameTh.trim().length == 0 || this.departmentCreateForm.value.nameEn.trim().length == 0) {
+		if (this.departmentCreateForm.value.kmitlId.trim().length == 0 || this.departmentCreateForm.value.nameTh.trim().length == 0 || this.departmentCreateForm.value.nameEn.trim().length == 0) {
 			this.alertService.showAlert('error', 'กรุณากรอกชื่อภาควิชา');
 			return;
 		}
@@ -146,6 +170,7 @@ export class SDMPageDepartment implements OnInit {
 
 		const createdDepartment = {
 			id: -1,
+			is_visible: false,
 			kmitl_id: this.departmentCreateForm.value.kmitlId,
 			faculty: this.faculty,
 			name_th: this.departmentCreateForm.value.nameTh,
@@ -188,7 +213,7 @@ export class SDMPageDepartment implements OnInit {
 	onConfirmEdit(): void {
 		if (!this.selectedDepartment) return;
 
-		if (this.departmentEditForm.value.nameTh.trim().length == 0 || this.departmentEditForm.value.nameEn.trim().length == 0) {
+		if (this.departmentEditForm.value.kmitlId.trim().length == 0 || this.departmentEditForm.value.nameTh.trim().length == 0 || this.departmentEditForm.value.nameEn.trim().length == 0) {
 			this.alertService.showAlert('error', 'กรุณากรอกชื่อภาควิชา');
 			return;
 		}

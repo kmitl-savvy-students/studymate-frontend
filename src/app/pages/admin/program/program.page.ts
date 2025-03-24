@@ -62,6 +62,30 @@ export class SDMPageProgram implements OnInit {
 		});
 	}
 
+	checkShowProgram(program: Program): void {
+		program.is_visible = !program.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/program/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, program)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchPrograms();
+					},
+					error: (error) => {
+						console.error('Error updating program:', error);
+					},
+				});
+		});
+	}
+
 	// #region Fetchings
 	fetchPrograms(): void {
 		if (!this.departmentId) return;
@@ -140,14 +164,15 @@ export class SDMPageProgram implements OnInit {
 		this.createProgramModal.show();
 	}
 	onConfirmCreate(): void {
-		if (this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อแผนการเรียน');
+		if (this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.createProgramModal.hide();
 
 		const createdProgram = {
 			id: -1,
+			is_visible: false,
 			kmitl_id: this.programCreateForm.value.kmitlId,
 			department: this.department,
 			name_th: this.programCreateForm.value.nameTh,
@@ -188,8 +213,8 @@ export class SDMPageProgram implements OnInit {
 		this.editProgramModal.show();
 	}
 	onConfirmEdit(): void {
-		if (this.programEditForm.value.nameTh.trim().length == 0 || this.programEditForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อแผนการเรียน');
+		if (this.programEditForm.value.kmitlId.trim().length == 0 || this.programEditForm.value.nameTh.trim().length == 0 || this.programEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.editProgramModal.hide();

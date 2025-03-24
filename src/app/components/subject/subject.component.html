@@ -8,10 +8,16 @@
 					{{ subjectCardData.subject.name_en }} [{{ subjectCardData.subject.credit }}
 					หน่วยกิต]
 				</a>
-				<div class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData?.session_type === 'ทฤษฎี'">
+				<!-- <div class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData?.session_type === 'ทฤษฎี'">
 					{{ subjectCardData.session_type }}
 				</div>
 				<div class="border-1 rounded-[15px] bg-orange-400 px-3 py-1.5 text-xs font-semibold text-light" *ngIf="subjectCardData?.session_type === 'ปฏิบัติ'">
+					{{ subjectCardData.session_type }}
+				</div> -->
+				<div class="border-1 rounded-[15px] border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100" *ngIf="subjectCardData?.session_type === 'ทฤษฎี'">
+					{{ subjectCardData.session_type }}
+				</div>
+				<div class="border-1 rounded-[15px] border border-green-300 bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-200" *ngIf="subjectCardData?.session_type === 'ปฏิบัติ'">
 					{{ subjectCardData.session_type }}
 				</div>
 			</div>
@@ -28,8 +34,8 @@
 						</div>
 					</ng-container>
 					<ng-template #noGroup>
-						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่พบหมวดวิชาในหลักสูตรที่เลือก</div>
-						<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">เสรี</div>
+						<div class="rounded-[15px] bg-gray-50 px-3 py-1.5 text-xs">ไม่พบหมวดวิชาในหลักสูตรที่เลือก</div>
+						<div class="rounded-[15px] bg-gray-50 px-3 py-1.5 text-xs">เสรี</div>
 					</ng-template>
 				</div>
 			</div>

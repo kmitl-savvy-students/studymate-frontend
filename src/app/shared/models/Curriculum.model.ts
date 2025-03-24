@@ -4,6 +4,7 @@ import { Program } from './Program.model';
 export class Curriculum {
 	constructor(
 		public id: number,
+		public is_visible: boolean,
 		public program: Program | null,
 		public year: number,
 		public name_th: string,

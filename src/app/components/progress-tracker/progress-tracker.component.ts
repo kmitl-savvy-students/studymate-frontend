@@ -12,6 +12,7 @@ import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { SDMBaseAccordion } from '../accordion/base-accordion.component';
 import { SDMBaseButton } from '../buttons/base-button.component';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-earn.component';
@@ -19,7 +20,7 @@ import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-e
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal, SDMBaseAccordion],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
@@ -44,10 +45,12 @@ export class SDMProgressTrackerComponent implements OnInit {
 	notFittedSubjects: TranscriptDetail[] = [];
 	subjectData!: Subject;
 	currentSubjects: CurriculumGroupSubject[] = [];
-	currentSubjectsGroupColor = '';
-	accordionLevelExpands = 2;
-	includeXGrade = false;
-	isFetchingTranscriptDetails = false;
+	transcriptSubjectIds: string[] = [];
+	currentSubjectsGroupColor: string = '';
+	accordionLevelExpands: number = 2;
+	includeXGrade: boolean = false;
+	isFetchingTranscriptDetails: boolean = false;
+	nodeType: string = '';
 	// Grade priority: "S" > "A" > "B" > "C" > "D" > "T" > "X"
 	private gradeOrder = ['S', 'A', 'B', 'C', 'D', 'T', 'X'];
 
@@ -117,10 +120,19 @@ export class SDMProgressTrackerComponent implements OnInit {
 		return null;
 	}
 
-	onClickShowSubjectGroup(subjects: CurriculumGroupSubject[], color: string): void {
-		this.currentSubjectsGroupColor = color;
-		this.currentSubjects = subjects;
+	onClickShowSubjectGroup(node: CurriculumGroup): void {
+		this.transcriptSubjectIds = this.groupMatches
+			.get(node.id)!
+			.map((subject) => subject.subject?.id)
+			.filter((id): id is string => id !== undefined);
+		this.currentSubjectsGroupColor = this.findParentNodeColor(node);
+		this.currentSubjects = node.subjects;
+		this.nodeType = node.type;
 		this.showSubjectGroupModal.show();
+	}
+
+	matchSubjectWithTranscript(subjectId: string): boolean {
+		return this.transcriptSubjectIds.includes(subjectId);
 	}
 
 	fetchTranscripts(): void {

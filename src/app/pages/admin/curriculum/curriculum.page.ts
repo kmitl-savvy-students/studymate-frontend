@@ -11,11 +11,12 @@ import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
+import { SDMBaseAccordion } from '../../../components/accordion/base-accordion.component';
 
 @Component({
 	selector: 'sdm-page-curriculum',
 	standalone: true,
-	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule],
+	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule, SDMBaseAccordion],
 	templateUrl: 'curriculum.page.html',
 })
 export class SDMPageCurriculum implements OnInit {
@@ -65,6 +66,30 @@ export class SDMPageCurriculum implements OnInit {
 				this.fetchCurriculums();
 				this.fetchCurriculumsAll();
 			}
+		});
+	}
+
+	checkShowCurriculum(curriculum: Curriculum): void {
+		curriculum.is_visible = !curriculum.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, curriculum)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchCurriculums();
+					},
+					error: (error) => {
+						console.error('Error updating curriculum:', error);
+					},
+				});
 		});
 	}
 
@@ -167,6 +192,7 @@ export class SDMPageCurriculum implements OnInit {
 
 		const createdCurriculum = {
 			id: -1,
+			is_visible: false,
 			program: this.program,
 			year: this.curriculumCreateForm.value.year,
 			name_th: this.curriculumCreateForm.value.nameTh,

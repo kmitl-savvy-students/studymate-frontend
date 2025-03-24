@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 		<ng-container *ngIf="!isCollectCredit">
 			<div class="flex flex-row items-center text-left align-middle">
 				<div>
-					<span class="mr-2 text-sm">หน่วยกิตที่ได้รับ:</span>
+					<span class="mr-2 text-nowrap text-sm">หน่วยกิตที่ได้รับ:</span>
 				</div>
 				<div [ngClass]="defaultClasses" [ngStyle]="Checked ? { 'background-color': bgColor, 'color': 'white' } : {}">{{ earnCredit }} / {{ totalCredit }}</div>
 			</div>
@@ -16,7 +16,7 @@ import { Component, Input } from '@angular/core';
 
 		<ng-container *ngIf="isCollectCredit">
 			<div class="flex flex-row items-center">
-				<span class="mr-2 text-sm">หน่วยกิตที่ลงไป: </span>
+				<span class="mr-2 text-nowrap text-sm">หน่วยกิตที่ลงไป: </span>
 				<div [ngClass]="defaultClasses" [ngStyle]="Checked ? { 'background-color': bgColor, 'color': 'white' } : {}">
 					{{ earnCredit }}
 				</div>
@@ -32,5 +32,5 @@ export class SDMTotalCreditEarnComponent {
 	@Input() bgColor?: string = '#2563eb';
 
 	// คลาสพื้นฐานที่ใช้ตลอด
-	public defaultClasses = ['text-md', 'rounded-xl', 'py-1.5', 'px-2', 'font-bold', 'bg-gray-100', 'text-black'];
+	public defaultClasses = ['text-md', 'rounded-xl', 'py-1.5', 'px-2', 'font-bold', 'bg-gray-100', 'text-black', 'text-nowrap'];
 }

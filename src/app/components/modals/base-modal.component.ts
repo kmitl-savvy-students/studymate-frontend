@@ -83,9 +83,13 @@ export class SDMBaseModal implements AfterViewInit {
 	}
 
 	handleCancel(): void {
-		this.hide();
-		this.cancelEvent.emit();
+		if (this.cancelEvent.observers.length === 0) {
+			this.hide();
+		} else {
+			this.cancelEvent.emit();
+		}
 	}
+
 	handleConfirm(): void {
 		this.confirmEvent.emit();
 	}
