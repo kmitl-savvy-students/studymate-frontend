@@ -62,7 +62,6 @@ export class SDMBaseModal implements AfterViewInit {
 
 	@Output() confirmEvent = new EventEmitter<void>();
 	@Output() cancelEvent = new EventEmitter<void>();
-	private cancelEventHasSubscribers = false;
 
 	modal: ModalInterface | undefined;
 
@@ -74,10 +73,6 @@ export class SDMBaseModal implements AfterViewInit {
 			backdrop: 'static',
 		};
 		this.modal = new Modal($modal, options);
-
-		this.cancelEvent.subscribe(() => {
-			this.cancelEventHasSubscribers = true;
-		});
 	}
 
 	show(): void {
@@ -94,6 +89,7 @@ export class SDMBaseModal implements AfterViewInit {
 			this.cancelEvent.emit();
 		}
 	}
+
 	handleConfirm(): void {
 		this.confirmEvent.emit();
 	}
