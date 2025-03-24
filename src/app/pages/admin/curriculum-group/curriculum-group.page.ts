@@ -42,6 +42,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 	@ViewChild('addSubjectModal') addSubjectModal!: SDMBaseModal;
 
 	currentParentNode: CurriculumGroup | null = null;
+	originalParentNode: CurriculumGroup | null = null;
 
 	private clipboard = inject(Clipboard);
 
@@ -266,19 +267,26 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #endregion
 	// #region Edit Node
 	onEditNode(node: CurriculumGroup): void {
+		node.branch = 1;
+
 		this.editSubjectsModal.hide();
 		this.editNodeModal.show();
 		this.currentParentNode = { ...node };
+		this.originalParentNode = { ...node };
 		this.editNodeForm.patchValue({
 			name: node.name,
 			type: node.type,
 			credit: node.credit,
-			branch: node.branch ?? 1, // TODO: Temp fix, please update database
+			branch: node.branch,
 			color: node.color,
 		});
 		if (this.editNodeForm.value.color.length === 0) {
 			this.editNodeForm.patchValue({ color: '#FFFFFF' });
 		}
+	}
+	onCancelEditNode(): void {
+		if (this.alertUnsaved()) return;
+		this.editNodeModal.hide();
 	}
 	onUpdateNodeType(event: any): void {
 		if (!this.currentParentNode) return;
@@ -313,6 +321,13 @@ export class SDMPageCurriculumGroup implements OnInit {
 					},
 				});
 		});
+	}
+	alertUnsaved(): boolean {
+		if (this.originalParentNode?.type != this.currentParentNode?.type || this.editNodeForm.value.credit != this.currentParentNode?.credit || this.editNodeForm.value.branch != this.currentParentNode?.branch) {
+			alert('คำเตือน คุณยังไม่ได้บันทึกข้อมูลที่แก้ไข');
+			return true;
+		}
+		return false;
 	}
 	// #endregion
 	// #region Delete Node
@@ -366,6 +381,8 @@ export class SDMPageCurriculumGroup implements OnInit {
 	}
 
 	onEditSubjects(): void {
+		if (this.alertUnsaved()) return;
+
 		this.fetchCurriculumGroupSubjects();
 		this.editNodeModal.hide();
 		this.editSubjectsModal.show();

@@ -106,7 +106,7 @@
 		</div>
 	</form>
 </sdm-base-modal>
-<sdm-base-modal #editNodeModal modalId="editNode" header="แก้ไขกลุ่ม" (confirmEvent)="onConfirmEditNode()">
+<sdm-base-modal #editNodeModal modalId="editNode" header="แก้ไขกลุ่ม" (confirmEvent)="onConfirmEditNode()" (cancelEvent)="onCancelEditNode()">
 	<form [formGroup]="editNodeForm">
 		<div class="input-primary mb-5">
 			<label for="name">ชื่อกลุ่ม</label>
