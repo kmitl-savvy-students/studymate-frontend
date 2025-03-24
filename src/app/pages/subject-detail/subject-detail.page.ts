@@ -105,7 +105,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 	}
 
 	fetchTranscripts() {
-		console.log('currentUser in fetch Transcript : ', this.currentUser);
 		this.isLoadingTranscript = true;
 		if (!this.currentUser) return;
 
@@ -196,7 +195,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			next: (res) => {
 				if (res) {
 					this.eachSubjectData = res;
-					console.log('eachSubjectData : ', this.eachSubjectData);
 				} else {
 					console.log('No Subject Data Available.');
 				}
@@ -218,7 +216,6 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 			next: (res) => {
 				if (res) {
 					this.subjectData = res;
-					console.log('subjectData : ', this.subjectData);
 				} else {
 					console.log('No Subject Data Available.');
 				}
@@ -237,12 +234,11 @@ export class SDMPageSubjectDetail implements OnInit, AfterViewInit {
 
 	public getSubjectReviews() {
 		this.isLoadingReview = true;
-		console.log('Loading:', this.isLoadingReview);
+
 		this.apiManagementService.GetSubjectReviewsBySubjectID(this.subjectId).subscribe({
 			next: (res) => {
 				if (res) {
 					this.subjectReviewData = res;
-					console.log('subjectReviewData  : ', this.subjectReviewData);
 				} else {
 					console.log('No Subject Reviews Data Available.');
 				}
