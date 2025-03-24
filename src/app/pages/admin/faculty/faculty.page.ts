@@ -51,7 +51,29 @@ export class SDMPageFaculty implements OnInit {
 		this.fetchFaculties();
 	}
 
-	checkShowFaculty(): void {}
+	checkShowFaculty(faculty: Faculty): void {
+		faculty.is_visible = !faculty.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, faculty)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchFaculties();
+					},
+					error: (error) => {
+						console.error('Error updating faculty:', error);
+					},
+				});
+		});
+	}
 
 	// #region Fetchings
 	fetchFaculties(): void {
@@ -101,6 +123,7 @@ export class SDMPageFaculty implements OnInit {
 
 		const createdFaculty = {
 			id: -1,
+			is_visible: false,
 			kmitl_id: this.facultyCreateForm.value.kmitlId,
 			name_th: this.facultyCreateForm.value.nameTh,
 			name_en: this.facultyCreateForm.value.nameEn,

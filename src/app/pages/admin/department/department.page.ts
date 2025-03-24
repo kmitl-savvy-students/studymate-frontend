@@ -62,7 +62,29 @@ export class SDMPageDepartment implements OnInit {
 		});
 	}
 
-	checkShowDepartment(): void {}
+	checkShowDepartment(department: Department): void {
+		department.is_visible = !department.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/department/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, department)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchDepartments();
+					},
+					error: (error) => {
+						console.error('Error updating department:', error);
+					},
+				});
+		});
+	}
 
 	// #region Fetchings
 	fetchDepartments(): void {
@@ -148,6 +170,7 @@ export class SDMPageDepartment implements OnInit {
 
 		const createdDepartment = {
 			id: -1,
+			is_visible: false,
 			kmitl_id: this.departmentCreateForm.value.kmitlId,
 			faculty: this.faculty,
 			name_th: this.departmentCreateForm.value.nameTh,

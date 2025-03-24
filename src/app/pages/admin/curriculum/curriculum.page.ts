@@ -69,7 +69,29 @@ export class SDMPageCurriculum implements OnInit {
 		});
 	}
 
-	checkShowCurriculum(): void {}
+	checkShowCurriculum(curriculum: Curriculum): void {
+		curriculum.is_visible = !curriculum.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, curriculum)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchCurriculums();
+					},
+					error: (error) => {
+						console.error('Error updating curriculum:', error);
+					},
+				});
+		});
+	}
 
 	// #region Fetchings
 	fetchCurriculumsAll(): void {
@@ -170,6 +192,7 @@ export class SDMPageCurriculum implements OnInit {
 
 		const createdCurriculum = {
 			id: -1,
+			is_visible: false,
 			program: this.program,
 			year: this.curriculumCreateForm.value.year,
 			name_th: this.curriculumCreateForm.value.nameTh,

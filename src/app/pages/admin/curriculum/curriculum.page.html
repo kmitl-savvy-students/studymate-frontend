@@ -102,7 +102,7 @@
 						</div>
 						<div class="flex flex-row gap-2">
 							<label class="inline-flex w-full cursor-pointer items-center justify-center gap-x-2 overflow-x-auto rounded-xl border border-gray-300 p-1.5">
-								<input type="checkbox" class="peer sr-only" (change)="checkShowCurriculum()" [checked]="" />
+								<input type="checkbox" class="peer sr-only" (change)="checkShowCurriculum(curriculum)" [checked]="curriculum.is_visible" />
 								<div
 									class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-main-100 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
 								<div class="mr-2 text-sm font-medium text-dark-100">แสดงในระบบ</div>

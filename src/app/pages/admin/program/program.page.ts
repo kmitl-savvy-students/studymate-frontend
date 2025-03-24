@@ -62,7 +62,29 @@ export class SDMPageProgram implements OnInit {
 		});
 	}
 
-	checkShowProgram(): void {}
+	checkShowProgram(program: Program): void {
+		program.is_visible = !program.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/program/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, program)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchPrograms();
+					},
+					error: (error) => {
+						console.error('Error updating program:', error);
+					},
+				});
+		});
+	}
 
 	// #region Fetchings
 	fetchPrograms(): void {
@@ -150,6 +172,7 @@ export class SDMPageProgram implements OnInit {
 
 		const createdProgram = {
 			id: -1,
+			is_visible: false,
 			kmitl_id: this.programCreateForm.value.kmitlId,
 			department: this.department,
 			name_th: this.programCreateForm.value.nameTh,

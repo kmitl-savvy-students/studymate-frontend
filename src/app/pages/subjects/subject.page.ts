@@ -419,6 +419,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		return this.apiManagementService.GetDropdownFaculties().pipe(
 			tap((res) => {
 				this.facultyList = res;
+				this.facultyList = this.facultyList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching departmentList:', error);
@@ -430,7 +431,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public getDropdownDepartmentsAsObservable(selectedFaculty: number): Observable<Department[]> {
 		return this.apiManagementService.GetDropdownDepartments(selectedFaculty).pipe(
 			tap((res) => {
-				this.departmentList = res?.length > 0 ? res : [{ id: -1, kmitl_id: '-1', faculty: null, name_th: 'ไม่พบข้อมูลภาควิชา', name_en: 'No Department Data' }];
+				this.departmentList = res?.length > 0 ? res : [{ id: -1, is_visible: true, kmitl_id: '-1', faculty: null, name_th: 'ไม่พบข้อมูลภาควิชา', name_en: 'No Department Data' }];
+				this.departmentList = this.departmentList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching departmentList:', error);
@@ -442,7 +444,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public getDropdownProgramsAsObservable(selectedDepartment: number): Observable<Program[]> {
 		return this.apiManagementService.GetDropdownPrograms(selectedDepartment).pipe(
 			tap((res) => {
-				this.programList = res?.length > 0 ? res : [{ id: -1, kmitl_id: '-1', department: null, name_th: 'ไม่พบข้อมูลแผนการเรียน', name_en: 'No Program Data' }];
+				this.programList = res?.length > 0 ? res : [{ id: -1, is_visible: true, kmitl_id: '-1', department: null, name_th: 'ไม่พบข้อมูลแผนการเรียน', name_en: 'No Program Data' }];
+				this.programList = this.programList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching programList:', error);
@@ -461,7 +464,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 								name_th: `${curriculum.name_th} (${curriculum.year})`,
 								name_en: `${curriculum.name_en} (${curriculum.year})`,
 							}))
-						: [{ id: -1, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
+						: [{ id: -1, is_visible: true, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
+				this.curriculumList = this.curriculumList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching curriculumList:', error);
