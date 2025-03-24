@@ -56,11 +56,12 @@ html {
 		left: auto !important;
 		right: 0 !important;
 	}
+
 	@media (min-width: 1024px) {
-		.nav-sidebar [drawer-backdrop] {
+		[drawer-backdrop] {
 			opacity: 0 !important;
 			visibility: hidden !important;
-			pointer-events: none !important;
+			/* pointer-events: none !important; */
 		}
 	}
 }

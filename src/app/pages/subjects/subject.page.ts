@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
@@ -16,6 +16,10 @@ import { initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
+import { SDMAvatarIcon } from '../../components/avatar/avatar.component';
+import { SDMBaseButton } from '../../components/buttons/base-button.component';
+import { IconComponent } from '../../components/icon/icon.component';
+import { StudyMateLogo } from '../../components/logo/studymate-logo.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { Curriculum } from './../../shared/models/Curriculum.model';
@@ -24,7 +28,7 @@ import { classYearList, semesterList, subjects_added, yearsList } from './subjec
 @Component({
 	selector: 'sdm-page-subject',
 	standalone: true,
-	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion],
+	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion, SDMBaseButton, IconComponent, StudyMateLogo, SDMAvatarIcon],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
@@ -85,6 +89,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public isSearched: boolean = false;
 	public isFilter: boolean = false;
+	public isLgScreen = window.innerWidth >= 1024;
 
 	// ตัวแปรเดิม
 	public subjectCardData: SubjectCardData[] = [];
@@ -99,6 +104,12 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		private route: ActivatedRoute,
 		private authService: AuthenticationService,
 	) {}
+
+	@HostListener('window:resize', ['$event'])
+	onResize(event: Event) {
+		this.isLgScreen = window.innerWidth >= 1024;
+		console.log('isLgScreen :', this.isLgScreen);
+	}
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -278,18 +289,22 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public onSelectedDaysChange(days: string[]) {
 		this.selectedDays = days;
+		console.log('selectedDays :', this.selectedDays);
 		this.handleFilterBar();
 		this.updatePaginatedItems();
 	}
 
 	public onReviewFilterValueChange(rating: number) {
 		this.selectedRatingFilter = rating;
+		console.log('selectedRatingFilter :', this.selectedRatingFilter);
+
 		this.handleFilterBar();
 		this.updatePaginatedItems();
 	}
 
 	public onSelectedCurriculumIdChange(curriculumIdList: number[]) {
 		this.selectedCurriculumIdList = curriculumIdList;
+		console.log('selectedCurriculumIdList :', this.selectedCurriculumIdList);
 		this.clearSearch();
 		this.handleFilterBar();
 		this.updatePaginatedItems();

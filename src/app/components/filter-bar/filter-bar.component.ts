@@ -20,6 +20,12 @@ export class SDMfilterBarComponent implements OnInit {
 	@Input() isReviewPage: boolean = false;
 	@Input() selectedCurriculum: Curriculum | undefined;
 	@Input() isLoading: boolean = false;
+	@Input() isLgScreen: boolean = false;
+
+	@Input() initialSelectedDays: string[] = [];
+	@Input() initialSelectedRating: number | null = null;
+	// @Input() initialSelectedCurriculumIdList: number[] = [];
+
 	@Output() selectedDays = new EventEmitter<string[]>();
 	@Output() selectedRating = new EventEmitter<number>();
 	@Output() selectedCurriculumId = new EventEmitter<number[]>();
@@ -58,6 +64,15 @@ export class SDMfilterBarComponent implements OnInit {
 		if (changes['isLoading']) {
 			this.isLoadingTranscript = changes['isLoading'].currentValue;
 		}
+		if (changes['initialSelectedDays']) {
+			this.selectedDaysInput = [...this.initialSelectedDays];
+		}
+		if (changes['initialSelectedRating']) {
+			this.selectedRatingInput = this.initialSelectedRating;
+		}
+		// if (changes['initialSelectedCurriculumIdList']) {
+		// 	this.selectedRatingInput = this.initialSelectedRating;
+		// }
 	}
 
 	toggleCheckbox(curriculumId: number, curriculumGroup: CurriculumGroup) {

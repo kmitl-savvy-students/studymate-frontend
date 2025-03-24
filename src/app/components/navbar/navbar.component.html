@@ -8,14 +8,14 @@
 
 			<!-- Sidebar button for mobile -->
 			<div class="flex items-center lg:hidden">
-				<sdm-base-button data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation" [iconCustom]="sidebarIconTemplate" />
+				<sdm-base-button data-drawer-target="nav-sidebar" data-drawer-show="nav-sidebar" aria-controls="nav-sidebar" [iconCustom]="sidebarIconTemplate" />
 				<ng-template #sidebarIconTemplate>
 					<sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" />
 				</ng-template>
 			</div>
 
 			<!-- Desktop menu - visible on lg screens and above -->
-			<div class="m-0 hidden content-center gap-16 lg:flex" id="desktop-menu">
+			<div class="m-0 hidden content-center gap-16 lg:flex">
 				<div class="flex items-center gap-8 text-base font-medium">
 					<sdm-button-nav link="/subject" text="ค้นหารายวิชาเรียน" />
 					<sdm-button-nav link="/review" text="ดูรีวิวรายวิชาเรียน" />
@@ -38,14 +38,14 @@
 </nav>
 
 <!-- Mobile menu - Sidebar Menu -->
-<div id="drawer-navigation" class="nav-sidebar fixed top-0 z-50 h-screen w-64 translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="drawer-navigation-label">
+<div id="nav-sidebar" class="nav-sidebar fixed top-0 z-50 h-screen w-64 translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="nav-sidebar-label">
 	<div class="flex justify-between">
 		<ng-container *ngIf="signedIn; else logoGuestOptions"><sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" /></ng-container>
 		<ng-template #logoGuestOptions>
 			<sdm-studymate-logo textSize1="text-lg" textSize2="text-xs" />
 		</ng-template>
 
-		<button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+		<button type="button" data-drawer-hide="nav-sidebar" aria-controls="nav-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
 			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 				<path
 					fill-rule="evenodd"
@@ -77,13 +77,13 @@
 				</a>
 			</li>
 			<ng-container *ngIf="signedIn; else mobileGuestOptions">
-				<li *ngIf="signedIn">
+				<li>
 					<a href="/my-subject" class="menu">
 						<sdm-icon icon="list-check" class="menu-icon"></sdm-icon>
 						<span class="flex-1 whitespace-nowrap">รายวิชาของฉัน</span>
 					</a>
 				</li>
-				<li *ngIf="signedIn">
+				<li>
 					<a href="/profile" class="menu">
 						<sdm-icon icon="user" class="menu-icon"></sdm-icon>
 						<span class="flex-1 whitespace-nowrap">โปรไฟล์</span>
@@ -95,7 +95,7 @@
 						<span class="flex-1 whitespace-nowrap">จัดการหลักสูตร</span>
 					</a>
 				</li>
-				<li *ngIf="signedIn">
+				<li>
 					<a href="/sign-out" class="menu">
 						<sdm-icon icon="right-from-bracket" class="menu-icon"></sdm-icon>
 						<span class="flex-1 whitespace-nowrap">ออกจากระบบ</span>
@@ -103,13 +103,13 @@
 				</li>
 			</ng-container>
 			<ng-template #mobileGuestOptions>
-				<li *ngIf="!signedIn">
+				<li>
 					<a href="/sign-in" class="menu">
 						<sdm-icon icon="right-to-bracket" class="menu-icon"></sdm-icon>
 						<span class="flex-1 whitespace-nowrap">เข้าสู่ระบบ</span>
 					</a>
 				</li>
-				<li *ngIf="!signedIn">
+				<li>
 					<a href="/sign-in" class="menu">
 						<sdm-icon icon="user-plus" class="menu-icon"></sdm-icon>
 						<span class="flex-1 whitespace-nowrap">สมัครสมาชิก</span>
