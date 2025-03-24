@@ -3,7 +3,7 @@
 	<h3 class="text-sm opacity-50">คุณ {{ currentUser?.firstname }} {{ currentUser?.lastname }}</h3>
 </div>
 
-<div *ngIf="!transcript && !isFetchingTranscript" class="text-sm">ไม่มีข้อมูลเกรด</div>
+<div *ngIf="!transcript && !isFetchingTranscript" class="text-sm"><div class="text-semibold rounded-3xl border bg-gradient-to-r from-indigo-50 to-blue-50 p-12 text-center text-lg">กรุณาอัปโหลดไฟล์ Transcript เพื่อดูข้อมูลส่วนนี้</div></div>
 
 <div *ngIf="isFetchingTranscript" class="animate-pulse rounded-xl border border-gray-200 p-6">
 	<div class="mb-4 h-20 w-full rounded-md bg-primary-100"></div>

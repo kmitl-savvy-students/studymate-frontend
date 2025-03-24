@@ -1,7 +1,7 @@
-<div class="flex w-full flex-col gap-y-5 rounded-[20px] border border-main-25 pb-5">
+<div class="flex w-full flex-col gap-y-5 rounded-[20px] border border-main-25 pb-5 shadow-md transition-shadow">
 	<!-- Header Section -->
 
-	<div class="flex w-full items-center gap-x-2 rounded-t-[19px] bg-main-25 p-5 text-base font-semibold">
+	<div class="relative flex w-full items-center gap-x-2 rounded-t-[19px] bg-gradient-to-r from-main-100 to-main-75 p-5 text-base font-semibold text-white">
 		<div *ngIf="subjectDetailData" class="flex items-center gap-x-2">
 			<div>{{ subjectDetailData.subject.id }}</div>
 			<div>{{ subjectDetailData.subject.name_en }}</div>
@@ -13,15 +13,15 @@
 			<div>{{ subjectData.name_th }}</div>
 		</div>
 		<div *ngIf="subjectDetailData" class="flex items-center gap-x-2">
-			<div class="border-1 rounded-[15px] bg-teal-500 px-3 py-1.5 text-xs font-semibold text-white" *ngIf="subjectDetailData?.session_type === 'ทฤษฎี'">
+			<div class="border-1 rounded-[15px] border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100" *ngIf="subjectDetailData?.session_type === 'ทฤษฎี'">
 				{{ subjectDetailData.session_type }}
 			</div>
-			<div class="border-1 rounded-[15px] bg-orange-400 px-3 py-1.5 text-xs font-semibold text-white" *ngIf="subjectDetailData?.session_type === 'ปฏิบัติ'">
+			<div class="border-1 rounded-[15px] border border-green-300 bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-200" *ngIf="subjectDetailData?.session_type === 'ปฏิบัติ'">
 				{{ subjectDetailData.session_type }}
 			</div>
-			<div *ngIf="subjectDetailData?.class_level === '0'" class="border-1 rounded-[15px] border border-dark-100 px-3 py-1.5 text-xs font-semibold">ทุกชั้นปี</div>
-			<div *ngIf="subjectDetailData?.class_level != '0'" class="border-1 rounded-[15px] border border-dark-100 px-3 py-1.5 text-xs font-semibold">ปี {{ subjectDetailData.class_level }}</div>
-			<div class="rounded-[15px] border border-dark-100 px-3 py-1.5 text-xs font-semibold">Sec {{ subjectDetailData.section }}</div>
+			<div *ngIf="subjectDetailData?.class_level === '0'" class="border-1 rounded-[15px] border border-white px-3 py-1.5 text-xs font-semibold">ทุกชั้นปี</div>
+			<div *ngIf="subjectDetailData?.class_level != '0'" class="rounded-[15px] border-2 border-white px-3 py-1.5 text-xs font-bold">ปี {{ subjectDetailData.class_level }}</div>
+			<div class="rounded-[15px] border-2 border-white px-3 py-1.5 text-xs font-bold">Sec {{ subjectDetailData.section }}</div>
 		</div>
 	</div>
 
@@ -33,10 +33,10 @@
 				<sdm-loading-skeleton [loadingType]="102"></sdm-loading-skeleton>
 			</ng-container>
 			<ng-template #showData>
-				<div class="indent-8" [innerHTML]="subjectData.detail"></div>
+				<div class="rounded-lg bg-gray-50 p-6 indent-8 leading-relaxed text-gray-700" [innerHTML]="subjectData.detail"></div>
 			</ng-template>
 		</div>
-		<div *ngIf="subjectDetailData" class="indent-8" [innerHTML]="subjectDetailData.subject.detail"></div>
+		<div *ngIf="subjectDetailData" class="rounded-xl bg-gray-50 p-6 indent-8 leading-relaxed text-gray-700" [innerHTML]="subjectDetailData.subject.detail"></div>
 	</div>
 
 	<!-- Course Details Section -->
@@ -114,7 +114,10 @@
 							</div>
 						</div>
 						<ng-template #noGroup>
-							<div class="rounded-[15px] bg-main-15 px-3 py-1.5 text-xs">ไม่ระบุหมวดหมู่</div>
+							<div class="flex flex-row gap-x-2">
+								<div class="rounded-[15px] bg-gray-50 px-3 py-1.5 text-xs">ไม่พบหมวดวิชาในหลักสูตรที่เลือก</div>
+								<div class="rounded-[15px] bg-gray-50 px-3 py-1.5 text-xs">เสรี</div>
+							</div>
 						</ng-template>
 					</div>
 				</div>
