@@ -221,7 +221,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #endregion
 	// #region Add Node
 	onAddChildNode(node: CurriculumGroup): void {
-		this.currentParentNode = node;
+		this.currentParentNode = { ...node };
 		this.addNodeForm.reset({
 			name: '',
 			type: 'REQUIRED_ALL',
