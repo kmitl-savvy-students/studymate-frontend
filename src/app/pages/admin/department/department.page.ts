@@ -140,7 +140,7 @@ export class SDMPageDepartment implements OnInit {
 		this.createDepartmentModal.show();
 	}
 	onConfirmCreate(): void {
-		if (this.departmentCreateForm.value.nameTh.trim().length == 0 || this.departmentCreateForm.value.nameEn.trim().length == 0) {
+		if (this.departmentCreateForm.value.kmitlId.trim().length == 0 || this.departmentCreateForm.value.nameTh.trim().length == 0 || this.departmentCreateForm.value.nameEn.trim().length == 0) {
 			this.alertService.showAlert('error', 'กรุณากรอกชื่อภาควิชา');
 			return;
 		}
@@ -190,7 +190,7 @@ export class SDMPageDepartment implements OnInit {
 	onConfirmEdit(): void {
 		if (!this.selectedDepartment) return;
 
-		if (this.departmentEditForm.value.nameTh.trim().length == 0 || this.departmentEditForm.value.nameEn.trim().length == 0) {
+		if (this.departmentEditForm.value.kmitlId.trim().length == 0 || this.departmentEditForm.value.nameTh.trim().length == 0 || this.departmentEditForm.value.nameEn.trim().length == 0) {
 			this.alertService.showAlert('error', 'กรุณากรอกชื่อภาควิชา');
 			return;
 		}

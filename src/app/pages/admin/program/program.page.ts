@@ -142,8 +142,8 @@ export class SDMPageProgram implements OnInit {
 		this.createProgramModal.show();
 	}
 	onConfirmCreate(): void {
-		if (this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อแผนการเรียน');
+		if (this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameTh.trim().length == 0 || this.programCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.createProgramModal.hide();
@@ -190,8 +190,8 @@ export class SDMPageProgram implements OnInit {
 		this.editProgramModal.show();
 	}
 	onConfirmEdit(): void {
-		if (this.programEditForm.value.nameTh.trim().length == 0 || this.programEditForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อแผนการเรียน');
+		if (this.programEditForm.value.kmitlId.trim().length == 0 || this.programEditForm.value.nameTh.trim().length == 0 || this.programEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.editProgramModal.hide();

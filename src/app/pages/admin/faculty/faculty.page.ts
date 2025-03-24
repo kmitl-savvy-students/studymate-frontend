@@ -93,8 +93,8 @@ export class SDMPageFaculty implements OnInit {
 		this.createFacultyModal.show();
 	}
 	onConfirmCreate(): void {
-		if (this.facultyCreateForm.value.nameTh.trim().length == 0 || this.facultyCreateForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อคณะ');
+		if (this.facultyCreateForm.value.kmitlId.trim().length == 0 || this.facultyCreateForm.value.nameTh.trim().length == 0 || this.facultyCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.createFacultyModal.hide();
@@ -142,8 +142,8 @@ export class SDMPageFaculty implements OnInit {
 	onConfirmEdit(): void {
 		if (!this.selectedFaculty) return;
 
-		if (this.facultyEditForm.value.nameTh.trim().length == 0 || this.facultyEditForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อคณะ');
+		if (this.facultyEditForm.value.kmitlId.trim().length == 0 || this.facultyEditForm.value.nameTh.trim().length == 0 || this.facultyEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.editFacultyModal.hide();
