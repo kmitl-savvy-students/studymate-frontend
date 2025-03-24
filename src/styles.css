@@ -48,4 +48,12 @@ html {
 	.input-primary > textarea {
 		@apply block w-full rounded-lg border border-primary-300 bg-primary-100 p-2.5 text-sm text-dark-100 transition-shadow focus:ring-4 focus:ring-primary-200;
 	}
+
+	.nav-sidebar {
+		left: auto !important;
+		right: 0 !important;
+	}
+	[drawer-backdrop] {
+		z-index: 40 !important;
+	}
 }

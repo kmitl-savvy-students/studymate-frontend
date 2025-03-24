@@ -1,11 +1,21 @@
-<nav>
-	<!-- <div class="container mx-auto"> -->
-	<div class="mx-auto w-full max-w-[2000px] flex-1 px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-28">
+<nav class="fixed top-0 z-40 w-full border-b border-b-primary-100 bg-light">
+	<div class="mx-auto w-full max-w-[2000px] flex-1 px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-32">
 		<div class="flex h-20 content-center justify-between">
+			<!-- Logo -->
 			<div class="flex items-center">
 				<sdm-studymate-logo />
 			</div>
-			<div class="m-0 flex content-center gap-16">
+
+			<!-- Sidebar button for mobile -->
+			<div class="flex items-center lg:hidden">
+				<sdm-base-button data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation" [iconCustom]="sidebarIconTemplate" />
+				<ng-template #sidebarIconTemplate>
+					<sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" />
+				</ng-template>
+			</div>
+
+			<!-- Desktop menu - visible on lg screens and above -->
+			<div class="m-0 hidden content-center gap-16 lg:flex" id="desktop-menu">
 				<div class="flex items-center gap-8 text-base font-medium">
 					<sdm-button-nav link="/subject" text="ค้นหารายวิชาเรียน" />
 					<sdm-button-nav link="/review" text="ดูรีวิวรายวิชาเรียน" />
@@ -26,3 +36,86 @@
 		</div>
 	</div>
 </nav>
+
+<!-- Mobile menu - Sidebar Menu -->
+<div id="drawer-navigation" class="nav-sidebar fixed top-0 z-50 h-screen w-64 translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="drawer-navigation-label">
+	<div class="flex justify-between">
+		<ng-container *ngIf="signedIn; else logoGuestOptions"><sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" /></ng-container>
+		<ng-template #logoGuestOptions>
+			<sdm-studymate-logo textSize1="text-lg" textSize2="text-xs" />
+		</ng-template>
+
+		<button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path
+					fill-rule="evenodd"
+					d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+					clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only">Close menu</span>
+		</button>
+	</div>
+
+	<div class="overflow-y-auto py-4">
+		<ul class="space-y-2 font-medium">
+			<li>
+				<a href="/subject" class="menu">
+					<sdm-icon icon="magnifying-glass" class="menu-icon"></sdm-icon>
+					<span class="menu-text">ค้นหารายวิชาเรียน</span>
+				</a>
+			</li>
+			<li>
+				<a href="/review" class="menu">
+					<sdm-icon icon="star" class="menu-icon"></sdm-icon>
+					<span class="flex-1 whitespace-nowrap">ดูรีวิวรายวิชาเรียน</span>
+				</a>
+			</li>
+			<li>
+				<a href="/about" class="menu">
+					<sdm-icon icon="people-group" class="menu-icon"></sdm-icon>
+					<span class="flex-1 whitespace-nowrap">เกี่ยวกับเรา</span>
+				</a>
+			</li>
+			<ng-container *ngIf="signedIn; else mobileGuestOptions">
+				<li *ngIf="signedIn">
+					<a href="/my-subject" class="menu">
+						<sdm-icon icon="list-check" class="menu-icon"></sdm-icon>
+						<span class="flex-1 whitespace-nowrap">รายวิชาของฉัน</span>
+					</a>
+				</li>
+				<li *ngIf="signedIn">
+					<a href="/profile" class="menu">
+						<sdm-icon icon="user" class="menu-icon"></sdm-icon>
+						<span class="flex-1 whitespace-nowrap">โปรไฟล์</span>
+					</a>
+				</li>
+				<li *ngIf="currentUser?.is_admin">
+					<a href="/admin/faculty" class="menu">
+						<sdm-icon icon="sitemap" class="menu-icon"></sdm-icon>
+						<span class="flex-1 whitespace-nowrap">จัดการหลักสูตร</span>
+					</a>
+				</li>
+				<li *ngIf="signedIn">
+					<a href="/sign-out" class="menu">
+						<sdm-icon icon="right-from-bracket" class="menu-icon"></sdm-icon>
+						<span class="flex-1 whitespace-nowrap">ออกจากระบบ</span>
+					</a>
+				</li>
+			</ng-container>
+			<ng-template #mobileGuestOptions>
+				<li *ngIf="!signedIn">
+					<a href="/sign-in" class="menu">
+						<sdm-icon icon="right-to-bracket" class="menu-icon"></sdm-icon>
+						<span class="flex-1 whitespace-nowrap">เข้าสู่ระบบ</span>
+					</a>
+				</li>
+				<li *ngIf="!signedIn">
+					<a href="/sign-in" class="menu">
+						<sdm-icon icon="user-plus" class="menu-icon"></sdm-icon>
+						<span class="flex-1 whitespace-nowrap">สมัครสมาชิก</span>
+					</a>
+				</li>
+			</ng-template>
+		</ul>
+	</div>
+</div>
