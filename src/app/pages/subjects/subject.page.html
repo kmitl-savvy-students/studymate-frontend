@@ -21,7 +21,10 @@
 		[initialSelectedRating]="selectedRatingFilter"
 		(selectedDays)="onSelectedDaysChange($event)"
 		(selectedRating)="onReviewFilterValueChange($event)"
+		[initialSelectedCurriculumIdList]="selectedCurriculumIdList"
+		[initialSelectedCurriculumIdGroup]="selectedCurriculumGroup"
 		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		(selectedCurriculumGroup)="onSelectedCurriculumGroupChange($event)"
 		class="flex-none"
 		[class.hidden]="!isLgScreen"></sdm-filter-bar>
 
@@ -218,6 +221,9 @@
 		[initialSelectedRating]="selectedRatingFilter"
 		(selectedDays)="onSelectedDaysChange($event)"
 		(selectedRating)="onReviewFilterValueChange($event)"
+		[initialSelectedCurriculumIdList]="selectedCurriculumIdList"
+		[initialSelectedCurriculumIdGroup]="selectedCurriculumGroup"
 		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		(selectedCurriculumGroup)="onSelectedCurriculumGroupChange($event)"
 		class="flex-none"></sdm-filter-bar>
 </div>
