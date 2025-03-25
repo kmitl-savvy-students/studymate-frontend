@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { SDMBaseAccordion } from '@components/accordion/base-accordion.component.js';
 import { Transcript } from '@models/Transcript.model.js';
 import { TranscriptDetail } from '@models/TranscriptDetail.model.js';
@@ -8,15 +9,18 @@ import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { LoadingService } from '@services/loading/loading.service.js';
 import { finalize } from 'rxjs';
+import { SDMBaseButton } from '../buttons/base-button.component';
+import { SDMBaseModal } from '../modals/base-modal.component';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-transcript-tracker',
-	imports: [CommonModule, SDMBaseAccordion, SDMSubjectListCardComponent],
+	imports: [CommonModule, SDMBaseAccordion, SDMSubjectListCardComponent, SDMBaseModal, SDMBaseButton, FormsModule],
 	templateUrl: './transcript-tracker.component.html',
 	styleUrl: './transcript-tracker.component.css',
 })
-export class SDMTranscriptTrackerComponent implements OnInit {
+export class SDMTranscriptTrackerComponent implements OnInit, AfterViewInit {
+	@ViewChild('policyModal') policyModal!: SDMBaseModal;
 	constructor(
 		private authService: AuthenticationService,
 		private loadingService: LoadingService,
@@ -25,6 +29,7 @@ export class SDMTranscriptTrackerComponent implements OnInit {
 
 	currentUser: User | null = null;
 	transcript: Transcript | null = null;
+	isChecked: boolean = false;
 
 	isFetchingTranscriptDetails: boolean = false;
 	groupedTranscriptDetails: { year: number; term: number; details: Array<TranscriptDetail> }[] = [];
@@ -40,9 +45,33 @@ export class SDMTranscriptTrackerComponent implements OnInit {
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
-
 			this.fetchTranscripts();
+			this.isChecked = !!this.currentUser?.view_policy;
 		});
+	}
+
+	ngAfterViewInit() {
+		if (!this.isChecked) {
+			this.policyModal.show();
+		}
+	}
+
+	onClosePolicy() {
+		if (this.isChecked) {
+			this.apiManagementService.UpdateUserPolicy(this.currentUser?.id).subscribe({
+				next: () => {
+					console.error('success');
+				},
+				error: (error) => {
+					console.error('Error updating curriculum:', error);
+				},
+			});
+			this.policyModal.hide();
+		} else {
+			const agreeDiv = document.querySelector('.argee') as HTMLElement;
+			// agreeDiv.classList.add('border', 'border-red-500', 'p-2', 'rounded-md');
+			agreeDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
 	}
 
 	fetchTranscripts() {

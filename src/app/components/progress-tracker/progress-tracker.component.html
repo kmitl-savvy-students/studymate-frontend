@@ -271,7 +271,7 @@
 		</div>
 	</div>
 </ng-template>
-<sdm-base-modal #showSubjectGroupModal modalId="showSubjectGroup" header="รายวิชาในหมวดหมู่" [normalModal]="true">
+<sdm-base-modal #showSubjectGroupModal modalId="showSubjectGroup" header="รายวิชาในหมวดหมู่" [normalModal]="true" (confirmEvent)="closeShowSubjectGroupModal()">
 	<div class="sticky top-0 z-10 flex w-full flex-col items-center justify-center bg-white pb-2">
 		<div class="font-semibold">
 			มีรายวิชาในหมวดนี้ทั้งหมด <span>{{ currentSubjects.length }}</span> รายวิชา ลงไปแล้ว <span>{{ transcriptSubjectIds.length }}</span> รายวิชา

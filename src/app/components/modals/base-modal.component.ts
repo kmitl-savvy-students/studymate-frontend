@@ -29,7 +29,7 @@ import { SDMBaseButton } from '../buttons/base-button.component';
 							</ng-container>
 							<ng-container *ngIf="!turnbackModal && normalModal">
 								<div class="w-full">
-									<sdm-base-button icon="xmark" text="ปิด" textColor="text-black" textColorHover="text-light" backgroundColor="bg-gray-300" backgroundColorHover="hover:bg-gray-400" (clickEvent)="handleCancel()" />
+									<sdm-base-button icon="xmark" text="ปิด" textColor="text-black" textColorHover="text-light" backgroundColor="bg-gray-300" backgroundColorHover="hover:bg-gray-400" (clickEvent)="handleConfirm()" />
 								</div>
 							</ng-container>
 							<ng-container *ngIf="!normalModal && turnbackModal">

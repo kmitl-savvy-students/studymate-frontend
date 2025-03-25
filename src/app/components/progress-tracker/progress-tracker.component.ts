@@ -131,6 +131,10 @@ export class SDMProgressTrackerComponent implements OnInit {
 		this.showSubjectGroupModal.show();
 	}
 
+	closeShowSubjectGroupModal(): void {
+		this.showSubjectGroupModal.hide();
+	}
+
 	matchSubjectWithTranscript(subjectId: string): boolean {
 		return this.transcriptSubjectIds.includes(subjectId);
 	}
