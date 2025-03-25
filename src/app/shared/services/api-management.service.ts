@@ -45,6 +45,12 @@ export class APIManagementService {
 		});
 	}
 
+	GetUserPolicy(userTokenId: string) {
+		const apiUrl = `${environment.backendUrl}/api/user/get-policy-by-user-id`;
+		const headers = this.GetAuthHeader(userTokenId);
+		return this.http.get(apiUrl, { headers });
+	}
+
 	GetCurriculum() {
 		const apiUrl = `${environment.backendUrl}/api/curriculum/get`;
 		return this.http.get<Curriculum[]>(apiUrl);
@@ -219,6 +225,14 @@ export class APIManagementService {
 		const apiUrl = `${environment.backendUrl}/api/user/update`;
 		const headers = this.GetAuthHeader(userTokenId);
 		return this.http.patch(apiUrl, { id: userId, curriculum_id: curId }, { headers });
+	}
+
+	UpdateUserPolicy(id: string | undefined) {
+		const apiUrl = `${environment.backendUrl}/api/user/update/policy`;
+		const body = {
+			id: id,
+		};
+		return this.http.post(apiUrl, body);
 	}
 
 	UpdateUserOauthSignupCallback(authCode: string) {

@@ -10,5 +10,6 @@ export class User {
 		public profile_picture: string,
 		public is_admin: string,
 		public curriculum: Curriculum,
+		public view_policy: number,
 	) {}
 }
