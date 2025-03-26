@@ -95,8 +95,8 @@
 						</sdm-search-bar>
 					</div>
 					<!-- Filter Sidebar button for mobile -->
-					<div class="flex cursor-pointer items-center rounded-[20px] bg-main-10 px-3 py-2 hover:bg-main-25 lg:hidden">
-						<sdm-icon icon="filter" class="text-sm text-dark-100" data-drawer-target="filter-sidebar" data-drawer-show="filter-sidebar" aria-controls="filter-sidebar"></sdm-icon>
+					<div data-drawer-target="filter-sidebar" data-drawer-show="filter-sidebar" aria-controls="filter-sidebar" class="flex cursor-pointer items-center rounded-[20px] bg-main-10 px-3 py-2 hover:bg-main-25 lg:hidden">
+						<sdm-icon icon="filter" class="text-sm text-dark-100"></sdm-icon>
 					</div>
 				</div>
 			</div>
@@ -200,7 +200,7 @@
 <div id="filter-sidebar" class="filter-sidebar fixed left-0 top-0 z-50 h-screen -translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="filter-sidebar-label">
 	<div class="flex items-center justify-between">
 		<div class="text-base font-semibold text-dark-100">ตัวกรองข้อมูล</div>
-		<button type="button" data-drawer-hide="nav-sidebar" aria-controls="nav-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+		<button type="button" data-drawer-hide="filter-sidebar" aria-controls="filter-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
 			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 				<path
 					fill-rule="evenodd"
