@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
 import { SDMSelectComponent } from '@components/select/select.component';
+import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
 import { Program } from '@models/Program.model';
@@ -16,10 +17,7 @@ import { initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
-import { SDMAvatarIcon } from '../../components/avatar/avatar.component';
-import { SDMBaseButton } from '../../components/buttons/base-button.component';
 import { IconComponent } from '../../components/icon/icon.component';
-import { StudyMateLogo } from '../../components/logo/studymate-logo.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { Curriculum } from './../../shared/models/Curriculum.model';
@@ -28,7 +26,7 @@ import { classYearList, semesterList, subjects_added, yearsList } from './subjec
 @Component({
 	selector: 'sdm-page-subject',
 	standalone: true,
-	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion, SDMBaseButton, IconComponent, StudyMateLogo, SDMAvatarIcon],
+	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion, IconComponent],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
@@ -86,6 +84,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public selectedRatingFilter: number | null = null;
 	public selectedCurriculumData: Curriculum | undefined;
 	public selectedCurriculumIdList: number[] = [];
+	public selectedCurriculumGroup: CurriculumGroup | undefined;
 
 	public isSearched: boolean = false;
 	public isFilter: boolean = false;
@@ -308,6 +307,10 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.clearSearch();
 		this.handleFilterBar();
 		this.updatePaginatedItems();
+	}
+
+	onSelectedCurriculumGroupChange(curriculumGroup: CurriculumGroup) {
+		this.selectedCurriculumGroup = curriculumGroup;
 	}
 
 	public handleFilterBar() {
