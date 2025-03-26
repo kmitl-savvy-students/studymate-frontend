@@ -51,7 +51,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 	includeXGrade: boolean = false;
 	isFetchingTranscriptDetails: boolean = false;
 	nodeType: string = '';
-	// Grade priority: "S" > "A" > "B" > "C" > "D" > "T" > "X"
 	private gradeOrder = ['S', 'A', 'B', 'C', 'D', 'T', 'X'];
 
 	ngOnInit(): void {
@@ -214,7 +213,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			if (!detail.subject?.id) continue;
 			const grade = detail.grade?.toUpperCase().trim() || '';
 			// Exclude F and U outright.
-			if (grade === 'F' || grade === 'U') continue;
+			//if (grade === 'F' || grade === 'U') continue;
 			const subId = detail.subject.id.toString();
 			if (!bestBySubject.has(subId)) {
 				bestBySubject.set(subId, detail);
@@ -281,6 +280,9 @@ export class SDMProgressTrackerComponent implements OnInit {
 	// Allow subject with credit 0 to be added regardless of group's full state.
 	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
 		// If grade is X and toggle is off, do not place detail.
+		const grade = detail.grade?.toUpperCase().trim();
+		if (grade === 'F' || grade === 'U') return false;
+
 		if (detail.grade?.toUpperCase().trim() === 'X' && !this.includeXGrade) return false;
 		if (group.children?.length) {
 			for (const child of group.children) {

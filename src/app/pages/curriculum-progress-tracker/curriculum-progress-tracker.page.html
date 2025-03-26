@@ -8,7 +8,10 @@
 	<div data-accordion="collapse">
 		<div class="mb-2 flex flex-wrap items-center gap-3">
 			<input type="checkbox" class="h-5 w-5 accent-green-600" [checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)" disabled />
-			<button class="flex items-center gap-2 rounded border px-4 py-2 font-medium hover:bg-gray-100" [attr.data-accordion-target]="'#group-' + currentUser?.curriculum?.curriculum_group?.id" (click)="toggleAccordion(currentUser?.curriculum?.curriculum_group?.id ?? -1)">
+			<button
+				class="flex items-center gap-2 rounded border px-4 py-2 font-medium hover:bg-gray-100"
+				[attr.data-accordion-target]="'#group-' + currentUser?.curriculum?.curriculum_group?.id"
+				(click)="toggleAccordion(currentUser?.curriculum?.curriculum_group?.id ?? -1)">
 				<span
 					class="transition-transform duration-200"
 					[ngClass]="{
@@ -21,7 +24,9 @@
 					<div class="text-sm opacity-75">ประเภท: {{ currentUser?.curriculum?.curriculum_group?.type }}</div>
 				</div>
 			</button>
-			<div class="text-sm text-gray-600">หน่วยกิตที่ได้รับ: {{ groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }} / {{ groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
+			<div class="text-sm text-gray-600">
+				หน่วยกิตที่ได้รับ: {{ groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }} / {{ groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}
+			</div>
 		</div>
 
 		<div [id]="'group-' + currentUser?.curriculum?.curriculum_group?.id" [class.hidden]="!isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1)" class="ml-4">

@@ -1,4 +1,3 @@
-<modal-select-curriculum #selectCurriculumModal></modal-select-curriculum>
 <div class="grid grid-cols-4 gap-x-5">
 	<div class="">
 		<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
@@ -21,7 +20,6 @@
 	<div class="col-span-3 flex w-full flex-col gap-y-4">
 		<div class="w-full rounded-[20px] border border-main-25 p-12">
 			<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="user"></sdm-icon>ข้อมูลผู้ใช้</div>
-
 			<form class="my-5 flex flex-col gap-y-4" [formGroup]="editProfileForm">
 				<div class="input-primary">
 					<label for="nickname">ชื่อเล่น</label>
@@ -63,6 +61,15 @@
 					backgroundColorHover="hover:bg-success-400"
 					(clickEvent)="onEditProfileFormConfirm()" />
 			</div>
+			<hr />
+			<sdm-base-button
+				icon="rotate-left"
+				text="เปลี่ยนรหัสผ่าน"
+				textColor="text-light"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-warning-300"
+				backgroundColorHover="hover:bg-warning-400"
+				(clickEvent)="openEditPasswordModal()" />
 		</div>
 		<div class="flex w-full flex-col gap-y-4 rounded-[20px] border border-main-25 p-12">
 			<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="book-bookmark"></sdm-icon>หลักสูตร</div>
@@ -88,16 +95,43 @@
 	</div>
 </div>
 
-<sdm-base-modal #uploadProfileModal modalId="uploadProfile" header="อัปโหลดรูปโปรไฟล์ใหม่">
-	<label for="uploadProfileInput" class="mb-3 flex h-80 w-full cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed border-primary-200 bg-light transition-all hover:bg-primary-100">
-		<div class="flex flex-col items-center justify-center pb-6 pt-5">
-			<sdm-icon icon="cloud-arrow-up" class="pb-7 text-5xl text-primary-300"></sdm-icon>
-			<p class="mb-2 text-base">
-				<span class="font-semibold">เลือก</span>
-				หรือวางไฟล์รูปโปรไฟล์ใหม่ที่นี่
-			</p>
-			<p class="text-sm opacity-50">ไฟล์ jpg,jpeg,png ขนาดไม่เกิน 5 MB</p>
+<sdm-base-modal #uploadProfileModal modalId="uploadProfile" header="เลือกโปรไฟล์รูปภาพ" (confirmEvent)="onConfirmAvatar()">
+	<sdm-base-button
+		icon="refresh"
+		text="สุ่มรูปภาพใหม่"
+		textColor="text-light"
+		textColorHover="hover:text-light"
+		backgroundColor="bg-primary-300"
+		backgroundColorHover="hover:bg-primary-400"
+		(clickEvent)="reRollAvatars()"></sdm-base-button>
+
+	<div class="my-3 grid grid-cols-4 gap-4">
+		<div
+			*ngFor="let image of predefinedAvatars"
+			class="relative flex cursor-pointer items-center justify-center overflow-hidden rounded-xl border-2 p-1"
+			[ngClass]="{
+				'border-gray-300': image === selectedAvatar,
+				'border-transparent': image !== selectedAvatar
+			}"
+			(click)="onSelectAvatar(image)">
+			<img [src]="image" class="h-full w-full object-contain" />
 		</div>
-		<input id="uploadProfileInput" class="hidden" type="file" />
-	</label>
+	</div>
+</sdm-base-modal>
+
+<sdm-base-modal #editPasswordModal modalId="editPassword" header="เปลี่ยนรหัสผ่าน" (confirmEvent)="onConfirmChangePassword()">
+	<form [formGroup]="passwordForm" class="mb-3 flex flex-col gap-4">
+		<div class="input-primary">
+			<label for="newPassword">รหัสผ่านใหม่</label>
+			<input type="password" id="newPassword" formControlName="newPassword" placeholder="อย่างน้อย 8 ตัว อักษรพิมพ์เล็ก-ใหญ่ ตัวเลข และสัญลักษณ์" />
+			<div *ngIf="passwordForm.get('newPassword')?.invalid && (passwordForm.get('newPassword')?.dirty || passwordForm.get('newPassword')?.touched)" class="mt-2 text-sm text-danger-300">
+				รหัสผ่านไม่ถูกต้อง (ต้อง >=8 ตัว, มีตัวใหญ่/เล็ก/ตัวเลข/สัญลักษณ์)
+			</div>
+		</div>
+		<div class="input-primary">
+			<label for="confirmPassword">ยืนยันรหัสผ่าน</label>
+			<input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="กรอกรหัสผ่านอีกครั้ง" />
+			<div *ngIf="passwordForm.hasError('passwordMismatch') &&(passwordForm.get('confirmPassword')?.dirty || passwordForm.get('confirmPassword')?.touched)" class="mt-2 text-sm text-danger-300">รหัสผ่านไม่ตรงกัน</div>
+		</div>
+	</form>
 </sdm-base-modal>
