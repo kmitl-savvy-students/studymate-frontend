@@ -5,7 +5,6 @@ import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { Transcript } from '@models/Transcript.model';
 import { TranscriptDetail } from '@models/TranscriptDetail.model';
 import { User } from '@models/User.model';
-import { AlertService } from '@services/alert/alert.service';
 import { AuthenticationService } from '@services/authentication/authentication.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
@@ -22,7 +21,6 @@ export class SDMPageCurriculumProgressTracker implements OnInit {
 		private authService: AuthenticationService,
 		private http: HttpClient,
 		private backendService: BackendService,
-		private alertService: AlertService,
 		private loadingService: LoadingService,
 	) {}
 
@@ -155,7 +153,10 @@ export class SDMPageCurriculumProgressTracker implements OnInit {
 			case 'REQUIRED_ALL':
 				if (group.subjects?.length) {
 					for (const detail of this.transcript!.details) {
-						if (!used.has(detail) && detail.subject) {
+						if (used.has(detail)) continue;
+						if (detail.grade === 'F' || detail.grade === 'U') continue;
+
+						if (detail.subject) {
 							const match = group.subjects.find((gs) => gs.subject?.id === detail.subject?.id);
 							if (match) {
 								this.groupMatches.get(group.id)?.push(detail);
@@ -170,10 +171,11 @@ export class SDMPageCurriculumProgressTracker implements OnInit {
 			case 'REQUIRED_CREDIT':
 				if (group.subjects?.length) {
 					for (const detail of this.transcript!.details) {
-						if (totalUsed >= needed) {
-							break;
-						}
-						if (!used.has(detail) && detail.subject) {
+						if (totalUsed >= needed) break;
+						if (used.has(detail)) continue;
+						if (detail.grade === 'F' || detail.grade === 'U') continue;
+
+						if (detail.subject) {
 							const match = group.subjects.find((gs) => gs.subject?.id === detail.subject?.id);
 							if (match) {
 								const c = detail.subject.credit;
@@ -190,10 +192,11 @@ export class SDMPageCurriculumProgressTracker implements OnInit {
 
 			case 'FREE':
 				for (const detail of this.transcript!.details) {
-					if (totalUsed >= needed) {
-						break;
-					}
-					if (!used.has(detail) && detail.subject) {
+					if (totalUsed >= needed) break;
+					if (used.has(detail)) continue;
+					if (detail.grade === 'F' || detail.grade === 'U') continue;
+
+					if (detail.subject) {
 						const c = detail.subject.credit;
 						if (totalUsed + c <= needed) {
 							this.groupMatches.get(group.id)?.push(detail);
@@ -211,7 +214,6 @@ export class SDMPageCurriculumProgressTracker implements OnInit {
 		this.groupCreditUsed.set(group.id, totalUsed);
 
 		let groupIsComplete = false;
-
 		if (group.children?.length) {
 			switch (group.type) {
 				case 'REQUIRED_ALL':
@@ -219,14 +221,12 @@ export class SDMPageCurriculumProgressTracker implements OnInit {
 						groupIsComplete = true;
 					}
 					break;
-
 				case 'REQUIRED_CREDIT':
 				case 'FREE':
 					if (totalUsed >= needed) {
 						groupIsComplete = true;
 					}
 					break;
-
 				default:
 					groupIsComplete = allChildrenComplete;
 					break;
