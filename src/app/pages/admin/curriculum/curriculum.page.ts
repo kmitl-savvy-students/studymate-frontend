@@ -11,12 +11,11 @@ import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
 import { finalize } from 'rxjs';
-import { SDMBaseAccordion } from '../../../components/accordion/base-accordion.component';
 
 @Component({
 	selector: 'sdm-page-curriculum',
 	standalone: true,
-	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule, SDMBaseAccordion],
+	imports: [SDMBaseButton, CommonModule, SDMBaseModal, ReactiveFormsModule],
 	templateUrl: 'curriculum.page.html',
 })
 export class SDMPageCurriculum implements OnInit {
