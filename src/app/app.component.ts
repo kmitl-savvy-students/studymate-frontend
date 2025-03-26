@@ -1,27 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { initFlowbite } from 'flowbite';
-import { AlertComponent } from './shared/services/alert/alert.component';
-import { FontAwesomeIconsService } from './shared/services/font-awesome-icons.service';
-import { LoadingOverlayComponent } from './shared/services/loading/loading-overlay.component';
-import { SelectCurriculumModalComponent } from './components/select-curriculum/select-curriculum-modal.component';
 import { CommonModule } from '@angular/common';
-import { AuthenticationService } from './shared/services/authentication/authentication.service';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
+import { FooterComponent } from '@components/footer/footer.component';
+import { NavbarComponent } from '@components/navbar/navbar.component';
+import { AlertComponent } from '@services/alert/alert.component';
+import { AuthenticationService } from '@services/authentication/authentication.service';
+import { FontAwesomeIconsService } from '@services/font-awesome-icons.service';
+import { LoadingOverlayComponent } from '@services/loading/loading-overlay.component';
+import { initFlowbite } from 'flowbite';
+import { SelectCurriculumModalComponent } from './components/select-curriculum/select-curriculum-modal.component';
 
 @Component({
 	standalone: true,
 	selector: 'app-root',
-	imports: [
-		RouterOutlet,
-		NavbarComponent,
-		FooterComponent,
-		AlertComponent,
-		CommonModule,
-		LoadingOverlayComponent,
-		SelectCurriculumModalComponent,
-	],
+	imports: [RouterOutlet, NavbarComponent, FooterComponent, AlertComponent, CommonModule, LoadingOverlayComponent, SelectCurriculumModalComponent],
 	templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit {
@@ -31,13 +23,22 @@ export class AppComponent implements OnInit {
 		private authService: AuthenticationService,
 	) {}
 
-	shouldShowNavbarAndFooter(): boolean {
-		const urlPath = this.router.url.split('?')[0];
-		return urlPath !== '/sign-up' && urlPath !== '/sign-in';
-	}
-
 	async ngOnInit() {
 		initFlowbite();
+		this.applyDarkMode();
 		await this.authService.validate();
+	}
+
+	applyDarkMode() {
+		if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+	}
+
+	isAuthentication(): boolean {
+		const urlPath = this.router.url.split('?')[0];
+		return urlPath == '/sign-up' || urlPath == '/sign-in';
 	}
 }

@@ -9,11 +9,59 @@ If not necessary, do not add anything in this file please.
 html,
 body {
 	height: 100%;
+	overflow: auto !important;
+	position: relative !important;
 }
 body {
 	font-family: 'IBM Plex Sans Thai', 'Helvetica Neue', sans-serif;
-	background-color: #ffffff;
 }
 html {
 	overflow-y: scroll;
+}
+
+@layer components {
+	/* body {
+		@apply bg-light text-dark;
+	} */
+
+	body {
+		@apply bg-light text-dark-100;
+	}
+
+	hr {
+		@apply my-8 h-px border-0 bg-gray-200;
+	}
+
+	.input-primary > label {
+		@apply mb-1 block text-sm font-medium text-gray-900;
+	}
+
+	.input-primary > input[disabled] {
+		@apply border-white bg-white;
+	}
+
+	.input-primary > input,
+	.input-primary > select,
+	/* .input-primary > textarea {
+		@apply text-dark block w-full rounded-lg border border-primary-300 bg-primary-100 p-2.5 text-sm transition-shadow focus:ring-4 focus:ring-primary-200;
+	} */
+	.input-primary > textarea {
+		@apply block w-full rounded-lg border border-primary-300 bg-primary-100 p-2.5 text-sm text-dark-100 transition-shadow focus:ring-4 focus:ring-primary-200;
+	}
+
+	[drawer-backdrop] {
+		z-index: 40 !important;
+	}
+	.nav-sidebar {
+		left: auto !important;
+		right: 0 !important;
+	}
+
+	@media (min-width: 1024px) {
+		[drawer-backdrop] {
+			opacity: 0 !important;
+			visibility: hidden !important;
+			/* pointer-events: none !important; */
+		}
+	}
 }

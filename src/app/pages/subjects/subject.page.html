@@ -1,0 +1,223 @@
+<div class="flex w-full gap-x-5">
+	<!-- วิธี 1 ไม่แชร์ค่า filter ที่เลือกให้กับ 2 component -->
+	<!-- <ng-container *ngIf="isLgScreen"
+		><sdm-filter-bar
+			*ngIf="isLgScreen"
+			[isLgScreen]="isLgScreen"
+			[selectedCurriculum]="selectedCurriculumData"
+			[isLoading]="isLoading"
+			(selectedDays)="onSelectedDaysChange($event)"
+			(selectedRating)="onReviewFilterValueChange($event)"
+			(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+			class="flex-none"></sdm-filter-bar
+	></ng-container> -->
+
+	<!-- วิธี 2 แชร์ค่า filter ที่เลือกให้กับ 2 component-->
+	<sdm-filter-bar
+		[isLgScreen]="isLgScreen"
+		[selectedCurriculum]="selectedCurriculumData"
+		[isLoading]="isLoading"
+		[initialSelectedDays]="selectedDays"
+		[initialSelectedRating]="selectedRatingFilter"
+		(selectedDays)="onSelectedDaysChange($event)"
+		(selectedRating)="onReviewFilterValueChange($event)"
+		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		class="flex-none"
+		[class.hidden]="!isLgScreen"></sdm-filter-bar>
+
+	<div class="flex w-full flex-col">
+		<div class="flex w-full flex-col">
+			<div class="grid w-full flex-none grid-cols-1 gap-3">
+				<sdm-base-accordion header="ค้นหารายวิชาเรียน" accordionId="selectDropdown-acc" [accordionDefaultStatus]="true">
+					<div class="w-full border-t-2 border-gray-100">
+						<div class="flex flex-row justify-between px-3">
+							<label class="inline-flex max-w-full cursor-pointer items-center overflow-x-auto rounded-md py-2 pl-1" [ngClass]="{ 'cursor-not-allowed':isLoading }">
+								<input type="checkbox" [disabled]="isLoading" class="peer sr-only" [ngClass]="{ 'cursor-not-allowed':isLoading }" (change)="toggleIsGened()" [checked]="isGened === '1'" />
+								<div
+									class="peer relative h-7 w-14 rounded-xl bg-main-10 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-main-100 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"
+									[ngClass]="{ 'cursor-not-allowed':isLoading }"></div>
+								<span class="ms-3 text-base font-medium text-dark-100" [ngClass]="{ 'cursor-not-allowed':isLoading }">แสดงข้อมูลเฉพาะรายวิชาหมวดศึกษาทั่วไป</span>
+							</label>
+							<div class="flex items-center">
+								<button type="button" class="flex h-8 flex-row items-center gap-x-2 text-dark-75 underline transition-all hover:scale-105 hover:text-main-100" (click)="clearAll()">
+									<span class="text-base font-normal">ล้างทั้งหมด</span>
+									<sdm-icon icon="filter-circle-xmark"></sdm-icon>
+								</button>
+							</div>
+							<!-- <sdm-base-button class="h-8" icon="filter" text="เคลียทั้งหมด" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400">
+							</sdm-base-button> -->
+						</div>
+
+						<div class="ml-1 grid grid-cols-4 gap-x-3 gap-y-2 px-3">
+							<sdm-select defaultLabel="ปีการศึกษา" SelectName="selectedYear" [listOptions]="yearsList" (selectedValue)="handleSelectChange('selectedYear',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="ภาคการศึกษา"
+								SelectName="selectedSemester"
+								[listOptions]="semesterList"
+								(selectedValue)="handleSelectChange('selectedSemester',$event)"
+								class="col-span-1"
+								[disabled]="isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="ชั้นปี"
+								SelectName="selectedClassYear"
+								[listOptions]="classYearList"
+								(selectedValue)="handleSelectChange('selectedClassYear',$event)"
+								class="col-span-1"
+								[disabled]="isLoading"></sdm-select>
+							<sdm-select defaultLabel="คณะ" SelectName="selectedFaculty" [listOptions]="facultyList" (selectedValue)="handleSelectChange('selectedFaculty',$event)" class="col-span-1" [disabled]="isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="ภาควิชา"
+								SelectName="selectedDepartment"
+								[listOptions]="departmentList"
+								(selectedValue)="handleSelectChange('selectedDepartment',$event)"
+								class="col-span-2"
+								[disabled]="disableDepartmentSelectDropdown || isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="แผนการเรียน"
+								SelectName="selectedProgram"
+								[listOptions]="programList"
+								(selectedValue)="handleSelectChange('selectedProgram',$event)"
+								class="col-span-2"
+								[disabled]="disableProgramSelectDropdown || isLoading"></sdm-select>
+							<sdm-select
+								defaultLabel="หลักสูตร"
+								SelectName="selectedCurriculum"
+								[listOptions]="curriculumList"
+								(selectedValue)="handleSelectChange('selectedCurriculum',$event)"
+								class="col-span-4"
+								[disabled]="disableCurriculumSelectDropdown || isLoading"></sdm-select>
+						</div>
+					</div>
+				</sdm-base-accordion>
+				<div class="flex w-full gap-2">
+					<div class="w-full">
+						<sdm-search-bar [data]="isFilter ? finalDisplayData : subjectCardData" (searchCleared)="onSearchCleared()" [filterFunction]="searchFunction" (searchedDataList)="getSearchedSubjectCardDataList($event)">
+						</sdm-search-bar>
+					</div>
+					<!-- Filter Sidebar button for mobile -->
+					<div data-drawer-target="filter-sidebar" data-drawer-show="filter-sidebar" aria-controls="filter-sidebar" class="flex cursor-pointer items-center rounded-[20px] bg-main-10 px-3 py-2 hover:bg-main-25 lg:hidden">
+						<sdm-icon icon="filter" class="text-sm text-dark-100"></sdm-icon>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ng-container *ngIf="isSelectAllDropdown && isLoading">
+			<div class="flex w-full animate-pulse flex-col items-center justify-center pt-4">
+				<!-- loading website -->
+				<div class="mb-4 h-52 w-full rounded-xl bg-primary-100"></div>
+				<div class="mb-4 h-52 w-full rounded-xl bg-primary-100"></div>
+				<div class="mb-4 h-52 w-full rounded-xl bg-primary-100"></div>
+				<div class="mb-4 h-52 w-full rounded-xl bg-primary-100"></div>
+				<!-- loading website -->
+			</div>
+		</ng-container>
+		<ng-container *ngIf="isSelectAllDropdown && (paginatedItems.length > 0) && !getSubjectDataIsNull && !isLoading">
+			<div class="flex w-full flex-col items-start">
+				<div class="flex w-full flex-1 flex-col items-center gap-3 text-dark-75">
+					<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage" class="mt-4"></sdm-pagination>
+					<div class="grid w-full grid-cols-1 gap-4">
+						<ng-container *ngFor="let data of paginatedItems; let i = index" class="grid grid-cols-1 gap-4">
+							<ng-container *ngIf="data && data.subject && data.subject.id">
+								<sdm-subject-cpn
+									[subjectCardData]="data"
+									[selectedYear]="selectedYear-543"
+									[selectedSemester]="selectedSemester"
+									[selectedCurriculum]="selectedCurriculum"
+									[subjectId]="data.subject.id"
+									[section]="data.section"
+									[isGened]="isGened"></sdm-subject-cpn>
+							</ng-container>
+						</ng-container>
+					</div>
+					<sdm-pagination (pageChange)="changePage($event)" [totalItems]="subjectCardTotal" [itemsPerPage]="itemsPerPage" [currentPage]="currentPage"></sdm-pagination>
+				</div>
+			</div>
+		</ng-container>
+
+		<!-- แสดงคำแนะนำถ้ายังเลือกข้อมูลไม่ครบ -->
+		<ng-container *ngIf="!isSelectAllDropdown">
+			<div class="mt-20 flex w-full flex-col items-center justify-center gap-3 text-center text-dark-75">
+				<div class="flex flex-col gap-y-4 text-sm">
+					<div *ngIf="selectedYear === -1 || selectedYear === undefined">โปรดเลือกปีการศึกษา เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedSemester === -1 || selectedSemester === undefined">โปรดเลือกภาคการศึกษา เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedClassYear === '' || selectedClassYear === '-1' || selectedClassYear === undefined">โปรดเลือกชั้นปี เพื่อดูรายวิชา</div>
+					<div *ngIf="selectedFaculty === -1 || selectedFaculty === undefined">โปรดเลือกคณะ เพื่อดูรายวิชา</div>
+					<div *ngIf="(selectedDepartment === -1 || selectedDepartment === undefined) && selectedFaculty !== 0">โปรดเลือกภาควิชา เพื่อดูรายวิชา</div>
+					<div *ngIf="(selectedProgram === -1 || selectedProgram === undefined) && selectedFaculty !== 0">โปรดเลือกแผนการเรียน เพื่อดูรายวิชา</div>
+					<div *ngIf="(selectedCurriculum === -1 ||selectedCurriculum === undefined) && selectedFaculty !== 0">โปรดเลือกหลักสูตร เพื่อดูรายวิชา</div>
+				</div>
+			</div>
+		</ng-container>
+
+		<!-- แสดงข้อความเมื่อไม่พบข้อมูล -->
+		<ng-container *ngIf="isSelectAllDropdown && !isLoading">
+			<!-- กรณีไม่พบข้อมูลจาก API -->
+			<div *ngIf="getSubjectDataIsNull" class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75">ไม่พบข้อมูลรายวิชา</div>
+
+			<!-- กรณีมีข้อมูลแต่ search ไม่พบ -->
+			<div *ngIf="!getSubjectDataIsNull && finalDisplayData.length === 0" class="flex w-full flex-1 flex-col items-center justify-center gap-3 p-20 text-center text-dark-75">
+				<ng-container [ngSwitch]="true">
+					<!-- กรณี search ไม่พบ -->
+					<span *ngSwitchCase="isSearched && !isFilter"> ไม่พบข้อมูลรายวิชาที่ค้นหา </span>
+					<!-- กรณี filter ไม่พบ -->
+					<span *ngSwitchCase="!isSearched && isFilter"> ไม่พบข้อมูลรายวิชาที่ฟิลเตอร์ </span>
+					<!-- กรณีทั้ง search และ filter ไม่พบ -->
+					<span *ngSwitchCase="isSearched && isFilter"> ไม่พบข้อมูลรายวิชาที่ค้นหาและฟิลเตอร์ </span>
+				</ng-container>
+			</div>
+		</ng-container>
+	</div>
+</div>
+
+<!-- Sidebar Menu สำหรับ mobile -->
+
+<!-- วิธี 1 ไม่แชร์ค่า filter ที่เลือกให้กับ 2 component -->
+<!-- <div id="filter-sidebar" class="filter-sidebar fixed left-0 top-0 z-50 h-screen -translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="filter-sidebar-label">
+	<div class="flex items-center justify-between">
+		<div class="text-base font-semibold text-dark-100">ตัวกรองข้อมูล</div>
+		<button type="button" data-drawer-hide="nav-sidebar" aria-controls="nav-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path
+					fill-rule="evenodd"
+					d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+					clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only">Close menu</span>
+		</button>
+	</div>
+	<sdm-filter-bar
+		*ngIf="!isLgScreen"
+		[isLgScreen]="isLgScreen"
+		[selectedCurriculum]="selectedCurriculumData"
+		[isLoading]="isLoading"
+		(selectedDays)="onSelectedDaysChange($event)"
+		(selectedRating)="onReviewFilterValueChange($event)"
+		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		class="flex-none"></sdm-filter-bar>
+</div> -->
+
+<!-- วิธี 2 แชร์ค่า filter ที่เลือกให้กับ 2 component -->
+<div id="filter-sidebar" class="filter-sidebar fixed left-0 top-0 z-50 h-screen -translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="filter-sidebar-label">
+	<div class="flex items-center justify-between">
+		<div class="text-base font-semibold text-dark-100">ตัวกรองข้อมูล</div>
+		<button type="button" data-drawer-hide="filter-sidebar" aria-controls="filter-sidebar" class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-dark-50 hover:bg-main-15 hover:text-dark-100">
+			<svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+				<path
+					fill-rule="evenodd"
+					d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+					clip-rule="evenodd"></path>
+			</svg>
+			<span class="sr-only">Close menu</span>
+		</button>
+	</div>
+	<sdm-filter-bar
+		[isLgScreen]="isLgScreen"
+		[selectedCurriculum]="selectedCurriculumData"
+		[isLoading]="isLoading"
+		[initialSelectedDays]="selectedDays"
+		[initialSelectedRating]="selectedRatingFilter"
+		(selectedDays)="onSelectedDaysChange($event)"
+		(selectedRating)="onReviewFilterValueChange($event)"
+		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
+		class="flex-none"></sdm-filter-bar>
+</div>

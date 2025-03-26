@@ -1,12 +1,10 @@
 # Builds files
-/node_modules
 /.angular
-
+/node_modules
 /package-lock.json
 
 # System files
 .DS_Store
 Thumbs.db
 
-#environment settings
-# **/environment.ts
+src/environments/environment.ts

@@ -1,11 +1,11 @@
-import { Component, SimpleChanges } from '@angular/core';
-import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
-import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
+import { Component } from '@angular/core';
 import { initFlowbite } from 'flowbite';
+import { SDMReviewFilterComponent } from '../../components/review-filter/review-filter.component';
+import { paginationType } from '../../shared/models/SdmAppService.model';
+import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
+import { User } from '../../shared/models/User.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
 import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
-import { User } from '../../shared/models/User.model';
-import { paginationType } from '../../shared/models/SdmAppService.model';
 
 @Component({
 	selector: 'sdm-page-subject-detail',
@@ -15,22 +15,17 @@ import { paginationType } from '../../shared/models/SdmAppService.model';
 })
 export class SDMPageReview {
 	public reviewData: SubjectReviewData[] = [];
-
-	public isLoadingReview: boolean = false;
+	public currentYearTermReviewData: SubjectReviewData[] = [];
 
 	public signedIn: boolean = false;
 	public currentUser: User | null = null;
+
+	public isLoadingReview: boolean = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
 		private authService: AuthenticationService,
 	) {}
-
-	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['isLoadingReview']) {
-			console.log('Loading:', changes['isLoading'].currentValue);
-		}
-	}
 
 	ngOnInit(): void {
 		this.authService.signedIn$.subscribe((signedIn) => {
@@ -38,6 +33,7 @@ export class SDMPageReview {
 		});
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
+			this.getCurrentYearTermReview();
 		});
 		this.getSubjectReviews();
 	}
@@ -57,7 +53,7 @@ export class SDMPageReview {
 				if (res) {
 					this.reviewData = res;
 				} else {
-					console.log('No Reviews Data Available.');
+					console.log('No allReview Data Available.');
 				}
 				this.isLoadingReview = false;
 			},
@@ -67,13 +63,33 @@ export class SDMPageReview {
 				} else if (error.status === 500) {
 					console.error('Internal Server Error');
 				} else {
-					console.error(
-						'An unexpected error occurred:',
-						error.status,
-					);
+					console.error('An unexpected error occurred:', error.status);
 				}
 				this.isLoadingReview = false;
 			},
 		});
+	}
+
+	public getCurrentYearTermReview() {
+		if (this.currentUser) {
+			this.apiManagementService.GetSubjectReviewsCurrentYearTerm().subscribe({
+				next: (res) => {
+					if (res) {
+						this.currentYearTermReviewData = res;
+					} else {
+						console.log('No currentReview Data Available.');
+					}
+				},
+				error: (error) => {
+					if (error.status === 404) {
+						console.error('Not found!!!!!!!');
+					} else if (error.status === 500) {
+						console.error('Internal Server Error');
+					} else {
+						console.error('An unexpected error occurred:', error.status);
+					}
+				},
+			});
+		}
 	}
 }

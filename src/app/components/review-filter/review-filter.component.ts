@@ -1,45 +1,29 @@
-import {
-	AfterViewInit,
-	Component,
-	EventEmitter,
-	Input,
-	OnChanges,
-	OnInit,
-	Output,
-	SimpleChanges,
-	ViewChild,
-} from '@angular/core';
-import { SDMSelectComponent } from '../select/select.component';
-import { ratingList } from './review-filter-data';
-import {
-	paginationType,
-	SelectedData,
-} from '../../shared/models/SdmAppService.model';
 import { CommonModule } from '@angular/common';
-import { SDMSubjectReviewComponent } from '../subject-review/subject-review.component';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { paginationType, SelectedData } from '../../shared/models/SdmAppService.model';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
-import { SDMPaginationComponent } from '../pagination/pagination.component';
-import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 import { User } from '../../shared/models/User.model';
+import { SDMPaginationComponent } from '../pagination/pagination.component';
 import { SDMSearchBarComponent } from '../search-bar/search-bar.component';
+import { SDMSelectComponent } from '../select/select.component';
+import { SDMSubjectReviewComponent } from '../subject-review/subject-review.component';
+import { ratingList } from './review-filter-data';
 
 @Component({
 	selector: 'sdm-review-filter',
 	standalone: true,
-	imports: [
-		SDMSelectComponent,
-		CommonModule,
-		SDMSubjectReviewComponent,
-		SDMPaginationComponent,
-		SDMSearchBarComponent,
-	],
+	imports: [SDMSelectComponent, CommonModule, SDMSubjectReviewComponent, SDMPaginationComponent, SDMSearchBarComponent],
 	templateUrl: './review-filter.component.html',
 	styleUrl: './review-filter.component.css',
 })
 export class SDMReviewFilterComponent implements OnChanges {
 	@ViewChild(SDMSelectComponent) sdmSelect!: SDMSelectComponent;
+	@ViewChild(SDMSearchBarComponent) sdmSearchBar!: SDMSearchBarComponent;
 
+	@Input() srcReviewData: SubjectReviewData[] = [];
 	@Input() subjectReviewData: SubjectReviewData[] = [];
+	@Input() currentYearTermReviewData: SubjectReviewData[] = [];
+
 	@Input() isLoadingReview: boolean = false;
 	@Input() paginationType!: number;
 	@Input() signedIn: boolean = false;
@@ -49,16 +33,22 @@ export class SDMReviewFilterComponent implements OnChanges {
 	@Input() isShowSearchBar: boolean = false;
 	@Input() isReviewPage: boolean = false;
 
+	@Input() sidebarFilterRatingValue: number = -1;
+	@Input() isOnReviewPage: boolean = false;
+
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() deleteUserReview = new EventEmitter<void>();
+	@Output() createLikeReview = new EventEmitter<void>();
+	@Output() deleteLikeReview = new EventEmitter<void>();
 
 	public ratingList = ratingList;
 
 	public selectedPopular: boolean = false;
 	public selectedLatest: boolean = false;
 	public selectedRating: boolean = false;
+	public selectedCurrentYearTerm: boolean = false;
 
-	public selectedStarRatingValue: any;
+	public selectedStarRatingValue: number = -1;
 
 	public searchedReviewDataList: SubjectReviewData[] = [];
 	public currentPage: number = 1;
@@ -77,128 +67,49 @@ export class SDMReviewFilterComponent implements OnChanges {
 	public isEditingReview: boolean = false;
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['subjectReviewData']) {
+		if (changes['subjectReviewData'] && changes['subjectReviewData']) {
 			this.getSubjectReviewIsNull = this.subjectReviewData.length === 0;
 			this.filterData();
-			this.updatePaginatedItems();
+		}
+		if (changes['isLoadingReview']) {
+			this.isLoadingReview = changes['isLoadingReview'].currentValue;
 		}
 	}
 
-	get paginationTypes() {
-		return paginationType;
-	}
-
-	public isReviewOwner(reviewUserId: string): boolean {
-		if (this.signedIn && this.currentUser) {
-			return reviewUserId === this.currentUser.id;
+	public checkSrcReviewData() {
+		if (!this.selectedPopular && !this.selectedLatest && !this.selectedRating && !this.selectedCurrentYearTerm) {
+			this.srcReviewData = this.subjectReviewData;
+		} else if ((this.selectedPopular || this.selectedLatest || this.selectedRating) && !this.selectedCurrentYearTerm) {
+			this.srcReviewData = this.subjectReviewData;
+		} else if (!this.selectedPopular && !this.selectedLatest && !this.selectedRating && this.selectedCurrentYearTerm) {
+			this.srcReviewData = this.currentYearTermReviewData;
 		}
-		return false;
-	}
-
-	private resetOtherFilters(filter: string) {
-		switch (filter) {
-			case 'popular':
-				this.selectedLatest = false;
-				this.clearSelect();
-				break;
-			case 'latest':
-				this.selectedPopular = false;
-				this.clearSelect();
-				break;
-			case 'starRating':
-				this.selectedPopular = false;
-				this.selectedLatest = false;
-				break;
-			default:
-				break;
-		}
-	}
-
-	private clearSelect() {
-		if (this.sdmSelect) {
-			this.sdmSelect.onSelectedOption('');
-		}
-	}
-
-	public onPopularFilterChange() {
-		this.selectedPopular = !this.selectedPopular;
-		this.resetOtherFilters('popular');
-		this.currentPage = 1;
-		this.filterData();
-	}
-
-	public onLatestFilterChange() {
-		this.selectedLatest = !this.selectedLatest;
-		this.resetOtherFilters('latest');
-		this.currentPage = 1;
-		this.filterData();
-	}
-
-	public onRatingFilterChange(selectedRatingData: SelectedData) {
-		this.selectedStarRatingValue = selectedRatingData.value;
-		if (this.selectedStarRatingValue) {
-			this.selectedRating = true;
-			this.resetOtherFilters('starRating');
-			this.currentPage = 1;
-		} else {
-			this.selectedRating = false;
-		}
-		this.filterData();
 	}
 
 	public filterData(): void {
-		const dataToFilter = this.isSearched
-			? this.searchedReviewDataList
-			: this.subjectReviewData;
+		this.checkSrcReviewData();
+		const dataToFilter = this.isSearched ? this.searchedReviewDataList : this.srcReviewData;
 		let userReview = null;
 
-		if (
-			this.prioritizeUserReview &&
-			!this.selectedPopular &&
-			!this.selectedLatest &&
-			this.selectedStarRatingValue === undefined &&
-			this.signedIn &&
-			this.currentUser
-		) {
-			userReview = dataToFilter.find(
-				(item) => item.user_id === this.currentUser?.id,
-			);
+		if (this.prioritizeUserReview && !this.selectedPopular && !this.selectedLatest && this.selectedStarRatingValue === undefined && this.signedIn && this.currentUser) {
+			userReview = dataToFilter.find((item) => item.user_id === Number(this.currentUser?.id));
 		}
 
 		if (this.selectedPopular) {
-			this.filterItems = [...dataToFilter].sort(
-				(a, b) => b.like - a.like,
-			);
+			this.filterItems = [...dataToFilter].sort((a, b) => b.like - a.like);
 		} else if (this.selectedLatest) {
-			this.filterItems = [...dataToFilter].sort(
-				(a, b) =>
-					new Date(b.created).getTime() -
-					new Date(a.created).getTime(),
-			);
-		} else if (
-			this.selectedRating &&
-			this.selectedStarRatingValue !== undefined
-		) {
-			this.filterItems = dataToFilter.filter(
-				(item) => item.rating === this.selectedStarRatingValue,
-			);
+			this.filterItems = [...dataToFilter].sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+		} else if (this.selectedRating && this.selectedStarRatingValue !== undefined) {
+			this.filterItems = dataToFilter.filter((item) => item.rating === this.selectedStarRatingValue);
+		} else if (this.selectedCurrentYearTerm) {
+			this.filterItems = dataToFilter;
 		} else {
 			this.filterItems = dataToFilter;
 		}
 
 		if (userReview) {
-			this.filterItems = [
-				userReview,
-				...this.filterItems.filter(
-					(item) => item.user_id !== this.currentUser?.id,
-				),
-			];
+			this.filterItems = [userReview, ...this.filterItems.filter((item) => item.user_id !== Number(this.currentUser?.id))];
 		}
-		this.updatePaginatedItems();
-	}
-
-	public changePage(page: number) {
-		this.currentPage = page;
 		this.updatePaginatedItems();
 	}
 
@@ -209,6 +120,126 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.paginatedItems = this.dataToPaginate.slice(start, end);
 		this.subjectReviewTotal = this.dataToPaginate.length;
 		this.filterReviewIsNull = this.dataToPaginate.length === 0;
+	}
+
+	get paginationTypes() {
+		return paginationType;
+	}
+
+	public isReviewOwner(reviewUserId: number): boolean {
+		if (this.signedIn && this.currentUser) {
+			return Number(reviewUserId) === Number(this.currentUser.id);
+		}
+		return false;
+	}
+
+	private resetOtherFilters(filter: string) {
+		switch (filter) {
+			case 'popular':
+				this.selectedLatest = false;
+				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
+
+				break;
+			case 'latest':
+				this.selectedPopular = false;
+				this.clearSelect();
+				this.selectedCurrentYearTerm = false;
+
+				break;
+			case 'starRating':
+				this.selectedPopular = false;
+				this.selectedLatest = false;
+				this.selectedCurrentYearTerm = false;
+				break;
+			case 'currentYearTerm':
+				this.selectedLatest = false;
+				this.selectedPopular = false;
+				this.clearSelect();
+				break;
+			default:
+				break;
+		}
+	}
+
+	private clearSelect() {
+		if (this.sdmSelect) {
+			this.sdmSelect.onSelectedOption(-1, '');
+		}
+	}
+
+	private clearSearch() {
+		if (this.sdmSearchBar) {
+			this.sdmSearchBar.clearSearch();
+		}
+	}
+
+	public onPopularFilterChange() {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedPopular = !this.selectedPopular;
+		this.resetOtherFilters('popular');
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public onLatestFilterChange() {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedLatest = !this.selectedLatest;
+		this.resetOtherFilters('latest');
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public onRatingFilterChange(selectedRatingData: SelectedData) {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedStarRatingValue = selectedRatingData.value;
+		if (this.selectedStarRatingValue && this.selectedStarRatingValue !== -1) {
+			this.selectedRating = true;
+			this.resetOtherFilters('starRating');
+			this.currentPage = 1;
+		} else {
+			this.selectedRating = false;
+		}
+		this.filterData();
+	}
+
+	public onSidebarRatingFilterChange(ratingValue: number) {
+		if (this.selectedCurrentYearTerm) {
+			this.clearSearch();
+			this.isSearched = false;
+		}
+		this.selectedStarRatingValue = ratingValue;
+		if (this.selectedStarRatingValue && this.selectedStarRatingValue !== -1) {
+			this.selectedRating = true;
+			this.resetOtherFilters('starRating');
+			this.currentPage = 1;
+		} else {
+			this.selectedRating = false;
+		}
+		this.filterData();
+	}
+
+	public onCurrentYearTermFilterChange() {
+		this.selectedCurrentYearTerm = !this.selectedCurrentYearTerm;
+		this.resetOtherFilters('currentYearTerm');
+		this.clearSearch();
+		this.isSearched = false;
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public changePage(page: number) {
+		this.currentPage = page;
+		this.updatePaginatedItems();
 	}
 
 	public onEditReview(isEditingReview: boolean) {
@@ -223,27 +254,29 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.deleteUserReview.emit();
 	}
 
-	public getSearchedReviewsDataList(
-		searchedReviewDataList: SubjectReviewData[],
-	) {
+	public onCreateLikeReview() {
+		this.createLikeReview.emit();
+	}
+
+	public onDeleteLikeReview() {
+		this.deleteLikeReview.emit();
+	}
+
+	public getSearchedReviewsDataList(searchedReviewDataList: SubjectReviewData[]) {
 		this.searchedReviewDataList = searchedReviewDataList;
 		this.isSearched = true;
 		this.currentPage = 1;
 		this.filterData();
 	}
 
-	public searchFunction(
-		data: SubjectReviewData[],
-		searchValue: string,
-	): SubjectReviewData[] {
-		return data.filter(
-			(review) =>
-				review.teachtable_subject.subject_id
-					.toLowerCase()
-					.includes(searchValue.toLowerCase()) ||
-				review.subject_name_en
-					.toLowerCase()
-					.includes(searchValue.toLowerCase()),
-		);
+	public onSearchCleared() {
+		this.isSearched = false;
+		this.searchedReviewDataList = [];
+		this.currentPage = 1;
+		this.filterData();
+	}
+
+	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
+		return data.filter((review) => review?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
 	}
 }

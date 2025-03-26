@@ -4,10 +4,43 @@
 
 @layer components {
 	.check-box {
-		@apply col-span-1 mt-[1px] h-3.5 w-3.5 justify-self-end rounded border-main-25 bg-white text-main-100 hover:cursor-pointer focus:ring-2 focus:ring-main-100;
+		@apply col-span-1 mt-[1px] h-3.5 w-3.5 justify-self-end rounded border-main-25 bg-white text-primary-300 hover:cursor-pointer focus:ring-2 focus:ring-main-100;
 	}
 
 	.icon-filter {
 		@apply flex h-7 w-7 items-center justify-center rounded-full text-sm hover:bg-main-10;
+	}
+	.tooltip {
+		display: inline-block;
+	}
+
+	.tooltip .tooltiptext {
+		visibility: hidden;
+		z-index: 10;
+	}
+
+	.tooltiptext {
+		transform: translateY(-10px);
+		padding-top: 10px;
+	}
+
+	.tooltip:hover .tooltiptext {
+		visibility: visible;
+	}
+
+	.tooltip-shadow {
+		box-shadow: 0 0 6px 0 rgb(0 0 0 / 0.1);
+	}
+
+	.date-box {
+		@apply rounded-[15px] px-3 py-1.5 text-center;
+	}
+
+	.date-box-disabled {
+		@apply rounded-[15px] bg-gray-100 px-3 py-1.5 text-sm text-gray-500;
+	}
+
+	.detail-data {
+		@apply rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm;
 	}
 }

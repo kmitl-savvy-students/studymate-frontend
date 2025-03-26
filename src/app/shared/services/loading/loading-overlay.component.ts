@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { LoadingService } from './loading.service';
 
 @Component({
@@ -13,14 +13,11 @@ import { LoadingService } from './loading.service';
 				'animation-fade-in': !isInitialLoad && isLoading,
 				'animation-fade-out': !isLoading,
 			}"
-			class="fixed inset-0 z-[9999] flex items-center justify-center bg-white"
-		>
+			class="bg-light fixed inset-0 z-[9999] flex items-center justify-center">
 			<div [ngClass]="{ 'animation-jump-out': !isLoading }">
-				<div class="icon animation-pulse flex flex-col items-center">
-					<span class="text-6xl font-semibold text-main-100"
-						>KMITL</span
-					>
-					<span class="-mt-2 text-3xl text-main-100">StudyMate</span>
+				<div class="icon animation-pulse text-primary-300 flex flex-col items-center">
+					<span class="text-6xl font-semibold">KMITL</span>
+					<span class="-mt-2 text-3xl">StudyMate</span>
 				</div>
 			</div>
 		</div>

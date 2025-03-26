@@ -1,0 +1,21 @@
+services:
+    frontend:
+        container_name: sdm-frontend-prod-ce-cloud-container
+        image: frontend-prod-img
+        restart: always
+        networks:
+            - prod-network
+        volumes:
+            - ./nginx.prod.ce-cloud.conf:/etc/nginx/conf.d/default.conf
+        labels:
+            traefik.enable: 'true'
+            traefik.http.services.sdm-frontend.loadbalancer.server.port: '80'
+            traefik.http.services.sdm-frontend.loadbalancer.server.scheme: 'http'
+            traefik.http.routers.sdm-frontend-https.entrypoints: 'websecure'
+            traefik.http.routers.sdm-frontend-https.rule: 'Host(`ce67-27.cloud.ce.kmitl.ac.th`)' 
+            traefik.http.routers.sdm-frontend-https.tls: 'true'
+            traefik.http.routers.sdm-frontend-https.tls.certresolver: 'letsencrypt'
+
+networks:
+    prod-network:
+        external: true

@@ -37,11 +37,7 @@ export class LoadingService {
 			this.loadingCount--;
 		}
 		const serviceLeft = `${this.loadingCount} services left.`;
-		console.log(
-			`DEBUG: [SERVICES] '${serviceName}' has been done. ${
-				this.loadingCount > 0 ? serviceLeft : ''
-			}`,
-		);
+		console.log(`DEBUG: [SERVICES] '${serviceName}' has been done. ${this.loadingCount > 0 ? serviceLeft : ''}`);
 		this.updateLoadingState();
 
 		if (this.loadingCount === 0 && !this.autoLoadTimeoutId) {
@@ -95,18 +91,14 @@ export class LoadingService {
 		this.loadingSubject.next(isLoading);
 
 		if (!isLoading) {
-			console.log(
-				'DEBUG: [SERVICES] All services are done. Application is shown.',
-			);
+			console.log('DEBUG: [SERVICES] All services are done. Application is shown.');
 		}
 	}
 
 	private startAutoLoadTimeout(): void {
 		this.autoLoadTimeoutId = setTimeout(() => {
 			if (this.loadingCount === 0 && this.loadingSubject.value) {
-				console.log(
-					`DEBUG: [SERVICES] No services registered within ${this.autoLoadDelay}ms. Showing application.`,
-				);
+				console.log(`DEBUG: [SERVICES] No services registered within ${this.autoLoadDelay}ms. Showing application.`);
 				this.loadingSubject.next(false);
 			}
 		}, this.autoLoadDelay);

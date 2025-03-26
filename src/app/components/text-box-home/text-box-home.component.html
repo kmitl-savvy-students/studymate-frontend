@@ -1,10 +1,10 @@
-<div class="flex h-[400px] w-[400px] justify-start 2xl:h-[500px] 2xl:w-[500px]">
+<div class="flex h-[400px] w-[400px] justify-start">
 	<div class="flex flex-col justify-center">
 		<p class="text-3xl font-bold">{{ headerText }}</p>
-		<div class="ms-5 mt-4 flex flex-col text-xl">
-			<ul class="list-inside list-disc">
+		<div class="mt-4 flex flex-col text-xl">
+			<ul class="list-outside list-disc pl-8">
 				@for (item of listText; track item) {
-					<li>{{ item }}</li>
+					<li class="pl-2">{{ item }}</li>
 				}
 			</ul>
 		</div>

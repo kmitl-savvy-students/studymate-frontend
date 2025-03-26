@@ -1,59 +1,118 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { initFlowbite } from 'flowbite';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AlertService } from '@services/alert/alert.service';
+import { BackendService } from '@services/backend.service';
+import { finalize } from 'rxjs';
+import { SDMBaseButton } from '../../components/buttons/base-button.component';
 import { IconComponent } from '../../components/icon/icon.component';
-import { AuthService } from '../../shared/services/auth.service.js';
+import { SDMBaseModal } from '../../components/modals/base-modal.component';
+import { SelectCurriculumModalComponent } from '../../components/select-curriculum/select-curriculum-modal.component';
 import { User } from '../../shared/models/User.model.js';
-import { UserToken } from '../../shared/models/UserToken.model.js';
-import { Router, NavigationEnd } from '@angular/router';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { AuthenticationService } from '../../shared/services/authentication/authentication.service';
 
 @Component({
 	selector: 'sdm-page-profile',
 	standalone: true,
-	imports: [IconComponent],
+	imports: [IconComponent, CommonModule, SDMBaseButton, ReactiveFormsModule, SDMBaseModal, SelectCurriculumModalComponent],
 	templateUrl: './profile.page.html',
 	styleUrl: './profile.page.css',
 })
-export class SDMPageProfile implements AfterViewInit {
-	public currentRoute: string = '';
-	public user: User | null = null;
-	public isSignIn: boolean = false;
-	public fromNavbar: string = 'navbar';
-	public isDropdownOpen = false;
+export class SDMPageProfile {
+	public currentUser: User | null = null;
+
+	@ViewChild('selectCurriculumModal') selectCurriculum!: SelectCurriculumModalComponent;
 
 	constructor(
-		private router: Router,
-		private authService: AuthService,
+		private authService: AuthenticationService,
+		private fb: FormBuilder,
+		private backendService: BackendService,
+		private alertService: AlertService,
+		private http: HttpClient,
 	) {
-		this.router.events
-			.pipe(filter((event) => event instanceof NavigationEnd))
-			.subscribe((event: any) => {
-				this.currentRoute = event.url;
-			});
+		this.editProfileForm = this.fb.group({
+			nickname: [''],
+			firstname: [''],
+			lastname: [''],
+		});
 	}
-
-	public userTokenSubject: Subject<UserToken | null> =
-		new Subject<UserToken | null>();
 
 	ngOnInit(): void {
-		this.authService.userTokenSubject
-			.pipe(
-				filter((token) => token !== null),
-				distinctUntilChanged(),
-			)
-			.subscribe((userToken) => {
-				let user = userToken.user;
-				if (user) {
-					this.isSignIn = true;
-					this.user = user;
-				} else {
-					this.isSignIn = false;
-				}
+		this.authService.user$.subscribe((user) => {
+			this.currentUser = user;
+
+			this.editProfileForm.patchValue({
+				nickname: this.currentUser?.nickname,
+				firstname: this.currentUser?.firstname,
+				lastname: this.currentUser?.lastname,
 			});
+			this.toggleEditProfileForm(false);
+		});
 	}
 
-	ngAfterViewInit(): void {
-		initFlowbite();
+	editProfileForm: FormGroup;
+	isEditProfile: boolean = false;
+	isEditProfileLoading: boolean = false;
+	isEditCurriculum: boolean = false;
+
+	onEditProfileForm(): void {
+		this.toggleEditProfileForm(true);
+	}
+	onEditProfileFormCancel(): void {
+		this.toggleEditProfileForm(false);
+	}
+
+	toggleEditCurriculum(): void {
+		this.selectCurriculum.toggleModalVisibility(true);
+	}
+
+	onEditProfileFormConfirm(): void {
+		if (this.currentUser == null) return;
+		this.isEditProfileLoading = true;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/user/update/data`;
+		const payload = {
+			id: this.currentUser.id,
+			nick_name: this.editProfileForm.value.nickname,
+			first_name: this.editProfileForm.value.firstname,
+			last_name: this.editProfileForm.value.lastname,
+		};
+		this.http
+			.put(apiUrl, payload)
+			.pipe(finalize(() => (this.isEditProfileLoading = false)))
+			.subscribe({
+				next: () => {
+					if (this.currentUser === null) return;
+					this.currentUser.nickname = this.editProfileForm.value.nickname;
+					this.currentUser.firstname = this.editProfileForm.value.firstname;
+					this.currentUser.lastname = this.editProfileForm.value.lastname;
+					this.authService.setUser(this.currentUser);
+
+					this.alertService.showAlert('success', 'บันทึกข้อมูลเสร็จสิ้น');
+
+					this.toggleEditProfileForm(false);
+				},
+				error: () => {
+					console.error('Error update user profile');
+				},
+			});
+	}
+	toggleEditProfileForm(status: boolean): void {
+		this.isEditProfile = status;
+		if (!this.isEditProfile) {
+			this.editProfileForm.get('nickname')?.disable();
+			this.editProfileForm.get('firstname')?.disable();
+			this.editProfileForm.get('lastname')?.disable();
+		} else {
+			this.editProfileForm.get('nickname')?.enable();
+			this.editProfileForm.get('firstname')?.enable();
+			this.editProfileForm.get('lastname')?.enable();
+		}
+	}
+
+	@ViewChild('uploadProfileModal') uploadProfileModal!: SDMBaseModal;
+	onUploadProfile(): void {
+		this.uploadProfileModal.show();
 	}
 }

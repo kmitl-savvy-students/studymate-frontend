@@ -1,46 +1,37 @@
 import { CommonModule } from '@angular/common';
-import {
-	Component,
-	EventEmitter,
-	Input,
-	Output,
-	ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { semesterList, yearsList } from '../../pages/subjects/subject-page-data.js';
+import { User } from '../../shared/models/User.model.js';
+import { SDMButtonLink } from '../buttons/button-link.component';
 import { IconComponent } from '../icon/icon.component';
-import { SDMSelectComponent } from '../select/select.component';
-import {
-	semesterList,
-	yearsList,
-} from '../../pages/subject/subject-page-data.js';
-import { SelectedData } from '../../shared/models/SdmAppService.model.js';
 import { SDMRatingComponent } from '../rating/rating.component';
 import { SDMRichTextEditor } from '../rich-text-editor/rich-text-editor.component';
-import { SDMButtonLink } from '../buttons/button-link.component';
-import { User } from '../../shared/models/User.model.js';
 
 @Component({
 	selector: 'sdm-write-review-box',
 	standalone: true,
-	imports: [
-		CommonModule,
-		IconComponent,
-		SDMSelectComponent,
-		SDMRatingComponent,
-		SDMRichTextEditor,
-		SDMButtonLink,
-	],
+	imports: [CommonModule, IconComponent, SDMRatingComponent, SDMRichTextEditor, SDMButtonLink],
 	templateUrl: './write-review-box.component.html',
 	styleUrl: './write-review-box.component.css',
 })
 export class SDMWriteReviewBoxComponent {
 	@Input() isEdit: boolean = false;
 	@Input() signedIn: boolean = false;
+	@Input() hasCompletedSubject: boolean = false;
 	@Input() currentUser: User | null = null;
 	@Input() subjectId!: string;
 	@Input() editReviewContent: string = '';
+	@Input() completedSubjectDetails: { year: number | null; term: number | null } | null = null;
+	@Input() canReview: boolean = false;
+	@Input() noSubjectCompleted: boolean = false;
+	@Input() notHaveTranscript: boolean = false;
+	@Input() isTransferCredit: boolean = false;
+	@Input() isLoadingTranscript: boolean = false;
+
 	@Output() reviewSuccess = new EventEmitter<void>();
 	@Output() confirmEditReview = new EventEmitter<void>();
 	@Output() cancelEditReview = new EventEmitter<void>();
+
 	public selectedYear?: number = 0;
 	public selectedSemester?: number = 0;
 
@@ -54,41 +45,22 @@ export class SDMWriteReviewBoxComponent {
 
 	public reviewRating: number = 0;
 
-	public onMarkdownChange(content: string): void {
-		this.markdownContent = content; // รับค่าจาก Markdown Editor
-	}
-
-	public handleSelectChange(selectName: string, selectedData: SelectedData) {
-		switch (selectName) {
-			case 'selectedYear':
-				this.selectedYear = selectedData.value;
-				break;
-			case 'selectedSemester':
-				this.selectedSemester = selectedData.value;
-				break;
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['isLoadingTranscript']) {
+			this.isLoadingTranscript = changes['isLoadingTranscript'].currentValue;
 		}
 	}
 
-	public updatePermission() {}
+	public onMarkdownChange(content: string): void {
+		this.markdownContent = content;
+	}
 
 	public onRatingChange(rating: number) {
 		this.reviewRating = rating;
 	}
 
-	public checkSelectAllDropdown() {
-		if (this.selectedYear && this.selectedSemester) {
-			this.isSelectAllDropdown = true;
-		} else {
-			this.isSelectAllDropdown = false;
-		}
-
-		console.log('isSelectAllDropdown', this.isSelectAllDropdown);
-	}
-
 	public resetForm(): void {
 		this.reviewRating = 0;
-		this.selectedSemester = 0;
-		this.selectedYear = 0;
 		this.showForm = false;
 		setTimeout(() => {
 			this.showForm = true;

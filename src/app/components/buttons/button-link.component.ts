@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { SDMBaseButton } from './base-button.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoadingService } from '../../shared/services/loading/loading.service';
+import { SDMBaseButton } from './base-button.component';
 
 @Component({
 	selector: 'sdm-button-link',
@@ -19,8 +19,15 @@ import { LoadingService } from '../../shared/services/loading/loading.service';
 			[textColorHover]="textColorHover"
 			[backgroundColor]="backgroundColor"
 			[backgroundColorHover]="backgroundColorHover"
-			(clickEvent)="handleClick()"
-		>
+			[backgroundColorCustom]="backgroundColorCustom"
+			[borderStyle]="borderStyle"
+			[borderRadius]="borderRadius"
+			[textSize]="textSize"
+			[fontWeight]="fontWeight"
+			[width]="width"
+			[margin]="margin"
+			[padding]="padding"
+			(clickEvent)="handleClick()">
 		</sdm-base-button>
 	`,
 })
@@ -31,20 +38,24 @@ export class SDMButtonLink {
 	) {}
 
 	@Input() link: string = '/';
-
 	@Input() isUnderlined: boolean = false;
-
 	@Input() text: string = 'Empty text';
 	@Input() icon: string = '';
 	@Input() iconCustom: any | null = null;
 	@Input() iconEnd: string = '';
 	@Input() iconEndCustom: any | null = null;
-
-	@Input() textColor: string = '';
-	@Input() textColorHover: string = '';
-
+	@Input() textColor: string = 'text-dark-100';
+	@Input() textColorHover: string = 'hover:text-main-100';
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorHover: string = '';
+	@Input() backgroundColorCustom: string = '';
+	@Input() borderStyle: string = '';
+	@Input() borderRadius: string = 'rounded-xl';
+	@Input() textSize: string = 'text-base';
+	@Input() fontWeight: string = 'font-semibold';
+	@Input() width: string = 'w-full';
+	@Input() margin: string = '';
+	@Input() padding: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 

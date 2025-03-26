@@ -1,19 +1,10 @@
 <div>
 	<ng-container *ngIf="!signedIn; else alreadySignin">
 		<div class="flex flex-col gap-1">
-			<div class="text-base font-semibold">
-				เขียนรีวิวสำหรับรายวิชานี้
-			</div>
-			<div
-				class="flex w-full flex-col items-center justify-center gap-2 rounded-[15px] border border-main-25 py-4"
-			>
+			<div class="text-base font-semibold">เขียนรีวิวสำหรับรายวิชานี้</div>
+			<div class="flex w-full flex-col items-center justify-center gap-2 rounded-[15px] border border-main-25 px-10 py-20">
 				<div>ขออภัย กรุณาเข้าสู่ระบบเพื่อรีวิวรายวิชา</div>
-				<sdm-button-link
-					text="เข้าสู่ระบบทันที"
-					link="/sign-in"
-					backgroundColor="bg-main-100"
-					textColor="text-white"
-				></sdm-button-link>
+				<sdm-button-link text="เข้าสู่ระบบทันที" link="/sign-in" backgroundColor="bg-main-100" textColor="text-light"></sdm-button-link>
 			</div>
 		</div>
 	</ng-container>
@@ -21,63 +12,53 @@
 		<div class="grid w-full flex-none grid-cols-1 gap-2">
 			<ng-container *ngIf="!isEdit && showForm">
 				<div class="flex flex-row items-center gap-1">
-					<div class="text-base font-semibold">
-						เขียนรีวิวสำหรับรายวิชานี้
-					</div>
+					<div class="text-base font-semibold">เขียนรีวิวสำหรับรายวิชานี้</div>
 					<div class="h-50 w-50">
-						<sdm-icon
-							icon="pen-to-square"
-							class="h-full w-full text-dark-100"
-						></sdm-icon>
+						<sdm-icon icon="pen-to-square" class="h-full w-full text-dark-100"></sdm-icon>
 					</div>
 				</div>
-				<div class="flex flex-row items-center gap-1.5">
-					<div class="text-sm font-semibold">ให้คะแนนรายวิชานี้</div>
-					<sdm-rating
-						mode="selector"
-						customClass="text-yellow-300"
-						(value)="onRatingChange($event)"
-					>
-					</sdm-rating>
-				</div>
-				<div class="flex flex-wrap justify-start gap-x-3 gap-y-3">
-					<sdm-select
-						defaultLabel="ปีการศึกษา"
-						SelectName="selectedYear"
-						customDdlHeader="text-sm"
-						customDdlOptions="text-sm"
-						[listOptions]="yearsList"
-						(selectedValue)="
-							handleSelectChange('selectedYear', $event)
-						"
-						class="w-32"
-					></sdm-select>
-					<sdm-select
-						defaultLabel="ภาคการศึกษา"
-						SelectName="selectedSemester"
-						customDdlHeader="text-sm"
-						customDdlOptions="text-sm"
-						[listOptions]="semesterList"
-						(selectedValue)="
-							handleSelectChange('selectedSemester', $event)
-						"
-						class="w-36"
-					></sdm-select>
-				</div>
+				<ng-container *ngIf="canReview">
+					<div class="flex flex-row items-center gap-1.5">
+						<div class="text-base font-semibold">ให้คะแนนรายวิชานี้</div>
+						<sdm-rating mode="selector" customClass="text-yellow-300" (value)="onRatingChange($event)"> </sdm-rating>
+					</div>
+					<div class="flex flex-wrap justify-start gap-x-3 gap-y-3">
+						<div class="rounded-[10px] bg-main-15 px-4 py-1 font-medium text-dark-100">ปีการศึกษา {{ completedSubjectDetails?.year }}</div>
+						<div class="rounded-[10px] bg-main-15 px-4 py-1 font-medium text-dark-100">ภาคการศึกษาที่ {{ completedSubjectDetails?.term }}</div>
+					</div>
+				</ng-container>
 			</ng-container>
-			<sdm-rich-text-editor
-				[isEdit]="isEdit"
-				[rating]="reviewRating"
-				[selectedYear]="selectedYear"
-				[selectedSemester]="selectedSemester"
-				[signedIn]="signedIn"
-				[currentUser]="currentUser"
-				[subjectId]="subjectId"
-				[editReviewContent]="editReviewContent"
-				(resetComponent)="onReviewSuccess()"
-				(cancelEditReview)="onCancelEditReview()"
-				(confirmEditReview)="onConfirmEditReview()"
-			></sdm-rich-text-editor>
+			<ng-container *ngIf="canReview; else cantReview"
+				><sdm-rich-text-editor
+					[isEdit]="isEdit"
+					[rating]="reviewRating"
+					[selectedYear]="completedSubjectDetails?.year ?? undefined"
+					[selectedSemester]="completedSubjectDetails?.term ?? undefined"
+					[signedIn]="signedIn"
+					[currentUser]="currentUser"
+					[subjectId]="subjectId"
+					[editReviewContent]="editReviewContent"
+					(reviewSuccess)="onReviewSuccess()"
+					(resetComponent)="resetForm()"
+					(cancelEditReview)="onCancelEditReview()"
+					(confirmEditReview)="onConfirmEditReview()"></sdm-rich-text-editor></ng-container
+			><ng-template #cantReview>
+				<ng-container *ngIf="isLoadingTranscript; else showWarning">
+					<div class="flex animate-pulse flex-col gap-y-2">
+						<div class="h-6 w-40 rounded-md bg-primary-100"></div>
+						<div class="h-6 w-48 rounded-md bg-primary-100"></div>
+						<div class="h-52 w-full rounded-xl bg-primary-100"></div>
+					</div>
+				</ng-container>
+				<ng-template #showWarning>
+					<div class="mt-1.5 flex w-full flex-col flex-wrap items-center justify-center gap-2 rounded-[15px] bg-orange-50 px-10 py-20">
+						<sdm-icon *ngIf="!canReview" icon="triangle-exclamation" class="text-4xl text-gray-500"></sdm-icon>
+						<div *ngIf="noSubjectCompleted" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากคุณไม่เคยเรียนรายวิชานี้ หรือกำลังเรียนอยู่</div>
+						<div *ngIf="notHaveTranscript" class="text-center font-semibold text-gray-500">ขออภัย โปรดเข้าสู่หน้ารายวิชาของฉันเพื่อทำการอัพโหลดทรานสคริปต์ก่อนรีวิวในรายวิชาต่างๆ</div>
+						<div *ngIf="isTransferCredit" class="text-center font-semibold text-gray-500">ขออภัย คุณไม่สามารถรีวิวรายวิชานี้ได้ เนื่องจากรายวิชานี้เป็นรายวิชาเทียบโอนหน่วยกิต</div>
+					</div>
+				</ng-template>
+			</ng-template>
 		</div>
 	</ng-template>
 </div>
