@@ -9,13 +9,12 @@ import { APIManagementService } from '@services/api-management.service.js';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
 import { LoadingService } from '@services/loading/loading.service.js';
 import { finalize } from 'rxjs';
-import { SDMBaseButton } from '../buttons/base-button.component';
 import { SDMBaseModal } from '../modals/base-modal.component';
 import { SDMSubjectListCardComponent } from '../subject-list-card/subject-list-card.component';
 
 @Component({
 	selector: 'sdm-transcript-tracker',
-	imports: [CommonModule, SDMBaseAccordion, SDMSubjectListCardComponent, SDMBaseModal, SDMBaseButton, FormsModule],
+	imports: [CommonModule, SDMBaseAccordion, SDMSubjectListCardComponent, SDMBaseModal, FormsModule],
 	templateUrl: './transcript-tracker.component.html',
 	styleUrl: './transcript-tracker.component.css',
 })
@@ -69,7 +68,6 @@ export class SDMTranscriptTrackerComponent implements OnInit, AfterViewInit {
 			this.policyModal.hide();
 		} else {
 			const agreeDiv = document.querySelector('.argee') as HTMLElement;
-			// agreeDiv.classList.add('border', 'border-red-500', 'p-2', 'rounded-md');
 			agreeDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
 	}

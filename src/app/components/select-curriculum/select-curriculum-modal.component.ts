@@ -6,6 +6,7 @@ import { Curriculum } from '@models/Curriculum.model';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
 import { Program } from '@models/Program.model';
+import { SelectCurriculumModalService } from '@services/select-curriculum-modal.service';
 import { Modal, ModalInterface, ModalOptions } from 'flowbite';
 import { User } from '../../shared/models/User.model';
 import { AlertService } from '../../shared/services/alert/alert.service';
@@ -21,6 +22,7 @@ import { SDMBaseButton } from '../buttons/base-button.component';
 })
 export class SelectCurriculumModalComponent implements OnInit {
 	@Output() confirmEvent = new EventEmitter<void>();
+	isCancelable: boolean = false;
 	modal: ModalInterface | undefined;
 	currentUser: User | null = null;
 
@@ -30,6 +32,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 		private http: HttpClient,
 		private alertService: AlertService,
 		private backendService: BackendService,
+		private curriculumModalService: SelectCurriculumModalService,
 	) {
 		this.dropdownForm = this.fb.group({
 			faculty: [''],
@@ -97,11 +100,14 @@ export class SelectCurriculumModalComponent implements OnInit {
 			this.curriculums = [];
 			if (programId) this.fetchDropdownCurriculums(programId);
 		});
+		this.curriculumModalService.registerModal(this);
 	}
 
 	toggleModalVisibility(status: boolean) {
 		if (status) this.modal?.show();
-		else this.modal?.hide();
+		else {
+			this.modal?.hide();
+		}
 	}
 
 	handleModalVisibility() {
