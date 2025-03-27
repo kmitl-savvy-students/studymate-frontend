@@ -1,6 +1,6 @@
 services:
     frontend:
-        container_name: StudyMate-main-Nginx
+        container_name: studymate-nginx
         image: frontend-prod-img
         restart: always
         networks:

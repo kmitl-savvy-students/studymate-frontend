@@ -1,4 +1,4 @@
-<ng-container *ngIf="isLoadingData; else showData">
+<ng-container *ngIf="isLoadingData && isLoadingDescription; else showData">
 	<div class="animate-pulse space-y-24">
 		<div class="mb-4 h-96 w-full rounded-xl bg-primary-100"></div>
 		<div class="mb-4 h-64 w-full rounded-xl bg-primary-100"></div>
