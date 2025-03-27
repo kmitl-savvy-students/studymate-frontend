@@ -1,6 +1,6 @@
 services:
     frontend:
-        container_name: sdm-frontend-prod-ce-cloud-container
+        container_name: StudyMate-main-Nginx
         image: frontend-prod-img
         restart: always
         networks:
