@@ -43,24 +43,16 @@
 						</div>
 					</form>
 				</div>
-				<div class="basis flex gap-2">
-					<ng-container *ngIf="isCancelable">
-						<div class="w-1/2">
-							<sdm-base-button
-								text="เลือกหลักสูตรดังกล่าว"
-								textColor="text-light"
-								textColorHover="hover:text-light"
-								backgroundColor="bg-primary-300"
-								backgroundColorHover="hover:bg-primary-400"
-								(clickEvent)="selectCurriculum()" />
-						</div>
-						<div class="w-1/2">
-							<sdm-base-button text="ยกเลิก" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="toggleModalVisibility(false)" />
-						</div>
-					</ng-container>
-					<div *ngIf="!isCancelable">
+				<div class="basis flex gap-2" *ngIf="isCancelable">
+					<div class="w-1/2">
+						<sdm-base-button text="เลือกหลักสูตรดังกล่าว" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="selectCurriculum()" />
+					</div>
+					<div class="w-1/2">
 						<sdm-base-button text="ยกเลิก" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-danger-300" backgroundColorHover="hover:bg-danger-400" (clickEvent)="toggleModalVisibility(false)" />
 					</div>
+				</div>
+				<div *ngIf="!isCancelable">
+					<sdm-base-button text="เลือกหลักสูตรดังกล่าว" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="selectCurriculum()" />
 				</div>
 			</div>
 		</div>

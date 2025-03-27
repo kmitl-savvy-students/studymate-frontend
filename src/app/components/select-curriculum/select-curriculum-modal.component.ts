@@ -124,8 +124,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 
 		this.http.get<Faculty[]>(apiUrl).subscribe({
 			next: (data) => {
-				this.faculties = data;
-				data.filter((x) => x.is_visible);
+				this.faculties = data.filter((x) => x.is_visible);
 			},
 			error: (error) => {
 				console.error('Error fetching faculties:', error);
@@ -137,8 +136,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 
 		this.http.get<Department[]>(apiUrl).subscribe({
 			next: (data) => {
-				this.departments = data;
-				data.filter((x) => x.is_visible);
+				this.departments = data.filter((x) => x.is_visible);
 			},
 			error: (error) => {
 				console.error('Error fetching departments:', error);
@@ -150,8 +148,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 
 		this.http.get<Program[]>(apiUrl).subscribe({
 			next: (data) => {
-				this.programs = data;
-				data.filter((x) => x.is_visible);
+				this.programs = data.filter((x) => x.is_visible);
 			},
 			error: (error) => {
 				console.error('Error fetching programs:', error);
@@ -163,8 +160,7 @@ export class SelectCurriculumModalComponent implements OnInit {
 
 		this.http.get<Curriculum[]>(apiUrl).subscribe({
 			next: (data) => {
-				this.curriculums = data;
-				data.filter((x) => x.is_visible);
+				this.curriculums = data.filter((x) => x.is_visible);
 			},
 			error: (error) => {
 				console.error('Error fetching curriculums:', error);

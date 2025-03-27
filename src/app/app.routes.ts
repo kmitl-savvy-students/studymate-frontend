@@ -19,6 +19,7 @@ import { SDMPageSubjectDetail } from '@pages/subject-detail/subject-detail.page'
 import { SDMPageSubject } from '@pages/subjects/subject.page';
 import { SDMPageTermOfUse } from '@pages/term-of-use/term-of-use.page';
 import { AuthenticationGuard } from '@services/authentication/authentication.guard';
+import { AdminGuard } from '@services/guard/admin.guard';
 import { SubjectDetailValidationGuard } from '@services/guard/subject-detail.guard';
 import { SubjectValidationGuard } from '@services/guard/subject.guard';
 
@@ -37,11 +38,11 @@ export const routes: Routes = [
 	// #endregion
 
 	// #region Edit Curriculum Structure
-	{ path: 'admin/faculty', component: SDMPageFaculty },
-	{ path: 'admin/department/:facultyId', component: SDMPageDepartment },
-	{ path: 'admin/program/:departmentId', component: SDMPageProgram },
-	{ path: 'admin/curriculum/:programId', component: SDMPageCurriculum },
-	{ path: 'admin/curriculum-group/:curriculumId', component: SDMPageCurriculumGroup },
+	{ path: 'admin/faculty', component: SDMPageFaculty, canActivate: [AdminGuard] },
+	{ path: 'admin/department/:facultyId', component: SDMPageDepartment, canActivate: [AdminGuard] },
+	{ path: 'admin/program/:departmentId', component: SDMPageProgram, canActivate: [AdminGuard] },
+	{ path: 'admin/curriculum/:programId', component: SDMPageCurriculum, canActivate: [AdminGuard] },
+	{ path: 'admin/curriculum-group/:curriculumId', component: SDMPageCurriculumGroup, canActivate: [AdminGuard] },
 	// #endregion
 
 	// #region Authentication
