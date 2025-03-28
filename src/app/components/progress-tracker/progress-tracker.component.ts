@@ -302,26 +302,33 @@ export class SDMProgressTrackerComponent implements OnInit {
 			const remaining = [...this.notFittedSubjects];
 			this.notFittedSubjects = [];
 			for (const detail of remaining) {
-				// ถ้าเป็น F/U => ไม่ place
 				const g = detail.grade?.toUpperCase().trim() || '';
 				if (g === 'F' || g === 'U') {
 					this.notFittedSubjects.push(detail);
 					continue;
 				}
-				if (this.placeDetailInGroup(detail, this.currentUser.curriculum.curriculum_group)) {
+				if (this.placeDetailInGroup(detail, this.rootNode!)) {
 					attemptPlaced = true;
 				} else {
 					this.notFittedSubjects.push(detail);
 				}
 			}
 			if (attemptPlaced) {
-				if (this.rootNode) {
-					this.updateUsageFromChildren(this.rootNode);
-					this.computeCompleteness(this.rootNode);
-				}
-				this.calculateProgressPercentage();
+				// เรียกอัปเดต usage, completeness, groupCreditTotal, progress
+				this.updateRootUsageAndProgress();
 			}
 		}
+	}
+
+	private updateRootUsageAndProgress(): void {
+		if (!this.rootNode) return;
+		this.updateUsageFromChildren(this.rootNode);
+		this.computeCompleteness(this.rootNode);
+		const rootId = this.rootNode.id;
+		const reqRoot = this.groupCreditRequired.get(rootId) || 0;
+		const usedRoot = this.groupCreditUsed.get(rootId) || 0;
+		this.groupCreditTotal = Math.max(0, reqRoot - usedRoot);
+		this.calculateProgressPercentage();
 	}
 
 	/**
