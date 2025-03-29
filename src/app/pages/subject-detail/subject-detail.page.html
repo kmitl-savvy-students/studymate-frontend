@@ -9,7 +9,7 @@
 			<sdm-rating mode="display" [rating]="displayData.rating" customClass="text-base text-dark-100"> </sdm-rating>
 		</div>
 		<div>
-			<span>{{ displayData.rating }}</span>
+			<span>{{ displayData.rating | number: '1.0-1' }} ดาว</span>
 			<span> | </span>
 			<span>{{ displayData.review }}</span>
 			<span> รีวิว</span>

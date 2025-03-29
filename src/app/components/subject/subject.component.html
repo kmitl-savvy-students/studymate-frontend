@@ -148,7 +148,7 @@
 				<div class="font-normal">คะแนนรีวิว</div>
 				<div class="flex items-center gap-x-1">
 					<sdm-rating mode="display" [rating]="subjectCardData.rating" customClass="text-sm text-primary-300"></sdm-rating>
-					<span class="text-sm text-dark-100">{{ subjectCardData.rating }}</span>
+					<span class="text-sm text-dark-100">{{ subjectCardData.rating | number: '1.0-1' }} ดาว</span>
 					<span class="text-sm text-dark-100">({{ subjectCardData.review }} รีวิว)</span>
 				</div>
 			</div>
