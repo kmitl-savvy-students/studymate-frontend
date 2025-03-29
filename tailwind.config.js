@@ -9,7 +9,7 @@ export const theme = {
 			sans: ['IBM Plex Sans Thai', ..._fontFamily.sans],
 		},
 		screens: {
-			'3xl': '1600px',
+			xs: '550px',
 		},
 		colors: {
 			violet: _violet,

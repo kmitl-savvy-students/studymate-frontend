@@ -20,7 +20,6 @@ export class SDMfilterBarComponent implements OnInit {
 	@Input() isReviewPage: boolean = false;
 	@Input() selectedCurriculum: Curriculum | undefined;
 	@Input() isLoading: boolean = false;
-	@Input() isLgScreen: boolean = false;
 
 	@Input() initialSelectedDays: string[] = [];
 	@Input() initialSelectedRating: number | null = null;
