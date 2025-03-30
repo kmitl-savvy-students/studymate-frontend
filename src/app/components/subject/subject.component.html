@@ -78,23 +78,6 @@
 						</div>
 					</div>
 				</div>
-				<!-- จอ xs ขึ้นไป -->
-				<div class="xs:col-span-4 xs:flex col-span-8 hidden flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
-					<div class="font-normal">อาจารย์ผู้สอน</div>
-					<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
-						<div *ngFor="let data of subjectCardData.teacher_list_th.slice(0, 1)" class="detail-data min-w-max">
-							{{ data }}
-						</div>
-						<div class="tooltip" *ngIf="subjectCardData.teacher_list_th.length > 1">
-							<sdm-icon icon="ellipsis" class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100 hover:cursor-pointer hover:bg-orange-100"></sdm-icon>
-							<div class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-dark-100">
-								<div class="text-sm" *ngFor="let teacher of subjectCardData.teacher_list_th">
-									{{ teacher }}
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 
 				<!-- Classroom -->
 				<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 md:col-span-2 lg:col-span-4 lg:ms-0 xl:col-span-2 2xl:col-span-1 2xl:-ms-20">
