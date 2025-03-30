@@ -1,9 +1,31 @@
 <div class="grid grid-cols-4 gap-x-5">
-	<div class="col-span-3 flex flex-col">
+	<div class="col-span-4 flex flex-col lg:col-span-3">
 		<div class="mb-4">
 			<h3 class="font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ currentUser?.curriculum?.year }}</h3>
 			<h2 class="text-2xl font-semibold">{{ currentUser?.curriculum?.name_th }}</h2>
 			<h3 class="text-lg opacity-50">{{ currentUser?.curriculum?.name_en }}</h3>
+		</div>
+		<!-- for tablet and mobile -->
+		<div class="mb-4 flex flex-col gap-y-4 lg:hidden">
+			<div class="flex flex-col gap-y-2">
+				<sdm-base-button
+					icon="file-import"
+					text="อัปโหลด Transcript"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-main-100"
+					backgroundColorHover="hover:bg-primary-400"
+					(clickEvent)="onUploadTranscript()"></sdm-base-button>
+				<sdm-base-button
+					icon="trash-can"
+					text="ลบข้อมูล Transcript"
+					textColor="text-light"
+					textColorHover="hover:text-light"
+					backgroundColor="bg-red-400"
+					backgroundColorHover="hover:bg-danger-400"
+					(clickEvent)="onDeleteTranscript()"></sdm-base-button>
+			</div>
+			<sdm-credit-dashboard [totalCompleted]="calculateTotalCompleteCredit()" [totalCredit]="136" [totalRemaining]="136 - calculateTotalCompleteCredit()"></sdm-credit-dashboard>
 		</div>
 		<sdm-tabs #subjectTab [tabs]="tabs">
 			<ng-template #transcript>
@@ -18,7 +40,8 @@
 		</sdm-tabs>
 	</div>
 	<div class="col-span-1">
-		<div class="flex flex-col gap-y-4">
+		<!-- for desktop -->
+		<div class="hidden flex-col lg:flex lg:gap-y-4">
 			<div class="flex flex-col gap-y-2">
 				<sdm-base-button
 					icon="file-import"

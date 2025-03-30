@@ -118,22 +118,31 @@
 						<span class="pr-1">สถานะ : </span>
 						<ng-container *ngIf="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1); else notDone"> <div class="rounded-xl bg-emerald-200 px-2 py-0.5 font-semibold">ครบ</div></ng-container>
 						<ng-template #notDone>
-							<div class="rounded-xl bg-gray-100 px-2 py-0.5">คงเหลือ</div>
+							<div class="rounded-xl bg-gray-100 px-2 py-0.5">ไม่ครบ</div>
 						</ng-template>
 					</div>
 				</div>
 				<div class="col-span-4 grid w-full grid-cols-4 items-center justify-items-center rounded-xl border border-gray-200 p-3.5">
-					<div class="col-span-2 text-sm font-medium text-dark-100">
-						หน่วยกิตทั้งหมด :
-						<div class="inline-flex pl-1 text-sm font-semibold text-main-75">{{ this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
+					<div class="col-span-4 text-sm font-medium text-dark-100">
+						หน่วยกิตรวมตลอดหลักสูตร :
+						<div class="inline-flex pl-1 text-sm font-semibold text-blue-500">{{ this.groupCreditRequired.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-					<div class="col-span-2 text-sm font-medium text-dark-100">
-						หน่วยกิตที่ขาด :
-						<div class="inline-flex pl-1 text-sm font-semibold text-red-300">
-							{{ groupCreditTotal }}
-						</div>
-					</div>
+	<div class="my-4 grid grid-cols-10 gap-x-2">
+		<div class="col-span-10 grid w-full grid-cols-4 items-center justify-items-center rounded-xl border border-gray-200 p-3.5">
+			<div class="col-span-2 text-sm font-medium text-dark-100">
+				หน่วยกิตที่ลงเรียนไปแล้วตามหลักสูตร :
+				<div class="inline-flex pl-1 text-sm font-semibold text-main-75">{{ this.groupCreditUsed.get(this.currentUser?.curriculum?.curriculum_group?.id || -1) || 0 }}</div>
+			</div>
+
+			<div class="col-span-2 text-sm font-medium text-dark-100">
+				หน่วยกิตที่ยังขาด :
+				<div class="inline-flex pl-1 text-sm font-semibold text-red-300">
+					{{ groupCreditTotal }}
 				</div>
 			</div>
 		</div>
