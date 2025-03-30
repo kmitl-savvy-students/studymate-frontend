@@ -2,7 +2,7 @@
 	<sdm-search-bar *ngIf="isShowSearchBar" [data]="srcReviewData" (searchCleared)="onSearchCleared()" [filterFunction]="searchFunction" (searchedDataList)="getSearchedReviewsDataList($event)" id="search-bar"></sdm-search-bar>
 
 	<!-- Header Section -->
-	<div class="flex items-center gap-3" id="filter-bar">
+	<div class="flex flex-wrap items-center gap-3" id="filter-bar">
 		<div class="font-medium text-dark-100">เรียงโดย</div>
 		<button
 			(click)="onPopularFilterChange()"
