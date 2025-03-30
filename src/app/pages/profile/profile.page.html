@@ -1,6 +1,6 @@
 <div class="grid grid-cols-4 gap-x-5">
-	<div class="">
-		<div class="border-1 col-span-2 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
+	<div class="max-[1180px]:col-span-4">
+		<div class="border-1 mb-4 flex flex-col items-center gap-y-5 rounded-[20px] border border-main-25 p-12">
 			<div class="relative">
 				<div *ngIf="currentUser?.profile_picture" class="h-32 w-32">
 					<sdm-icon [src]="currentUser?.profile_picture || null" class="h-full w-full"></sdm-icon>
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-span-3 flex w-full flex-col gap-y-4">
+	<div class="col-span-3 flex w-full flex-col gap-y-4 max-[1180px]:col-span-4">
 		<div class="w-full rounded-[20px] border border-main-25 p-12">
 			<div class="text-xl font-semibold"><sdm-icon class="me-3" icon="user"></sdm-icon>ข้อมูลผู้ใช้</div>
 			<form class="my-5 flex flex-col gap-y-4" [formGroup]="editProfileForm">
