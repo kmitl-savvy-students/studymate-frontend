@@ -66,15 +66,19 @@ export class SDMfilterBarComponent implements OnInit {
 		if (changes['initialSelectedRating']) {
 			this.selectedRatingInput = this.initialSelectedRating;
 		}
+		if (changes['initialSelectedCurriculumIdList']) {
+			this.findChildNodeCheckbox(this.rootNode!, false);
+			this.selectedIds = [...changes['initialSelectedCurriculumIdList'].currentValue];
+			// อัปเดตสถานะ checkbox ให้ตรงกับค่าที่เลือก
+			this.selectedIds.forEach((id) => {
+				this.curriculumGroupIsChecked[id] = true;
+			});
+		}
 	}
 
 	toggleCheckbox(curriculumId: number, curriculumGroup: CurriculumGroup) {
-		console.log('id :', curriculumId);
-
 		// ถ้า node นี้ถูกเลือกอยู่แล้ว ให้ยกเลิกการเลือกทั้ง node และลูกๆ
 		if (this.isChecked(curriculumId)) {
-			console.log('Unchecking node:', curriculumId);
-
 			// ลบ curriculumId ออกจาก selectedIds
 			this.selectedIds = this.selectedIds.filter((id) => id !== curriculumId);
 
@@ -87,18 +91,16 @@ export class SDMfilterBarComponent implements OnInit {
 
 			// Emit ค่าใหม่
 			this.selectedCurriculumId.emit(this.selectedIds);
-			console.log('SelectedIds:', this.selectedIds);
 			return;
 		}
 
-		console.log('curGroup:', curriculumGroup);
 		// ถ้ายังไม่เลือก ให้เพิ่ม curriculumId และลูกๆ ของมัน
 		this.getChildIdWithSubject(curriculumGroup);
 
 		// เพิ่ม curriculumId ที่เลือก
 		this.selectedIds = [...this.selectedIds];
 
-		// ✅ เช็คว่า Parent ต้องถูกเลือกด้วยไหม
+		// เช็คว่า Parent ต้องถูกเลือกด้วยไหม
 		this.checkParentIfChildrenSelected(curriculumGroup);
 
 		// Emit ค่าใหม่
@@ -106,73 +108,49 @@ export class SDMfilterBarComponent implements OnInit {
 
 		// อัปเดตสถานะ checkbox ให้ตรงกับค่าที่เลือก
 		this.findChildNodeCheckbox(curriculumGroup, true);
-
-		console.log('SelectedIds:', this.selectedIds);
 	}
 
 	// ฟังก์ชันตรวจสอบว่า parentGroup ยังมีลูกที่ถูกเลือกอยู่หรือไม่
 	private uncheckParentIfNoChildrenSelected(curriculumGroup: CurriculumGroup) {
-		console.log('call uncheckParentIfNoChildrenSelected for node:', curriculumGroup);
-
 		// ตรวจสอบค่า parent_id
-		if (!curriculumGroup || curriculumGroup.parent_id == null) {
-			console.log('❌ curriculumGroup or parent_id is null:', curriculumGroup);
-			return;
-		}
+		if (!curriculumGroup || curriculumGroup.parent_id == null) return;
 
 		// หา parent node
 		const parentNode = this.findNodeById(curriculumGroup.parent_id, this.rootNode!);
-		console.log('🔍 Found parentNode:', parentNode);
 
-		if (!parentNode) {
-			console.log('❌ Parent node not found!');
-			return;
-		}
+		if (!parentNode) return;
 
 		// ตรวจสอบว่ามีลูกที่ถูกเลือกอยู่หรือไม่
 		const hasCheckedChild = parentNode.children.some((child) => this.isChecked(child.id));
-		console.log(`🔍 Parent (${parentNode.id}) hasCheckedChild:`, hasCheckedChild);
 
 		if (!hasCheckedChild) {
-			console.log(`🔄 Unchecking parent node: ${parentNode.id}`);
 			this.curriculumGroupIsChecked[parentNode.id] = false;
 			this.selectedIds = this.selectedIds.filter((id) => id !== parentNode.id);
 
-			// ✅ ไล่เช็ค parent ที่สูงขึ้นไปด้วย
+			// ไล่เช็ค parent ที่สูงขึ้นไปด้วย
 			this.uncheckParentIfNoChildrenSelected(parentNode);
 		}
 	}
 
 	// ฟังก์ชันทำให้ Parent ถูกเลือกถ้ามีลูกถูกเลือก
 	private checkParentIfChildrenSelected(curriculumGroup: CurriculumGroup) {
-		console.log('call checkParentIfChildrenSelected for node:', curriculumGroup);
-
-		if (!curriculumGroup || curriculumGroup.parent_id == null) {
-			console.log('❌ curriculumGroup or parent_id is null:', curriculumGroup);
-			return;
-		}
+		if (!curriculumGroup || curriculumGroup.parent_id == null) return;
 
 		// หา parent node
 		const parentNode = this.findNodeById(curriculumGroup.parent_id, this.rootNode!);
-		console.log('🔍 Found parentNode:', parentNode);
 
-		if (!parentNode) {
-			console.log('❌ Parent node not found!');
-			return;
-		}
+		if (!parentNode) return;
 
 		// ถ้ามีลูกที่ถูกเลือกอยู่ Parent ต้องถูกเลือกด้วย
 		const hasCheckedChild = parentNode.children.some((child) => this.isChecked(child.id));
-		console.log(`🔍 Parent (${parentNode.id}) hasCheckedChild:`, hasCheckedChild);
 
 		if (hasCheckedChild) {
-			console.log(`✅ Checking parent node: ${parentNode.id}`);
 			this.curriculumGroupIsChecked[parentNode.id] = true;
 			if (!this.selectedIds.includes(parentNode.id)) {
 				this.selectedIds.push(parentNode.id);
 			}
 
-			// ✅ ไล่เช็ค parent ที่สูงขึ้นไปด้วย
+			// ไล่เช็ค parent ที่สูงขึ้นไปด้วย
 			this.checkParentIfChildrenSelected(parentNode);
 		}
 	}
@@ -203,7 +181,7 @@ export class SDMfilterBarComponent implements OnInit {
 		// อัปเดตสถานะ checkbox ของ curriculumGroup นี้
 		this.curriculumGroupIsChecked[curriculumGroup.id] = status;
 
-		// ✅ เรียกใช้เช็ค parent ทุกครั้งที่เลือก node
+		// เรียกใช้เช็ค parent ทุกครั้งที่เลือก node
 		if (status) {
 			this.checkParentIfChildrenSelected(curriculumGroup);
 		}

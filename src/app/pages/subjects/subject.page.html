@@ -1,9 +1,10 @@
 <div class="flex w-full gap-x-5">
 	<sdm-filter-bar
-		[selectedCurriculum]="selectedCurriculumData"
 		[isLoading]="isLoading"
+		[selectedCurriculum]="selectedCurriculumData"
 		[initialSelectedDays]="selectedDays"
 		[initialSelectedRating]="selectedRatingFilter"
+		[initialSelectedCurriculumIdList]="selectedCurriculumIdList"
 		(selectedDays)="onSelectedDaysChange($event)"
 		(selectedRating)="onReviewFilterValueChange($event)"
 		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
@@ -179,10 +180,11 @@
 		</button>
 	</div>
 	<sdm-filter-bar
-		[selectedCurriculum]="selectedCurriculumData"
 		[isLoading]="isLoading"
+		[selectedCurriculum]="selectedCurriculumData"
 		[initialSelectedDays]="selectedDays"
 		[initialSelectedRating]="selectedRatingFilter"
+		[initialSelectedCurriculumIdList]="selectedCurriculumIdList"
 		(selectedDays)="onSelectedDaysChange($event)"
 		(selectedRating)="onReviewFilterValueChange($event)"
 		(selectedCurriculumId)="onSelectedCurriculumIdChange($event)"
