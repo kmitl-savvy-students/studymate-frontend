@@ -12,6 +12,7 @@ import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject';
 import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
+import { Validators } from 'ngx-editor';
 import { finalize } from 'rxjs';
 import { IconComponent } from '../../../components/icon/icon.component';
 
@@ -56,10 +57,10 @@ export class SDMPageCurriculumGroup implements OnInit {
 		private alertService: AlertService,
 	) {
 		this.addNodeForm = this.fb.group({
-			name: [''],
+			name: ['', Validators.required],
 			type: ['REQUIRED_ALL'],
-			credit: 0,
-			branch: 1,
+			credit: [0],
+			branch: [1],
 			color: ['#FFFFFF'],
 		});
 		this.editNodeForm = this.fb.group({
@@ -236,6 +237,11 @@ export class SDMPageCurriculumGroup implements OnInit {
 		this.addNodeModal.show();
 	}
 	onConfirmAddNode(): void {
+		if (this.addNodeForm.invalid) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อกลุ่มด้วย');
+			return;
+		}
+		// Continue with the creation logic...
 		if (!this.currentParentNode) return;
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group/create`;
 		const payload: CurriculumGroup = {
@@ -264,6 +270,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 				});
 		});
 	}
+
 	// #endregion
 	// #region Edit Node
 	onEditNode(node: CurriculumGroup): void {
@@ -355,11 +362,11 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #region Edit Subjects
 	onCopyAllSubject(): void {
 		if (!this.currentParentNode) return;
-
-		let subjectsString = this.currentParentNode.subjects.flatMap((subject) => subject.subject?.id).join(',');
+		let subjectsString = this.curriculumGroupSubjects.flatMap((subject) => subject.subject?.id).join(',');
 		this.clipboard.copy(subjectsString);
 		this.alertService.showAlert('success', 'คัดลอกรายวิชาสำเร็จ!');
 	}
+
 	onDeleteAllSubject(): void {
 		if (!this.currentParentNode) return;
 
