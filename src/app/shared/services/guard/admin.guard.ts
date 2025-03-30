@@ -11,8 +11,9 @@ export class AdminGuard implements CanActivate {
 		private router: Router,
 	) {}
 
-	canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-		if (this.authService?.currentUser?.is_admin) {
+	async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+		const isValid = await this.authService.validate();
+		if (isValid && this.authService.currentUser?.is_admin) {
 			return true;
 		} else {
 			this.router.navigate(['/home']);

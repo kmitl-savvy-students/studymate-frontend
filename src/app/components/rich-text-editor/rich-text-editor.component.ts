@@ -70,7 +70,7 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges, AfterVie
 		console.log(this.selectedSemester);
 		if (!this.rating) {
 			this.alertService.showAlert('error', 'โปรดให้คะแนนรายวิชา');
-		} else if (this.review_content === '') {
+		} else if (typeof this.review_content !== 'string' || this.review_content.trim().length === 0) {
 			this.alertService.showAlert('error', 'โปรดเขียนรีวิว');
 		} else {
 			if (this.currentUser) {
@@ -82,6 +82,9 @@ export class SDMRichTextEditor implements OnInit, OnDestroy, OnChanges, AfterVie
 					},
 					error: (err) => {
 						switch (err.status) {
+							case 400:
+								this.alertService.showAlert('error', 'ไม่สามารถรีวิวโดยที่ยังไม่เขียนเนื้อหารีวิวได้');
+								break;
 							case 409:
 								this.alertService.showAlert('error', 'คุณเคยรีวิวรายวิชานี้ไปแล้ว');
 								break;
