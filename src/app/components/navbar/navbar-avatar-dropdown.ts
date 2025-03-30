@@ -11,7 +11,7 @@ import { SDMButtonLink } from '../buttons/button-link.component';
 	standalone: true,
 	imports: [SDMBaseButton, SDMButtonLink, SDMAvatarIcon, CommonModule],
 	template: `
-		<sdm-base-button buttonId="avatarDropdownBtn" [text]="'สวัสดีครับ คุณ ' + currentUser?.nickname" textColorHover="hover:text-primary-300" [iconCustom]="customIconTemplate" iconEnd="angle-down" dropdownToggle="avatarDropdown" />
+		<sdm-base-button buttonId="avatarDropdownBtn" [text]="'คุณ ' + currentUser?.firstname" textColorHover="hover:text-primary-300" [iconCustom]="customIconTemplate" iconEnd="angle-down" dropdownToggle="avatarDropdown" />
 		<div id="avatarDropdown" class="z-10 flex flex-col gap-1 rounded-xl border border-primary-200 bg-light p-2">
 			<sdm-button-link link="/my-subject" text="รายวิชาของฉัน" textColorHover="hover:text-light" backgroundColor="bg-light" backgroundColorHover="hover:bg-primary-300" (clickEvent)="closeDropdown()" />
 			<sdm-button-link link="/profile" text="โปรไฟล์" textColorHover="hover:text-light" backgroundColor="bg-light" backgroundColorHover="hover:bg-primary-300" (clickEvent)="closeDropdown()" />

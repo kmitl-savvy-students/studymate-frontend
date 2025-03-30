@@ -102,7 +102,8 @@
 			</div>
 		</div>
 	</sdm-base-accordion>
-	<div class="my-4 grid grid-cols-10 gap-x-2">
+
+	<div class="my-4 hidden grid-cols-10 gap-x-2 sm:grid">
 		<div class="col-span-4">
 			<label class="inline-flex w-full cursor-pointer items-center justify-center overflow-x-auto rounded-xl border border-gray-200 p-3">
 				<input type="checkbox" class="peer sr-only" (change)="toggleIncludeXGrade()" [checked]="includeXGrade" />
@@ -132,7 +133,7 @@
 		</div>
 	</div>
 
-	<div class="my-4 grid grid-cols-10 gap-x-2">
+	<div class="my-4 hidden grid-cols-10 gap-x-2 sm:grid">
 		<div class="col-span-10 grid w-full grid-cols-4 items-center justify-items-center rounded-xl border border-gray-200 p-3.5">
 			<div class="col-span-2 text-sm font-medium text-dark-100">
 				หน่วยกิตที่ลงเรียนไปแล้วตามหลักสูตร :
@@ -148,7 +149,7 @@
 		</div>
 	</div>
 
-	<div class="my-4 w-full items-center overflow-x-auto rounded-xl border border-gray-200 p-4">
+	<div class="my-4 hidden w-full items-center overflow-x-auto rounded-xl border border-gray-200 p-4 sm:block">
 		<div class="flex w-full flex-row items-center">
 			<div class="h-5 w-full rounded-lg bg-gray-200">
 				<div
@@ -161,7 +162,7 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col gap-y-6">
+	<div class="hidden flex-col gap-y-6 sm:flex">
 		<div *ngIf="currentUser?.curriculum?.curriculum_group" class="max-w-full overflow-x-auto rounded-xl border border-gray-200 p-6">
 			<div data-accordion="collapse">
 				<div class="mb-2 flex flex-wrap items-center gap-3">
@@ -292,18 +293,20 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="mt-4 flex w-full items-center justify-center rounded-[20px] bg-orange-50 px-10 py-24 text-center text-base font-normal sm:hidden">เพื่อประสบการณ์การใช้งานที่ดีที่สุด โปรดใช้งานฟีเจอร​์นี้บนเดสก์ท็อปหรือแท็บเล็ต</div>
 </ng-template>
 <sdm-base-modal #showSubjectGroupModal modalId="showSubjectGroup" header="รายวิชาในหมวดหมู่" [normalModal]="true" (confirmEvent)="closeShowSubjectGroupModal()">
 	<div class="sticky top-0 z-10 flex w-full flex-col items-center justify-center bg-white pb-2">
-		<div class="font-semibold">
+		<div class="text-center font-semibold">
 			มีรายวิชาในหมวดนี้ทั้งหมด <span>{{ currentSubjects.length }}</span> รายวิชา ลงไปแล้ว <span>{{ transcriptSubjectIds.length }}</span> รายวิชา
 		</div>
 
-		<div class="text-sm opacity-75">
+		<div class="text-center text-sm opacity-75">
 			ประเภท: <span class="text-red-400">{{ nodeType }}</span>
 		</div>
 
-		<div class="text-sm opacity-50">หมายเหตุ: รายวิชาที่เช็คถูกคือรายวิชาที่คุณได้ลงเรียนแล้ว</div>
+		<div class="text-center text-sm opacity-50">หมายเหตุ: รายวิชาที่เช็คถูกคือรายวิชาที่คุณได้ลงเรียนแล้ว</div>
 	</div>
 	<div class="mb-3 max-h-[500px] overflow-y-scroll">
 		<div class="flex flex-col gap-3 px-4">

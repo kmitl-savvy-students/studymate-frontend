@@ -29,6 +29,7 @@ export class SDMTranscriptTrackerComponent implements OnInit, AfterViewInit {
 	currentUser: User | null = null;
 	transcript: Transcript | null = null;
 	isChecked: boolean = false;
+	public isSmallScreen: boolean = false;
 
 	isFetchingTranscriptDetails: boolean = false;
 	groupedTranscriptDetails: { year: number; term: number; details: Array<TranscriptDetail> }[] = [];
@@ -42,11 +43,16 @@ export class SDMTranscriptTrackerComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
+		this.checkScreenSize();
 		this.authService.user$.subscribe((user) => {
 			this.currentUser = user;
 			this.fetchTranscripts();
 			this.isChecked = !!this.currentUser?.view_policy;
 		});
+	}
+
+	private checkScreenSize(): void {
+		this.isSmallScreen = window.innerWidth < 430; // ตัวอย่าง: ถ้าหน้าจอกว้างน้อยกว่า 768px ถือว่าเป็นหน้าจอเล็ก
 	}
 
 	ngAfterViewInit() {
