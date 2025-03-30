@@ -189,14 +189,21 @@
 									[Checked]="groupComplete.get(currentUser?.curriculum?.curriculum_group?.id || -1)"
 									[earnCredit]="groupCreditUsed.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0"
 									[totalCredit]="groupCreditRequired.get(currentUser?.curriculum?.curriculum_group?.id || -1) || 0"></sdm-total-credit-earn>
-								<div
+								<!-- <div
 									class="transition-transform duration-200"
 									[ngClass]="{
 										'rotate-90': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
 										'text-black': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
 									}">
 									▶
-								</div>
+								</div> -->
+								<sdm-icon
+									[icon]="isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1) ? 'down-left-and-up-right-to-center' : 'up-right-and-down-left-from-center'"
+									class="text-base font-bold transition-transform duration-200"
+									[ngClass]="{
+										'text-black': isAccordionOpen(currentUser?.curriculum?.curriculum_group?.id ?? -1),
+									}">
+								</sdm-icon>
 							</div>
 						</div>
 					</button>
@@ -238,14 +245,20 @@
 										[Checked]="groupComplete.get(child.id)"
 										[earnCredit]="groupCreditUsed.get(child.id) || 0"
 										[totalCredit]="groupCreditRequired.get(child.id) || 0"></sdm-total-credit-earn>
-									<div
-										class="text-gray-500 transition-transform duration-200"
+									<!-- <sdm-icon
+										[icon]="isAccordionOpen(child.id) ? 'window-minimize' : 'maximize'"
+										class="text-base font-bold transition-transform duration-200"
 										[ngClass]="{
-											'rotate-90': isAccordionOpen(child.id),
 											'text-black': isAccordionOpen(child.id),
 										}">
-										▶
-									</div>
+									</sdm-icon> -->
+									<sdm-icon
+										icon="sort-down"
+										class="text-xl font-bold transition-transform duration-200"
+										[ngClass]="{
+											'-rotate-90': isAccordionOpen(child.id),
+											'text-black': isAccordionOpen(child.id),
+										}"></sdm-icon>
 								</div>
 							</div>
 						</button>

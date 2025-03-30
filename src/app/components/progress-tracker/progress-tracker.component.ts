@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IconComponent } from '@components/icon/icon.component.js';
 import { SDMBaseModal } from '@components/modals/base-modal.component.js';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject.js';
@@ -20,7 +21,7 @@ import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-e
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal, SDMBaseAccordion],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal, SDMBaseAccordion, IconComponent],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
