@@ -36,4 +36,8 @@
 	.detail-data {
 		@apply rounded-[15px] bg-orange-50 px-3 py-1.5 text-sm;
 	}
+
+	.rule-remark-width {
+		width: auto !important;
+	}
 }

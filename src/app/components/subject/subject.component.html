@@ -1,5 +1,5 @@
 <div *ngIf="subjectCardData" class="border-1 rounded-[20px] border border-main-25 bg-white p-6 text-dark-100">
-	<div class="flex flex-col gap-y-6">
+	<div class="flex flex-col gap-y-4">
 		<div class="flex flex-col gap-y-2 border-b border-main-25 pb-5">
 			<div class="flex flex-row flex-wrap items-center gap-x-3 gap-y-2">
 				<a class="text-lg font-semibold hover:cursor-pointer hover:text-main-100" [href]="getSubjectDetailUrl()">
@@ -7,15 +7,21 @@
 					{{ subjectCardData.subject.name_en }} [{{ subjectCardData.subject.credit }}
 					หน่วยกิต]
 				</a>
-				<div class="border-1 rounded-[15px] border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100" *ngIf="subjectCardData?.session_type === 'ทฤษฎี'">
+				<div class="border-1 rounded-[15px] border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 max-[1180px]:hidden" *ngIf="subjectCardData?.session_type === 'ทฤษฎี'">
 					{{ subjectCardData.session_type }}
 				</div>
-				<div class="border-1 rounded-[15px] border border-green-300 bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-200" *ngIf="subjectCardData?.session_type === 'ปฏิบัติ'">
+				<div class="border-1 rounded-[15px] border border-green-300 bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-200 max-[1180px]:hidden" *ngIf="subjectCardData?.session_type === 'ปฏิบัติ'">
 					{{ subjectCardData.session_type }}
 				</div>
 			</div>
-			<div class="flex flex-col">
+			<div class="flex">
 				<div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+					<div class="border-1 rounded-[15px] border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 min-[1180px]:hidden" *ngIf="subjectCardData?.session_type === 'ทฤษฎี'">
+						{{ subjectCardData.session_type }}
+					</div>
+					<div class="border-1 rounded-[15px] border border-green-300 bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-800 hover:bg-green-200 min-[1180px]:hidden" *ngIf="subjectCardData?.session_type === 'ปฏิบัติ'">
+						{{ subjectCardData.session_type }}
+					</div>
 					<div *ngIf="subjectCardData?.class_level === '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ทุกชั้นปี</div>
 					<div *ngIf="subjectCardData?.class_level != '0'" class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">ปี {{ subjectCardData.class_level }}</div>
 					<div class="border-1 rounded-[15px] border border-main-50 px-3 py-1.5 text-xs">Sec {{ subjectCardData.section }}</div>
@@ -34,8 +40,127 @@
 			</div>
 		</div>
 
+		<sdm-base-accordion class="xs:hidden block" header="ข้อมูลรายวิชาเพิ่มเติม" accordionId="each-subject-component" [accordionDefaultStatus]="false" borderStyle="!border-0">
+			<!-- Course Details Section -->
+			<div class="grid grid-cols-8 gap-y-5">
+				<!-- Class Schedule -->
+				<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
+					<div class="font-normal">วัน-เวลาเรียน</div>
+					<div *ngIf="subjectCardData.class_datetime.length > 1; else noSchedule">
+						<div class="flex flex-wrap gap-x-2 gap-y-2">
+							<div class="detail-data w-[77px] text-center">
+								{{ subjectCardData.class_datetime[0] }}
+							</div>
+							<div class="detail-data">
+								{{ subjectCardData.class_datetime[1] }}
+							</div>
+
+							<div *ngIf="checkString(subjectCardData.class_datetime[2]) !== ''" class="detail-data">+ {{ subjectCardData.class_datetime[2] }}</div>
+						</div>
+					</div>
+					<!-- No Schedule Template -->
+					<ng-template #noSchedule>
+						<div class="flex">
+							<div class="date-box-disabled">
+								{{ subjectCardData.class_datetime }}
+							</div>
+						</div>
+					</ng-template>
+				</div>
+
+				<!-- Teachers -->
+				<!-- จอ xs ลงมา -->
+				<div class="xs:col-span-4 xs:hidden col-span-8 flex flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
+					<div class="font-normal">อาจารย์ผู้สอน</div>
+					<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
+						<div *ngFor="let data of subjectCardData.teacher_list_th" class="detail-data min-w-max">
+							{{ data }}
+						</div>
+					</div>
+				</div>
+				<!-- จอ xs ขึ้นไป -->
+				<div class="xs:col-span-4 xs:flex col-span-8 hidden flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
+					<div class="font-normal">อาจารย์ผู้สอน</div>
+					<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
+						<div *ngFor="let data of subjectCardData.teacher_list_th.slice(0, 1)" class="detail-data min-w-max">
+							{{ data }}
+						</div>
+						<div class="tooltip" *ngIf="subjectCardData.teacher_list_th.length > 1">
+							<sdm-icon icon="ellipsis" class="rounded-[15px] bg-orange-50 px-3 py-1 text-dark-100 hover:cursor-pointer hover:bg-orange-100"></sdm-icon>
+							<div class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-dark-100">
+								<div class="text-sm" *ngFor="let teacher of subjectCardData.teacher_list_th">
+									{{ teacher }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Classroom -->
+				<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 md:col-span-2 lg:col-span-4 lg:ms-0 xl:col-span-2 2xl:col-span-1 2xl:-ms-20">
+					<div class="font-normal">ห้องเรียน</div>
+					<div class="flex">
+						<div
+							[ngClass]="{
+								'detail-data': subjectCardData.room_number !== null,
+								'date-box-disabled': subjectCardData.room_number === null,
+							}">
+							{{ subjectCardData.room_number !== null ? subjectCardData.room_number : 'ไม่ระบุ' }}
+						</div>
+					</div>
+				</div>
+
+				<!-- Building Details -->
+				<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 md:col-span-3 lg:col-span-4 lg:ms-0 xl:col-span-3 2xl:col-span-1 2xl:-ms-20">
+					<div class="font-normal">ตึกเรียน</div>
+					<div class="flex flex-row" *ngIf="subjectCardData.building_name != null">
+						<div class="detail-data text-center text-sm">
+							{{ subjectCardData.building_name }}
+						</div>
+					</div>
+					<div class="flex flex-row" *ngIf="subjectCardData.building_name === null">
+						<div class="date-box-disabled">ไม่ระบุ</div>
+					</div>
+				</div>
+
+				<!-- Conditions -->
+				<!-- จอ xs ลงมา -->
+				<div class="xs:col-span-2 col-span-8 flex flex-col gap-y-2 md:col-span-1 lg:col-span-2 xl:col-span-1">
+					<div class="font-normal">เงื่อนไข</div>
+					<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
+						<div *ngIf="subjectCardData.rule !== ''; else noRule" [innerHTML]="subjectCardData.rule" class="detail-data rule-remark-width"></div>
+						<ng-template #noRule>
+							<div class="py-0.3 rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400">-</div>
+						</ng-template>
+					</div>
+				</div>
+
+				<!-- Remarks -->
+				<!-- จอ xs ลงมา -->
+				<div class="xs:col-span-2 col-span-8 flex flex-col gap-y-2 md:col-span-2">
+					<div class="font-normal">หมายเหตุ</div>
+					<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
+						<div *ngIf="subjectCardData.remark !== ''; else noRule" [innerHTML]="subjectCardData.remark" class="detail-data rule-remark-width text-[#ff0000]"></div>
+						<ng-template #noRemark>
+							<div class="py-0.3 rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400">-</div>
+						</ng-template>
+					</div>
+				</div>
+
+				<!-- Review Score -->
+				<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 md:col-span-2 lg:col-span-4 xl:col-span-2">
+					<div class="font-normal">คะแนนรีวิว</div>
+					<div class="flex items-center gap-x-1">
+						<sdm-rating mode="display" [rating]="subjectCardData.rating" customClass="text-sm text-primary-300"></sdm-rating>
+						<span class="text-sm text-dark-100">{{ subjectCardData.rating }}</span>
+						<span class="text-sm text-dark-100">({{ subjectCardData.review }} รีวิว)</span>
+					</div>
+				</div>
+			</div>
+		</sdm-base-accordion>
+
 		<!-- Course Details Section -->
-		<div class="grid grid-cols-8 gap-y-5">
+		<div class="xs:grid hidden grid-cols-8 gap-y-5">
 			<!-- Class Schedule -->
 			<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
 				<div class="font-normal">วัน-เวลาเรียน</div>
@@ -62,7 +187,17 @@
 			</div>
 
 			<!-- Teachers -->
-			<div class="xs:col-span-4 col-span-8 flex flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
+			<!-- จอ xs ลงมา -->
+			<div class="xs:col-span-4 xs:hidden col-span-8 flex flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
+				<div class="font-normal">อาจารย์ผู้สอน</div>
+				<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
+					<div *ngFor="let data of subjectCardData.teacher_list_th" class="detail-data min-w-max">
+						{{ data }}
+					</div>
+				</div>
+			</div>
+			<!-- จอ xs ขึ้นไป -->
+			<div class="xs:col-span-4 xs:flex col-span-8 hidden flex-col gap-y-2 pe-4 md:col-span-3 lg:col-span-4 xl:col-span-3">
 				<div class="font-normal">อาจารย์ผู้สอน</div>
 				<div class="flex flex-row flex-wrap items-center gap-x-2 gap-y-2">
 					<div *ngFor="let data of subjectCardData.teacher_list_th.slice(0, 1)" class="detail-data min-w-max">
@@ -107,11 +242,12 @@
 			</div>
 
 			<!-- Conditions -->
-			<div class="xs:col-span-2 col-span-4 flex flex-col gap-y-2 md:col-span-1 lg:col-span-2 xl:col-span-1">
+			<!-- จอ xs ขึ้นไป -->
+			<div class="xs:col-span-2 col-span-8 flex flex-col gap-y-2 md:col-span-1 lg:col-span-2 xl:col-span-1">
 				<div class="font-normal">เงื่อนไข</div>
 				<div class="tooltip relative" *ngIf="subjectCardData.rule !== ''">
 					<sdm-icon icon="circle-exclamation" class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"> </sdm-icon>
-					<div [innerHTML]="subjectCardData.rule" class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] min-w-max flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"></div>
+					<div [innerHTML]="subjectCardData.rule" class="tooltiptext tooltip-shadow absolute mt-3 flex max-h-[450px] w-[300px] flex-col gap-y-2 overflow-y-auto rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"></div>
 				</div>
 				<div class="flex" *ngIf="subjectCardData.rule === ''">
 					<div class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200" *ngIf="subjectCardData.rule === ''">
@@ -122,11 +258,12 @@
 			</div>
 
 			<!-- Remarks -->
-			<div class="xs:col-span-2 col-span-4 flex flex-col gap-y-2 md:col-span-2">
+			<!-- จอ xs ขึ้นไป -->
+			<div class="xs:col-span-2 col-span-8 flex flex-col gap-y-2 md:col-span-2">
 				<div class="font-normal">หมายเหตุ</div>
 				<div class="tooltip relative" *ngIf="subjectCardData.remark !== ''">
 					<sdm-icon icon="circle-exclamation" class="h-4 w-4 text-red-400 hover:cursor-pointer hover:text-red-500"> > </sdm-icon>
-					<div [innerHTML]="subjectCardData.remark" class="tooltiptext tooltip-shadow absolute mt-3 max-h-[450px] w-[240px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"></div>
+					<div [innerHTML]="subjectCardData.remark" class="tooltiptext tooltip-shadow absolute mt-3 max-h-[450px] w-[300px] overflow-y-auto break-words rounded-[10px] bg-white p-4 text-center text-sm text-dark-100"></div>
 				</div>
 				<div class="flex" *ngIf="subjectCardData.remark === ''">
 					<div class="py-0.3 tooltip relative rounded-[15px] bg-gray-100 px-3 text-sm text-gray-400 hover:cursor-pointer hover:bg-gray-200" *ngIf="subjectCardData.remark === ''">
