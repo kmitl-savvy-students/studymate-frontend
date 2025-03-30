@@ -7,51 +7,37 @@
 	><div *ngIf="subjectReviewData" class="flex w-full flex-col rounded-[15px] border border-main-25">
 		<!-- Header Section -->
 		<div class="flex w-full items-center justify-between gap-x-2 rounded-[15px] bg-gradient-to-r from-indigo-50 to-blue-50 px-5 py-2.5 text-base font-semibold">
-			<a *ngIf="isShowSubjectIdAndName" class="flex items-center gap-4 hover:text-main-100" [href]="getSubjectDetailUrl()" target="_blank">
-				<div class="flex items-center gap-4">
-					<div>
-						{{ subjectReviewData.subject_id }}
-					</div>
-					<div>{{ subjectReviewData.subject_name_en }}</div>
+			<a *ngIf="isShowSubjectIdAndName" class="flex flex-wrap items-center gap-x-4 gap-y-1" [href]="getSubjectDetailUrl()" target="_blank">
+				<div class="flex items-center hover:text-main-100">
+					{{ subjectReviewData.subject_id }} {{ subjectReviewData.subject_name_en }} ภาคการศึกษาที่ {{ subjectReviewData.teachtable.term }} ปีการศึกษา {{ subjectReviewData.teachtable.year }}
 				</div>
-				<div>
-					ปีการศึกษา
-					{{ subjectReviewData.teachtable.year }}
+				<div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+					<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
+					<sdm-rating mode="display" [rating]="subjectReviewData.rating" class="text-base text-dark-100"></sdm-rating>
 				</div>
-				<div>
-					ภาคการศึกษาที่
-					{{ subjectReviewData.teachtable.term }}
-				</div>
-				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
 			</a>
 
-			<a class="flex items-center gap-4" *ngIf="!isShowSubjectIdAndName">
-				<div>
+			<a class="flex flex-wrap items-center gap-x-4 gap-y-1" *ngIf="!isShowSubjectIdAndName">
+				<div class="flex items-center">
 					ปีการศึกษา
-					{{ subjectReviewData.teachtable.year }}
-				</div>
-				<div>
-					ภาคการศึกษาที่
+					{{ subjectReviewData.teachtable.year }} ภาคการศึกษาที่
 					{{ subjectReviewData.teachtable.term }}
 				</div>
-				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
+				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light xs:hidden">รีวิวของฉัน</div>
+				<sdm-rating mode="display" [rating]="subjectReviewData.rating" class="text-base text-dark-100"></sdm-rating>
 			</a>
-
-			<div class="flex items-center gap-x-1">
-				<sdm-rating mode="display" [rating]="subjectReviewData.rating" customClass="text-base text-dark-100"></sdm-rating>
-			</div>
 		</div>
 
 		<!-- แสดงผลการแก้ไขหรือรีวิว -->
 		<ng-container *ngIf="!isEditing">
 			<!-- Subject Review -->
 			<div>
-				<div class="px-5 pb-2 pt-3 text-sm font-normal text-dark-100" [innerHTML]="this.subjectReviewData.review"></div>
+				<div class="px-5 pb-3 pt-4 text-sm font-normal text-dark-100" [innerHTML]="this.subjectReviewData.review"></div>
 			</div>
 
 			<!-- Footer Section -->
 
-			<div class="flex items-center justify-between px-5 pb-3">
+			<div class="flex flex-wrap items-center justify-between px-5 pb-3">
 				<div class="flex items-center gap-2">
 					<sdm-icon
 						icon="thumbs-up"
@@ -65,6 +51,7 @@
 						(click)="!isLoadingUpdateReviewLike && toggleLike()"></sdm-icon>
 					<div>{{ this.subjectReviewData.like }}</div>
 				</div>
+
 				<div class="flex items-center gap-2.5">
 					<div class="text-sm font-normal text-dark-75">
 						{{ this.subjectReviewData.created }}
