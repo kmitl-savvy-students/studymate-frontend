@@ -1,4 +1,4 @@
-<div class="mb-3 flex">
+<div class="mb-3 hidden sm:flex">
 	<sdm-base-button
 		icon="right-to-bracket"
 		text="ย้อนกลับ"
@@ -9,10 +9,10 @@
 		(clickEvent)="navigateToDepartment()"></sdm-base-button>
 </div>
 
-<h1 class="mt-5 text-3xl font-semibold">{{ department?.name_th }}</h1>
-<h2 class="text-xl opacity-50">{{ department?.name_en }}</h2>
+<h1 class="mt-5 hidden text-3xl font-semibold sm:block">{{ department?.name_th }}</h1>
+<h2 class="hidden text-xl opacity-50 sm:block">{{ department?.name_en }}</h2>
 
-<hr class="my-4" />
+<hr class="my-4 hidden sm:block" />
 
 <sdm-base-modal #createProgramModal modalId="createProgram" header="สร้างแผนการเรียนใหม่" (confirmEvent)="onConfirmCreate()">
 	<form [formGroup]="programCreateForm">
@@ -48,7 +48,7 @@
 	</form>
 </sdm-base-modal>
 
-<div>
+<div class="hidden sm:block">
 	<h1 class="text-2xl font-semibold">เลือกแผนการเรียน</h1>
 	<h2>แผนการเรียนทั้งหมด</h2>
 	<div *ngIf="isLoading" class="my-2 text-center">
@@ -60,14 +60,14 @@
 		</div>
 		<div *ngIf="programs.length > 0" class="my-2 rounded-xl border p-5">
 			<ul class="flex flex-col divide-y">
-				<li *ngFor="let program of programs" class="flex items-center justify-between py-2">
+				<li *ngFor="let program of programs" class="flex items-center justify-between gap-x-4 py-2">
 					<div (click)="navigateToCurriculum(program.id)" class="cursor-pointer text-lg hover:text-primary-300">
 						<div class="font-semibold">({{program.kmitl_id}}) {{ program.name_th }}</div>
 						<div class="text-sm opacity-50">{{ program.name_en }}</div>
 					</div>
 
-					<div class="flex flex-row gap-2">
-						<label class="inline-flex w-full cursor-pointer items-center justify-center gap-x-2 overflow-x-auto rounded-xl border border-gray-300 p-1.5">
+					<div class="flex flex-col gap-2 md:flex-row">
+						<label class="inline-flex w-44 cursor-pointer items-center justify-center gap-x-2 overflow-x-auto rounded-xl border border-gray-300 p-1.5">
 							<input type="checkbox" class="peer sr-only" (change)="checkShowProgram(program)" [checked]="program.is_visible" />
 							<div
 								class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-main-100 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
@@ -81,6 +81,7 @@
 							textColorHover="hover:text-light"
 							backgroundColor="bg-warning-300"
 							backgroundColorHover="hover:bg-warning-400"
+							width="w-full md:w-24"
 							(clickEvent)="onEditProgram(program)"></sdm-base-button>
 					</div>
 				</li>
@@ -96,3 +97,5 @@
 		backgroundColorHover="hover:bg-primary-400"
 		(clickEvent)="onCreateProgram()"></sdm-base-button>
 </div>
+
+<div class="flex w-full items-center justify-center rounded-[20px] bg-orange-50 px-10 py-24 text-center text-base font-normal sm:hidden">เพื่อประสบการณ์การใช้งานที่ดีที่สุด โปรดใช้งานหน้านี้บนเดสก์ท็อปหรือแท็บเล็ต</div>
