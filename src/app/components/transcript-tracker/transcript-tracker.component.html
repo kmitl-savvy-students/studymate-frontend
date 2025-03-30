@@ -30,7 +30,7 @@
 				</div>
 				<div *ngIf="transcriptDetails.year !== 0">
 					<sdm-base-accordion
-						header="ผลการเรียน ปีการศึกษา พ.ศ. {{ transcriptDetails.year + 543 }}"
+						header="{{ isSmallScreen ? 'ปีการศึกษา ' : 'ผลการเรียน ปีการศึกษา พ.ศ. ' }}{{ transcriptDetails.year + 543 }}"
 						subHeader="ภาคเรียนที่ {{ transcriptDetails.term }}"
 						accordionId="transfer-credit-acc-{{ transcriptDetails.year + 543 }}-{{ transcriptDetails.term }}"
 						[accordionDefaultStatus]="i === getFirstNonZeroYearIndex()">
