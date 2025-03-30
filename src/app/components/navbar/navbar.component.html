@@ -10,7 +10,15 @@
 			<div class="flex items-center lg:hidden">
 				<sdm-base-button data-drawer-target="nav-sidebar" data-drawer-show="nav-sidebar" aria-controls="nav-sidebar" [iconCustom]="sidebarIconTemplate" />
 				<ng-template #sidebarIconTemplate>
-					<sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" />
+					<ng-container *ngIf="signedIn; else GuestOptions">
+						<div class="flex items-center space-x-2">
+							<span class="text-lg font-medium">{{ currentUser?.firstname }}</span>
+							<sdm-avatar-icon class="h-9 w-10" [imagePath]="currentUser?.profile_picture ?? ''" [isSignIn]="currentUser ? true : false" />
+						</div>
+					</ng-container>
+					<ng-template #GuestOptions>
+						<sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" [isSignIn]="false" />
+					</ng-template>
 				</ng-template>
 			</div>
 
@@ -40,7 +48,12 @@
 <!-- Mobile menu - Sidebar Menu -->
 <div id="nav-sidebar" class="nav-sidebar fixed top-0 z-50 h-screen w-64 translate-x-full overflow-y-auto bg-white p-4 transition-transform lg:hidden" tabindex="-1" aria-labelledby="nav-sidebar-label">
 	<div class="flex justify-between">
-		<ng-container *ngIf="signedIn; else logoGuestOptions"><sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" /></ng-container>
+		<ng-container *ngIf="signedIn; else logoGuestOptions"
+			><div class="flex items-center">
+				<sdm-avatar-icon class="h-9 w-10" [imagePath]="currentUser?.profile_picture ?? ''" [isSignIn]="currentUser ? true : false" />
+				<span class="text-lg font-medium">{{ currentUser?.firstname }}</span>
+			</div>
+		</ng-container>
 		<ng-template #logoGuestOptions>
 			<sdm-studymate-logo textSize1="text-lg" textSize2="text-xs" />
 		</ng-template>
@@ -110,7 +123,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="/sign-in" class="menu">
+					<a href="/sign-up" class="menu">
 						<sdm-icon icon="user-plus" class="menu-icon"></sdm-icon>
 						<span class="flex-1 whitespace-nowrap">สมัครสมาชิก</span>
 					</a>

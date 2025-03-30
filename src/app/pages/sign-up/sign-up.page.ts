@@ -32,6 +32,7 @@ export class SDMPageSignUp {
 	public isStrongPassword: boolean = true;
 	public isDisabledOtpZone: boolean = false;
 	private countdownInterval: any;
+	public isSmallScreen: boolean = false;
 
 	signUpFormGroup: FormGroup;
 
@@ -58,6 +59,7 @@ export class SDMPageSignUp {
 	}
 
 	ngOnInit(): void {
+		this.checkScreenSize();
 		this.route.queryParams.subscribe((params) => {
 			const authCode = params['code'];
 			const error = params['error'];
@@ -73,6 +75,10 @@ export class SDMPageSignUp {
 			this.isDisabledOtp();
 		});
 		this.isDisabledOtp();
+	}
+
+	private checkScreenSize(): void {
+		this.isSmallScreen = window.innerWidth < 768; // ตัวอย่าง: ถ้าหน้าจอกว้างน้อยกว่า 768px ถือว่าเป็นหน้าจอเล็ก
 	}
 
 	handleGoogleCallback(authCode: string): void {

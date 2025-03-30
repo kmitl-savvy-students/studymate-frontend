@@ -81,7 +81,9 @@
 		<div class="input-primary mb-5">
 			<label for="name">ชื่อกลุ่ม</label>
 			<input type="text" id="name" formControlName="name" placeholder="ชื่อกลุ่ม" required />
+			<div *ngIf="addNodeForm.get('name')?.invalid && addNodeForm.get('name')?.touched" class="error">กรุณากรอกชื่อด้วย</div>
 		</div>
+
 		<div class="input-primary mb-5">
 			<label for="color">สีกลุ่ม</label>
 			<input type="color" class="h-20" id="color" formControlName="color" placeholder="สีกลุ่ม" required />

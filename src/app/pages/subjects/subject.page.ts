@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
@@ -13,7 +13,7 @@ import { SubjectCardData } from '@models/SubjectCardData.model';
 import { User } from '@models/User.model';
 import { APIManagementService } from '@services/api-management.service';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
-import { initFlowbite } from 'flowbite';
+import { Drawer, initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
@@ -88,7 +88,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public isSearched: boolean = false;
 	public isFilter: boolean = false;
-	public isLgScreen = window.innerWidth >= 1024;
 
 	// ตัวแปรเดิม
 	public subjectCardData: SubjectCardData[] = [];
@@ -97,18 +96,14 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public searchedData: SubjectCardData[] = []; // เก็บผลลัพธ์หลังการ search
 	public finalDisplayData: SubjectCardData[] = []; // เก็บผลลัพธ์สุดท้ายที่จะแสดง
 
+	private drawer: Drawer | null = null;
+
 	constructor(
 		private apiManagementService: APIManagementService,
 		private router: Router,
 		private route: ActivatedRoute,
 		private authService: AuthenticationService,
 	) {}
-
-	@HostListener('window:resize', ['$event'])
-	onResize(event: Event) {
-		this.isLgScreen = window.innerWidth >= 1024;
-		console.log('isLgScreen :', this.isLgScreen);
-	}
 
 	ngOnInit(): void {
 		this.authService.user$.subscribe((user) => {
@@ -303,7 +298,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public onSelectedCurriculumIdChange(curriculumIdList: number[]) {
 		this.selectedCurriculumIdList = curriculumIdList;
-		console.log('selectedCurriculumIdList :', this.selectedCurriculumIdList);
 		this.clearSearch();
 		this.handleFilterBar();
 		this.updatePaginatedItems();
@@ -330,7 +324,13 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.isGened = '0';
 		this.isShowGened = false;
 		this.checkSelectAllDropdown();
-		this.router.navigate(['/subject']);
+		this.resetAllFilters();
+
+		this.router.navigate(['/subject']).then(() => {
+			setTimeout(() => {
+				initFlowbite();
+			}, 0);
+		});
 	}
 
 	public resetAllFilters() {
@@ -745,6 +745,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 					if (success) {
 						console.log('Navigation successful!');
 						this.getSubjectData();
+						initFlowbite();
 					}
 				})
 				.catch((error) => {

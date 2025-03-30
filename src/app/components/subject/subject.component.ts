@@ -2,18 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
+import { SDMBaseAccordion } from '../accordion/base-accordion.component';
 import { IconComponent } from '../icon/icon.component';
 import { SDMRatingComponent } from '../rating/rating.component';
 @Component({
 	selector: 'sdm-subject-cpn',
 	standalone: true,
-	imports: [IconComponent, CommonModule, SDMRatingComponent],
+	imports: [IconComponent, CommonModule, SDMRatingComponent, SDMBaseAccordion],
 	templateUrl: './subject.component.html',
 	styleUrl: './subject.component.css',
 })
 export class SDMSubjectComponent {
 	@Input() subjectCardData?: SubjectCardData;
-
 	@Input() selectedYear: number = -1;
 	@Input() selectedSemester: number = -1;
 	@Input() selectedCurriculum: number = -1;

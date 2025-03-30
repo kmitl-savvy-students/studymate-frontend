@@ -15,12 +15,19 @@ import { SDMButtonLink } from '../buttons/button-link.component';
 		<div id="avatarDropdown" class="z-10 flex flex-col gap-1 rounded-xl border border-primary-200 bg-light p-2">
 			<sdm-button-link link="/my-subject" text="รายวิชาของฉัน" textColorHover="hover:text-light" backgroundColor="bg-light" backgroundColorHover="hover:bg-primary-300" (clickEvent)="closeDropdown()" />
 			<sdm-button-link link="/profile" text="โปรไฟล์" textColorHover="hover:text-light" backgroundColor="bg-light" backgroundColorHover="hover:bg-primary-300" (clickEvent)="closeDropdown()" />
-			<sdm-button-link *ngIf="currentUser?.is_admin" link="/admin/faculty" text="จัดการหลักสูตร" textColorHover="hover:text-light" backgroundColor="bg-light" backgroundColorHover="hover:bg-primary-300" (clickEvent)="closeDropdown()" />
+			<sdm-button-link
+				*ngIf="currentUser?.is_admin"
+				link="/admin/faculty"
+				text="จัดการหลักสูตร"
+				textColorHover="hover:text-light"
+				backgroundColor="bg-light"
+				backgroundColorHover="hover:bg-primary-300"
+				(clickEvent)="closeDropdown()" />
 			<sdm-button-link link="/sign-out" text="ออกจากระบบ" textColorHover="hover:text-light" backgroundColor="bg-light" backgroundColorHover="hover:bg-primary-300" (clickEvent)="closeDropdown()" />
 		</div>
 
 		<ng-template #customIconTemplate>
-			<sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" />
+			<sdm-avatar-icon [imagePath]="currentUser?.profile_picture ?? ''" [isSignIn]="currentUser ? true : false" />
 		</ng-template>
 	`,
 })

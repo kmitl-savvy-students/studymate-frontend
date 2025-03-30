@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IconComponent } from '@components/icon/icon.component.js';
 import { SDMBaseModal } from '@components/modals/base-modal.component.js';
 import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject.js';
@@ -20,7 +21,7 @@ import { SDMTotalCreditEarnComponent } from '../total-credit-earn/total-credit-e
 @Component({
 	selector: 'sdm-progress-tracker',
 	standalone: true,
-	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal, SDMBaseAccordion],
+	imports: [CommonModule, SDMSubjectListCardComponent, SDMBaseButton, SDMTotalCreditEarnComponent, SDMBaseModal, SDMBaseAccordion, IconComponent],
 	templateUrl: './progress-tracker.component.html',
 })
 export class SDMProgressTrackerComponent implements OnInit {
@@ -38,15 +39,16 @@ export class SDMProgressTrackerComponent implements OnInit {
 	rootNode: CurriculumGroup | null = null;
 	openAccordions: Set<number> = new Set<number>();
 
-	groupMatches = new Map<number, TranscriptDetail[]>(); // วิชาที่ใช้ในแต่ละ group
-	groupCreditUsed = new Map<number, number>(); // หน่วยกิตที่ใช้แล้วในแต่ละ group
-	groupCreditRequired = new Map<number, number>(); // หน่วยกิตที่ต้องการของแต่ละ group
-	groupComplete = new Map<number, boolean>(); // สถานะ complete ของ group
+	// Map สำหรับเก็บวิชาและหน่วยกิตที่ใช้ในแต่ละกลุ่ม
+	groupMatches = new Map<number, TranscriptDetail[]>();
+	groupCreditUsed = new Map<number, number>();
+	groupCreditRequired = new Map<number, number>();
+	groupComplete = new Map<number, boolean>();
 
 	progressPercentage = 0;
-	groupCreditTotal = 0;
+	groupCreditTotal = 0; // หน่วยกิตที่ยังขาด (minimum)
 
-	notFittedSubjects: TranscriptDetail[] = []; // วิชาที่ไม่สามารถจับลง group ได้
+	notFittedSubjects: TranscriptDetail[] = [];
 	subjectData!: Subject;
 	currentSubjects: CurriculumGroupSubject[] = [];
 	transcriptSubjectIds: string[] = [];
@@ -56,6 +58,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 	isFetchingTranscriptDetails: boolean = false;
 	nodeType: string = '';
 
+	// ลำดับเกรด (index ต่ำ = ดี)
 	private gradeOrder = ['S', 'A', 'B', 'C', 'D', 'T', 'X'];
 
 	ngOnInit(): void {
@@ -69,9 +72,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		});
 	}
 
-	// -------------------------------------------
-	// UI / Accordion
-	// -------------------------------------------
+	// ------------------ UI / Accordion ------------------
 	toggleIncludeXGrade(): void {
 		this.includeXGrade = !this.includeXGrade;
 		this.assignSubjectsToGroups();
@@ -146,9 +147,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		return this.transcriptSubjectIds.includes(subjectId);
 	}
 
-	// -------------------------------------------
-	// Data fetching
-	// -------------------------------------------
+	// ------------------ Data fetching ------------------
 	fetchTranscripts(): void {
 		if (!this.currentUser) return;
 		this.isFetchingTranscriptDetails = true;
@@ -164,7 +163,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 				next: (data) => {
 					this.transcript = data;
 					if (this.transcript?.details) {
-						// จัดเรียงวิชา (DESC credit, ASC grade)
+						// เรียงวิชา: credit จากมากไปน้อย, เกรดจากดีไปแย่
 						this.transcript.details.sort((a, b) => {
 							const creditA = a.subject?.credit || 0;
 							const creditB = b.subject?.credit || 0;
@@ -185,39 +184,33 @@ export class SDMProgressTrackerComponent implements OnInit {
 			});
 	}
 
-	// -------------------------------------------
-	// Main logic
-	// -------------------------------------------
+	// ------------------ Main logic ------------------
 	assignSubjectsToGroups(): void {
 		if (!this.transcript?.details || !this.currentUser?.curriculum?.curriculum_group) {
 			this.notFittedSubjects = [];
 			return;
 		}
 
-		// 1) แยกวิชาเกรด F/U ไป notFitted ทันที
-		//    ส่วนวิชา X จะยัดได้ถ้า includeXGrade=true
+		// 1) แยกวิชาเกรด F/U ไป notFitted ทันที (F/U จะไม่ถูกจับใส่กลุ่ม)
+		//    ส่วนวิชา X จะถูกจับได้ถ้า includeXGrade=true
 		const bestBySubject = new Map<string, TranscriptDetail>();
 		const duplicateDetails: TranscriptDetail[] = [];
-		this.notFittedSubjects = []; // เคลียร์ก่อน
+		this.notFittedSubjects = []; // เคลียร์ notFittedSubjects
 
 		for (const detail of this.transcript.details) {
 			if (!detail.subject?.id) {
-				// ไม่มี subject ID => แปลก => ไม่จัดกลุ่ม
 				this.notFittedSubjects.push(detail);
 				continue;
 			}
 			const grade = detail.grade?.toUpperCase().trim() || '';
 			if (grade === 'F' || grade === 'U') {
-				// F/U => ไม่เอาเข้ากลุ่ม => อยู่ notFitted ตลอด
 				this.notFittedSubjects.push(detail);
 				continue;
 			}
-			// ที่เหลือ (S,A,B,C,D,T,X) => เข้า bestBySubject
 			const subId = detail.subject.id.toString();
 			if (!bestBySubject.has(subId)) {
 				bestBySubject.set(subId, detail);
 			} else {
-				// ถ้าเคยมีแล้ว => เลือกตัวดีที่สุด
 				const curBest = bestBySubject.get(subId)!;
 				const cA = detail.subject?.credit || 0;
 				const cB = curBest.subject?.credit || 0;
@@ -239,7 +232,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			}
 		}
 
-		// 2) uniqueDetails => วิชาที่คัดแล้ว
+		// 2) uniqueDetails = ผลลัพธ์ที่คัดเลือกแล้ว (เฉพาะวิชาที่ไม่ F/U)
 		const uniqueDetails = Array.from(bestBySubject.values());
 		uniqueDetails.sort((a, b) => {
 			const creditA = a.subject?.credit || 0;
@@ -250,7 +243,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			return ga - gb;
 		});
 
-		// 3) เตรียม map
+		// 3) เตรียม map สำหรับกลุ่ม
 		this.groupMatches.clear();
 		this.groupCreditUsed.clear();
 		this.groupCreditRequired.clear();
@@ -265,7 +258,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			this.groupCreditUsed.set(id, 0);
 		}
 
-		// 4) วางวิชา (Greedy) ลงกลุ่ม
+		// 4) วางวิชา (แบบ greedy) ลงในกลุ่ม
 		const usedDetails = new Set<TranscriptDetail>();
 		for (const detail of uniqueDetails) {
 			if (this.placeDetailInGroup(detail, this.currentUser.curriculum.curriculum_group)) {
@@ -273,7 +266,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			}
 		}
 
-		// 5) อัปเดต usage + completeness
+		// 5) อัปเดต usage และ completeness ของ tree
 		this.updateUsageFromChildren(this.currentUser.curriculum.curriculum_group);
 		this.computeCompleteness(this.currentUser.curriculum.curriculum_group);
 		const rootId = this.currentUser.curriculum.curriculum_group.id;
@@ -282,12 +275,12 @@ export class SDMProgressTrackerComponent implements OnInit {
 		this.groupCreditTotal = Math.max(0, reqRoot - usedRoot);
 		this.calculateProgressPercentage();
 
-		// 6) วิชาที่ไม่ได้ใช้ => notFitted
+		// 6) วิชาที่ไม่ได้ถูกใช้ในกลุ่ม => notFittedSubjects
 		const notUsedUnique = uniqueDetails.filter((d) => !usedDetails.has(d));
 		this.notFittedSubjects.push(...duplicateDetails);
 		this.notFittedSubjects.push(...notUsedUnique);
 
-		// 7) แก้ปัญหา RequiredBranch เต็มแล้ว => ดึง usage เกินออก
+		// 7) แก้ปัญหาในกลุ่ม REQUIRED_BRANCH (ดึงวิชาที่ซ่อนอยู่ลึกออกมา)
 		this.resolveRequireBranchConflicts(this.rootNode);
 		if (this.rootNode) {
 			this.updateUsageFromChildren(this.rootNode);
@@ -295,7 +288,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		}
 		this.calculateProgressPercentage();
 
-		// 8) ลูป reassign notFittedSubjects จนกว่าจะนิ่ง
+		// 8) ลูป reassign วิชาใน notFittedSubjects จนกว่าจะนิ่ง
 		let attemptPlaced = true;
 		while (attemptPlaced) {
 			attemptPlaced = false;
@@ -314,7 +307,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 				}
 			}
 			if (attemptPlaced) {
-				// เรียกอัปเดต usage, completeness, groupCreditTotal, progress
 				this.updateRootUsageAndProgress();
 			}
 		}
@@ -333,13 +325,14 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	/**
 	 * placeDetailInGroup: พยายามวางวิชา detail ลงใน group
-	 * (ถ้าวางได้ return true, ถ้าวางไม่ได้ return false)
+	 * สำหรับกลุ่ม REQUIRED_ALL ต้อง exact match
+	 * สำหรับกลุ่ม FREE, REQUIRED_CREDIT, REQUIRED_BRANCH ให้ตีความว่าความต้องการเป็น "ขั้นต่ำ"
 	 */
 	private placeDetailInGroup(detail: TranscriptDetail, group: CurriculumGroup): boolean {
 		const grade = detail.grade?.toUpperCase().trim();
 		if (grade === 'X' && !this.includeXGrade) return false;
 
-		// ถ้า group เป็น REQUIRED_BRANCH แล้วเต็ม => ไม่รับ
+		// ถ้า group เป็น REQUIRED_BRANCH แล้วเต็มแล้ว => ไม่รับ
 		const req = this.groupCreditRequired.get(group.id) || 0;
 		const usedVal = this.groupCreditUsed.get(group.id) || 0;
 		if (group.type === 'REQUIRED_BRANCH' && usedVal >= req) {
@@ -355,41 +348,40 @@ export class SDMProgressTrackerComponent implements OnInit {
 			}
 		}
 
-		// เช็ก capacity
 		const c = detail.subject?.credit ?? 0;
 		const need = this.groupCreditRequired.get(group.id) || 0;
 		const used = this.groupCreditUsed.get(group.id) || 0;
 
-		// ถ้า subject credit != 0 หรือ group != REQUIRED_ALL => เช็กว่าเต็มหรือยัง
-		if (!(c === 0 && group.type === 'REQUIRED_ALL')) {
-			if (used >= need) return false;
-		}
-		// เกิน max => ไม่ใส่
-		if (c !== 0 && used + c > this.computeMaxCredits(group)) return false;
-
 		switch (group.type) {
-			case 'REQUIRED_ALL':
+			case 'REQUIRED_ALL': {
+				// REQUIRED_ALL ต้องใส่ครบทุกวิชาที่ระบุไว้ (exact match)
 				if (group.subjects?.some((gs) => gs.subject?.id === detail.subject?.id)) {
 					if (!this.groupMatches.get(group.id)?.includes(detail)) {
+						// ตรวจสอบว่าไม่ได้เกินจำนวนที่กำหนด
+						if (used + c > need) return false;
 						this.groupMatches.get(group.id)?.push(detail);
 						this.groupCreditUsed.set(group.id, used + c);
 						return true;
 					}
 				}
 				break;
-
+			}
 			case 'COLLECTIVE':
 			case 'REQUIRED_CREDIT':
 			case 'REQUIRED_BRANCH': {
+				// สำหรับกลุ่มเหล่านี้ ให้ตีความว่าการใช้หน่วยกิตเป็น "ขั้นต่ำ"
 				if (group.subjects?.some((gs) => gs.subject?.id === detail.subject?.id)) {
-					const p = this.findParentRequiredCreditGroup(group);
-					const pu = p ? this.groupCreditUsed.get(p.id) || 0 : 0;
-					const pn = p ? this.groupCreditRequired.get(p.id) || 0 : 0;
-					if (c === 0 || (used < need && used + c <= this.computeMaxCredits(group))) {
-						if (p && pu >= pn) break; // parent เต็ม
+					// ถ้ายังไม่เต็ม (used < need) ให้เพิ่มได้
+					if (used < need) {
 						this.groupMatches.get(group.id)?.push(detail);
-						this.groupCreditUsed.set(group.id, used + c);
+						// อัปเดตค่า usage: ถ้าเกิน required ก็ cap ที่ required
+						const newUsage = Math.min(used + c, need);
+						this.groupCreditUsed.set(group.id, newUsage);
+						// อัปเดต parent ด้วยถ้ามี (เฉพาะในกรณี REQUIRED_CREDIT/BRANCH)
+						const p = this.findParentRequiredCreditGroup(group);
 						if (p) {
+							const pu = this.groupCreditUsed.get(p.id) || 0;
+							const pn = this.groupCreditRequired.get(p.id) || 0;
 							this.groupCreditUsed.set(p.id, Math.min(pu + c, pn));
 						}
 						return true;
@@ -397,32 +389,31 @@ export class SDMProgressTrackerComponent implements OnInit {
 				}
 				break;
 			}
-
-			case 'FREE':
-				if (c === 0 || (used < need && used + c <= this.computeMaxCredits(group))) {
+			case 'FREE': {
+				// สำหรับกลุ่ม FREE ให้ตีความแบบ "ขั้นต่ำ" เช่นกัน
+				if (used < need) {
 					this.groupMatches.get(group.id)?.push(detail);
-					this.groupCreditUsed.set(group.id, used + c);
+					const newUsage = Math.min(used + c, need);
+					this.groupCreditUsed.set(group.id, newUsage);
 					return true;
 				}
 				break;
+			}
 		}
 		return false;
 	}
 
-	// -------------------------------------------
-	// ใช้ recursive ล้าง usage ทั้ง subtree
-	// -------------------------------------------
+	// ------------------ Recursive removal for deep conflicts ------------------
 	private removeAllUsageFromSubtree(group: CurriculumGroup): void {
-		// 1) ดึงวิชาใน groupMatches ของ group นี้ โยนกลับไป notFittedSubjects
+		// 1) เอาวิชาที่อยู่ใน groupMatches ของ group นี้กลับไป notFittedSubjects
 		const details = this.groupMatches.get(group.id) || [];
 		for (const d of details) {
 			this.notFittedSubjects.push(d);
 		}
-		// 2) เคลียร์ matches, usage ของ group นี้
+		// 2) เคลียร์ข้อมูลใน group นี้
 		this.groupMatches.set(group.id, []);
 		this.groupCreditUsed.set(group.id, 0);
-
-		// 3) ทำซ้ำกับ children ทุกชั้น
+		// 3) ทำแบบ recursive กับ children
 		if (group.children) {
 			for (const child of group.children) {
 				this.removeAllUsageFromSubtree(child);
@@ -432,8 +423,8 @@ export class SDMProgressTrackerComponent implements OnInit {
 
 	/**
 	 * resolveRequireBranchConflicts:
-	 * ถ้า group เป็น REQUIRED_BRANCH แล้วใช้เกิน need => ให้ keep แค่บาง children
-	 * ที่เหลือให้ removeAllUsageFromSubtree (ลึกลงไปทุกชั้น)
+	 * ถ้า group เป็น REQUIRED_BRANCH และ usage เกิน need ให้คงไว้เฉพาะ children ที่พอ (keep) แล้วล้าง (removeAllUsageFromSubtree)
+	 * ของ children ที่เหลือ (ลึกทุกชั้น)
 	 */
 	private resolveRequireBranchConflicts(group: CurriculumGroup | null): void {
 		if (!group) return;
@@ -442,14 +433,14 @@ export class SDMProgressTrackerComponent implements OnInit {
 			const need = this.groupCreditRequired.get(group.id) || 0;
 			const used = this.groupCreditUsed.get(group.id) || 0;
 			if (used >= need && group.children?.length) {
-				// sort child ตาม usage มาก -> usage น้อย
+				// เรียง children ตาม usage จากมากไปน้อย
 				const contrib = group.children.map((c) => ({
 					group: c,
 					used: this.groupCreditUsed.get(c.id) || 0,
 				}));
 				contrib.sort((a, b) => b.used - a.used);
 
-				// สะสม usage จากบนลงล่างจนพอ (need)
+				// สะสม usage จากบนลงล่างจนพอ
 				let sum = 0;
 				const keep: number[] = [];
 				for (const x of contrib) {
@@ -459,7 +450,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 					}
 				}
 
-				// ที่ไม่อยู่ใน keep => ลบ usage ทั้ง subtree
+				// สำหรับ children ที่ไม่อยู่ใน keep ให้ล้างข้อมูลทั้ง subtree
 				for (const x of contrib) {
 					if (!keep.includes(x.group.id) && x.used > 0) {
 						this.removeAllUsageFromSubtree(x.group);
@@ -468,7 +459,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 			}
 		}
 
-		// ทำซ้ำกับ children
+		// ทำแบบ recursive กับ children
 		if (group.children?.length) {
 			for (const c of group.children) {
 				this.resolveRequireBranchConflicts(c);
@@ -476,9 +467,7 @@ export class SDMProgressTrackerComponent implements OnInit {
 		}
 	}
 
-	// -------------------------------------------
-	// usage, completeness
-	// -------------------------------------------
+	// ------------------ Usage & completeness ------------------
 	private computeMaxCredits(group: CurriculumGroup): number {
 		let max = 0;
 		if (group.children?.length) {
@@ -507,7 +496,6 @@ export class SDMProgressTrackerComponent implements OnInit {
 		}
 		const need = this.groupCreditRequired.get(group.id) || 0;
 		let usage = ownUsage;
-
 		if (group.children && group.children.length > 0) {
 			if (!group.subjects?.length || group.type === 'FREE') {
 				usage = childUsage;
@@ -532,23 +520,14 @@ export class SDMProgressTrackerComponent implements OnInit {
 		let complete = false;
 		switch (group.type) {
 			case 'REQUIRED_ALL':
-				if (group.children?.length) {
-					complete = childOK;
-				} else {
-					if (group.subjects?.length) {
-						const matched = this.groupMatches.get(group.id) || [];
-						complete = matched.length === group.subjects.length;
-					} else complete = true;
-				}
+				complete = group.children?.length ? childOK : group.subjects?.length ? this.groupMatches.get(group.id)?.length === group.subjects.length : true;
 				break;
 			case 'REQUIRED_CREDIT':
 			case 'FREE':
 				complete = used >= need;
 				break;
 			case 'REQUIRED_BRANCH':
-				if (group.children?.length) {
-					complete = used >= need && this.hasAtLeastOneChildCompleted(group);
-				} else complete = false;
+				complete = group.children?.length ? used >= need && this.hasAtLeastOneChildCompleted(group) : false;
 				break;
 			default:
 				if (group.children?.length) complete = childOK;
