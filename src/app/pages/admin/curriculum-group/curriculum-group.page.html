@@ -1,4 +1,4 @@
-<div class="mb-3 flex">
+<div class="mb-3 hidden sm:flex">
 	<sdm-base-button
 		icon="right-to-bracket"
 		text="ย้อนกลับ"
@@ -9,13 +9,13 @@
 		(clickEvent)="navigateToCurriculum()"></sdm-base-button>
 </div>
 
-<h2 class="mt-5 text-lg font-semibold opacity-75">หลักสูตรปี พ.ศ. {{ curriculum?.year }}</h2>
-<h1 class="text-3xl font-semibold">{{ curriculum?.name_th }}</h1>
-<h2 class="text-xl opacity-50">{{ curriculum?.name_en }}</h2>
+<h2 class="mt-5 hidden text-lg font-semibold opacity-75 sm:block">หลักสูตรปี พ.ศ. {{ curriculum?.year }}</h2>
+<h1 class="hidden text-3xl font-semibold sm:block">{{ curriculum?.name_th }}</h1>
+<h2 class="hidden text-xl opacity-50 sm:block">{{ curriculum?.name_en }}</h2>
 
-<hr class="my-4" />
+<hr class="my-4 hidden sm:block" />
 
-<div>
+<div class="hidden overflow-x-auto sm:block">
 	<h1 class="text-2xl font-semibold">จัดการโครงสร้างหลักสูตร</h1>
 	<div>
 		<ul *ngIf="rootNode" class="tree mt-2">
@@ -44,7 +44,7 @@
 						<div class="h-5 w-5 rounded-3xl align-middle" [style.background-color]="findParentNodeColor(child)"></div>
 						<sdm-icon *ngIf="child.children?.length" icon="folder-open" />
 						<sdm-icon *ngIf="!child.children?.length" icon="table-list" />
-						<div>
+						<div class="min-w-max">
 							<div class="font-semibold">{{ child.name }}</div>
 							<div class="-mt-1 text-sm opacity-75">
 								เงื่อนไข :
@@ -215,3 +215,5 @@
 		</div>
 	</form>
 </sdm-base-modal>
+
+<div class="flex w-full items-center justify-center rounded-[20px] bg-orange-50 px-10 py-24 text-center text-base font-normal sm:hidden">เพื่อประสบการณ์การใช้งานที่ดีที่สุด โปรดใช้งานหน้านี้บนเดสก์ท็อปหรือแท็บเล็ต</div>
