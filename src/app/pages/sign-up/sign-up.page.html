@@ -55,7 +55,9 @@
 				[isDisabled]="isOtpButtonDisabled  || isDisabledOtpZone"
 				(clickEvent)="requestOTP()"
 				class="col-span-1"
-				[text]="isOtpButtonDisabled ? 'กรุณารอ ' + otpCountdown + ' วินาที' : 'ขอรหัส OTP'"
+				[text]="isOtpButtonDisabled 
+        ? (isSmallScreen ? '↻ ' + otpCountdown + ' วินาที' : 'กรุณารอ ' + otpCountdown + ' วินาที') 
+        : 'ขอรหัส OTP'"
 				textColor="text-dark-100"
 				textColorHover="hover:text-dark-100"
 				backgroundColor="bg-main-10"
@@ -116,7 +118,7 @@
 	</div>
 	<sdm-google-button [isSignUp]="true" />
 	<div class="mt-4 flex items-center justify-center gap-3.5">
-		<span class="text-dark-50 text-center"> เป็นสมาชิกอยู่แล้ว? </span>
+		<span class="text-center text-dark-50"> เป็นสมาชิกอยู่แล้ว? </span>
 		<sdm-button-link link="/sign-in" text="เข้าสู่ระบบ" textColorHover="text-primary-300" [isUnderlined]="true" />
 	</div>
 </sdm-auth-form>

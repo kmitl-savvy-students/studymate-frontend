@@ -298,7 +298,6 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public onSelectedCurriculumIdChange(curriculumIdList: number[]) {
 		this.selectedCurriculumIdList = curriculumIdList;
-		console.log('selectedCurriculumIdList :', this.selectedCurriculumIdList);
 		this.clearSearch();
 		this.handleFilterBar();
 		this.updatePaginatedItems();
