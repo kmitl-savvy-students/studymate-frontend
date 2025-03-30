@@ -8,7 +8,7 @@ import { IconComponent } from '../icon/icon.component';
 	standalone: true,
 	template: `
 		<div [id]="accordionId" data-accordion="collapse" data-active-classes="text-dark-100" data-inactive-classes="text-dark-100">
-			<h2 [id]="accordionId + '-heading'" [class.border-b-2]="!isExpanded" class="border-gray-100 py-4">
+			<h2 [id]="accordionId + '-heading'" [class.border-b-2]="!isExpanded" class="py-4" [class]="borderStyle">
 				<button
 					type="button"
 					class="flex w-full items-center justify-between gap-3"
@@ -48,6 +48,7 @@ export class SDMBaseAccordion implements AfterViewInit {
 	@Input() subHeader: string = '';
 	@Input() accordionId: string = '';
 	@Input() accordionDefaultStatus: boolean = false;
+	@Input() borderStyle: string = 'border-gray-100';
 
 	@Input() data: any = 0;
 
