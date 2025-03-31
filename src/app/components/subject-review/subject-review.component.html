@@ -23,8 +23,12 @@
 					{{ subjectReviewData.teachtable.year }} ภาคการศึกษาที่
 					{{ subjectReviewData.teachtable.term }}
 				</div>
-				<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light xs:hidden">รีวิวของฉัน</div>
-				<sdm-rating mode="display" [rating]="subjectReviewData.rating" class="text-base text-dark-100"></sdm-rating>
+				<div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+					<div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
+					<sdm-rating mode="display" [rating]="subjectReviewData.rating" class="text-base text-dark-100"></sdm-rating>
+				</div>
+				<!-- <div *ngIf="isReviewCreator" class="rounded-[15px] bg-main-100 px-3 py-1.5 text-xs text-light">รีวิวของฉัน</div>
+				<sdm-rating mode="display" [rating]="subjectReviewData.rating" class="text-base text-dark-100"></sdm-rating> -->
 			</a>
 		</div>
 
