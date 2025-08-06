@@ -1,0 +1,15 @@
+services:
+    frontend:
+        container_name: studymate-nginx
+        image: frontend-prod-img
+        restart: always
+        networks:
+            - prod-network
+        volumes:
+            - ./nginx.prod.ce-cloud.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - 80:80
+
+networks:
+    prod-network:
+        external: true

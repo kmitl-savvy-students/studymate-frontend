@@ -43,14 +43,20 @@ export class SDMBaseButton {
 	@Input() isDisabled: boolean = false;
 	@Input() isUnderlined: boolean = false;
 	@Input() isSubmit: boolean = false;
-	// @Input() textColor: string = 'text-dark';
 	@Input() textColor: string = 'text-dark-100';
-	@Input() textColorHover: string = 'hover:text-primary-300';
+	@Input() textColorHover: string = 'hover:text-main-100';
 	@Input() backgroundColor: string = '';
 	@Input() backgroundColorCustom: string = '';
 	@Input() backgroundColorHover: string = '';
 	@Input() backgroundColorHoverCustom: string = '';
 	@Input() cursor: string = '';
+	@Input() borderStyle: string = '';
+	@Input() borderRadius: string = 'rounded-xl';
+	@Input() textSize: string = 'text-base';
+	@Input() fontWeight: string = 'font-semibold';
+	@Input() width: string = 'w-full';
+	@Input() margin: string = '';
+	@Input() padding: string = '';
 
 	@Output() clickEvent = new EventEmitter<void>();
 
@@ -59,7 +65,7 @@ export class SDMBaseButton {
 	}
 
 	getButtonClasses(): string {
-		const classes = ['transition-all', 'flex', 'w-full', 'items-center', 'justify-center', 'gap-3', 'rounded-xl', 'text-base', 'font-semibold'];
+		const classes = ['transition-all', 'flex', 'items-center', 'justify-center', 'gap-3'];
 
 		if (this.textColor) classes.push(this.textColor);
 		if (this.textColorHover) classes.push(this.textColorHover);
@@ -67,9 +73,15 @@ export class SDMBaseButton {
 		if (this.backgroundColorHover && !this.isDisabled) classes.push(this.backgroundColorHover);
 		if (this.backgroundColor || this.backgroundColorHover) classes.push('px-4', 'py-3');
 		if (this.isUnderlined) classes.push('underline', 'decoration-1');
-
 		if (this.isDisabled) classes.push('opacity-50', 'cursor-not-allowed');
 		if (this.cursor) classes.push(this.cursor);
+		if (this.borderStyle) classes.push(this.borderStyle);
+		if (this.borderRadius) classes.push(this.borderRadius);
+		if (this.textSize) classes.push(this.textSize);
+		if (this.fontWeight) classes.push(this.fontWeight);
+		if (this.width) classes.push(this.width);
+		if (this.margin) classes.push(this.margin);
+		if (this.padding) classes.push(this.padding);
 
 		return classes.join(' ');
 	}

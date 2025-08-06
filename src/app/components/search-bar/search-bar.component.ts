@@ -43,8 +43,6 @@ export class SDMSearchBarComponent {
 	}
 
 	onSearch() {
-		// this.tempSubjectData = this.data;
-
 		this.checkSearchValue(this.searchValue);
 
 		if (this.filterFunction) {
@@ -52,7 +50,6 @@ export class SDMSearchBarComponent {
 		} else {
 			throw new Error('filterFunction is required');
 		}
-		console.log('ผลการค้นหาใน onSearch() : ', this.filteredDataList);
 		this.searchedDataList.emit(this.filteredDataList);
 	}
 
@@ -66,7 +63,6 @@ export class SDMSearchBarComponent {
 		this.searchForm.reset();
 		this.isFocus = false;
 		this.searchValue = '';
-		this.searchCleared.emit(); // emit event เมื่อ clear search
-		// this.searchedDataList.emit(this.tempSubjectData); // ส่งข้อมูลต้นฉบับกลับไป
+		this.searchCleared.emit();
 	}
 }

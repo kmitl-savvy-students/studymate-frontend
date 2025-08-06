@@ -19,8 +19,20 @@ import { LoadingService } from '../../shared/services/loading/loading.service';
 	template: `
 		<sdm-auth-form authHeader="เข้าสู่ระบบ" [formGroup]="signInFormGroup" [onSubmit]="onSubmit">
 			<div class="flex flex-col gap-2">
-				<input formControlName="id" type="text" required placeholder="รหัสนักศึกษา" autocomplete="username" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
-				<input formControlName="password" type="password" autocomplete="current-password" required placeholder="รหัสผ่าน" class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100 disabled:pointer-events-none" />
+				<input
+					formControlName="id"
+					type="text"
+					required
+					placeholder="รหัสนักศึกษา"
+					autocomplete="username"
+					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100" />
+				<input
+					formControlName="password"
+					type="password"
+					autocomplete="current-password"
+					required
+					placeholder="รหัสผ่าน"
+					class="rounded-xl px-4 py-3 text-sm ring-1 ring-main-25 hover:ring-2 hover:ring-main-100 focus:outline-none focus:ring-2 focus:ring-main-100 disabled:pointer-events-none" />
 				<sdm-base-button [isSubmit]="true" text="เข้าสู่ระบบ" icon="right-to-bracket" textColor="text-light" textColorHover="text-light" backgroundColor="bg-main-100" backgroundColorHover="bg-main-120" />
 				<div class="my-2 flex items-center gap-5">
 					<hr class="w-full text-main-25" />
@@ -30,7 +42,7 @@ import { LoadingService } from '../../shared/services/loading/loading.service';
 				<sdm-google-button [isSignIn]="true" />
 			</div>
 			<div class="mt-4 flex items-center justify-center gap-3.5">
-				<span class="text-dark-50 text-center"> ยังไม่เป็นสมาชิก? </span>
+				<span class="text-center text-dark-50"> ยังไม่เป็นสมาชิก? </span>
 				<sdm-button-link link="/sign-up" text="สมัครสมาชิก" textColorHover="text-primary-300" [isUnderlined]="true" />
 			</div>
 		</sdm-auth-form>

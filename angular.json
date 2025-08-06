@@ -32,6 +32,27 @@
 						"scripts": []
 					},
 					"configurations": {
+						"ce-prod": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.ce-cloud.ts"
+								}
+							],
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "5MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								}
+							],
+							"outputHashing": "all"
+						},
 						"prod": {
 							"fileReplacements": [
 								{
@@ -86,6 +107,9 @@
 				"serve": {
 					"builder": "@angular-devkit/build-angular:dev-server",
 					"configurations": {
+						"ce-prod": {
+							"buildTarget": "studymate-frontend:build:ce-prod"
+						},
 						"prod": {
 							"buildTarget": "studymate-frontend:build:prod"
 						},

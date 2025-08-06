@@ -51,6 +51,30 @@ export class SDMPageFaculty implements OnInit {
 		this.fetchFaculties();
 	}
 
+	checkShowFaculty(faculty: Faculty): void {
+		faculty.is_visible = !faculty.is_visible;
+
+		const apiUrl = `${this.backendService.getBackendUrl()}/api/faculty/update`;
+
+		this.loadingService.show(() => {
+			this.http
+				.put(apiUrl, faculty)
+				.pipe(
+					finalize(() => {
+						this.loadingService.hide();
+					}),
+				)
+				.subscribe({
+					next: () => {
+						this.fetchFaculties();
+					},
+					error: (error) => {
+						console.error('Error updating faculty:', error);
+					},
+				});
+		});
+	}
+
 	// #region Fetchings
 	fetchFaculties(): void {
 		this.isLoading = true;
@@ -91,14 +115,15 @@ export class SDMPageFaculty implements OnInit {
 		this.createFacultyModal.show();
 	}
 	onConfirmCreate(): void {
-		if (this.facultyCreateForm.value.nameTh.trim().length == 0 || this.facultyCreateForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อคณะ');
+		if (this.facultyCreateForm.value.kmitlId.trim().length == 0 || this.facultyCreateForm.value.nameTh.trim().length == 0 || this.facultyCreateForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.createFacultyModal.hide();
 
 		const createdFaculty = {
 			id: -1,
+			is_visible: false,
 			kmitl_id: this.facultyCreateForm.value.kmitlId,
 			name_th: this.facultyCreateForm.value.nameTh,
 			name_en: this.facultyCreateForm.value.nameEn,
@@ -140,8 +165,8 @@ export class SDMPageFaculty implements OnInit {
 	onConfirmEdit(): void {
 		if (!this.selectedFaculty) return;
 
-		if (this.facultyEditForm.value.nameTh.trim().length == 0 || this.facultyEditForm.value.nameEn.trim().length == 0) {
-			this.alertService.showAlert('error', 'กรุณากรอกชื่อคณะ');
+		if (this.facultyEditForm.value.kmitlId.trim().length == 0 || this.facultyEditForm.value.nameTh.trim().length == 0 || this.facultyEditForm.value.nameEn.trim().length == 0) {
+			this.alertService.showAlert('error', 'กรุณากรอกข้อมูลให้ครบถ้วน');
 			return;
 		}
 		this.editFacultyModal.hide();

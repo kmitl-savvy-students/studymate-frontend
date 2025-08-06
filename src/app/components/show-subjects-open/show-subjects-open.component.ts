@@ -32,13 +32,9 @@ export class SDMShowSubjectsOpenComponent implements OnInit {
 	async ngOnInit(): Promise<void> {
 		this.isloading = true;
 		this.firstYear = await this.initOpenSubjects(this.classYear[0]);
-		console.log(this.firstYear);
 		this.secondYear = await this.initOpenSubjects(this.classYear[1]);
-		console.log(this.secondYear);
 		this.thirdYear = await this.initOpenSubjects(this.classYear[2]);
-		console.log(this.thirdYear);
 		this.fourthYear = await this.initOpenSubjects(this.classYear[3]);
-		console.log(this.fourthYear);
 		this.isloading = false;
 	}
 
@@ -52,7 +48,6 @@ export class SDMShowSubjectsOpenComponent implements OnInit {
 		return new Promise((resolve) => {
 			this.apiManagementService.GetOpenSubjectData(year - 543, semester, this.selectedCurriculum, this.subjectId, this.isGened).subscribe({
 				next: (res) => {
-					console.log(res);
 					resolve(res ? res : null);
 				},
 				error: (error) => {

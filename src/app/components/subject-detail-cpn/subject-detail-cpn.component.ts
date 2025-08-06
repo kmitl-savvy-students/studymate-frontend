@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { Subject } from '@models/Subject.model.js';
 import { SubjectCardData } from '../../shared/models/SubjectCardData.model.js';
 import { IconComponent } from '../icon/icon.component.js';
@@ -16,6 +16,12 @@ export class SDMSubjectDetailCpnComponent {
 	@Input() subjectDetailData?: SubjectCardData;
 	@Input() subjectData?: Subject;
 	// @Input() subjectDetailDescription?: subjectDetailData;
+
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['isLoadingTranscript']) {
+			this.subjectData = changes['subjectData'].currentValue;
+		}
+	}
 
 	get isLoadingData(): boolean {
 		return !this.subjectDetailData; // ถ้า subjectDetailData เป็น undefined/null ให้ isLoading = true

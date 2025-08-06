@@ -22,14 +22,6 @@ export class SubjectDetailValidationGuard implements CanActivate {
 		const subjectId = route.params['subjectId'];
 		const isGened = route.params['isGened'];
 
-		console.log('year : ', year);
-		console.log('semester : ', semester);
-		console.log('curriculumId : ', curriculumId);
-		console.log('section : ', section);
-		console.log('subjectId : ', subjectId);
-		console.log('isGened : ', isGened);
-		console.log('typeof isGened : ', typeof isGened);
-
 		// Case 1: Direct subject access (without year/semester/curriculumId/section/isGened)
 		if ((isNaN(year) || year === -1) && (isNaN(semester) || semester === -1) && (isNaN(curriculumId) || curriculumId === -1) && (isNaN(section) || section === -1) && (!isGened || isGened === '') && subjectId) {
 			return this.validateDirectSubjectAccess(subjectId);

@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 @layer components {
-	nav {
-		@apply border-b-primary-100 bg-light;
-		@apply fixed left-0 right-0 top-0 z-40 border-b;
+	.menu {
+		@apply flex items-center gap-3 rounded-lg p-2 text-dark-100 hover:bg-main-15;
+	}
+	.menu-icon {
+		@apply w-1/12 text-main-100;
+	}
+	.menu-text {
+		@apply w-11/12;
 	}
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { SDMfilterBarComponent } from '@components/filter-bar/filter-bar.component.js';
 import { SDMSearchBarComponent } from '@components/search-bar/search-bar.component';
 import { SDMSelectComponent } from '@components/select/select.component';
+import { CurriculumGroup } from '@models/CurriculumGroup.model';
 import { Department } from '@models/Department';
 import { Faculty } from '@models/Faculty';
 import { Program } from '@models/Program.model';
@@ -12,10 +13,11 @@ import { SubjectCardData } from '@models/SubjectCardData.model';
 import { User } from '@models/User.model';
 import { APIManagementService } from '@services/api-management.service';
 import { AuthenticationService } from '@services/authentication/authentication.service.js';
-import { initFlowbite } from 'flowbite';
+import { Drawer, initFlowbite } from 'flowbite';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, concatMap, switchMap, tap } from 'rxjs/operators';
 import { SDMBaseAccordion } from '../../components/accordion/base-accordion.component';
+import { IconComponent } from '../../components/icon/icon.component';
 import { SDMPaginationComponent } from '../../components/pagination/pagination.component';
 import { SDMSubjectComponent } from '../../components/subject/subject.component';
 import { Curriculum } from './../../shared/models/Curriculum.model';
@@ -24,7 +26,7 @@ import { classYearList, semesterList, subjects_added, yearsList } from './subjec
 @Component({
 	selector: 'sdm-page-subject',
 	standalone: true,
-	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion],
+	imports: [SDMSelectComponent, SDMSearchBarComponent, CommonModule, SDMfilterBarComponent, SDMPaginationComponent, SDMSubjectComponent, SDMBaseAccordion, IconComponent],
 	templateUrl: './subject.page.html',
 	styleUrl: './subject.page.css',
 })
@@ -82,6 +84,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public selectedRatingFilter: number | null = null;
 	public selectedCurriculumData: Curriculum | undefined;
 	public selectedCurriculumIdList: number[] = [];
+	public selectedCurriculumGroup: CurriculumGroup | undefined;
 
 	public isSearched: boolean = false;
 	public isFilter: boolean = false;
@@ -92,6 +95,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public filteredData: SubjectCardData[] = []; // เก็บผลลัพธ์หลังการ filter
 	public searchedData: SubjectCardData[] = []; // เก็บผลลัพธ์หลังการ search
 	public finalDisplayData: SubjectCardData[] = []; // เก็บผลลัพธ์สุดท้ายที่จะแสดง
+
+	private drawer: Drawer | null = null;
 
 	constructor(
 		private apiManagementService: APIManagementService,
@@ -117,7 +122,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 						this.selectedCurriculum = +params['curriculum'];
 						this.isGened = params['isGened'];
 					}
-					console.log('isGened in param ; ', this.isGened);
+					// console.log('isGened in param ; ', this.isGened);
 					if (this.isGened === '0') {
 						this.isShowGened = false;
 					} else if (this.isGened === '1') {
@@ -254,7 +259,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		let processedData = [...this.subjectCardData];
 
 		// ถ้ามีการ search ให้กรองด้วย search ก่อน
-		console.log('isSearch in process', this.isSearched);
+		// console.log('isSearch in process', this.isSearched);
 		if (this.isSearched) {
 			processedData = this.searchedData;
 		}
@@ -268,7 +273,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 		// เก็บผลลัพธ์สุดท้าย
 		this.finalDisplayData = processedData;
-		console.log('final display data :', this.finalDisplayData);
+		// console.log('final display data :', this.finalDisplayData);
 		this.subjectCardTotal = this.finalDisplayData.length;
 
 		// อัพเดท pagination
@@ -278,12 +283,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public onSelectedDaysChange(days: string[]) {
 		this.selectedDays = days;
+		console.log('selectedDays :', this.selectedDays);
 		this.handleFilterBar();
 		this.updatePaginatedItems();
 	}
 
 	public onReviewFilterValueChange(rating: number) {
 		this.selectedRatingFilter = rating;
+		console.log('selectedRatingFilter :', this.selectedRatingFilter);
+
 		this.handleFilterBar();
 		this.updatePaginatedItems();
 	}
@@ -295,10 +303,34 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.updatePaginatedItems();
 	}
 
+	onSelectedCurriculumGroupChange(curriculumGroup: CurriculumGroup) {
+		this.selectedCurriculumGroup = curriculumGroup;
+	}
+
 	public handleFilterBar() {
 		this.isFilter = this.selectedDays.length > 0 || this.selectedCurriculumIdList.length > 0 || this.selectedRatingFilter !== null;
-		console.log('filter', this.isFilter);
+		// console.log('filter', this.isFilter);
 		this.processDataWithFiltersAndSearch();
+	}
+
+	public clearAll() {
+		this.resetDropdowns('selectedYear');
+		this.resetDropdowns('selectedSemester');
+		this.resetDropdowns('selectedClassYear');
+		this.resetDropdowns('selectedFaculty');
+		this.resetDropdowns('selectedDepartment');
+		this.resetDropdowns('selectedProgram');
+		this.resetDropdowns('selectedCurriculum');
+		this.isGened = '0';
+		this.isShowGened = false;
+		this.checkSelectAllDropdown();
+		this.resetAllFilters();
+
+		this.router.navigate(['/subject']).then(() => {
+			setTimeout(() => {
+				initFlowbite();
+			}, 0);
+		});
 	}
 
 	public resetAllFilters() {
@@ -326,7 +358,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 
 	public getSearchedSubjectCardDataList(searchResults: SubjectCardData[]) {
 		this.searchedData = searchResults;
-		console.log('search data :', this.searchedData);
+		// console.log('search data :', this.searchedData);
 		this.isSearched = searchResults.length !== this.subjectCardData.length;
 		this.searchSubjectDataIsNull = searchResults.length === 0;
 
@@ -338,7 +370,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		this.isSearched = false;
 		this.searchedData = this.isFilter ? [...this.filteredData] : [...this.subjectCardData];
 		this.searchSubjectDataIsNull = false;
-		console.log('isSearch in onclearsearch', this.isSearched);
+		// console.log('isSearch in onclearsearch', this.isSearched);
 		this.processDataWithFiltersAndSearch();
 	}
 
@@ -403,6 +435,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		return this.apiManagementService.GetDropdownFaculties().pipe(
 			tap((res) => {
 				this.facultyList = res;
+				this.facultyList = this.facultyList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching departmentList:', error);
@@ -414,7 +447,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public getDropdownDepartmentsAsObservable(selectedFaculty: number): Observable<Department[]> {
 		return this.apiManagementService.GetDropdownDepartments(selectedFaculty).pipe(
 			tap((res) => {
-				this.departmentList = res?.length > 0 ? res : [{ id: -1, kmitl_id: '-1', faculty: null, name_th: 'ไม่พบข้อมูลภาควิชา', name_en: 'No Department Data' }];
+				this.departmentList = res?.length > 0 ? res : [{ id: -1, is_visible: true, kmitl_id: '-1', faculty: null, name_th: 'ไม่พบข้อมูลภาควิชา', name_en: 'No Department Data' }];
+				this.departmentList = this.departmentList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching departmentList:', error);
@@ -426,7 +460,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 	public getDropdownProgramsAsObservable(selectedDepartment: number): Observable<Program[]> {
 		return this.apiManagementService.GetDropdownPrograms(selectedDepartment).pipe(
 			tap((res) => {
-				this.programList = res?.length > 0 ? res : [{ id: -1, kmitl_id: '-1', department: null, name_th: 'ไม่พบข้อมูลแผนการเรียน', name_en: 'No Program Data' }];
+				this.programList = res?.length > 0 ? res : [{ id: -1, is_visible: true, kmitl_id: '-1', department: null, name_th: 'ไม่พบข้อมูลแผนการเรียน', name_en: 'No Program Data' }];
+				this.programList = this.programList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching programList:', error);
@@ -445,7 +480,8 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 								name_th: `${curriculum.name_th} (${curriculum.year})`,
 								name_en: `${curriculum.name_en} (${curriculum.year})`,
 							}))
-						: [{ id: -1, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
+						: [{ id: -1, is_visible: true, program: null, year: -1, name_th: 'ไม่พบข้อมูลหลักสูตร', name_en: 'No Curriculum Data', curriculum_group: null }];
+				this.curriculumList = this.curriculumList.filter((x) => x.is_visible);
 			}),
 			catchError((error) => {
 				console.error('Error fetching curriculumList:', error);
@@ -462,15 +498,15 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 		switch (selectName) {
 			case 'selectedYear':
 				this.selectedYear = selectedData.value;
-				console.log('selectedYear :', this.selectedYear);
+				// console.log('selectedYear :', this.selectedYear);
 				break;
 			case 'selectedSemester':
 				this.selectedSemester = selectedData.value;
-				console.log('selectedSemester :', this.selectedSemester);
+				// console.log('selectedSemester :', this.selectedSemester);
 				break;
 			case 'selectedClassYear':
 				this.selectedClassYear = selectedData.value.toString();
-				console.log('selectedClassYear :', this.selectedClassYear);
+				// console.log('selectedClassYear :', this.selectedClassYear);
 				break;
 			case 'selectedFaculty':
 				const oldSelectFaculty = this.selectedFaculty;
@@ -486,7 +522,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (this.selectedFaculty !== -1) {
 					this.getDropdownDepartmentsAsObservable(this.selectedFaculty).subscribe();
 				}
-				console.log('selectedFaculty :', this.selectedFaculty);
+				// console.log('selectedFaculty :', this.selectedFaculty);
 				break;
 			case 'selectedDepartment':
 				const oldSelectedDepartment = this.selectedDepartment;
@@ -498,7 +534,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (this.selectedDepartment !== -1) {
 					this.getDropdownProgramsAsObservable(this.selectedDepartment).subscribe();
 				}
-				console.log('selectedDepartment :', this.selectedDepartment);
+				// console.log('selectedDepartment :', this.selectedDepartment);
 				break;
 			case 'selectedProgram':
 				const oldSelectedProgram = this.selectedProgram;
@@ -510,12 +546,13 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 				if (this.selectedProgram !== -1) {
 					this.getDropdownCurriculumsAsObservable(this.selectedProgram).subscribe();
 				}
-				console.log('selectedProgram :', this.selectedProgram);
+				// console.log('selectedProgram :', this.selectedProgram);
 				break;
 			case 'selectedCurriculum':
 				this.selectedCurriculum = selectedData.value;
-				console.log('selected curriculum index :', this.selectedCurriculum);
-				this.selectedCurriculumData = this.curriculumList[this.selectedCurriculum - 1];
+				// console.log('selected curriculum index :', this.selectedCurriculum);
+				// this.selectedCurriculumData = this.curriculumList[this.selectedCurriculum - 1];
+				this.selectedCurriculumData = this.curriculumList.find((curriculum) => curriculum.id === this.selectedCurriculum);
 				// console.log('final choose curriculum :', this.selectedCurriculumData);
 				break;
 			default:
@@ -708,6 +745,7 @@ export class SDMPageSubject implements AfterViewInit, OnInit {
 					if (success) {
 						console.log('Navigation successful!');
 						this.getSubjectData();
+						initFlowbite();
 					}
 				})
 				.catch((error) => {

@@ -1,17 +1,24 @@
-<div class="mb-3 flex">
-	<sdm-base-button icon="right-to-bracket" text="ย้อนกลับ" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="bg-primary-400" (clickEvent)="navigateToFaculty()"></sdm-base-button>
+<div class="mb-3 hidden sm:flex">
+	<sdm-base-button
+		icon="right-to-bracket"
+		text="ย้อนกลับ"
+		textColor="text-light"
+		textColorHover="hover:text-light"
+		backgroundColor="bg-primary-300"
+		backgroundColorHover="bg-primary-400"
+		(clickEvent)="navigateToFaculty()"></sdm-base-button>
 </div>
 
-<h1 class="mt-5 text-3xl font-semibold">{{ faculty?.name_th }}</h1>
-<h2 class="text-xl opacity-50">{{ faculty?.name_en }}</h2>
+<h1 class="mt-5 hidden text-3xl font-semibold sm:block">{{ faculty?.name_th }}</h1>
+<h2 class="hidden text-xl opacity-50 sm:block">{{ faculty?.name_en }}</h2>
 
-<hr class="my-4" />
+<hr class="my-4 hidden sm:block" />
 
 <sdm-base-modal #createDepartmentModal modalId="createDepartment" header="สร้างภาควิชาใหม่" (confirmEvent)="onConfirmCreate()">
 	<form [formGroup]="departmentCreateForm">
 		<div class="input-primary mb-5">
 			<label for="kmitlId">รหัสอ้างอิงภาควิชาจากสำนักทะเบียน KMITL</label>
-			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา (ไม่จำเป็น)" required />
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา" required />
 		</div>
 		<div class="input-primary mb-5">
 			<label for="nameTh">ชื่อภาควิชาภาษาไทย</label>
@@ -28,7 +35,7 @@
 	<form [formGroup]="departmentEditForm">
 		<div class="input-primary mb-5">
 			<label for="kmitlId">รหัสอ้างอิงภาควิชาจากสำนักทะเบียน KMITL</label>
-			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา (ไม่จำเป็น)" required />
+			<input type="text" id="kmitlId" formControlName="kmitlId" placeholder="รหัสภาควิชา" required />
 		</div>
 		<div class="input-primary mb-5">
 			<label for="editNameTh">ชื่อภาควิชาภาษาไทย</label>
@@ -41,27 +48,53 @@
 	</form>
 </sdm-base-modal>
 
-<div>
+<div class="hidden sm:block">
 	<h1 class="text-2xl font-semibold">เลือกภาควิชา</h1>
 	<h2>ภาควิชาทั้งหมด</h2>
 	<div *ngIf="isLoading" class="my-2 text-center">
 		<div class="spinner-border animate-spin"></div>
 	</div>
 	<div *ngIf="!isLoading">
-		<div *ngIf="departments.length === 0" class="my-2 border p-5">
+		<div *ngIf="departments.length === 0" class="my-2 rounded-xl border p-5">
 			<div class="text-center">ไม่มีผลลัพธ์</div>
 		</div>
-		<div *ngIf="departments.length > 0" class="my-2 border p-5">
-			<ul class="flex flex-col gap-2">
-				<li *ngFor="let department of departments" class="flex items-center justify-between">
+		<div *ngIf="departments.length > 0" class="my-2 rounded-xl border p-5">
+			<ul class="flex flex-col divide-y">
+				<li *ngFor="let department of departments" class="flex items-center justify-between gap-x-4 py-2">
 					<div (click)="navigateToCurriculumType(department.id)" class="cursor-pointer text-lg hover:text-primary-300">
 						<div class="font-semibold">({{department.kmitl_id}}) {{ department.name_th }}</div>
 						<div class="text-sm opacity-50">{{ department.name_en }}</div>
 					</div>
-					<sdm-base-button icon="pen" text="แก้ไข" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-warning-300" backgroundColorHover="hover:bg-warning-400" (clickEvent)="onEditDepartment(department)"></sdm-base-button>
+					<div class="flex flex-col gap-2 md:flex-row">
+						<label class="inline-flex w-44 cursor-pointer items-center justify-center gap-x-2 overflow-x-auto rounded-xl border border-gray-300 p-1.5">
+							<input type="checkbox" class="peer sr-only" (change)="checkShowDepartment(department)" [checked]="department.is_visible" />
+							<div
+								class="peer relative h-7 w-14 rounded-full bg-gray-200 after:absolute after:start-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-200 after:bg-white after:transition-all after:content-[''] peer-checked:bg-main-100 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full"></div>
+							<div class="mr-2 text-sm font-medium text-dark-100">แสดงในระบบ</div>
+						</label>
+
+						<sdm-base-button
+							icon="pen"
+							text="แก้ไข"
+							textColor="text-light"
+							textColorHover="hover:text-light"
+							backgroundColor="bg-warning-300"
+							backgroundColorHover="hover:bg-warning-400"
+							width="w-full md:w-24"
+							(clickEvent)="onEditDepartment(department)"></sdm-base-button>
+					</div>
 				</li>
 			</ul>
 		</div>
 	</div>
-	<sdm-base-button icon="plus" text="สร้างภาควิชาใหม่" textColor="text-light" textColorHover="hover:text-light" backgroundColor="bg-primary-300" backgroundColorHover="hover:bg-primary-400" (clickEvent)="onCreateDepartment()"></sdm-base-button>
+	<sdm-base-button
+		icon="plus"
+		text="สร้างภาควิชาใหม่"
+		textColor="text-light"
+		textColorHover="hover:text-light"
+		backgroundColor="bg-primary-300"
+		backgroundColorHover="hover:bg-primary-400"
+		(clickEvent)="onCreateDepartment()"></sdm-base-button>
 </div>
+
+<div class="flex w-full items-center justify-center rounded-[20px] bg-orange-50 px-10 py-24 text-center text-base font-normal sm:hidden">เพื่อประสบการณ์การใช้งานที่ดีที่สุด โปรดใช้งานหน้านี้บนเดสก์ท็อปหรือแท็บเล็ต</div>

@@ -3,7 +3,6 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChil
 import { Router } from '@angular/router';
 import { User } from '@models/User.model';
 import { AlertService } from '@services/alert/alert.service';
-import { AuthenticationService } from '@services/authentication/authentication.service';
 import { initFlowbite } from 'flowbite';
 import { SubjectReviewData } from '../../shared/models/SubjectReviewData.model';
 import { APIManagementService } from '../../shared/services/api-management.service';
@@ -47,10 +46,10 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 
 	public reviewContent: string = '';
 	public isLoadingAllUsersLikedSubjectReviews: boolean = false;
+	public isLoadingUpdateReviewLike = false;
 
 	constructor(
 		private apiManagementService: APIManagementService,
-		private authService: AuthenticationService,
 		private router: Router,
 		private alertService: AlertService,
 	) {}
@@ -82,8 +81,7 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 			this.isAnimating = false;
 		}, 300);
 
-		this.isCurrentUserLiked = !this.isCurrentUserLiked;
-		if (this.isCurrentUserLiked) {
+		if (!this.isCurrentUserLiked) {
 			this.createSubjectReviewLike();
 		} else {
 			this.deleteSubjectReviewLike();
@@ -124,27 +122,35 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 
 	public createSubjectReviewLike() {
 		if (this.currentUser) {
+			this.isLoadingUpdateReviewLike = true;
 			this.apiManagementService.CreateSubjectReviewLike(this.subjectReviewData.id).subscribe({
 				next: () => {
 					this.subjectReviewData.like++;
+					this.isCurrentUserLiked = true;
+					this.isLoadingUpdateReviewLike = false;
 				},
 				error: (err) => {
 					this.isCurrentUserLiked = false;
 					console.error('Error Like review:', err);
+					this.isLoadingUpdateReviewLike = false;
 				},
 			});
 		}
 	}
 
 	public deleteSubjectReviewLike() {
-		if (this.currentUser) {
+		if (this.currentUser && this.subjectReviewData.like > 0) {
+			this.isLoadingUpdateReviewLike = true;
 			this.apiManagementService.DeleteSubjectReviewLike(this.subjectReviewData.id).subscribe({
 				next: () => {
 					this.subjectReviewData.like--;
+					this.isCurrentUserLiked = false;
+					this.isLoadingUpdateReviewLike = false;
 				},
 				error: (err) => {
 					this.isCurrentUserLiked = true;
 					console.error('Error deleting review:', err);
+					this.isLoadingUpdateReviewLike = false;
 				},
 			});
 		}
@@ -165,7 +171,6 @@ export class SDMSubjectReviewComponent implements OnInit, AfterViewInit {
 						}
 
 						this.currentUserLikedSubjectReviews = this.allUsersLikedSubjectReviews.filter((review) => review.user_id === Number(this.currentUser?.id));
-
 						this.isCurrentUserLiked = this.currentUserLikedSubjectReviews.length > 0;
 						this.isLoadingAllUsersLikedSubjectReviews = false;
 					}

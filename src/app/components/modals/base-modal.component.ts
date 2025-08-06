@@ -29,7 +29,7 @@ import { SDMBaseButton } from '../buttons/base-button.component';
 							</ng-container>
 							<ng-container *ngIf="!turnbackModal && normalModal">
 								<div class="w-full">
-									<sdm-base-button icon="xmark" text="ปิด" textColor="text-black" textColorHover="text-light" backgroundColor="bg-gray-300" backgroundColorHover="hover:bg-gray-400" (clickEvent)="handleCancel()" />
+									<sdm-base-button icon="xmark" text="ปิด" textColor="text-black" textColorHover="text-light" backgroundColor="bg-gray-300" backgroundColorHover="hover:bg-gray-400" (clickEvent)="handleConfirm()" />
 								</div>
 							</ng-container>
 							<ng-container *ngIf="!normalModal && turnbackModal">
@@ -83,9 +83,13 @@ export class SDMBaseModal implements AfterViewInit {
 	}
 
 	handleCancel(): void {
-		this.hide();
-		this.cancelEvent.emit();
+		if (this.cancelEvent.observers.length === 0) {
+			this.hide();
+		} else {
+			this.cancelEvent.emit();
+		}
 	}
+
 	handleConfirm(): void {
 		this.confirmEvent.emit();
 	}

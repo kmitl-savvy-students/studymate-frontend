@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { IconComponent } from '../icon/icon.component';
 
 @Component({
 	selector: 'sdm-announce',
@@ -10,5 +9,5 @@ import { IconComponent } from '../icon/icon.component';
 	styleUrl: './announce.component.css',
 })
 export class AnnounceComponent {
-	@Input() details: { detail: string; date: string }[] = [];
+	@Input() details: { detail: string }[] = [];
 }

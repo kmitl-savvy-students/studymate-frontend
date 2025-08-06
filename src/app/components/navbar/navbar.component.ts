@@ -4,13 +4,16 @@ import { SDMButtonLink } from '@components/buttons/button-link.component';
 import { StudyMateLogo } from '@components/logo/studymate-logo.component';
 import { User } from '@models/User.model';
 import { AuthenticationService } from '@services/authentication/authentication.service';
+import { SDMAvatarIcon } from '../avatar/avatar.component';
+import { SDMBaseButton } from '../buttons/base-button.component';
+import { IconComponent } from '../icon/icon.component';
 import { SDMAvatarDropdownNav } from './navbar-avatar-dropdown';
 import { SDMButtonNav } from './navbar-button.component';
 
 @Component({
 	selector: 'sdm-navbar',
 	standalone: true,
-	imports: [CommonModule, StudyMateLogo, SDMButtonNav, SDMButtonLink, SDMAvatarDropdownNav],
+	imports: [CommonModule, StudyMateLogo, SDMButtonNav, SDMButtonLink, SDMAvatarDropdownNav, SDMBaseButton, SDMAvatarIcon, IconComponent],
 	templateUrl: 'navbar.component.html',
 	styleUrl: 'navbar.component.css',
 })

@@ -269,6 +269,13 @@ export class SDMReviewFilterComponent implements OnChanges {
 		this.filterData();
 	}
 
+	public onSearchCleared() {
+		this.isSearched = false;
+		this.searchedReviewDataList = [];
+		this.currentPage = 1;
+		this.filterData();
+	}
+
 	public searchFunction(data: SubjectReviewData[], searchValue: string): SubjectReviewData[] {
 		return data.filter((review) => review?.subject_id?.toLowerCase().includes(searchValue.toLowerCase()) || review?.subject_name_en?.toLowerCase().includes(searchValue.toLowerCase()));
 	}

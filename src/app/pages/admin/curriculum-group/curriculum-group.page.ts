@@ -12,6 +12,7 @@ import { CurriculumGroupSubject } from '@models/CurriculumGroupSubject';
 import { AlertService } from '@services/alert/alert.service';
 import { BackendService } from '@services/backend.service';
 import { LoadingService } from '@services/loading/loading.service';
+import { Validators } from 'ngx-editor';
 import { finalize } from 'rxjs';
 import { IconComponent } from '../../../components/icon/icon.component';
 
@@ -42,6 +43,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 	@ViewChild('addSubjectModal') addSubjectModal!: SDMBaseModal;
 
 	currentParentNode: CurriculumGroup | null = null;
+	originalParentNode: CurriculumGroup | null = null;
 
 	private clipboard = inject(Clipboard);
 
@@ -55,15 +57,17 @@ export class SDMPageCurriculumGroup implements OnInit {
 		private alertService: AlertService,
 	) {
 		this.addNodeForm = this.fb.group({
-			name: [''],
+			name: ['', Validators.required],
 			type: ['REQUIRED_ALL'],
-			credit: 0,
+			credit: [0],
+			branch: [1],
 			color: ['#FFFFFF'],
 		});
 		this.editNodeForm = this.fb.group({
 			name: [''],
 			type: ['REQUIRED_ALL'],
 			credit: 0,
+			branch: 1,
 			color: ['#FFFFFF'],
 		});
 		this.addSubjectForm = this.fb.group({
@@ -174,6 +178,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: 'Root',
 			type: 'REQUIRED_ALL',
 			credit: 0,
+			branch: 1,
 			color: '#FFFFFF',
 			children: [],
 			subjects: [],
@@ -221,16 +226,22 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #endregion
 	// #region Add Node
 	onAddChildNode(node: CurriculumGroup): void {
-		this.currentParentNode = node;
+		this.currentParentNode = { ...node };
 		this.addNodeForm.reset({
 			name: '',
 			type: 'REQUIRED_ALL',
 			credit: 0,
+			branch: 1,
 			color: '#FFFFFF',
 		});
 		this.addNodeModal.show();
 	}
 	onConfirmAddNode(): void {
+		if (this.addNodeForm.invalid) {
+			this.alertService.showAlert('error', 'กรุณากรอกชื่อกลุ่มด้วย');
+			return;
+		}
+		// Continue with the creation logic...
 		if (!this.currentParentNode) return;
 		const apiUrl = `${this.backendService.getBackendUrl()}/api/curriculum-group/create`;
 		const payload: CurriculumGroup = {
@@ -239,6 +250,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: this.addNodeForm.value.name,
 			type: this.addNodeForm.value.type,
 			credit: this.addNodeForm.value.credit,
+			branch: this.addNodeForm.value.branch,
 			color: this.addNodeForm.value.color,
 			children: [],
 			subjects: [],
@@ -258,21 +270,30 @@ export class SDMPageCurriculumGroup implements OnInit {
 				});
 		});
 	}
+
 	// #endregion
 	// #region Edit Node
 	onEditNode(node: CurriculumGroup): void {
+		node.branch = 1;
+
 		this.editSubjectsModal.hide();
 		this.editNodeModal.show();
 		this.currentParentNode = { ...node };
+		this.originalParentNode = { ...node };
 		this.editNodeForm.patchValue({
 			name: node.name,
 			type: node.type,
 			credit: node.credit,
+			branch: node.branch,
 			color: node.color,
 		});
 		if (this.editNodeForm.value.color.length === 0) {
 			this.editNodeForm.patchValue({ color: '#FFFFFF' });
 		}
+	}
+	onCancelEditNode(): void {
+		if (this.alertUnsaved()) return;
+		this.editNodeModal.hide();
 	}
 	onUpdateNodeType(event: any): void {
 		if (!this.currentParentNode) return;
@@ -288,6 +309,7 @@ export class SDMPageCurriculumGroup implements OnInit {
 			name: this.editNodeForm.value.name,
 			type: this.editNodeForm.value.type,
 			credit: this.editNodeForm.value.credit,
+			branch: this.editNodeForm.value.branch,
 			color: this.editNodeForm.value.color,
 			children: [],
 			subjects: [],
@@ -306,6 +328,13 @@ export class SDMPageCurriculumGroup implements OnInit {
 					},
 				});
 		});
+	}
+	alertUnsaved(): boolean {
+		if (this.originalParentNode?.type != this.currentParentNode?.type || this.editNodeForm.value.credit != this.currentParentNode?.credit || this.editNodeForm.value.branch != this.currentParentNode?.branch) {
+			alert('คำเตือน คุณยังไม่ได้บันทึกข้อมูลที่แก้ไข');
+			return true;
+		}
+		return false;
 	}
 	// #endregion
 	// #region Delete Node
@@ -333,11 +362,11 @@ export class SDMPageCurriculumGroup implements OnInit {
 	// #region Edit Subjects
 	onCopyAllSubject(): void {
 		if (!this.currentParentNode) return;
-
-		let subjectsString = this.currentParentNode.subjects.flatMap((subject) => subject.subject?.id).join(',');
+		let subjectsString = this.curriculumGroupSubjects.flatMap((subject) => subject.subject?.id).join(',');
 		this.clipboard.copy(subjectsString);
 		this.alertService.showAlert('success', 'คัดลอกรายวิชาสำเร็จ!');
 	}
+
 	onDeleteAllSubject(): void {
 		if (!this.currentParentNode) return;
 
@@ -359,6 +388,8 @@ export class SDMPageCurriculumGroup implements OnInit {
 	}
 
 	onEditSubjects(): void {
+		if (this.alertUnsaved()) return;
+
 		this.fetchCurriculumGroupSubjects();
 		this.editNodeModal.hide();
 		this.editSubjectsModal.show();

@@ -4,7 +4,8 @@
 	"scripts": {
 		"start": "ng serve --no-hmr",
 		"build-preprod": "ng build --configuration=preprod",
-		"build-prod": "ng build --configuration=prod"
+		"build-prod": "ng build --configuration=prod",
+		"build-ce-prod": "ng build --configuration=ce-prod"
 	},
 	"dependencies": {
 		"@angular/animations": "^19.0.0",

@@ -1,8 +1,8 @@
 <div class="grid w-full grid-cols-1 gap-5">
-	<sdm-search-bar *ngIf="isShowSearchBar" [data]="srcReviewData" [filterFunction]="searchFunction" (searchedDataList)="getSearchedReviewsDataList($event)" id="search-bar"></sdm-search-bar>
+	<sdm-search-bar *ngIf="isShowSearchBar" [data]="srcReviewData" (searchCleared)="onSearchCleared()" [filterFunction]="searchFunction" (searchedDataList)="getSearchedReviewsDataList($event)" id="search-bar"></sdm-search-bar>
 
 	<!-- Header Section -->
-	<div class="flex items-center gap-3" id="filter-bar">
+	<div class="flex flex-wrap items-center gap-3" id="filter-bar">
 		<div class="font-medium text-dark-100">เรียงโดย</div>
 		<button
 			(click)="onPopularFilterChange()"
@@ -33,7 +33,7 @@
 			*ngIf="isReviewPage && signedIn"
 			(click)="onCurrentYearTermFilterChange()"
 			[disabled]="getSubjectReviewIsNull || isEditingReview"
-			class="filter-button"
+			class="filter-button max-[900px]:hidden"
 			[ngClass]="{
 				'bg-main-100 text-light': selectedCurrentYearTerm,
 				'bg-main-15 text-dark-100': !selectedCurrentYearTerm,
@@ -41,6 +41,19 @@
 				'cursor-not-allowed': getSubjectReviewIsNull || isEditingReview,
 			}">
 			เปิดในปีการศึกษาและภาคการศึกษาปัจจุบัน
+		</button>
+		<button
+			*ngIf="isReviewPage && signedIn"
+			(click)="onCurrentYearTermFilterChange()"
+			[disabled]="getSubjectReviewIsNull || isEditingReview"
+			class="filter-button min-[901px]:hidden"
+			[ngClass]="{
+				'bg-main-100 text-light': selectedCurrentYearTerm,
+				'bg-main-15 text-dark-100': !selectedCurrentYearTerm,
+				'hover:bg-main-25': !getSubjectReviewIsNull && !selectedCurrentYearTerm && !isEditingReview,
+				'cursor-not-allowed': getSubjectReviewIsNull || isEditingReview,
+			}">
+			เปิด ณ ปัจจุบัน
 		</button>
 	</div>
 	<ng-container *ngIf="!isLoadingReview && filterReviewIsNull && !getSubjectReviewIsNull">
