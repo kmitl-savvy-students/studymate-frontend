@@ -32,6 +32,27 @@
 						"scripts": []
 					},
 					"configurations": {
+						"gcp-prod": {
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.prod.gcp.ts"
+								}
+							],
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kB",
+									"maximumError": "5MB"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "500kB",
+									"maximumError": "1MB"
+								}
+							],
+							"outputHashing": "all"
+						},
 						"ce-prod": {
 							"fileReplacements": [
 								{
