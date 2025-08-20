@@ -5,7 +5,8 @@
 		"start": "ng serve --no-hmr",
 		"build-preprod": "ng build --configuration=preprod",
 		"build-prod": "ng build --configuration=prod",
-		"build-ce-prod": "ng build --configuration=ce-prod"
+		"build-ce-prod": "ng build --configuration=ce-prod",
+		"build-gcp-prod": "ng build --configuration=gcp-prod"
 	},
 	"dependencies": {
 		"@angular/animations": "^19.0.0",
