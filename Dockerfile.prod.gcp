@@ -8,6 +8,7 @@ COPY . .
 RUN npm run build-gcp-prod
 
 FROM nginx:latest
+WORKDIR /usr/share/nginx/html
 
 COPY --from=build /app/dist/studymate-frontend/browser/ /usr/share/nginx/html/
 
